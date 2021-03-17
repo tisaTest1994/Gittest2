@@ -1,0 +1,12 @@
+{
+  "注释": "当前选择语言，如果是All就是做矩阵",
+  "language": "Cn",
+  "注释": "支持语言",
+  "language support": ["All", "Cn", "En"],
+  "注释": "当前选择环境",
+  "env": "test",
+  "注释": "支持环境",
+  "env support":  ["test"],
+  "注释": "test环境url",
+  "test": "https://testapi.latibac.com/api/v1"
+}
