@@ -265,7 +265,6 @@ class TestAccountApi:
             'accessToken']
         headers['Authorization'] = "Bearer " + accessToken
         r = requests.request('GET', url='{}/account/info'.format(env_url),  headers=headers)
-        print(r.json())
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert "user" in r.text, "查询用户信息错误，返回值是{}".format(r.text)
 
