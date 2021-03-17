@@ -1,0 +1,9 @@
+image: leilei
+
+before_script:
+  - pip install -r requirements.txt
+
+test2:
+  stage: test
+  script:
+    - python run.py
