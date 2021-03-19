@@ -14,7 +14,7 @@ headers = {
 
 
 if __name__ == '__main__':
-    pytest.main(['TestCase/TestApiCase/TestCase.py', '-v', '--alluredir', './Reports'])
+    pytest.main(['TestCase/TestApiCase/TestCase.py', '-n 4', '-v', '--alluredir', './Reports'])
     split = "allure generate ./Reports  -o ./Reports/html --clean"
     os.system(split)
 
