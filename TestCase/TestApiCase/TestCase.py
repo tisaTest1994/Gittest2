@@ -9,10 +9,11 @@ class TestAccountApi:
 
     @allure.feature('test_account_001 成功注册用户')
     def test_account_001(self):
+        citizenCountryCode = random.choice(citizenCountryCodeList)
         data = {
             "emailAddress": generate_email(),
             "verificationCode": "666666",
-            "citizenCountryCode": "cn",
+            "citizenCountryCode": citizenCountryCode,
             "password": "A!234sdfg"
         }
         r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
@@ -22,10 +23,11 @@ class TestAccountApi:
 
     @allure.feature('test_account_002 注册用户用户已经存在')
     def test_account_002(self):
+        citizenCountryCode = random.choice(citizenCountryCodeList)
         data = {
             "emailAddress": "yuk3e@cabital.com",
             "verificationCode": "666666",
-            "citizenCountryCode": "cn",
+            "citizenCountryCode": citizenCountryCode,
             "password": "A!234sdfg"
         }
         r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
@@ -35,10 +37,11 @@ class TestAccountApi:
 
     @allure.feature('test_account_003 注册用户验证码错误')
     def test_account_003(self):
+        citizenCountryCode = random.choice(citizenCountryCodeList)
         data = {
             "emailAddress": generate_email(),
             "verificationCode": "1666666",
-            "citizenCountryCode": "cn",
+            "citizenCountryCode": citizenCountryCode,
             "password": "A!234sdfg"
         }
         r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
@@ -46,20 +49,24 @@ class TestAccountApi:
         assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'COMMON_000006' in r.text, "验证码错误错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_004 申请注册验证码')
+    @allure.feature('test_account_004 申请注册验证码,全可过国家')
     def test_account_004(self):
-        data = {
-            "emailAddress": generate_email(),
-        }
-        r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert r.json() == {}, "申请注册验证码错误，返回值是{}".format(r.text)
+        for i in citizenCountryCodeList:
+            data = {
+                "emailAddress": generate_email(),
+                "citizenCountryCode": i
+            }
+            r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
+                                 data=json.dumps(data), headers=headers)
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.json() == {}, "申请注册验证码,全可过国家错误，返回值是{}".format(r.text)
 
     @allure.feature('test_account_005 申请注册验证码邮箱已注册')
     def test_account_005(self):
-        data: dict[str, str] = {
+        citizenCountryCode = random.choice(citizenCountryCodeList)
+        data = {
             "emailAddress": "yuk3e@cabital.com",
+            "citizenCountryCode": citizenCountryCode
         }
         r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
                              data=json.dumps(data), headers=headers)
@@ -68,8 +75,10 @@ class TestAccountApi:
 
     @allure.feature('test_account_006 申请注册验证码邮箱在黑名单')
     def test_account_006(self):
+        citizenCountryCode = random.choice(citizenCountryCodeList)
         data = {
             "emailAddress": "yuk3e@cabital.com",
+            "citizenCountryCode": citizenCountryCode
         }
         r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
                              data=json.dumps(data), headers=headers)
@@ -205,8 +214,18 @@ class TestAccountApi:
 
     @allure.feature('test_account_017 忘记密码验证码')
     def test_account_017(self):
+        allure.dynamic.description("注册一个新账户")
+        citizenCountryCode = random.choice(citizenCountryCodeList)
+        emailAddress = generate_email()
         data = {
-            "emailAddress": "yuke@cabital.com"
+            "emailAddress": emailAddress,
+            "verificationCode": "666666",
+            "citizenCountryCode": citizenCountryCode,
+            "password": "A!234sdfg"
+        }
+        requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
+        data = {
+            "emailAddress": emailAddress,
         }
         r = requests.request('POST', url='{}/account/user/forgetPassword/sendVerificationCode'.format(env_url),
                              data=json.dumps(data), headers=headers)
@@ -215,6 +234,7 @@ class TestAccountApi:
 
     @allure.feature('test_account_018 用户未注册忘记密码验证码')
     def test_account_018(self):
+        citizenCountryCode = random.choice(citizenCountryCodeList)
         data = {
             "emailAddress": "yuk32131e@cabital.com"
         }
@@ -299,6 +319,16 @@ class TestAccountApi:
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json() == {}, "用户忘记密码验证码错误错误，返回值是{}".format(r.text)
 
+    @allure.feature('test_account_024 申请注册验证码,使用白名单外国家代码被拒绝')
+    def test_account_024(self):
+        data = {
+            "emailAddress": generate_email(),
+            "citizenCountryCode": "WYL"
+        }
+        r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
+                             data=json.dumps(data), headers=headers)
+        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        assert "ACC_LEGAL_ENTITY_000001" in r.text, "申请注册验证码,使用白名单外国家代码被拒绝错误，返回值是{}".format(r.text)
 
 # core相关cases
 class TestCoreApi:
