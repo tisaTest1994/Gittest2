@@ -1,493 +1,728 @@
-import requests
-import allure
 from Function.ApiFunction import *
 from run import *
+from Function.log import *
 
 
 # account相关cases
 class TestAccountApi:
 
-    @allure.feature('test_account_001 成功注册用户')
+    @allure.testcase('test_account_001 成功注册用户')
     def test_account_001(self):
-        citizenCountryCode = random.choice(citizenCountryCodeList)
-        data = {
-            "emailAddress": generate_email(),
-            "verificationCode": "666666",
-            "citizenCountryCode": citizenCountryCode,
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'accessToken' in r.text, "成功注册用户错误，返回值是{}".format(r.text)
-
-    @allure.feature('test_account_002 注册用户用户已经存在')
-    def test_account_002(self):
-        citizenCountryCode = random.choice(citizenCountryCodeList)
-        data = {
-            "emailAddress": "yuk3e@cabital.com",
-            "verificationCode": "666666",
-            "citizenCountryCode": citizenCountryCode,
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'ACC_REGISTRY_000002' in r.text, "用户已经存在错误，返回值是{}".format(r.text)
-
-    @allure.feature('test_account_003 注册用户验证码错误')
-    def test_account_003(self):
-        citizenCountryCode = random.choice(citizenCountryCodeList)
-        data = {
-            "emailAddress": generate_email(),
-            "verificationCode": "1666666",
-            "citizenCountryCode": citizenCountryCode,
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'COMMON_000006' in r.text, "验证码错误错误，返回值是{}".format(r.text)
-
-    @allure.feature('test_account_004 申请注册验证码,全可过国家')
-    def test_account_004(self):
-        for i in citizenCountryCodeList:
+        with allure.step("获取随机国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+        with allure.step("注册"):
             data = {
                 "emailAddress": generate_email(),
-                "citizenCountryCode": i
+                "verificationCode": "666666",
+                "citizenCountryCode": citizenCountryCode,
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "成功注册用户错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_002 注册用户用户已经存在')
+    def test_account_002(self):
+        with allure.step("获取随机国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+        with allure.step("注册"):
+            data = {
+                "emailAddress": "yuk3e@cabital.com",
+                "verificationCode": "666666",
+                "citizenCountryCode": citizenCountryCode,
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'ACC_REGISTRY_000002' in r.text, "用户已经存在错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_003 注册用户验证码错误')
+    def test_account_003(self):
+        with allure.step("获取随机国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+        with allure.step("注册"):
+            data = {
+                "emailAddress": generate_email(),
+                "verificationCode": "1666666",
+                "citizenCountryCode": citizenCountryCode,
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'COMMON_000006' in r.text, "验证码错误错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_004 申请注册验证码,全可过国家')
+    def test_account_004(self):
+        with allure.step("获取全部国家代码并依次带入"):
+            for i in citizenCountryCodeList:
+                logger.info('本次国家代码是{}'.format(i))
+                data = {
+                    "emailAddress": generate_email(),
+                    "citizenCountryCode": i
+                }
+                r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
+                                     data=json.dumps(data), headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验返回值"):
+                    assert r.json() == {}, "申请注册验证码,全可过国家错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_005 申请注册验证码邮箱已注册')
+    def test_account_005(self):
+        with allure.step("获取随机国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+        data = {
+            "emailAddress": "yuk3e@cabital.com",
+            "citizenCountryCode": citizenCountryCode
+        }
+        r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
+                             data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert "ACC_REGISTRY_000002" in r.text, "申请注册验证码邮箱已注册错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_006 申请注册验证码邮箱在黑名单')
+    def test_account_006(self):
+        with allure.step("获取随机国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+        with allure.step("用黑名单邮箱申请注册验证码"):
+            data = {
+                "emailAddress": "yuk3e@cabital.com",
+                "citizenCountryCode": citizenCountryCode
             }
             r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
                                  data=json.dumps(data), headers=headers)
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-            assert r.json() == {}, "申请注册验证码,全可过国家错误，返回值是{}".format(r.text)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert "ACC_REGISTRY_000002" in r.text, "申请注册验证码邮箱在黑名单错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_005 申请注册验证码邮箱已注册')
-    def test_account_005(self):
-        citizenCountryCode = random.choice(citizenCountryCodeList)
-        data = {
-            "emailAddress": "yuk3e@cabital.com",
-            "citizenCountryCode": citizenCountryCode
-        }
-        r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert "ACC_REGISTRY_000002" in r.text, "申请注册验证码邮箱已注册错误，返回值是{}".format(r.text)
-
-    @allure.feature('test_account_006 申请注册验证码邮箱在黑名单')
-    def test_account_006(self):
-        citizenCountryCode = random.choice(citizenCountryCodeList)
-        data = {
-            "emailAddress": "yuk3e@cabital.com",
-            "citizenCountryCode": citizenCountryCode
-        }
-        r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert "ACC_REGISTRY_000002" in r.text, "申请注册验证码邮箱在黑名单错误，返回值是{}".format(r.text)
-
-    @allure.feature('test_account_007 登录已经注册账号')
+    @allure.testcase('test_account_007 登录已经注册账号')
     def test_account_007(self):
-        data = {
-            "username": "yuk3e@cabital.com",
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'accessToken' in r.text, "登录已经注册账号错误，返回值是{}".format(r.text)
+        with allure.step("登录已经注册账号"):
+            data = {
+                "username": "yuk3e@cabital.com",
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "登录已经注册账号错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_008 登录已经注册账号密码错误')
+    @allure.testcase('test_account_008 登录已经注册账号密码错误')
     def test_account_008(self):
-        data = {
-            "username": "yuk3e@cabital.com",
-            "password": "A!2123123"
-        }
-        r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 404, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'ACC_LOGIN_000001' in r.text, "登录已经注册账号密码错误错误，返回值是{}".format(r.text)
+        with allure.step("登录已经注册账号使用错误密码"):
+            data = {
+                "username": "yuk3e@cabital.com",
+                "password": "A!2123123"
+            }
+            r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 404, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'ACC_LOGIN_000001' in r.text, "登录已经注册账号密码错误错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_009 登录未注册账号')
+    @allure.testcase('test_account_009 登录未注册账号')
     def test_account_009(self):
-        data = {
-            "username": "yuk3e@cabital23.com",
-            "password": "A!2123123"
-        }
-        r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 404, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'ACC_LOGIN_000001' in r.text, "登录已经注册账号密码错误错误，返回值是{}".format(r.text)
+        with allure.step("登录未注册账号"):
+            data = {
+                "username": "yuk3e@cabital23.com",
+                "password": "A!2123123"
+            }
+            r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 404, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'ACC_LOGIN_000001' in r.text, "登录已经注册账号密码错误错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_010 登录黑名单账号')
+    @allure.testcase('test_account_010 登录黑名单账号')
     def test_account_010(self):
-        data = {
-            "username": "yuk3e@cabital23.com",
-            "password": "A!2123123"
-        }
-        r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 404, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'ACC_LOGIN_000001' in r.text, "登录已经注册账号密码错误错误，返回值是{}".format(r.text)
+        with allure.step("登录黑名单账号"):
+            data = {
+                "username": "yuk3e@cabital23.com",
+                "password": "A!2123123"
+            }
+            r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 404, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'ACC_LOGIN_000001' in r.text, "登录已经注册账号密码错误错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_011 刷新账户token')
+    @allure.testcase('test_account_011 刷新账户token')
     def test_account_011(self):
-        """
-        test_account_011 拿到原来的token
-        """
-        refreshToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['refreshToken']
-        data = {
-            "refreshToken": refreshToken
-        }
-        r = requests.request('POST', url='{}/account/user/refreshToken'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'accessToken' in r.text, "刷新账户token错误，返回值是{}".format(r.text)
+        with allure.step("获取refreshToken"):
+            refreshToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['refreshToken']
+        with allure.step("刷新tokne"):
+            data = {
+                "refreshToken": refreshToken
+            }
+            r = requests.request('POST', url='{}/account/user/refreshToken'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "刷新账户token错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_012 用错误的token刷新token')
+    @allure.testcase('test_account_012 用错误的token刷新token')
     def test_account_012(self):
-        """
-        test_account_012 拿到原来的token
-        """
-        data = {
-            "refreshToken": "123"
-        }
-        r = requests.request('POST', url='{}/account/user/refreshToken'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 401, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'ACC_LOGIN_000003' in r.text, "用错误的token刷新token错误，返回值是{}".format(r.text)
+        with allure.step("用错误的token刷新token"):
+            data = {
+                "refreshToken": "123"
+            }
+            r = requests.request('POST', url='{}/account/user/refreshToken'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 401, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'ACC_LOGIN_000003' in r.text, "用错误的token刷新token错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_013 用空的token刷新token')
+    @allure.testcase('test_account_013 用空的token刷新token')
     def test_account_013(self):
-        """
-        test_account_013 拿到原来的token
-        """
-        data = {
-            "refreshToken": ""
-        }
-        r = requests.request('POST', url='{}/account/user/refreshToken'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'COMMON_000006' in r.text, "用空的token刷新token错误，返回值是{}".format(r.text)
+        with allure.step("用空的token刷新token"):
+            data = {
+                "refreshToken": ""
+            }
+            r = requests.request('POST', url='{}/account/user/refreshToken'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'COMMON_000006' in r.text, "用空的token刷新token错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_014 修改密码')
+    @allure.testcase('test_account_014 修改密码')
     def test_account_014(self):
-        """
-        test_account_014 拿到原来的access_token 放入header中
-        """
-        accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        data = {
-            "original": "A!234sdfg",
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert r.json() == {}, "修改密码错误，返回值是{}".format(r.text)
+        with allure.step("获取token"):
+            accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("修改密码"):
+            data = {
+                "original": "A!234sdfg",
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "修改密码错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_015 修改密码使用错误token')
+    @allure.testcase('test_account_015 修改密码使用错误token')
     def test_account_015(self):
-        headers['Authorization'] = "Bearer " + "accessToken"
-        data = {
-            "original": "A!234sdfg",
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 401, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + "accessToken"
+        with allure.step("修改密码使用错误token"):
+            data = {
+                "original": "A!234sdfg",
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 401, "http 状态码不对，目前状态码是{}".format(r.status_code)
 
-    @allure.feature('test_account_016 使用错误原始密码修改密码')
+    @allure.testcase('test_account_016 使用错误原始密码修改密码')
     def test_account_016(self):
-        """
-        test_account_016 拿到原来的access_token 放入header中
-        """
-        accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        data = {
-            "original": "11111",
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert "ACC_RESET_000001" in r.text, "使用错误原始密码修改密码错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("使用错误原始密码修改密码"):
+            data = {
+                "original": "11111",
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert "ACC_RESET_000001" in r.text, "使用错误原始密码修改密码错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_017 忘记密码验证码')
+    @allure.testcase('test_account_017 忘记密码验证码')
     def test_account_017(self):
-        allure.dynamic.description("注册一个新账户")
-        citizenCountryCode = random.choice(citizenCountryCodeList)
-        emailAddress = generate_email()
-        data = {
-            "emailAddress": emailAddress,
-            "verificationCode": "666666",
-            "citizenCountryCode": citizenCountryCode,
-            "password": "A!234sdfg"
-        }
-        requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
-        data = {
-            "emailAddress": emailAddress,
-        }
-        r = requests.request('POST', url='{}/account/user/forgetPassword/sendVerificationCode'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert r.json() == {}, "忘记密码验证码错误，返回值是{}".format(r.text)
+        with allure.step("获取随机国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+        with allure.step("获取随机邮箱"):
+            emailAddress = generate_email()
+        with allure.step("注册新用户"):
+            data = {
+                "emailAddress": emailAddress,
+                "verificationCode": "666666",
+                "citizenCountryCode": citizenCountryCode,
+                "password": "A!234sdfg"
+            }
+            requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
+                             headers=headers)
+        with allure.step("忘记密码验证码"):
+            data = {
+                "emailAddress": emailAddress,
+            }
+            r = requests.request('POST', url='{}/account/user/forgetPassword/sendVerificationCode'.format(env_url),
+                                 data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "忘记密码验证码错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_018 用户未注册忘记密码验证码')
+    @allure.testcase('test_account_018 用户未注册忘记密码验证码')
     def test_account_018(self):
-        citizenCountryCode = random.choice(citizenCountryCodeList)
-        data = {
-            "emailAddress": "yuk32131e@cabital.com"
-        }
-        r = requests.request('POST', url='{}/account/user/forgetPassword/sendVerificationCode'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert "ACC_USER_000002" in r.text, "用户未注册忘记密码验证码错误，返回值是{}".format(r.text)
+        with allure.step("用户未注册忘记密码验证码"):
+            data = {
+                "emailAddress": "yuk321xx31e@cabita1l.com"
+            }
+            r = requests.request('POST', url='{}/account/user/forgetPassword/sendVerificationCode'.format(env_url),
+                                 data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert "ACC_USER_000002" in r.text, "用户未注册忘记密码验证码错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_019 忘记密码')
+    @allure.testcase('test_account_019 忘记密码')
     def test_account_019(self):
-        data = {
-            "code": "666666",
-            "email": "yuk3e@cabital.com",
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert r.json() == {}, "忘记密码错误，返回值是{}".format(r.text)
+        with allure.step("忘记密码"):
+            data = {
+                "code": "666666",
+                "email": "yuk3e@cabital.com",
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
+                                 data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "忘记密码错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_020 未注册用户忘记密码')
+    @allure.testcase('test_account_020 未注册用户忘记密码')
     def test_account_020(self):
-        data = {
-            "code": "666666",
-            "email": "yuk3e@cabita3123l.com",
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert "ACC_USER_000002" in r.text, "未注册用户忘记密码错误，返回值是{}".format(r.text)
+        with allure.step("忘记密码"):
+            data = {
+                "code": "666666",
+                "email": "yuk3e@cabita3123l.com",
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
+                                 data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert "ACC_USER_000002" in r.text, "未注册用户忘记密码错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_021 用户忘记密码验证码错误')
+    @allure.testcase('test_account_021 用户忘记密码验证码错误')
     def test_account_021(self):
-        data = {
-            "code": "166666",
-            "email": "yuk3e@cabital.com",
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert "ACC_VERIFY_CODE_000001" in r.text, "用户忘记密码验证码错误错误，返回值是{}".format(r.text)
+        with allure.step("用户忘记密码验证码错误"):
+            data = {
+                "code": "166666",
+                "email": "yuk3e@cabital.com",
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
+                                 data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert "ACC_VERIFY_CODE_000001" in r.text, "用户忘记密码验证码错误错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_021 查询用户信息')
+    @allure.testcase('test_account_021 查询用户信息')
     def test_account_021(self):
-        accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        r = requests.request('GET', url='{}/account/info'.format(env_url),  headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert "user" in r.text, "查询用户信息错误，返回值是{}".format(r.text)
+        with allure.step("获取token"):
+            accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询用户信息"):
+            r = requests.request('GET', url='{}/account/info'.format(env_url),  headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert "user" in r.text, "查询用户信息错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_022 修改个人信息')
+    @allure.testcase('test_account_022 修改个人信息')
     def test_account_022(self):
-        accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        data = {
-            "firstName": "yuke",
-            "lastName": "zhang",
-            "dateOfBirth": "1997-12-12",
-            "gender": "MALE"
-        }
-        r = requests.request('POST', url='{}/account/info/personal'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert r.json() == {}, "修改个人信息错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("修改个人信息"):
+            data = {
+                "firstName": "yuke",
+                "lastName": "zhang",
+                "dateOfBirth": "1997-12-12",
+                "gender": "MALE"
+            }
+            r = requests.request('POST', url='{}/account/info/personal'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "修改个人信息错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_023 修改个人爱好')
+    @allure.testcase('test_account_023 修改个人爱好')
     def test_account_023(self):
-        accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        data = {
-            "language": "EN",
-            "currency": "USD",
-            "timeZone": "W11"
-        }
-        r = requests.request('POST', url='{}/account/setting/preference'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert r.json() == {}, "用户忘记密码验证码错误错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("修改个人爱好"):
+            data = {
+                "language": "EN",
+                "currency": "USD",
+                "timeZone": "W11"
+            }
+            r = requests.request('POST', url='{}/account/setting/preference'.format(env_url),
+                                 data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "用户忘记密码验证码错误错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_account_024 申请注册验证码,使用白名单外国家代码被拒绝')
+    @allure.testcase('test_account_024 申请注册验证码,使用白名单外国家代码被拒绝')
     def test_account_024(self):
-        data = {
-            "emailAddress": generate_email(),
-            "citizenCountryCode": "WYL"
-        }
-        r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert "ACC_LEGAL_ENTITY_000001" in r.text, "申请注册验证码,使用白名单外国家代码被拒绝错误，返回值是{}".format(r.text)
+        with allure.step("申请注册验证码,使用白名单外国家代码被拒绝"):
+            data = {
+                "emailAddress": generate_email(),
+                "citizenCountryCode": "WYL"
+            }
+            r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
+                                 data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert "ACC_LEGAL_ENTITY_000001" in r.text, "申请注册验证码,使用白名单外国家代码被拒绝错误，返回值是{}".format(r.text)
+
 
 # core相关cases
 class TestCoreApi:
 
-    @allure.feature('test_core_001 查询钱包所有地址')
+    @allure.testcase('test_core_001 查询钱包所有地址')
     def test_core_001(self):
-        accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        r = requests.request('GET', url='{}/core/account'.format(env_url), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'wallets' in r.text, "查询钱包所有地址错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询钱包所有地址"):
+            r = requests.request('GET', url='{}/core/account'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'wallets' in r.text, "查询钱包所有地址错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_core_002 查询钱包所有币种')
+    @allure.testcase('test_core_002 查询钱包所有币种')
     def test_core_002(self):
-        accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'id' in r.text, "查询钱包所有币种错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询钱包所有币种"):
+            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'id' in r.text, "查询钱包所有币种错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_core_002 查询钱包所有币种')
-    def test_core_002(self):
-        accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'id' in r.text, "查询钱包所有币种错误，返回值是{}".format(r.text)
-
-    @allure.feature('test_core_003 查询钱包某个币种')
+    @allure.testcase('test_core_003 查询钱包某个币种')
     def test_core_003(self):
-        accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        r = requests.request('GET', url='{}/core/account/wallets/{}'.format(env_url, "f120fb67-0cab-4832-8064-306ada17857a"), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert r.json()['id'] == "f120fb67-0cab-4832-8064-306ada17857a", "查询钱包所有币种错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询钱包某个币种"):
+            r = requests.request('GET', url='{}/core/account/wallets/{}'.format(env_url, "f120fb67-0cab-4832-8064-306ada17857a"), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['id'] == "f120fb67-0cab-4832-8064-306ada17857a", "查询钱包所有币种错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_core_004 查询货币兑换比例')
+    @allure.testcase('test_core_004 查询货币兑换比例')
     def test_core_004(self):
         list = ['BTC-USD', 'USD-BTC', 'USD-EUR', 'EUR-USD', 'BTC-EUR', 'BTC-EUR']
-        for i in list:
-            r = requests.request('GET', url='{}/core/quotes/{}'.format(env_url, i), headers=headers)
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-            assert r.json()['quote'] != {}, " 查询货币兑换比例错误，返回值是{}".format(r.text)
+        with allure.step("查询货币兑换比例"):
+            for i in list:
+                with allure.step("查询{}兑换比例".format(i)):
+                    r = requests.request('GET', url='{}/core/quotes/{}'.format(env_url, i), headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验返回值"):
+                    assert r.json()['quote'] != {}, " 查询货币兑换比例错误，返回值是{}".format(r.text)
 
 
 # market相关cases
 class TestMarketApi:
-    @allure.feature('test_market_001 获得价格曲线')
+    @allure.testcase('test_market_001 获得价格曲线')
     def test_market_001(self):
-        r = requests.request('GET', url='{}/marketstat/public/quote-chart'.format(env_url), headers=headers)
-        pass
+        with allure.step("循环货币循环时间"):
+            pass
+        for i in ['BTCEUR', 'BTCUSD', 'ETHEUR', 'ETHUSD', 'USDEUR']:
+            for y in ['10', '60', 'D', 'W', 'M']:
+                params = {
+                    "pair": i,
+                    "interval": y,
+                    "from_time": "0",
+                    "to_time": ""
+                }
+                r = requests.request('GET', url='{}/marketstat/public/quote-chart'.format(env_url), params=params,
+                                     headers=headers)
+                logger.info('货币{}的{}时间的曲线{}'.format(i, y, r.text))
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验返回值"):
+                    assert 'items' in r.text, "获得价格曲线错误，返回值是{}".format(r.text)
 
 
 # payout相关cases
 class TestPayoutApi:
 
-    @allure.feature('test_payout_001 没有Kyc用户添加常用收款地址失败')
+    @allure.testcase('test_payout_001 没有Kyc用户添加常用收款地址失败')
     def test_payout_001(self):
-        accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        data = {
-            "nickName": "alan EUR ERC20",
-            "currency": "USDT",
-            "method": "ERC20",
-            "address": "test-address"
-        }
-        r = requests.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 403, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'ACC_FORBIDDEN' in r.text, "没有Kyc用户添加常用收款地址失败错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='yuk3e@cabital.com', password="A!234sdfg")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("没有Kyc用户添加常用收款地址失败"):
+            data = {
+                "nickName": "alan EUR ERC20",
+                "currency": "USDT",
+                "method": "ERC20",
+                "address": "test-address"
+            }
+            r = requests.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 403, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'ACC_FORBIDDEN' in r.text, "没有Kyc用户添加常用收款地址失败错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_002 有Kyc用户添加常用收款地址')
+    @allure.testcase('test_payout_002 有Kyc用户添加常用收款地址')
     def test_payout_002(self):
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        data = {
-            "nickName": "alan EUR ERC20",
-            "currency": "USDT",
-            "method": "ERC20",
-            "address": "test-address"
-        }
-        r = requests.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert {} == r.json(), "有Kyc用户添加常用收款地址错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("有Kyc用户添加常用收款地址"):
+            data = {
+                "nickName": "alan EUR ERC20",
+                "currency": "USDT",
+                "method": "ERC20",
+                "address": "test-address"
+            }
+            r = requests.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert {} == r.json(), "有Kyc用户添加常用收款地址错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_003 获取收款地址list')
+    @allure.testcase('test_payout_003 获取收款地址list')
     def test_payout_003(self):
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        r = requests.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'payeeList' in r.text, "获取收款地址list错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("获取收款地址list"):
+            r = requests.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'payeeList' in r.text, "获取收款地址list错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_004 获取常用收款地址')
+    @allure.testcase('test_payout_004 获取常用收款地址')
     def test_payout_004(self):
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        r = requests.request('GET', url='{}/account/myPayee/{}'.format(env_url, '23'), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'payeeList' in r.text, "获取常用收款地址错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("获取收款地址list"):
+            r = requests.request('GET', url='{}/account/myPayee/{}'.format(env_url, '23'), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'payeeList' in r.text, "获取常用收款地址错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_005 使用不存在id获取常用收款地址')
+    @allure.testcase('test_payout_005 使用不存在id获取常用收款地址')
     def test_payout_005(self):
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        r = requests.request('GET', url='{}/account/myPayee/{}'.format(env_url, '300'), headers=headers)
-        print(r.json())
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'ACC_MY_PAYEE_000001' in r.text, "使用不存在id获取常用收款地址错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("使用不存在id获取常用收款地址"):
+            r = requests.request('GET', url='{}/account/myPayee/{}'.format(env_url, '300'), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'ACC_MY_PAYEE_000001' in r.text, "使用不存在id获取常用收款地址错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_006 更新收款地址')
+    @allure.testcase('test_payout_006 更新收款地址')
     def test_payout_006(self):
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        data = {
-            "nickName": "alan EUR ERC20",
-            "currency": "EUR",
-            "method": "ERC20",
-            "address": "test-address-update",
-            "isValid": True,
-            "whitelisted": False
-        }
-        r = requests.request('PUT', url='{}/account/myPayee/{}'.format(env_url, '3'), data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert r.json() == {}, "更新收款地址错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("更新收款地址"):
+            data = {
+                "nickName": "alan EUR ERC20",
+                "currency": "EUR",
+                "method": "ERC20",
+                "address": "test-address-update",
+                "isValid": True,
+                "whitelisted": False
+            }
+            r = requests.request('PUT', url='{}/account/myPayee/{}'.format(env_url, '3'), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "更新收款地址错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_007 更新使用不存在id收款地址')
+    @allure.testcase('test_payout_007 更新使用不存在id收款地址')
     def test_payout_007(self):
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        data = {
-            "nickName": "alan EUR ERC20",
-            "currency": "EUR",
-            "method": "ERC20",
-            "address": "test-address-update",
-            "isValid": True,
-            "whitelisted": False
-        }
-        r = requests.request('PUT', url='{}/account/myPayee/{}'.format(env_url, '300'), data=json.dumps(data), headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'ACC_MY_PAYEE_000001' in r.text, "更新使用不存在id收款地址错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("更新使用不存在id收款地址"):
+            data = {
+                "nickName": "alan EUR ERC20",
+                "currency": "EUR",
+                "method": "ERC20",
+                "address": "test-address-update",
+                "isValid": True,
+                "whitelisted": False
+            }
+            r = requests.request('PUT', url='{}/account/myPayee/{}'.format(env_url, '300'), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'ACC_MY_PAYEE_000001' in r.text, "更新使用不存在id收款地址错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_008 删除收款地址')
+    @allure.testcase('test_payout_008 删除收款地址')
     def test_payout_008(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
         headers['Authorization'] = "Bearer " + accessToken
         allure.dynamic.description("增加常用地址")
         headers['Authorization'] = "Bearer " + accessToken
@@ -507,7 +742,7 @@ class TestPayoutApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 assert {} == r.json(), "删除收款地址错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_009 根据不存在的删除收款地址')
+    @allure.testcase('test_payout_009 根据不存在的删除收款地址')
     def test_payout_009(self):
         allure.dynamic.description("获取token")
         accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
@@ -518,7 +753,7 @@ class TestPayoutApi:
         assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'ACC_MY_PAYEE_000001' in r.text, "删除收款地址错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_010 获取提现费率和提现限制')
+    @allure.testcase('test_payout_010 获取提现费率和提现限制')
     def test_payout_010(self):
         allure.dynamic.description("获取token")
         accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
@@ -536,7 +771,7 @@ class TestPayoutApi:
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'fee' in r.text, "获取提现费率和提现限制错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_011 提现')
+    @allure.testcase('test_payout_011 提现')
     def test_payout_011(self):
         allure.dynamic.description("获取token")
         accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
@@ -553,7 +788,7 @@ class TestPayoutApi:
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'transaction_id' in r.text, "提现错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_012 提现失败')
+    @allure.testcase('test_payout_012 提现失败')
     def test_payout_012(self):
         allure.dynamic.description("获取token")
         accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
@@ -567,11 +802,10 @@ class TestPayoutApi:
             "method": "ERC20"
         }
         r = requests.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
-        print(r.json())
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'transaction_id' in r.text, "提现错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_013 查询提现详情')
+    @allure.testcase('test_payout_013 查询提现详情')
     def test_payout_013(self):
         allure.dynamic.description("获取token")
         accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
@@ -582,7 +816,7 @@ class TestPayoutApi:
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'transaction_time' in r.text, "查询提现详情错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_payout_014 使用错误id查询提现详情')
+    @allure.testcase('test_payout_014 使用错误id查询提现详情')
     def test_payout_014(self):
         allure.dynamic.description("获取token")
         accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
@@ -597,7 +831,7 @@ class TestPayoutApi:
 # pay in相关cases
 class TestPayInApi:
 
-    @allure.feature('test_pay_in_001 查询转入记录（不指定链）')
+    @allure.testcase('test_pay_in_001 查询转入记录（不指定链）')
     def test_pay_in_001(self):
         allure.dynamic.description("获取token")
         accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
@@ -612,7 +846,7 @@ class TestPayInApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             assert r.json() == [] or 'code' in r.text, "查询转入记录（不指定链）错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_pay_in_002 查询转入记录（使用错误币种）')
+    @allure.testcase('test_pay_in_002 查询转入记录（使用错误币种）')
     def test_pay_in_002(self):
         allure.dynamic.description("获取token")
         accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
@@ -626,7 +860,7 @@ class TestPayInApi:
         assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'method is not support message' in r.text, "查询转入记录（使用错误币种）错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_pay_in_003 查询转入记录（使用转币链查询）')
+    @allure.testcase('test_pay_in_003 查询转入记录（使用转币链查询）')
     def test_pay_in_003(self):
         allure.dynamic.description("获取token")
         accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
@@ -641,7 +875,7 @@ class TestPayInApi:
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'ERC20' in r.text, "查询转入记录（使用转币链查询）错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_pay_in_004 查询转入记录（使用错误转币链查询）')
+    @allure.testcase('test_pay_in_004 查询转入记录（使用错误转币链查询）')
     def test_pay_in_004(self):
         allure.dynamic.description("获取token")
         accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
@@ -660,23 +894,28 @@ class TestPayInApi:
 # kyc相关cases
 class TestKycApi:
 
-    @allure.feature('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
+    @allure.testcase('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
     def test_kyc_001(self):
         allure.dynamic.description("获取token")
         accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
             'accessToken']
         headers['Authorization'] = "Bearer " + accessToken
-        r = requests.request('GET', url='{}/kyc/case/start'.format(env_url), headers=headers)
+        citizenCountryCode = random.choice(citizenCountryCodeList)
+        data = {
+            "citizenCountryCode": citizenCountryCode
+        }
+        r = requests.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
         assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'KYC_CASE_000006' in r.text, "通过kyc的用户，获取kyc上传token失败错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_kyc_002 未通过kyc的用户，获取kyc上传token')
+    @allure.testcase('test_kyc_002 未通过kyc的用户，获取kyc上传token')
     def test_kyc_002(self):
         allure.dynamic.description("注册一个新账户")
+        citizenCountryCode = random.choice(citizenCountryCodeList)
         data = {
             "emailAddress": generate_email(),
             "verificationCode": "666666",
-            "citizenCountryCode": "cn",
+            "citizenCountryCode": citizenCountryCode,
             "password": "A!234sdfg"
         }
         r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
@@ -684,17 +923,22 @@ class TestKycApi:
         accessToken = r.json()['accessToken']
         headers['Authorization'] = "Bearer " + accessToken
         allure.dynamic.description("调用kyc")
-        r = requests.request('GET', url='{}/kyc/case/start'.format(env_url), headers=headers)
+        citizenCountryCode = random.choice(citizenCountryCodeList)
+        data = {
+            "citizenCountryCode": citizenCountryCode
+        }
+        r = requests.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'basic-kyc' in r.text, "通过kyc的用户，获取kyc上传token错误，返回值是{}".format(r.text)
+        assert 'Cabital_LT_KYC_Mobile_Basic' in r.text, "通过kyc的用户，获取kyc上传token错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_kyc_003 未申请kyc获取kyc-case失败')
+    @allure.testcase('test_kyc_003 未申请kyc获取kyc-case失败')
     def test_kyc_003(self):
         allure.dynamic.description("注册一个新账户")
+        citizenCountryCode = random.choice(citizenCountryCodeList)
         data = {
             "emailAddress": generate_email(),
             "verificationCode": "666666",
-            "citizenCountryCode": "cn",
+            "citizenCountryCode": citizenCountryCode,
             "password": "A!234sdfg"
         }
         r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
@@ -703,13 +947,12 @@ class TestKycApi:
         headers['Authorization'] = "Bearer " + accessToken
         allure.dynamic.description("调用kyc")
         data = {
-
         }
-        r = requests.request('POST', url='{}/kyc/case/get'.format(env_url),data=json.dumps(data), headers=headers)
+        r = requests.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'informations' in r.text, "未申请kyc获取kyc-case失败错误，返回值是{}".format(r.text)
 
-    @allure.feature('test_kyc_004 获取kyc-case')
+    @allure.testcase('test_kyc_004 获取kyc-case')
     def test_kyc_004(self):
         allure.dynamic.description("获取注册账户token")
         accessToken = AccountFunction.get_account_token(account='kimi@cabital.com', password="123456")[
@@ -721,10 +964,4 @@ class TestKycApi:
         r = requests.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'id' in r.text, "获取kyc-case错误，返回值是{}".format(r.text)
-
-
-
-
-
-
 

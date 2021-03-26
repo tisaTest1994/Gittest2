@@ -1,11 +1,13 @@
 from run import *
 from time import sleep
 import requests
+import allure
 
 
 class AccountFunction:
 
     @staticmethod
+    @allure.step
     def get_account_token(account, password):
         data = {
             "username": account,
