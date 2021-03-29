@@ -1,6 +1,7 @@
 from Function.ApiFunction import *
 from run import *
 from Function.log import *
+import allure
 
 
 # account相关cases
