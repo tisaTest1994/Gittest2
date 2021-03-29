@@ -723,109 +723,149 @@ class TestPayoutApi:
     def test_payout_008(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("增加常用地址")
-        headers['Authorization'] = "Bearer " + accessToken
-        data = {
-            "nickName": "alan EUR ERC20",
-            "currency": "USDT",
-            "method": "ERC20",
-            "address": "test-address-delete"
-        }
-        requests.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data), headers=headers)
-        allure.dynamic.description("寻找刚加的地址，获得id号")
-        r = requests.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
-        for i in r.json()['payeeList']:
-            if i['address'] == "test-address-delete":
-                allure.dynamic.description("凭借id号删除地址")
-                r = requests.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, i['id']), headers=headers)
-                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                assert {} == r.json(), "删除收款地址错误，返回值是{}".format(r.text)
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("增加常用地址"):
+            data = {
+                "nickName": "alan EUR ERC20",
+                "currency": "USDT",
+                "method": "ERC20",
+                "address": "test-address-delete"
+            }
+            requests.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
+                             headers=headers)
+        with allure.step("寻找刚加的地址，获得id号"):
+            r = requests.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
+            for i in r.json()['payeeList']:
+                if i['address'] == "test-address-delete":
+                    with allure.step("凭借id号删除地址"):
+                        r = requests.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, i['id']),
+                                         headers=headers)
+                        with allure.step("状态码和返回值"):
+                            logger.info('状态码是{}'.format(str(r.status_code)))
+                            logger.info('返回值是{}'.format(str(r.text)))
+                        with allure.step("校验状态码"):
+                            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                        with allure.step("校验返回值"):
+                            assert {} == r.json(), "删除收款地址错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_009 根据不存在的删除收款地址')
     def test_payout_009(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("凭借空id号删除地址")
-        r = requests.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, '300'), headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'ACC_MY_PAYEE_000001' in r.text, "删除收款地址错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("凭借空id号删除地址"):
+            r = requests.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, '300'), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'ACC_MY_PAYEE_000001' in r.text, "删除收款地址错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_010 获取提现费率和提现限制')
     def test_payout_010(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("获取提现费率和提现限制")
-        data = {
-            "amount": "0.8",
-            "code": "BTC",
-            "address": "xxxxxxxxxxxx",
-            "method": "ERC20",
-            "receive_amount": "0.79995"
-        }
-        r = requests.request('POST', url='{}/pay/withdraw/verification'.format(env_url), data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'fee' in r.text, "获取提现费率和提现限制错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("获取提现费率和提现限制"):
+            data = {
+                "amount": "0.8",
+                "code": "BTC",
+                "address": "xxxxxxxxxxxx",
+                "method": "ERC20",
+                "receive_amount": "0.79995"
+            }
+            r = requests.request('POST', url='{}/pay/withdraw/verification'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'fee' in r.text, "获取提现费率和提现限制错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_011 提现')
     def test_payout_011(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("提现")
-        data = {
-            "amount": "0.8",
-            "code": "BTC",
-            "address": "xxxxxxxxxxxx",
-            "method": "ERC20"
-        }
-        r = requests.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'transaction_id' in r.text, "提现错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("提现"):
+            data = {
+                "amount": "0.8",
+                "code": "BTC",
+                "address": "xxxxxxxxxxxx",
+                "method": "ERC20"
+            }
+            r = requests.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'transaction_id' in r.text, "提现错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_012 提现失败')
     def test_payout_012(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("提现")
-        data = {
-            "amount": "0.8",
-            "code": "BTC",
-            "address": "b8915f70-3e28-480b-970a-d54ec8d8a284",
-            "method": "ERC20"
-        }
-        r = requests.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'transaction_id' in r.text, "提现错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("提现"):
+            data = {
+                "amount": "0.8",
+                "code": "BTC",
+                "address": "b8915f70-3e28-480b-970a-d54ec8d8a284",
+                "method": "ERC20"
+            }
+            r = requests.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'transaction_id' in r.text, "提现错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_013 查询提现详情')
     def test_payout_013(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("查询提现详情")
-        r = requests.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, '46842250-3fa0-4bd1-9d46-4467dfa9ce52'), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'transaction_time' in r.text, "查询提现详情错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询提现详情"):
+            r = requests.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, '46842250-3fa0-4bd1-9d46-4467dfa9ce52'), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'transaction_time' in r.text, "查询提现详情错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_014 使用错误id查询提现详情')
     def test_payout_014(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("查询提现详情")
-        r = requests.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, '468422531310-3fa0-4bd1-9d46-4467dfa9ce52'), headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'no rows in result set' in r.text, "使用错误id查询提现详情错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询提现详情"):
+            r = requests.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, '468422531310-3fa0-4bd1-9d46-4467dfa9ce52'), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'no rows in result set' in r.text, "使用错误id查询提现详情错误，返回值是{}".format(r.text)
 
 
 # pay in相关cases
@@ -833,62 +873,83 @@ class TestPayInApi:
 
     @allure.testcase('test_pay_in_001 查询转入记录（不指定链）')
     def test_pay_in_001(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("查询转入记录")
-        currency = ['USDT', 'BTC', 'ETH']
-        data = {}
-        for i in currency:
-            data['code'] = i
-            r = requests.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data, headers=headers)
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-            assert r.json() == [] or 'code' in r.text, "查询转入记录（不指定链）错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询转入记录"):
+            currency = ['USDT', 'BTC', 'ETH']
+            data = {}
+            for i in currency:
+                data['code'] = i
+                r = requests.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data,
+                                     headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验返回值"):
+                    assert r.json() == [] or 'code' in r.text, "查询转入记录（不指定链）错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_pay_in_002 查询转入记录（使用错误币种）')
     def test_pay_in_002(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("查询转入记录")
-        data = {
-            'code': 'US345'
-        }
-        r = requests.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data, headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'method is not support message' in r.text, "查询转入记录（使用错误币种）错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询转入记录"):
+            data = {
+                'code': 'US345'
+            }
+            r = requests.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data, headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'method is not support message' in r.text, "查询转入记录（使用错误币种）错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_pay_in_003 查询转入记录（使用转币链查询）')
     def test_pay_in_003(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("查询转入记录")
-        data = {
-            'code': 'ETH',
-            'method': 'ERC20'
-        }
-        r = requests.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data, headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'ERC20' in r.text, "查询转入记录（使用转币链查询）错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询转入记录"):
+            data = {
+                'code': 'ETH',
+                'method': 'ERC20'
+            }
+            r = requests.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data, headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'ERC20' in r.text, "查询转入记录（使用转币链查询）错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_pay_in_004 查询转入记录（使用错误转币链查询）')
     def test_pay_in_004(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("查询转入记录")
-        data = {
-            'code': 'ETH',
-            'method': 'ER124141'
-        }
-        r = requests.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data, headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'method is not support message' in r.text, "查询转入记录（使用错误转币链查询）错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询转入记录"):
+            data = {
+                'code': 'ETH',
+                'method': 'ER124141'
+            }
+            r = requests.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data, headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'method is not support message' in r.text, "查询转入记录（使用错误转币链查询）错误，返回值是{}".format(r.text)
 
 
 # kyc相关cases
@@ -896,72 +957,103 @@ class TestKycApi:
 
     @allure.testcase('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
     def test_kyc_001(self):
-        allure.dynamic.description("获取token")
-        accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        citizenCountryCode = random.choice(citizenCountryCodeList)
-        data = {
-            "citizenCountryCode": citizenCountryCode
-        }
-        r = requests.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
-        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'KYC_CASE_000006' in r.text, "通过kyc的用户，获取kyc上传token失败错误，返回值是{}".format(r.text)
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account='slide.xiao7@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("随机获得国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+            data = {
+                "citizenCountryCode": citizenCountryCode
+            }
+        with allure.step("通过kyc的用户，获取kyc上传token失败"):
+            r = requests.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'KYC_CASE_000006' in r.text, "通过kyc的用户，获取kyc上传token失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_002 未通过kyc的用户，获取kyc上传token')
     def test_kyc_002(self):
-        allure.dynamic.description("注册一个新账户")
-        citizenCountryCode = random.choice(citizenCountryCodeList)
-        data = {
-            "emailAddress": generate_email(),
-            "verificationCode": "666666",
-            "citizenCountryCode": citizenCountryCode,
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        accessToken = r.json()['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("调用kyc")
-        citizenCountryCode = random.choice(citizenCountryCodeList)
-        data = {
-            "citizenCountryCode": citizenCountryCode
-        }
-        r = requests.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'Cabital_LT_KYC_Mobile_Basic' in r.text, "通过kyc的用户，获取kyc上传token错误，返回值是{}".format(r.text)
+        with allure.step("随机获得国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+        with allure.step("注册一个新账户"):
+            data = {
+                "emailAddress": generate_email(),
+                "verificationCode": "666666",
+                "citizenCountryCode": citizenCountryCode,
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("获得token"):
+            accessToken = r.json()['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("获取随机国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+        with allure.step("未通过kyc的用户，获取kyc上传token"):
+            data = {
+                "citizenCountryCode": citizenCountryCode
+            }
+            r = requests.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'Cabital_LT_KYC_Mobile_Basic' in r.text, "通过kyc的用户，获取kyc上传token错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_003 未申请kyc获取kyc-case失败')
     def test_kyc_003(self):
-        allure.dynamic.description("注册一个新账户")
-        citizenCountryCode = random.choice(citizenCountryCodeList)
-        data = {
-            "emailAddress": generate_email(),
-            "verificationCode": "666666",
-            "citizenCountryCode": citizenCountryCode,
-            "password": "A!234sdfg"
-        }
-        r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
-                             headers=headers)
-        accessToken = r.json()['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("随机获得国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+        with allure.step("注册一个新账户"):
+            data = {
+                "emailAddress": generate_email(),
+                "verificationCode": "666666",
+                "citizenCountryCode": citizenCountryCode,
+                "password": "A!234sdfg"
+            }
+            r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("获得token"):
+            accessToken = r.json()['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
         allure.dynamic.description("调用kyc")
-        data = {
-        }
-        r = requests.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'informations' in r.text, "未申请kyc获取kyc-case失败错误，返回值是{}".format(r.text)
+        with allure.step("未申请kyc获取kyc-case失败"):
+            data = {
+            }
+            r = requests.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'informations' in r.text, "未申请kyc获取kyc-case失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_004 获取kyc-case')
     def test_kyc_004(self):
-        allure.dynamic.description("获取注册账户token")
-        accessToken = AccountFunction.get_account_token(account='kimi@cabital.com', password="123456")[
-            'accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        allure.dynamic.description("调用kyc")
-        data = {
-        }
-        r = requests.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'id' in r.text, "获取kyc-case错误，返回值是{}".format(r.text)
+        with allure.step("获取注册账户token"):
+            accessToken = AccountFunction.get_account_token(account='kimi@cabital.com', password="123456")['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("调用kyc"):
+            data = {
+            }
+            r = requests.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'id' in r.text, "获取kyc-case错误，返回值是{}".format(r.text)
 
