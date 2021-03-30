@@ -4,5 +4,7 @@ before_script:
 
 apiTest:
   stage: test
+  tag:
+    - python
   script:
     - python run.py
