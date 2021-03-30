@@ -19,8 +19,7 @@ citizenCountryCodeList = get_json()['citizenCountryCodeList']
 if __name__ == '__main__':
     pytest.main(['TestCase/TestApiCase/TestCase.py', '-v', '--alluredir', './Reports'])
     split = "allure generate ./Reports  -o ./Reports/html --clean"
-    import sys
-    print(sys.argv[0])
+    print(os.system('pwd'))
     os.system(split)
 
 
