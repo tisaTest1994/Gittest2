@@ -21,6 +21,7 @@ class TestAccountUiCase:
 
     @allure.testcase('test_account_001 使用已经注册账户登录，登录进入主页后退出')
     def test_account_001(self):
+        #@allure.step()
         UiFunction.login(account='yuk3e@cabital.com', password='A!234sdfg')
         UiFunction.logout(account='yuk3e@cabital.com')
 
