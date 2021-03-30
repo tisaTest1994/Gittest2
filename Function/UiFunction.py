@@ -27,6 +27,6 @@ class UiFunction:
             if poco(account).exists():
                 poco(account).click()
             else:
-                click(0.36, 0.03)
+                click(0.36, 0.025)
             poco('退出登录').click()
 
