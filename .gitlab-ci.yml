@@ -1,4 +1,5 @@
 before_script:
+  - apt-get install allure
   - pip install -r requirements.txt
 
 apiTest:
