@@ -1057,4 +1057,3 @@ class TestKycApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'id' in r.text, "获取kyc-case错误，返回值是{}".format(r.text)
-
