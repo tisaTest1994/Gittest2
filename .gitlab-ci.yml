@@ -15,3 +15,7 @@ apiTest:
     - python
   script:
     - python run.py
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 3 day
