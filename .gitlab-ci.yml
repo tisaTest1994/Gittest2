@@ -7,3 +7,5 @@ test2:
   stage: test
   script:
     - python run.py
+  tags:
+    - aws
