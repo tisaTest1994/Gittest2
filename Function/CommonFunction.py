@@ -3,6 +3,7 @@ from faker import Faker
 import random
 import json
 import os
+import imaplib
 
 
 # 获取当前时间
@@ -54,3 +55,7 @@ def get_json():
     with open(path, "rb+") as f:
         js = json.load(f)
     return js
+
+
+# 获取邮件内的验证码
+

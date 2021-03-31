@@ -8,6 +8,7 @@ class UiFunction:
     @staticmethod
     def login(account, password):
         UiFunction.logout(account)
+        sleep(5)
         assert poco('Move your 1st step towards digital assets with Cabital').exists(), "没到注册登录页面"
         poco('Log In').click()
         assert poco('Welcome Back').exists(), "没到输入密码界面"
