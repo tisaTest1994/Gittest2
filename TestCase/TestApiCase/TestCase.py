@@ -633,26 +633,26 @@ class TestAccountApi:
 # kyc相关cases
 class TestKycApi:
 
-    # @allure.testcase('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
-    # def test_kyc_001(self):
-    #     with allure.step("获取token"):
-    #         accessToken = AccountFunction.get_account_token(account="james@test.com", password="A!234sdfg")['accessToken']
-    #     with allure.step("把token写入headers"):
-    #         headers['Authorization'] = "Bearer " + accessToken
-    #     with allure.step("随机获得国家代码"):
-    #         citizenCountryCode = random.choice(citizenCountryCodeList)
-    #         data = {
-    #             "citizenCountryCode": citizenCountryCode
-    #         }
-    #     with allure.step("通过kyc的用户，获取kyc上传token失败"):
-    #         r = requests.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
-    #     with allure.step("状态码和返回值"):
-    #         logger.info('状态码是{}'.format(str(r.status_code)))
-    #         logger.info('返回值是{}'.format(str(r.text)))
-    #     with allure.step("校验状态码"):
-    #         assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-    #     with allure.step("校验返回值"):
-    #         assert 'KYC_CASE_000006' in r.text, "通过kyc的用户，获取kyc上传token失败错误，返回值是{}".format(r.text)
+    @allure.testcase('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
+    def test_kyc_001(self):
+        with allure.step("获取token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("随机获得国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+            data = {
+                "citizenCountryCode": citizenCountryCode
+            }
+        with allure.step("通过kyc的用户，获取kyc上传token失败"):
+            r = requests.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'KYC_CASE_000001' in r.text, "通过kyc的用户，获取kyc上传token失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_002 未通过kyc的用户，获取kyc上传token')
     def test_kyc_002(self):
@@ -770,8 +770,8 @@ class TestCoreApi:
         with allure.step("查询钱包所有币种"):
             r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
             id = r.json()[0]["id"]
-            print(id)
         with allure.step("查询钱包某个币种"):
+
             r = requests.request('GET', url='{}/core/account/wallets/{}'.format(env_url, id), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -779,7 +779,7 @@ class TestCoreApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['id'] != None, "查询钱包所有币种错误，返回值是{}".format(r.text)
+            assert r.json()['id'] is not None, "查询钱包所有币种错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_core_004 查询货币兑换比例')
     def test_core_004(self):
@@ -795,6 +795,106 @@ class TestCoreApi:
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
                     assert r.json()['quote'] != {}, " 查询货币兑换比例错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_core_005 查询钱包所有币种，使用SAVING模式')
+    def test_core_005(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询钱包所有币种，使用SAVING模式"):
+            params = {
+                'type': 'SAVING'
+            }
+            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'SAVING' in r.text, "查询钱包所有币种，使用SAVING模式错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_core_006 查询钱包所有币种，使用BALANCE模式')
+    def test_core_006(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询钱包所有币种，使用BALANCE模式"):
+            params = {
+                'type': 'BALANCE'
+            }
+            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'BALANCE' in r.text, "查询钱包所有币种，使用BALANCE模式错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_core_007 查询钱包BTC地址')
+    def test_core_007(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询钱包BTC地址"):
+            params = {
+                'code': 'BTC'
+            }
+            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'BTC' in r.text, "查询钱包BTC地址错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_core_008 查询钱包ETH地址')
+    def test_core_008(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询钱包ETH地址"):
+            params = {
+                'code': 'BTC'
+            }
+            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'ETH' in r.text, "查询钱包ETH地址错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_core_007 查询钱包USDT地址')
+    def test_core_007(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("查询钱包USDT地址"):
+            params = {
+                'code': 'USDT'
+            }
+            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'USDT' in r.text, "查询钱包USDT地址错误，返回值是{}".format(r.text)
 
 
 # market相关cases
