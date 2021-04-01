@@ -75,22 +75,22 @@ class TestAccountApi:
 
     @allure.testcase('test_account_004 申请注册验证码,全可过国家')
     def test_account_004(self):
-        with allure.step("获取全部国家代码并依次带入"):
-            for i in citizenCountryCodeList:
-                logger.info('本次国家代码是{}'.format(i))
-                data = {
-                    "emailAddress": generate_email(),
-                    "citizenCountryCode": i
-                }
-                r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
-                                     data=json.dumps(data), headers=headers)
-                with allure.step("状态码和返回值"):
-                    logger.info('状态码是{}'.format(str(r.status_code)))
-                    logger.info('返回值是{}'.format(str(r.text)))
-                with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                with allure.step("校验返回值"):
-                    assert r.json() == {}, "申请注册验证码,全可过国家错误，返回值是{}".format(r.text)
+        with allure.step("获取随机国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+            data = {
+                "emailAddress": generate_email(),
+                "citizenCountryCode": citizenCountryCode
+            }
+            r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
+                                 data=json.dumps(data), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+                logger.info('国家代码是{}'.format(citizenCountryCode))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json() == {}, "申请注册验证码,全可过国家错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_005 申请注册验证码邮箱已注册')
     def test_account_005(self):
@@ -746,8 +746,7 @@ class TestCoreApi:
     @allure.testcase('test_core_002 查询钱包所有币种')
     def test_core_002(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
-                'accessToken']
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询钱包所有币种"):
