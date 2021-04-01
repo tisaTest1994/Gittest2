@@ -78,7 +78,7 @@ class TestAccountApi:
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(citizenCountryCodeList)
             data = {
-                "emailAddress": generate_email(),
+                "emailAddress": "zcdsw159@sina.com",
                 "citizenCountryCode": citizenCountryCode
             }
             r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
