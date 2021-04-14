@@ -18,7 +18,7 @@ class AccountFunction:
 
     # 注册
     @staticmethod
-    def sign_up(account='', password='12345678'):
+    def sign_up(account='', password='Abc112233'):
         citizenCountryCode = random.choice(citizenCountryCodeList)
         data = {
             "emailAddress": account,
@@ -27,3 +27,17 @@ class AccountFunction:
             "password": password
         }
         requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
+
+    # 提现获取交易id
+    @staticmethod
+    def get_payout_transaction_id(account=email['email'], password=email['password'], amount='0.0008',address='0x428DA40C585514022b2eB537950d5AB5C7365a07' ):
+        accessToken = AccountFunction.get_account_token(account=account,  password=password)['accessToken']
+        headers['Authorization'] = "Bearer " + accessToken
+        data = {
+            "amount": amount,
+            "code": "ETH",
+            "address": address,
+            "method": "ERC20"
+        }
+        r = requests.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        return r.json()['transaction_id']

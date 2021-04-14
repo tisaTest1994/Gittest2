@@ -25,6 +25,14 @@ def generate_number(number):
     return a
 
 
+# 生成随机字符串
+def generate_string(number):
+    a = ""
+    for i in range(0, number):
+        a = a + str(random.choice("0123456789qbcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPWRSTUVWXYZ"))
+    return a
+
+
 # 生成随机电话号码
 def generate_phone():
     return "135" + generate_number(8)
