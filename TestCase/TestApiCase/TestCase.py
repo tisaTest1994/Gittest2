@@ -1263,7 +1263,7 @@ class TestPayoutApi:
     @allure.testcase('test_payout_012 提现ETH失败')
     def test_payout_012(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])[
+            accessToken = AccountFunction.get_account_token(account="yilei2@cabital.com",  password=email['password'])[
                 'accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
