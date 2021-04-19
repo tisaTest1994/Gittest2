@@ -22,7 +22,7 @@ def get_test_result():
 
 # 和slack交互
 def slack_report():
-    slackUrl = get_json()['slackTestUrl']
+    slackUrl = get_json()['slackUrl']
     slack = slackweb.Slack(url=slackUrl)
     result = get_test_result()
     id = get_job_id()
@@ -32,11 +32,8 @@ def slack_report():
             "text": "ToTal Test Cases number: _{}_,"
                     "\n Pass Test Cases number: _{}_,"
                     "\n Failed Test Cases number: _{}_,"
-                    "\n Broken Test Cases number: _{}_,"
-                    "\n Skipped Test Cases number: _{}_"
                     "\n Detailed report address is https://cabital.gitlab.io/-/Test/-/jobs/{"
-                    "}/artifacts/Reports/html/index.html".format(result["Total"], result["PASSED"], result["FAILED"],
-                                                                 result["BROKEN"], result["SKIPPED"], id),
+                    "}/artifacts/Reports/html/index.html".format(result["Total"], result["PASSED"], result["FAILED"], id),
             "pretext": "_Api Test Report_",
             "ts": time.time()
         }
