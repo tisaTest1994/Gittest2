@@ -1,5 +1,5 @@
 import pytest
-import os
+from Function.Slack import *
 from Function.CommonFunction import *
 
 # 选择环境，得到环境url
@@ -20,6 +20,6 @@ if __name__ == '__main__':
     pytest.main(['TestCase/TestApiCase/TestCase.py', '-v', '--alluredir', './Reports'])
     split = "allure generate ./Reports  -o ./Reports/html --clean"
     os.system(split)
-
+    slack_report()
 
 

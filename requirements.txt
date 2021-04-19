@@ -50,3 +50,7 @@ toml==0.10.2
 urllib3==1.26.3
 websocket-client==0.48.0
 wrapt==1.12.1
+
+wxpy~=0.3.9.8
+locust~=1.4.4
+slackweb~=1.0.5
