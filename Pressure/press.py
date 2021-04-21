@@ -1,6 +1,6 @@
 from run import *
 from locust import HttpUser, task, between
-from Function.ApiFunction import *
+from Function.api_function import *
 
 
 class MyUser(HttpUser):

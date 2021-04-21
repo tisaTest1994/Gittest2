@@ -1,4 +1,4 @@
-from Function.UiFunction import *
+from Function.ui_function import *
 import allure
 
 

@@ -2,7 +2,7 @@ import slackweb
 import time
 import csv
 import requests
-from Function.CommonFunction import *
+from Function.common_function import *
 
 
 # 获取测试结果
