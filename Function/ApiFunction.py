@@ -41,3 +41,8 @@ class AccountFunction:
         }
         r = requests.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
         return r.json()['transaction_id']
+
+    # 赚钱
+    @staticmethod
+    def interest_accrual():
+        pass
