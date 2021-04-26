@@ -4,10 +4,10 @@ before_script:
   - apt-get install default-jre -y
   - apt-get install default-jdk -y
   - apt-get install curl -y
-#   - apt-get install gzip -y
-#   - curl -o allure-2.7.0.tgz -Ls https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/2.7.0/allure-2.7.0.tgz
-#   - tar -xvf allure-2.7.0.tgz -C /opt/
-#   - ln -s /opt/allure-2.7.0/bin/allure /usr/bin/allure
+  - apt-get install gzip -y
+  - curl -o allure-2.7.0.tgz -Ls https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/2.7.0/allure-2.7.0.tgz
+  - tar zxvf allure-2.7.0.tgz -C /opt/
+  - ln -s /opt/allure-2.7.0/bin/allure /usr/bin/allure
   - pip install -r requirements.txt
 
 apiTest:
