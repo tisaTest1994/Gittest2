@@ -14,7 +14,7 @@ class TestMarketApi:
                     "pair": i,
                     "interval": y,
                     "from_time": "0",
-                    "to_time": ""
+                    "to_time": "16312131"
                 }
                 r = requests.request('GET', url='{}/marketstat/public/quote-chart'.format(env_url), params=params,
                                      headers=headers)
