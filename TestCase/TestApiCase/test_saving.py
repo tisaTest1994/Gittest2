@@ -1,6 +1,7 @@
 from Function.api_function import *
 from run import *
 from Function.log import *
+from decimal import *
 import allure
 
 
@@ -99,15 +100,26 @@ class TestSavingApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
-            r = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+            r1 = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择BTC投资项目"):
             BTCList = []
-            for i in r.json():
+            for i in r1.json():
                 if i['code'] == 'BTC':
                     BTCList.append(i)
             if len(BTCList) >= 1:
                 BTC_item = random.choice(BTCList)
-            print(BTC_item)
+        with allure.step("获得投资前，目前持有总数"):
+            r2 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']), headers=headers)
+            total_holding_old = r2.json()['total_holding']['amount']
+            logger.info('投资btc前，目前持有项目的btc数量是{}'.format(total_holding_old))
+        with allure.step("投资前，查询钱包可用btc金额"):
+            r3 = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+            for i in r3.json():
+                if i['code'] == 'BTC' and i['wallet_type'] == 'BALANCE':
+                    for y in i['balances']:
+                        if y['type'] == 'BALANCE_TYPE_AVAILABLE':
+                            balance_type_available_amount_old = y['amount']
+            logger.info('投资btc前，目前持有可用的btc数量是{}'.format(balance_type_available_amount_old))
         with allure.step("有足够BTC的用户发起购买BTC投资项目成功"):
             data = {
                 "tx_type": 1,
@@ -121,8 +133,25 @@ class TestSavingApi:
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("获得投资后，目前持有总数"):
+                r4 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']),
+                                      headers=headers)
+                total_holding_latest = r4.json()['total_holding']['amount']
+                logger.info('投资btc后，目前持有项目的btc数量是{}'.format(total_holding_latest))
+            with allure.step("投资后，查询钱包可用btc金额"):
+                r3 = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+                for i in r3.json():
+                    if i['code'] == 'BTC' and i['wallet_type'] == 'BALANCE':
+                        for y in i['balances']:
+                            if y['type'] == 'BALANCE_TYPE_AVAILABLE':
+                                balance_type_available_amount_latest = y['amount']
+                logger.info('投资btc后，目前持有可用的btc数量是{}'.format(balance_type_available_amount_latest))
             with allure.step("校验返回值"):
-                assert 'tx_id' in r.text, "有足够BTC的用户发起购买BTC投资项目成功错误，返回值是{}".format(r.text)
+                logger.info('本次投资是{}'.format(data['amount']))
+                assert Decimal(total_holding_old) + Decimal(data['amount']) == Decimal(total_holding_latest), \
+                    "有足够BTC的用户发起购买BTC投资项目,投资金额（total_holding）错误，返回值是{}".format(r.text)
+                assert Decimal(balance_type_available_amount_old) - Decimal(data['amount']) == Decimal(balance_type_available_amount_latest), \
+                    "有足够BTC的用户发起购买BTC投资项目,剩余可用资金错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_006 有足够ETH的用户发起购买ETH投资项目成功')
     def test_saving_006(self):
@@ -131,29 +160,58 @@ class TestSavingApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
-            r = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+            r1 = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择ETH投资项目"):
-            BTCList = []
-            for i in r.json():
+            List = []
+            for i in r1.json():
                 if i['code'] == 'ETH':
-                    BTCList.append(i)
-            if len(BTCList) >= 1:
-                BTC_item = random.choice(BTCList)
+                    List.append(i)
+            if len(List) >= 1:
+                item = random.choice(List)
+        with allure.step("获得投资前，目前持有总数"):
+            r2 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, item['product_id']), headers=headers)
+            total_holding_old = r2.json()['total_holding']['amount']
+            logger.info('投资ETH前，目前持有项目的ETH数量是{}'.format(total_holding_old))
+        with allure.step("投资前，查询钱包可用ETH金额"):
+            r3 = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+            for i in r3.json():
+                if i['code'] == 'ETH' and i['wallet_type'] == 'BALANCE':
+                    for y in i['balances']:
+                        if y['type'] == 'BALANCE_TYPE_AVAILABLE':
+                            balance_type_available_amount_old = y['amount']
+            logger.info('投资ETH前，目前持有可用的ETH数量是{}'.format(balance_type_available_amount_old))
         with allure.step("有足够ETH的用户发起购买ETH投资项目成功"):
             data = {
                 "tx_type": 1,
-                "amount": "0.00167",
-                "code": BTC_item['code']
+                "amount": "0.00027",
+                "code": item['code']
             }
-            r = requests.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
+            r = requests.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, item['product_id']),
                                  data=json.dumps(data), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("获得投资后，目前持有总数"):
+                r4 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, item['product_id']),
+                                      headers=headers)
+                total_holding_latest = r4.json()['total_holding']['amount']
+                logger.info('投资ETH后，目前持有项目的ETH数量是{}'.format(total_holding_latest))
+            with allure.step("投资后，查询钱包可用ETH金额"):
+                r3 = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+                for i in r3.json():
+                    if i['code'] == 'ETH' and i['wallet_type'] == 'BALANCE':
+                        for y in i['balances']:
+                            if y['type'] == 'BALANCE_TYPE_AVAILABLE':
+                                balance_type_available_amount_latest = y['amount']
+                logger.info('投资ETH后，目前持有可用的ETH数量是{}'.format(balance_type_available_amount_latest))
             with allure.step("校验返回值"):
-                assert 'tx_id' in r.text, "有足够ETH的用户发起购买ETH投资项目成功错误，返回值是{}".format(r.text)
+                logger.info('本次投资是{}'.format(data['amount']))
+                assert Decimal(total_holding_old) + Decimal(data['amount']) == Decimal(total_holding_latest), \
+                    "有足够ETH的用户发起购买ETH投资项目,投资金额（total_holding）错误，返回值是{}".format(r.text)
+                assert Decimal(balance_type_available_amount_old) - Decimal(data['amount']) == Decimal(balance_type_available_amount_latest), \
+                    "有足够ETH的用户发起购买ETH投资项目,剩余可用资金错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_007 有足够USDT的用户发起购买USDT投资项目成功')
     def test_saving_007(self):
@@ -162,18 +220,30 @@ class TestSavingApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
-            r = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+            r1 = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择USDT投资项目"):
             BTCList = []
-            for i in r.json():
+            for i in r1.json():
                 if i['code'] == 'USDT':
                     BTCList.append(i)
             if len(BTCList) >= 1:
                 BTC_item = random.choice(BTCList)
-        with allure.step("有足够BTC的用户发起购买USDT投资项目成功"):
+        with allure.step("获得投资前，目前持有总数"):
+            r2 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']), headers=headers)
+            total_holding_old = r2.json()['total_holding']['amount']
+            logger.info('投资USDT前，目前持有项目的USDT数量是{}'.format(total_holding_old))
+        with allure.step("投资前，查询钱包可用USDT金额"):
+            r3 = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+            for i in r3.json():
+                if i['code'] == 'USDT' and i['wallet_type'] == 'BALANCE':
+                    for y in i['balances']:
+                        if y['type'] == 'BALANCE_TYPE_AVAILABLE':
+                            balance_type_available_amount_old = y['amount']
+            logger.info('投资USDT前，目前持有可用的USDT数量是{}'.format(balance_type_available_amount_old))
+        with allure.step("有足够USDT的用户发起购买USDT投资项目成功"):
             data = {
                 "tx_type": 1,
-                "amount": "22",
+                "amount": "1.17",
                 "code": BTC_item['code']
             }
             r = requests.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
@@ -183,8 +253,25 @@ class TestSavingApi:
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("获得投资后，目前持有总数"):
+                r4 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']),
+                                      headers=headers)
+                total_holding_latest = r4.json()['total_holding']['amount']
+                logger.info('投资USDT后，目前持有项目的USDT数量是{}'.format(total_holding_latest))
+            with allure.step("投资后，查询钱包可用USDT金额"):
+                r3 = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+                for i in r3.json():
+                    if i['code'] == 'USDT' and i['wallet_type'] == 'BALANCE':
+                        for y in i['balances']:
+                            if y['type'] == 'BALANCE_TYPE_AVAILABLE':
+                                balance_type_available_amount_latest = y['amount']
+                logger.info('投资USDT后，目前持有可用的USDT数量是{}'.format(balance_type_available_amount_latest))
             with allure.step("校验返回值"):
-                assert 'tx_id' in r.text, "有足够USDT的用户发起购买USDT投资项目成功错误，返回值是{}".format(r.text)
+                logger.info('本次投资是{}'.format(data['amount']))
+                assert Decimal(total_holding_old) + Decimal(data['amount']) == Decimal(total_holding_latest), \
+                    "有足够BTC的用户发起购买USDT投资项目,投资金额（total_holding）错误，返回值是{}".format(r.text)
+                assert Decimal(balance_type_available_amount_old) - Decimal(data['amount']) == Decimal(balance_type_available_amount_latest), \
+                    "有足够BTC的用户发起购买USDT投资项目,剩余可用资金错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_008 投资金额小于最小投资BTC数量')
     def test_saving_008(self):
@@ -235,7 +322,7 @@ class TestSavingApi:
         with allure.step("投资金额小于最小投资ETH数量"):
             data = {
                 "tx_type": 1,
-                "amount": "0.00167",
+                "amount": "0.00000000167",
                 "code": BTC_item['code']
             }
             r = requests.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
@@ -244,9 +331,9 @@ class TestSavingApi:
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
-                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'tx_id' in r.text, "投资金额小于最小投资ETH数量错误，返回值是{}".format(r.text)
+                assert 'amount < min amount' in r.text, "投资金额小于最小投资ETH数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_010 投资金额小于最小投资USDT数量')
     def test_saving_010(self):
@@ -303,25 +390,44 @@ class TestSavingApi:
             with allure.step("校验返回值"):
                 assert 'total_holding' in r.text, "获取产品持有情况错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_saving_012 赎回已经投资的ETH项目')
-    def test_saving_010(self):
+    @allure.testcase('test_saving_012 赎回BTC投资项目成功')
+    def test_saving_012(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
-            r = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
-        with allure.step("选择ETH投资项目"):
+            r1 = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+        with allure.step("选择BTC投资项目"):
             BTCList = []
-            for i in r.json():
-                if i['code'] == 'ETH':
+            for i in r1.json():
+                if i['code'] == 'BTC':
                     BTCList.append(i)
             if len(BTCList) >= 1:
                 BTC_item = random.choice(BTCList)
-        with allure.step("投资金额小于最小投资USDT数量"):
+        with allure.step("赎回项目前，总共持有金额"):
+            r2 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']), headers=headers)
+            total_holding_old = r2.json()['total_holding']['amount']
+            logger.info('赎回项目前，总共持有金额数量是{}'.format(total_holding_old))
+        with allure.step("赎回项目前，可计息金额"):
+            accruing_amount_old = r2.json()['accruing_amount']['amount']
+            logger.info('赎回项目前，可计息金额数量是{}'.format(accruing_amount_old))
+        with allure.step("赎回项目前，今天申购金额"):
+            subscribing_amount_old = r2.json()['subscribing_amount']['amount']
+            logger.info('赎回项目前，今天申购金额数量是{}'.format(subscribing_amount_old))
+        with allure.step("赎回项目前，可赎回金额"):
+            redeemable_amount_old = r2.json()['redeemable_amount']['amount']
+            logger.info('赎回项目前，可赎回金额数量是{}'.format(redeemable_amount_old))
+        with allure.step("赎回项目前，赎回中金额"):
+            redeeming_amount_old = r2.json()['redeeming_amount']['amount']
+            logger.info('赎回项目前，赎回中金额数量是{}'.format(redeeming_amount_old))
+        with allure.step("赎回项目前，检查可赎回金额 + 正在赎回金额 = 总持有金额"):
+            assert Decimal(redeemable_amount_old) + Decimal(redeeming_amount_old) == Decimal(total_holding_old), \
+                "，检查可赎回金额 + 正在赎回金额 != 总持有金额"
+        with allure.step("赎回BTC投资项目成功"):
             data = {
                 "tx_type": 2,
-                "amount": "0.0001",
+                "amount": "0.00087",
                 "code": BTC_item['code']
             }
             r = requests.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
@@ -331,5 +437,254 @@ class TestSavingApi:
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("赎回项目后，总共持有金额"):
+                r5 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']),
+                                      headers=headers)
+                accruing_amount_latest = r5.json()['accruing_amount']['amount']
+                logger.info('赎回项目后，总共持有金额数量是{}'.format(accruing_amount_latest))
+            with allure.step("赎回项目后，今天申购金额"):
+                subscribing_amount_latest = r5.json()['subscribing_amount']['amount']
+                logger.info('赎回项目后，今天申购金额数量是{}'.format(subscribing_amount_latest))
+            with allure.step("赎回项目后，可赎回金额"):
+                redeemable_amount_latest = r5.json()['redeemable_amount']['amount']
+                logger.info('赎回项目后，可赎回金额数量是{}'.format(redeemable_amount_latest))
+            with allure.step("赎回项目后，赎回中金额"):
+                redeeming_amount_latest = r5.json()['redeeming_amount']['amount']
+                logger.info('赎回项目后，赎回中金额数量是{}'.format(redeeming_amount_latest))
             with allure.step("校验返回值"):
-                assert 'tx_id' in r.text, "投资金额小于最小投资USDT数量错误，返回值是{}".format(r.text)
+                logger.info('本次赎回是{}'.format(data['amount']))
+            with allure.step("赎回项目后，检查可赎回金额 + 正在赎回金额 = 总持有金额"):
+                assert Decimal(redeemable_amount_old) + Decimal(redeeming_amount_old) == Decimal(total_holding_old), "检查可赎回金额 + 正在赎回金额 != 总持有金额"
+            with allure.step("赎回项目后，之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"):
+                assert Decimal(redeeming_amount_old) + Decimal(data['amount']) == Decimal(redeeming_amount_latest), "之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"
+
+    @allure.testcase('test_saving_013 赎回ETH投资项目成功')
+    def test_saving_013(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("获取产品product_id"):
+            r1 = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+        with allure.step("选择ETH投资项目"):
+            BTCList = []
+            for i in r1.json():
+                if i['code'] == 'ETH':
+                    BTCList.append(i)
+            if len(BTCList) >= 1:
+                BTC_item = random.choice(BTCList)
+        with allure.step("赎回项目前，总共持有金额"):
+            r2 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']), headers=headers)
+            total_holding_old = r2.json()['total_holding']['amount']
+            logger.info('赎回项目前，总共持有金额数量是{}'.format(total_holding_old))
+        with allure.step("赎回项目前，可计息金额"):
+            accruing_amount_old = r2.json()['accruing_amount']['amount']
+            logger.info('赎回项目前，可计息金额数量是{}'.format(accruing_amount_old))
+        with allure.step("赎回项目前，今天申购金额"):
+            subscribing_amount_old = r2.json()['subscribing_amount']['amount']
+            logger.info('赎回项目前，今天申购金额数量是{}'.format(subscribing_amount_old))
+        with allure.step("赎回项目前，可赎回金额"):
+            redeemable_amount_old = r2.json()['redeemable_amount']['amount']
+            logger.info('赎回项目前，可赎回金额数量是{}'.format(redeemable_amount_old))
+        with allure.step("赎回项目前，赎回中金额"):
+            redeeming_amount_old = r2.json()['redeeming_amount']['amount']
+            logger.info('赎回项目前，赎回中金额数量是{}'.format(redeeming_amount_old))
+        with allure.step("赎回项目前，检查可赎回金额 + 正在赎回金额 = 总持有金额"):
+            assert Decimal(redeemable_amount_old) + Decimal(redeeming_amount_old) == Decimal(total_holding_old), \
+                "，检查可赎回金额 + 正在赎回金额 != 总持有金额"
+        with allure.step("赎回BTC投资项目成功"):
+            data = {
+                "tx_type": 2,
+                "amount": "0.00187",
+                "code": BTC_item['code']
+            }
+            r = requests.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
+                                 data=json.dumps(data), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("赎回项目后，总共持有金额"):
+                r5 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']),
+                                      headers=headers)
+                accruing_amount_latest = r5.json()['accruing_amount']['amount']
+                logger.info('赎回项目后，总共持有金额数量是{}'.format(accruing_amount_latest))
+            with allure.step("赎回项目后，今天申购金额"):
+                subscribing_amount_latest = r5.json()['subscribing_amount']['amount']
+                logger.info('赎回项目后，今天申购金额数量是{}'.format(subscribing_amount_latest))
+            with allure.step("赎回项目后，可赎回金额"):
+                redeemable_amount_latest = r5.json()['redeemable_amount']['amount']
+                logger.info('赎回项目后，可赎回金额数量是{}'.format(redeemable_amount_latest))
+            with allure.step("赎回项目后，赎回中金额"):
+                redeeming_amount_latest = r5.json()['redeeming_amount']['amount']
+                logger.info('赎回项目后，赎回中金额数量是{}'.format(redeeming_amount_latest))
+            with allure.step("校验返回值"):
+                logger.info('本次赎回是{}'.format(data['amount']))
+            with allure.step("赎回项目后，检查可赎回金额 + 正在赎回金额 = 总持有金额"):
+                assert Decimal(redeemable_amount_old) + Decimal(redeeming_amount_old) == Decimal(total_holding_old), "检查可赎回金额 + 正在赎回金额 != 总持有金额"
+            with allure.step("赎回项目后，之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"):
+                assert Decimal(redeeming_amount_old) + Decimal(data['amount']) == Decimal(redeeming_amount_latest), "之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"
+
+    @allure.testcase('test_saving_014 赎回USDT投资项目成功')
+    def test_saving_014(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("获取产品product_id"):
+            r1 = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+        with allure.step("选择USDT投资项目"):
+            BTCList = []
+            for i in r1.json():
+                if i['code'] == 'USDT':
+                    BTCList.append(i)
+            if len(BTCList) >= 1:
+                BTC_item = random.choice(BTCList)
+        with allure.step("赎回项目前，总共持有金额"):
+            r2 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']), headers=headers)
+            total_holding_old = r2.json()['total_holding']['amount']
+            logger.info('赎回项目前，总共持有金额数量是{}'.format(total_holding_old))
+        with allure.step("赎回项目前，可计息金额"):
+            accruing_amount_old = r2.json()['accruing_amount']['amount']
+            logger.info('赎回项目前，可计息金额数量是{}'.format(accruing_amount_old))
+        with allure.step("赎回项目前，今天申购金额"):
+            subscribing_amount_old = r2.json()['subscribing_amount']['amount']
+            logger.info('赎回项目前，今天申购金额数量是{}'.format(subscribing_amount_old))
+        with allure.step("赎回项目前，可赎回金额"):
+            redeemable_amount_old = r2.json()['redeemable_amount']['amount']
+            logger.info('赎回项目前，可赎回金额数量是{}'.format(redeemable_amount_old))
+        with allure.step("赎回项目前，赎回中金额"):
+            redeeming_amount_old = r2.json()['redeeming_amount']['amount']
+            logger.info('赎回项目前，赎回中金额数量是{}'.format(redeeming_amount_old))
+        with allure.step("赎回项目前，检查可赎回金额 + 正在赎回金额 = 总持有金额"):
+            assert Decimal(redeemable_amount_old) + Decimal(redeeming_amount_old) == Decimal(total_holding_old), \
+                "，检查可赎回金额 + 正在赎回金额 != 总持有金额"
+        with allure.step("赎回USDT投资项目成功"):
+            data = {
+                "tx_type": 2,
+                "amount": "1.7",
+                "code": BTC_item['code']
+            }
+            r = requests.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
+                                 data=json.dumps(data), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("赎回项目后，总共持有金额"):
+                r5 = requests.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']),
+                                      headers=headers)
+                accruing_amount_latest = r5.json()['accruing_amount']['amount']
+                logger.info('赎回项目后，总共持有金额数量是{}'.format(accruing_amount_latest))
+            with allure.step("赎回项目后，今天申购金额"):
+                subscribing_amount_latest = r5.json()['subscribing_amount']['amount']
+                logger.info('赎回项目后，今天申购金额数量是{}'.format(subscribing_amount_latest))
+            with allure.step("赎回项目后，可赎回金额"):
+                redeemable_amount_latest = r5.json()['redeemable_amount']['amount']
+                logger.info('赎回项目后，可赎回金额数量是{}'.format(redeemable_amount_latest))
+            with allure.step("赎回项目后，赎回中金额"):
+                redeeming_amount_latest = r5.json()['redeeming_amount']['amount']
+                logger.info('赎回项目后，赎回中金额数量是{}'.format(redeeming_amount_latest))
+            with allure.step("校验返回值"):
+                logger.info('本次赎回是{}'.format(data['amount']))
+            with allure.step("赎回项目后，检查可赎回金额 + 正在赎回金额 = 总持有金额"):
+                assert Decimal(redeemable_amount_old) + Decimal(redeeming_amount_old) == Decimal(total_holding_old), "检查可赎回金额 + 正在赎回金额 != 总持有金额"
+            with allure.step("赎回项目后，之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"):
+                assert Decimal(redeeming_amount_old) + Decimal(data['amount']) == Decimal(redeeming_amount_latest), "之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"
+
+    @allure.testcase('test_saving_015 赎回金额超过最大的可赎回BTC数量')
+    def test_saving_015(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("获取产品product_id"):
+            r1 = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+        with allure.step("选择BTC投资项目"):
+            BTCList = []
+            for i in r1.json():
+                if i['code'] == 'BTC':
+                    BTCList.append(i)
+            if len(BTCList) >= 1:
+                BTC_item = random.choice(BTCList)
+        with allure.step("赎回BTC投资项目成功"):
+            data = {
+                "tx_type": 2,
+                "amount": "1000000",
+                "code": BTC_item['code']
+            }
+            r = requests.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
+                                 data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'EARNINGTXN000019:not enough saving balance' in r.text, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_saving_016 赎回金额超过最大的可赎回ETH数量')
+    def test_saving_016(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("获取产品product_id"):
+            r1 = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+        with allure.step("选择ETH投资项目"):
+            BTCList = []
+            for i in r1.json():
+                if i['code'] == 'ETH':
+                    BTCList.append(i)
+            if len(BTCList) >= 1:
+                BTC_item = random.choice(BTCList)
+        with allure.step("赎回BTC投资项目成功"):
+            data = {
+                "tx_type": 2,
+                "amount": "1000000",
+                "code": BTC_item['code']
+            }
+            r = requests.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
+                                 data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'EARNINGTXN000019:not enough saving balance' in r.text, "赎回金额超过最大的可赎回ETH数量错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_saving_017 赎回金额超过最大的可赎回USDT数量')
+    def test_saving_017(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("获取产品product_id"):
+            r1 = requests.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+        with allure.step("选择BTC投资项目"):
+            BTCList = []
+            for i in r1.json():
+                if i['code'] == 'USDT':
+                    BTCList.append(i)
+            if len(BTCList) >= 1:
+                BTC_item = random.choice(BTCList)
+        with allure.step("赎回USDT投资项目成功"):
+            data = {
+                "tx_type": 2,
+                "amount": "100000000",
+                "code": BTC_item['code']
+            }
+            r = requests.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
+                                 data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'EARNINGTXN000019:not enough saving balance' in r.text, "赎回金额超过最大的可赎回USDT数量错误，返回值是{}".format(r.text)
+
+

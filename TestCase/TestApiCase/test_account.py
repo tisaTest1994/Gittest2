@@ -16,7 +16,7 @@ class TestAccountApi:
                 "emailAddress": generate_email(),
                 "verificationCode": "666666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Abc112233"
+                "password": "Zcdsw123"
             }
             r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -40,7 +40,7 @@ class TestAccountApi:
                 "emailAddress": account,
                 "verificationCode": "666666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Abc112233"
+                "password": "Zcdsw123"
             }
             r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -61,7 +61,7 @@ class TestAccountApi:
                 "emailAddress": generate_email(),
                 "verificationCode": "1666666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Abc112233"
+                "password": "Zcdsw123"
             }
             r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -119,7 +119,7 @@ class TestAccountApi:
             citizenCountryCode = random.choice(citizenCountryCodeList)
         with allure.step("用黑名单邮箱申请注册验证码"):
             data = {
-                "emailAddress": "heimingdan@test.com",
+                "emailAddress": "yilei100@cabital.com",
                 "citizenCountryCode": citizenCountryCode
             }
             r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
@@ -140,7 +140,7 @@ class TestAccountApi:
         with allure.step("登录已经注册账号"):
             data = {
                 "username": account,
-                "password": "Abc112233"
+                "password": "Zcdsw123"
             }
             r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -189,22 +189,23 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert 'ACC_LOGIN_000001' in r.text, "登录已经注册账号输入错误密码错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_account_010 登录黑名单账号')
+    @allure.testcase('test_account_010 登录已经注册的黑名单账号')
     def test_account_010(self):
-        with allure.step("登录黑名单账号"):
+        with allure.step("登录已经注册的黑名单账号"):
+            blacklist = get_json()['blacklist']
             data = {
-                "username": "b3Gv@gmail.com",
-                "password": "123456"
+                "username": blacklist['email'],
+                "password": blacklist['password']
             }
-        #     r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-        #                          headers=headers)
-        # with allure.step("状态码和返回值"):
-        #     logger.info('状态码是{}'.format(str(r.status_code)))
-        #     logger.info('返回值是{}'.format(str(r.text)))
-        # with allure.step("校验状态码"):
-        #     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        # with allure.step("校验返回值"):
-        #     assert 'ACC_LOGIN_000001' in r.text, "登录已经注册账号密码错误错误，返回值是{}".format(r.text)
+            r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "登录已经注册的黑名单账号错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_011 刷新账户token')
     def test_account_011(self):
@@ -259,7 +260,7 @@ class TestAccountApi:
     @allure.testcase('test_account_014 修改密码')
     def test_account_014(self):
         account = generate_email()
-        password = 'Abc112233'
+        password = 'Zcdsw123'
         with allure.step("提前先注册好"):
             AccountFunction.sign_up(account, password)
         with allure.step("获取token"):
@@ -289,8 +290,8 @@ class TestAccountApi:
             headers['Authorization'] = "Bearer " + "accessToken1234"
         with allure.step("修改密码使用错误token"):
             data = {
-                "original": "Abc112233",
-                "password": "Abc112233"
+                "original": "Zcdsw123",
+                "password": "Zcdsw123"
             }
             r = requests.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -303,7 +304,7 @@ class TestAccountApi:
     @allure.testcase('test_account_016 使用错误原始密码修改密码')
     def test_account_016(self):
         account = generate_email()
-        password = 'Abc112233'
+        password = 'Zcdsw123'
         with allure.step("提前先注册好"):
             AccountFunction.sign_up(account, password)
         with allure.step("获取token"):
@@ -313,7 +314,7 @@ class TestAccountApi:
         with allure.step("使用错误原始密码修改密码"):
             data = {
                 "original": "11111",
-                "password": "Abc112233"
+                "password": "Zcdsw123"
             }
             r = requests.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -328,7 +329,7 @@ class TestAccountApi:
     @allure.testcase('test_account_017 忘记密码验证码')
     def test_account_017(self):
         account = generate_email()
-        password = 'Abc112233'
+        password = 'Zcdsw123'
         with allure.step("提前先注册好"):
             AccountFunction.sign_up(account, password)
         with allure.step("忘记密码验证码"):
@@ -365,13 +366,13 @@ class TestAccountApi:
     def test_account_019(self):
         with allure.step("忘记密码"):
             account = generate_email()
-            password = 'Abc112233'
+            password = 'Zcdsw123'
             with allure.step("提前先注册好"):
                 AccountFunction.sign_up(account, password)
             data = {
                 "code": "666666",
                 "email": account,
-                "password": "Abc112233"
+                "password": "Zcdsw123"
             }
             r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
                                  data=json.dumps(data), headers=headers)
@@ -389,7 +390,7 @@ class TestAccountApi:
             data = {
                 "code": "666666",
                 "email": generate_email(),
-                "password": "Abc112233"
+                "password": "Zcdsw123"
             }
             r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
                                  data=json.dumps(data), headers=headers)
@@ -405,14 +406,14 @@ class TestAccountApi:
     def test_account_021(self):
         with allure.step("忘记密码"):
             account = generate_email()
-            password = 'Abc112233'
+            password = 'Zcdsw123'
             with allure.step("提前先注册好"):
                 AccountFunction.sign_up(account, password)
         with allure.step("用户忘记密码验证码错误"):
             data = {
                 "code": "166666",
                 "email": account,
-                "password": "Abc112233"
+                "password": "Zcdsw123"
             }
             r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
                                  data=json.dumps(data), headers=headers)
@@ -428,7 +429,7 @@ class TestAccountApi:
     def test_account_021(self):
         with allure.step("忘记密码"):
             account = generate_email()
-            password = 'Abc112233'
+            password = 'Zcdsw123'
             with allure.step("提前先注册好"):
                 AccountFunction.sign_up(account, password)
         with allure.step("获取token"):
@@ -449,7 +450,7 @@ class TestAccountApi:
     def test_account_022(self):
         with allure.step("忘记密码"):
             account = generate_email()
-            password = 'Abc112233'
+            password = 'Zcdsw123'
             with allure.step("提前先注册好"):
                 AccountFunction.sign_up(account, password)
         with allure.step("获取token"):
@@ -477,7 +478,7 @@ class TestAccountApi:
     def test_account_023(self):
         with allure.step("忘记密码"):
             account = generate_email()
-            password = 'Abc112233'
+            password = 'Zcdsw123'
             with allure.step("提前先注册好"):
                 AccountFunction.sign_up(account, password)
         with allure.step("获取token"):
@@ -547,7 +548,7 @@ class TestAccountApi:
                 "emailAddress": generate_email(),
                 "verificationCode": "16666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Abc112233"
+                "password": "Zcdsw123"
             }
             r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -568,7 +569,7 @@ class TestAccountApi:
                 "emailAddress": generate_email(),
                 "verificationCode": "dqwdqwd",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Abc112233"
+                "password": "Zcdsw123"
             }
             r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -583,7 +584,7 @@ class TestAccountApi:
     @allure.testcase('test_account_028 登录已经注册账号密码使用特殊字符')
     def test_account_028(self):
         account = generate_email()
-        password = "Abc11223336"
+        password = "Zcdsw1!@#$%^"
         with allure.step("提前先注册好"):
             AccountFunction.sign_up(account, password)
         with allure.step("登录已经注册账号使用错误密码"):
@@ -604,7 +605,7 @@ class TestAccountApi:
     @allure.testcase('test_account_029 使用相同的密码修改密码')
     def test_account_029(self):
         account = generate_email()
-        password = 'Abc112233'
+        password = 'Zcdsw123'
         with allure.step("提前先注册好"):
             AccountFunction.sign_up(account, password)
         with allure.step("获取token"):
