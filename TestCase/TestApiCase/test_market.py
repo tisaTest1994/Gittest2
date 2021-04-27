@@ -1,6 +1,6 @@
-from Function.api_function import *
 from run import *
 from Function.log import *
+from datetime import datetime
 import allure
 
 
@@ -14,7 +14,7 @@ class TestMarketApi:
                     "pair": i,
                     "interval": y,
                     "from_time": "0",
-                    "to_time": "16312131"
+                    "to_time": str(datetime.now().timestamp()).split('.')[0]
                 }
                 r = requests.request('GET', url='{}/marketstat/public/quote-chart'.format(env_url), params=params,
                                      headers=headers)
