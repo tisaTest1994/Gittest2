@@ -13,5 +13,11 @@
   "PRIVATE-TOKEN": "tjkst4kHzfDPwyThPoX-",
   "blacklist": {
     "email": "yilei1@cabital.com", "password": "Zcdsw123"
+  },
+  "mysql": {
+      "account": "testuser",
+      "password": "IwOH1yANZgom4kTV",
+      "host": "rds-cluster-cluster.cluster-cyxbmvlfoqo7.ap-southeast-1.rds.amazonaws.com",
+      "port": 3306
   }
 }

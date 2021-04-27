@@ -1,6 +1,7 @@
 import pytest
 from Function.slack import *
 from Function.common_function import *
+from Function.connect_mysql import *
 
 # 选择环境，得到环境url
 global env_url
@@ -17,9 +18,10 @@ citizenCountryCodeList = get_json()['citizenCountryCodeList']
 
 
 if __name__ == '__main__':
-    pytest.main(['TestCase/TestApiCase', '-n 8', '-v', '--alluredir', './Reports'])
-    split = "allure generate ./Reports  -o ./Reports/html --clean"
-    os.system(split)
-    slack_report()
+    connect_mysql()
+    # pytest.main(['TestCase/TestApiCase', '-n 8', '-v', '--alluredir', './Reports'])
+    # split = "allure generate ./Reports  -o ./Reports/html --clean"
+    # os.system(split)
+    # slack_report()
 
 
