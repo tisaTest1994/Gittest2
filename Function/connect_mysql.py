@@ -10,7 +10,7 @@ def connect_mysql(db, sql):
     connection = pymysql.connect(host=host, user=account, passwd=password, db=db, port=port, charset='utf8', cursorclass=pymysql.cursors.DictCursor)
     with connection:
         with connection.cursor() as cursor:
-            cursor.execute(sql, ('webmaster@python.org',))
+            cursor.execute(sql)
             result = cursor.fetchone()
             print(result)
             return result
