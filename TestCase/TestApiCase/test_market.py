@@ -16,7 +16,7 @@ class TestMarketApi:
                     "from_time": "0",
                     "to_time": str(datetime.now().timestamp()).split('.')[0]
                 }
-                r = requests.request('GET', url='{}/marketstat/public/quote-chart'.format(env_url), params=params,
+                r = session.request('GET', url='{}/marketstat/public/quote-chart'.format(env_url), params=params,
                                      headers=headers)
                 logger.info('货币{}的{}时间的曲线{}'.format(i, y, r.text))
                 with allure.step("状态码和返回值"):
@@ -35,7 +35,7 @@ class TestMarketApi:
                 params = {
                     "code": i
                 }
-                r = requests.request('GET', url='{}/marketstat/public/ticker'.format(env_url), params=params,
+                r = session.request('GET', url='{}/marketstat/public/ticker'.format(env_url), params=params,
                                  headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))

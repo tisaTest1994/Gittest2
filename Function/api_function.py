@@ -1,17 +1,17 @@
 from run import *
-import requests
+from Function.log import *
 
 
 class AccountFunction:
 
+    # 获取用户token
     @staticmethod
     def get_account_token(account, password):
         data = {
             "username": account,
             "password": password
         }
-        r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-                             headers=headers)
+        r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers, timeout=3)
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'accessToken' in r.text, "成功注册用户错误，返回值是{}".format(r.json())
         return r.json()
@@ -26,7 +26,7 @@ class AccountFunction:
             "citizenCountryCode": citizenCountryCode,
             "password": password
         }
-        requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
+        session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers, timeout=3)
 
     # 提现获取交易id
     @staticmethod
@@ -39,7 +39,8 @@ class AccountFunction:
             "address": address,
             "method": "ERC20"
         }
-        r = requests.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        logger.info('获取的交易订单json是{}'.format(r.text))
         return r.json()['transaction_id']
 
     # 获取下次清算金额
@@ -47,14 +48,14 @@ class AccountFunction:
     def get_interest(productId, account=email['email'],  password=email['password']):
         accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
         headers['Authorization'] = "Bearer " + accessToken
-        r1 = requests.request('GET', url='{}/earn/products/{}/next_yield'.format(env_url, productId), headers=headers)
+        r1 = session.request('GET', url='{}/earn/products/{}/next_yield'.format(env_url, productId), headers=headers)
         return r1.json()['next_yield']
 
     # 获取换汇报价
     @staticmethod
     def get_quote(pair):
         cryptos = pair.split('-')
-        r1 = requests.request('GET',
+        r1 = session.request('GET',
                               url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[0], cryptos[1])),
                               headers=headers)
         return r1.json()
@@ -64,7 +65,7 @@ class AccountFunction:
     def get_crypto_number(account=email['email'], password=email['password'], crypto_type='BTC'):
         accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
         headers['Authorization'] = "Bearer " + accessToken
-        r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+        r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
         for i in r.json():
             if i['code'] == crypto_type and i['wallet_type'] == 'BALANCE':
                 for y in i['balances']:

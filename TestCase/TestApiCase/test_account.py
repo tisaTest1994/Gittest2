@@ -18,8 +18,7 @@ class TestAccountApi:
                 "citizenCountryCode": citizenCountryCode,
                 "password": "Zcdsw123"
             }
-            r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers, timeout=3)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -386,7 +385,7 @@ class TestAccountApi:
 
     @allure.testcase('test_account_020 未注册用户忘记密码失败')
     def test_account_020(self):
-        with allure.step("忘记密码"):
+        with allure.step("未注册用户忘记密码失败"):
             data = {
                 "code": "666666",
                 "email": generate_email(),
@@ -404,7 +403,7 @@ class TestAccountApi:
 
     @allure.testcase('test_account_021 用户忘记密码验证码错误')
     def test_account_021(self):
-        with allure.step("忘记密码"):
+        with allure.step("用户忘记密码验证码错误"):
             account = generate_email()
             password = 'Zcdsw123'
             with allure.step("提前先注册好"):
@@ -448,7 +447,7 @@ class TestAccountApi:
 
     @allure.testcase('test_account_022 修改个人信息')
     def test_account_022(self):
-        with allure.step("忘记密码"):
+        with allure.step("修改个人信息"):
             account = generate_email()
             password = 'Zcdsw123'
             with allure.step("提前先注册好"):
@@ -476,7 +475,7 @@ class TestAccountApi:
 
     @allure.testcase('test_account_023 修改个人爱好')
     def test_account_023(self):
-        with allure.step("忘记密码"):
+        with allure.step("修改个人爱好"):
             account = generate_email()
             password = 'Zcdsw123'
             with allure.step("提前先注册好"):
@@ -499,7 +498,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json() == {}, "用户忘记密码验证码错误错误，返回值是{}".format(r.text)
+            assert r.json() == {}, "修改个人爱好错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_024 申请注册验证码,使用白名单外国家代码被拒绝')
     def test_account_024(self):

@@ -24,7 +24,7 @@ class TestPayoutApi:
                 "method": "ERC20",
                 "address": "test-address"
             }
-            r = requests.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
+            r = session.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
                                  headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -49,7 +49,7 @@ class TestPayoutApi:
                     "method": "ERC20",
                     "address": generate_string(30)
                 }
-                r = requests.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
+                r = session.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
                                      headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('添加{}的常用地址，返回值是{}'.format(i, str(r.text)))
@@ -65,7 +65,7 @@ class TestPayoutApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取存储的常用收款地址list"):
-            r = requests.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
+            r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -81,11 +81,11 @@ class TestPayoutApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取收款地址list"):
-            r = requests.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
+            r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
         with allure.step("获取单个收款地址id"):
             id = r.json()['payeeList'][0]['id']
         with allure.step("获取某个常用收款地址"):
-            r = requests.request('GET', url='{}/account/myPayee/{}'.format(env_url, id), headers=headers)
+            r = session.request('GET', url='{}/account/myPayee/{}'.format(env_url, id), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -101,7 +101,7 @@ class TestPayoutApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("使用不存在id获取常用收款地址"):
-            r = requests.request('GET', url='{}/account/myPayee/{}'.format(env_url, '300'), headers=headers)
+            r = session.request('GET', url='{}/account/myPayee/{}'.format(env_url, '300'), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -126,7 +126,7 @@ class TestPayoutApi:
                 "isValid": True,
                 "whitelisted": False
             }
-            r = requests.request('PUT', url='{}/account/myPayee/{}'.format(env_url, '3'), data=json.dumps(data),
+            r = session.request('PUT', url='{}/account/myPayee/{}'.format(env_url, '3'), data=json.dumps(data),
                                  headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -152,7 +152,7 @@ class TestPayoutApi:
                 "isValid": True,
                 "whitelisted": False
             }
-            r = requests.request('PUT', url='{}/account/myPayee/{}'.format(env_url, '300'), data=json.dumps(data),
+            r = session.request('PUT', url='{}/account/myPayee/{}'.format(env_url, '300'), data=json.dumps(data),
                                  headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -169,11 +169,11 @@ class TestPayoutApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取收款地址list"):
-            r = requests.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
+            r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
         with allure.step("获取单个收款地址id"):
             id = r.json()['payeeList'][0]['id']
         with allure.step("删除常用收款地址"):
-            requests.request('Delete', url='{}/account/myPayee/{}'.format(env_url, id), headers=headers)
+            session.request('Delete', url='{}/account/myPayee/{}'.format(env_url, id), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -190,7 +190,7 @@ class TestPayoutApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("凭借空id号删除地址"):
-            r = requests.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, '300'), headers=headers)
+            r = session.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, '300'), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -212,7 +212,7 @@ class TestPayoutApi:
                 "address": "0x623089BFb1dc2d3023Ba4bd0f42F61d66826994eu",
                 "method": "ERC20"
             }
-            r = requests.request('POST', url='{}/pay/withdraw/verification'.format(env_url), data=json.dumps(data),
+            r = session.request('POST', url='{}/pay/withdraw/verification'.format(env_url), data=json.dumps(data),
                                  headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -235,7 +235,7 @@ class TestPayoutApi:
                 "address": "0x428DA40C585514022b2eB537950d5AB5C7365a07",
                 "method": "ERC20"
             }
-            r = requests.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
+            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
                                  headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -259,7 +259,7 @@ class TestPayoutApi:
                 "address": "0x428DA40C585514022b2eB537950d5AB5C7365a07",
                 "method": "ERC20"
             }
-            r = requests.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
+            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
                                  headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -274,7 +274,7 @@ class TestPayoutApi:
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
         with allure.step("查询提现详情"):
-            r = requests.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id), headers=headers)
+            r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -291,7 +291,7 @@ class TestPayoutApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询提现详情"):
-            r = requests.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, '468422531310-3fa0-4bd1-9d46-4467dfa9ce52'), headers=headers)
+            r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, '468422531310-3fa0-4bd1-9d46-4467dfa9ce52'), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -313,7 +313,7 @@ class TestPayoutApi:
                 "method": "ERC20",
                 "address": "0x428DA40C585514022b2eB537950d5AB5C7365a07"
             }
-            r = requests.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
+            r = session.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
                                  headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('添加{}的常用地址，返回值是{}'.format("0x428DA40C585514022b2eB537950d5AB5C7365a07", str(r.text)))

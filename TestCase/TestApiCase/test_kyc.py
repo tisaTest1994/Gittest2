@@ -19,7 +19,7 @@ class TestKycApi:
                 "citizenCountryCode": citizenCountryCode
             }
         with allure.step("通过kyc的用户，获取kyc上传token失败"):
-            r = requests.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
+            r = session.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -44,7 +44,7 @@ class TestKycApi:
             data = {
                 "citizenCountryCode": citizenCountryCode
             }
-            r = requests.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data),
+            r = session.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data),
                                  headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -68,7 +68,7 @@ class TestKycApi:
         with allure.step("未申请kyc获取kyc-case失败"):
             data = {
             }
-            r = requests.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
+            r = session.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -86,7 +86,7 @@ class TestKycApi:
         with allure.step("获取kyc-case信息"):
             data = {
             }
-            r = requests.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
+            r = session.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))

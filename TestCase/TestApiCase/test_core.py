@@ -15,7 +15,7 @@ class TestCoreApi:
             headers['Authorization'] = "Bearer " + accessToken
             headers['X-Currency'] = 'USD'
         with allure.step("查询钱包所有币种详细金额以及报价，以美元价格返回"):
-            r = requests.request('GET', url='{}/core/account'.format(env_url), headers=headers)
+            r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -31,7 +31,7 @@ class TestCoreApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询钱包所有币种金额"):
-            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+            r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -48,10 +48,10 @@ class TestCoreApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询钱包某个币种的详细信息"):
-            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+            r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
             id = r.json()[0]["id"]
         with allure.step("查询钱包某个币种"):
-            r = requests.request('GET', url='{}/core/account/wallets/{}'.format(env_url, id), headers=headers)
+            r = session.request('GET', url='{}/core/account/wallets/{}'.format(env_url, id), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -66,7 +66,7 @@ class TestCoreApi:
         with allure.step("查询货币兑换比例"):
             for i in List:
                 with allure.step("查询{}兑换比例".format(i)):
-                    r = requests.request('GET', url='{}/core/quotes/{}'.format(env_url, i), headers=headers)
+                    r = session.request('GET', url='{}/core/quotes/{}'.format(env_url, i), headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
@@ -85,7 +85,7 @@ class TestCoreApi:
             params = {
                 'type': 'SAVING'
             }
-            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
+            r = session.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -104,7 +104,7 @@ class TestCoreApi:
             params = {
                 'type': 'BALANCE'
             }
-            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
+            r = session.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -123,7 +123,7 @@ class TestCoreApi:
             params = {
                 'code': 'BTC'
             }
-            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
+            r = session.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -143,7 +143,7 @@ class TestCoreApi:
             params = {
                 'code': 'ETH'
             }
-            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
+            r = session.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -162,7 +162,7 @@ class TestCoreApi:
             params = {
                 'code': 'USDT'
             }
-            r = requests.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
+            r = session.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -179,7 +179,7 @@ class TestCoreApi:
             headers['Authorization'] = "Bearer " + accessToken
             headers['X-Currency'] = 'EUR'
         with allure.step("查询钱包所有币种详细金额以及报价，以欧元价格返回"):
-            r = requests.request('GET', url='{}/core/account'.format(env_url), headers=headers)
+            r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))

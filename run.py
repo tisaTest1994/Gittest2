@@ -17,6 +17,14 @@ global citizenCountryCodeList
 citizenCountryCodeList = get_json()['citizenCountryCodeList']
 
 
+class sessions(requests.Session):
+    def request(self, *args, **kwargs):
+        kwargs.setdefault('timeout', 5)
+        return super(sessions, self).request(*args, **kwargs)
+
+
+session = sessions()
+
 if __name__ == '__main__':
     pytest.main(['TestCase/TestApiCase', '-n 8', '-v', '--alluredir', './Reports'])
     split = "allure generate ./Reports  -o ./Reports/html --clean"
