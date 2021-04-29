@@ -383,11 +383,11 @@ class TestConvertApi:
                 "sell_amount": str(sell_amount),
                 "major_ccy": 'BTC'
             }
-            r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
-            sleep(60)
-            print(r.json())
+            sleep(20)
+            r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
             logger.info('申请换汇参数{}'.format(data))
+            logger.info('超时换汇交易返回值是{}'.format(r.text))
+            assert 'CFXTXN000012:invalid Rate' in r.text, '超时换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
 
     @allure.testcase('test_convert_07 小于接受的最小值换汇交易')
     def test_convert_07(self):
@@ -570,3 +570,23 @@ class TestConvertApi:
                                           headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
                     assert 'CFXTXN000013' in r3.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
+
+    @allure.testcase('test_convert_08 使用错误金额换汇交易')
+    def test_convert_08(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+            quote = AccountFunction.get_quote('BTC-USDT')
+            data = {
+                "quote_id": quote['quote_id'],
+                "quote": quote['quote'],
+                "pair": 'BTC-USDT',
+                "buy_amount": '0.01',
+                "sell_amount": "11",
+                "major_ccy": 'BTC'
+            }
+            r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
+            print(r.text)
+            logger.info('申请换汇参数{}'.format(data))
