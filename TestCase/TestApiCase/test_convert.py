@@ -155,8 +155,9 @@ class TestConvertApi:
                     r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                          headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    assert "'status': 5," not in r.text, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
                     sleep(5)
+                    logger.info('换汇返回值{}'.format(r.text))
+                    assert r.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
                         buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[0])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
@@ -220,8 +221,9 @@ class TestConvertApi:
                     r1 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                           headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    assert "'status': 5," not in r1.text, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r1.text)
                     sleep(5)
+                    logger.info('换汇返回值{}'.format(r1.text))
+                    assert r1.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r1.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
                         buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[1])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
@@ -285,8 +287,9 @@ class TestConvertApi:
                     r2 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                           headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    assert "'status': 5," not in r2.text, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r2.text)
                     sleep(5)
+                    logger.info('换汇返回值{}'.format(r2.text))
+                    assert r2.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r2.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
                         buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[0])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
@@ -349,8 +352,9 @@ class TestConvertApi:
                     }
                     r3 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    assert "'status': 5," not in r3.text, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
                     sleep(5)
+                    logger.info('换汇返回值{}'.format(r3.text))
+                    assert r3.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
                         buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[1])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
@@ -588,5 +592,5 @@ class TestConvertApi:
                 "major_ccy": 'BTC'
             }
             r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
-            print(r.text)
             logger.info('申请换汇参数{}'.format(data))
+            assert 'CFXTXN000021:amount calculation error' in r.text, '使用错误金额换汇交易错误,返回值是{}'.format(r.text)

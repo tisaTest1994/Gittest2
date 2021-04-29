@@ -1,7 +1,7 @@
 import pytest
 from Function.slack import *
-from Function.common_function import *
 from Function.connect_mysql import *
+from time import sleep
 
 # 选择环境，得到环境url
 global env_url
@@ -19,7 +19,7 @@ citizenCountryCodeList = get_json()['citizenCountryCodeList']
 
 class sessions(requests.Session):
     def request(self, *args, **kwargs):
-        kwargs.setdefault('timeout', 5)
+        kwargs.setdefault('timeout', 3)
         return super(sessions, self).request(*args, **kwargs)
 
 
@@ -27,8 +27,8 @@ session = sessions()
 
 if __name__ == '__main__':
     pytest.main(['TestCase/TestApiCase', '-n 8', '-v', '--alluredir', './Reports'])
-    split = "allure generate ./Reports  -o ./Reports/html --clean"
-    os.system(split)
+    os.system("allure generate ./Reports  -o ./Reports/html --clean")
+    sleep(2)
     slack_report()
 
 

@@ -183,7 +183,7 @@ class TestSavingApi:
         with allure.step("有足够ETH的用户发起购买ETH投资项目成功"):
             data = {
                 "tx_type": 1,
-                "amount": "0.00027",
+                "amount": "0.01327",
                 "code": item['code']
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, item['product_id']),
@@ -194,8 +194,7 @@ class TestSavingApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("获得投资后，目前持有总数"):
-                r4 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, item['product_id']),
-                                      headers=headers)
+                r4 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, item['product_id']), headers=headers)
                 total_holding_latest = r4.json()['total_holding']['amount']
                 logger.info('投资ETH后，目前持有项目的ETH数量是{}'.format(total_holding_latest))
             with allure.step("投资后，查询钱包可用ETH金额"):
@@ -738,11 +737,11 @@ class TestSavingApi:
                 amount = r.json()['accruing_amount']['amount']
                 logger.info('获得计息本金{}'.format(amount))
                 if product['code'] == 'BTC' or product['code'] == 'ETH':
-                    interest_my_count = (Decimal(amount) * Decimal(apy)).quantize(Decimal('0.00000000'))
+                    interest_my_count = (Decimal(amount) * Decimal(apy)).quantize(Decimal('0.00000000'), ROUND_FLOOR)
                 elif product['code'] == 'USDT':
-                    interest_my_count = (Decimal(amount) * Decimal(apy)).quantize(Decimal('0.000000'))
+                    interest_my_count = (Decimal(amount) * Decimal(apy)).quantize(Decimal('0.000000'), ROUND_FLOOR)
                 else:
-                    interest_my_count = (Decimal(amount) * Decimal(apy)).quantize(Decimal('0.00'))
+                    interest_my_count = (Decimal(amount) * Decimal(apy)).quantize(Decimal('0.00'), ROUND_FLOOR)
                 logger.info('自己计算明天计息情况是{}'.format(interest_my_count))
         assert interest_my_count == Decimal(interest), '接口获得和自己计算今天计算的利息不对'
 
