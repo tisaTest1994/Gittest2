@@ -26,7 +26,7 @@ class sessions(requests.Session):
 session = sessions()
 
 if __name__ == '__main__':
-    pytest.main(['TestCase/TestApiCase', '-n 8', '-v', '--alluredir', './Reports'])
+    pytest.main(['TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     sleep(2)
     slack_report()
