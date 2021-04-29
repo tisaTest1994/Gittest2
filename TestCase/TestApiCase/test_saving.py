@@ -133,9 +133,9 @@ class TestSavingApi:
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            sleep(2)
             with allure.step("获得投资后，目前持有总数"):
-                r4 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']),
-                                      headers=headers)
+                r4 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']), headers=headers)
                 total_holding_latest = r4.json()['total_holding']['amount']
                 logger.info('投资btc后，目前持有项目的btc数量是{}'.format(total_holding_latest))
             with allure.step("投资后，查询钱包可用btc金额"):
@@ -186,8 +186,8 @@ class TestSavingApi:
                 "amount": "0.01327",
                 "code": item['code']
             }
-            r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, item['product_id']),
-                                 data=json.dumps(data), headers=headers)
+            r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, item['product_id']), data=json.dumps(data), headers=headers)
+            sleep(2)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -247,6 +247,7 @@ class TestSavingApi:
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
                                  data=json.dumps(data), headers=headers)
+            sleep(2)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -431,6 +432,7 @@ class TestSavingApi:
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
                                  data=json.dumps(data), headers=headers)
+            sleep(2)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -499,6 +501,7 @@ class TestSavingApi:
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
                                  data=json.dumps(data), headers=headers)
+            sleep(2)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -567,6 +570,7 @@ class TestSavingApi:
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
                                  data=json.dumps(data), headers=headers)
+            sleep(2)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))

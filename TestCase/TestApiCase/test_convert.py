@@ -94,8 +94,8 @@ class TestConvertApi:
             assert float(str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]) <= float(
                 r1.json()['quote']), "{}汇率对出现了问题".format(i)
 
-    @allure.testcase('test_convert_05 换汇交易')
-    def test_convert_05(self):
+    @allure.testcase('test_convert_005 换汇交易')
+    def test_convert_005(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
                 'accessToken']
@@ -370,8 +370,8 @@ class TestConvertApi:
                     assert Decimal(buy_amount_wallet_balance) + Decimal(buy_amount) == Decimal(buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[1], buy_amount_wallet_balance, buy_amount, buy_amount_wallet_balance_latest)
                     assert Decimal(sell_amount_wallet_balance) - Decimal(sell_amount) == Decimal(sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(cryptos[0], sell_amount_wallet_balance, sell_amount, sell_amount_wallet_balance_latest)
 
-    @allure.testcase('test_convert_06 超时换汇交易')
-    def test_convert_06(self):
+    @allure.testcase('test_convert_006 超时换汇交易')
+    def test_convert_006(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
                 'accessToken']
@@ -393,8 +393,8 @@ class TestConvertApi:
             logger.info('超时换汇交易返回值是{}'.format(r.text))
             assert 'CFXTXN000012:invalid Rate' in r.text, '超时换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
 
-    @allure.testcase('test_convert_07 小于接受的最小值换汇交易')
-    def test_convert_07(self):
+    @allure.testcase('test_convert_007 小于接受的最小值换汇交易')
+    def test_convert_007(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
                 'accessToken']
@@ -575,8 +575,8 @@ class TestConvertApi:
                     logger.info('申请换汇参数{}'.format(data))
                     assert 'CFXTXN000013' in r3.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
 
-    @allure.testcase('test_convert_08 使用错误金额换汇交易')
-    def test_convert_08(self):
+    @allure.testcase('test_convert_008 使用错误金额换汇交易')
+    def test_convert_008(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
                 'accessToken']
