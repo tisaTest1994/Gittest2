@@ -1,6 +1,6 @@
 import pytest
-from Function.common_function import *
-from Function.slack import *
+import requests
+#from Function.slack import *
 from Function.connect_mysql import *
 from time import sleep
 
@@ -31,6 +31,6 @@ if __name__ == '__main__':
     pytest.main(['TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     sleep(2)
-    slack_report()
+    #slack_report()
 
 
