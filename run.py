@@ -26,6 +26,7 @@ class sessions(requests.Session):
 session = sessions()
 
 if __name__ == '__main__':
+    print(os.system('python'))
     pytest.main(['TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     sleep(2)

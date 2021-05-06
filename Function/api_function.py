@@ -58,6 +58,8 @@ class AccountFunction:
         r1 = session.request('GET',
                               url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[0], cryptos[1])),
                               headers=headers)
+        strTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(r1.json()['valid_until'])))
+        logger.info('获得报价的服务器时间是{}'.format(strTime))
         return r1.json()
 
     # 获取钱包指定币种数量
