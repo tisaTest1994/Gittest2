@@ -5,11 +5,7 @@ from time import sleep
 from pathlib import Path
 import os
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR.joinpath('static')
-STATICFILES_DIRS = (BASE_DIR.joinpath('static'))
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # 选择环境，得到环境url
