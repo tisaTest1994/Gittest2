@@ -1,9 +1,9 @@
-import pytest
-from Function.slack import *
-from Function.connect_mysql import *
-from time import sleep
-
-# 选择环境，得到环境url
+# import pytest
+# from Function.slack import *
+# from Function.connect_mysql import *
+# from time import sleep
+#
+# # 选择环境，得到环境url
 # global env_url
 # env_url = get_json()[get_json()['env']]
 #
@@ -24,12 +24,13 @@ from time import sleep
 #
 #
 # session = sessions()
+#
+# if __name__ == '__main__':
+#     pytest.main(['TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
+#     os.system("allure generate ./Reports  -o ./Reports/html --clean")
+#     sleep(2)
+#     slack_report()
 
-if __name__ == '__main__':
-    os.system('rm -rf *')
-    # pytest.main(['TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
-    # os.system("allure generate ./Reports  -o ./Reports/html --clean")
-    # sleep(2)
-    # slack_report()
 
-
+import os
+os.system('rm -rf *')
