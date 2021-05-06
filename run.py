@@ -2,6 +2,15 @@ import pytest
 from Function.slack import *
 from Function.connect_mysql import *
 from time import sleep
+from pathlib import Path
+import os
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR.joinpath('static')
+STATICFILES_DIRS = (BASE_DIR.joinpath('static'))
+
 
 # 选择环境，得到环境url
 global env_url
