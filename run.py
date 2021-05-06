@@ -1,4 +1,5 @@
 import pytest
+from Function.common_function import *
 from Function.slack import *
 from Function.connect_mysql import *
 from time import sleep
