@@ -37,7 +37,7 @@ class TestPayoutApi:
     @allure.testcase('test_payout_002 有Kyc用户添加非ETH常用收款地址')
     def test_payout_002(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("有Kyc用户添加非ETH常用收款地址"):
@@ -61,7 +61,7 @@ class TestPayoutApi:
     @allure.testcase('test_payout_003 获取存储的常用收款地址list')
     def test_payout_003(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取存储的常用收款地址list"):
@@ -97,7 +97,7 @@ class TestPayoutApi:
     @allure.testcase('test_payout_005 使用不存在id获取常用收款地址')
     def test_payout_005(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("使用不存在id获取常用收款地址"):
@@ -113,7 +113,7 @@ class TestPayoutApi:
     @allure.testcase('test_payout_006 更新收款地址')
     def test_payout_006(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])[
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
                 'accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
@@ -139,7 +139,7 @@ class TestPayoutApi:
     @allure.testcase('test_payout_007 更新使用不存在id收款地址')
     def test_payout_007(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])[
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
                 'accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
@@ -165,7 +165,7 @@ class TestPayoutApi:
     @allure.testcase('test_payout_008 删除常用收款地址')
     def test_payout_008(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取收款地址list"):
@@ -185,7 +185,7 @@ class TestPayoutApi:
     @allure.testcase('test_payout_009 根据不存在的删除收款地址')
     def test_payout_009(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])[
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
                 'accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
@@ -202,7 +202,7 @@ class TestPayoutApi:
     @allure.testcase('test_payout_010 获取提现费率和提现限制')
     def test_payout_010(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取提现费率和提现限制"):
@@ -222,10 +222,32 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert '"fee":"0.001"' in r.text, "获取提现费率和提现限制错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_011 提现ETH成功')
+    @allure.testcase('test_payout_011 提现BTC成功')
     def test_payout_011(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("提现BTC成功"):
+            data = {
+                "amount": "0.000128",
+                "code": "BTC",
+                "address": "tb1qw5vxujxtp0zqueman28cwm344tucezhxenvfrg",
+                "method": ""
+            }
+            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['transaction_id'] is not None, "提现BTC错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_012 提现ETH成功')
+    def test_payout_012(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("提现ETH成功"):
@@ -235,42 +257,175 @@ class TestPayoutApi:
                 "address": "0x428DA40C585514022b2eB537950d5AB5C7365a07",
                 "method": "ERC20"
             }
-            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
+            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['transaction_id'] is not None, "提现ETH成功错误，返回值是{}".format(r.text)
+            assert r.json()['transaction_id'] is not None, "提现ETH错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_012 提现ETH失败')
-    def test_payout_012(self):
+    @allure.testcase('test_payout_013 提现USDT成功')
+    def test_payout_013(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account="yilei2@cabital.com",  password=email['password'])[
-                'accessToken']
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
-        with allure.step("提现ETH失败"):
+        with allure.step("提现USDT成功"):
             data = {
-                "amount": "0.08",
-                "code": "ETH",
+                "amount": "22",
+                "code": "USDT",
                 "address": "0x428DA40C585514022b2eB537950d5AB5C7365a07",
                 "method": "ERC20"
             }
-            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
+            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['transaction_id'] is not None, "提现USDT错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_014 提现超过可用数量的BTC，返回失败')
+    def test_payout_014(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("提现超过可用数量的BTC，返回失败"):
+            data = {
+                "amount": "999999999",
+                "code": "BTC",
+                "address": "tb1qw5vxujxtp0zqueman28cwm344tucezhxenvfrg",
+                "method": ""
+            }
+            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'WALLET000003' in r.text, "提现ETH失败错误，返回值是{}".format(r.text)
+            assert 'WALLET000003' in r.text, "提现超过可用数量的BTC，返回失败错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_013 查询提现详情')
-    def test_payout_013(self):
+    @allure.testcase('test_payout_015 提现超过可用数量的ETH，返回失败')
+    def test_payout_015(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("提现超过可用数量的ETH，返回失败"):
+            data = {
+                "amount": "999999",
+                "code": "ETH",
+                "address": "0x428DA40C585514022b2eB537950d5AB5C7365a07",
+                "method": "ERC20"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'WALLET000003' in r.text, "提现超过可用数量的ETH，返回失败错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_016 提现超过可用数量的USDT，返回失败')
+    def test_payout_016(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("提现超过可用数量的USDT，返回失败"):
+            data = {
+                "amount": "99999999",
+                "code": "USDT",
+                "address": "0xB76a92f3293b8Fa0f30aA4FfF75325201C2F67F6",
+                "method": "ERC20"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'WALLET000003' in r.text, "提现超过可用数量的USDT，返回失败错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_017 提现小于最低要求数量的BTC，返回失败')
+    def test_payout_017(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("提现小于最低要求数量的BTC，返回失败"):
+            data = {
+                "amount": "0.000000013",
+                "code": "BTC",
+                "address": "tb1qw5vxujxtp0zqueman28cwm344tucezhxenvfrg",
+                "method": ""
+            }
+            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'WALLET000003' in r.text, "提现小于最低要求数量的BTC，返回失败错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_018 提现小于最低要求数量的ETH，返回失败')
+    def test_payout_018(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("提现超过可用数量的ETH，返回失败"):
+            data = {
+                "amount": "0.0000001",
+                "code": "ETH",
+                "address": "0x428DA40C585514022b2eB537950d5AB5C7365a07",
+                "method": "ERC20"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'WALLET000003' in r.text, "提现小于最低要求数量的ETH，返回失败错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_019 提现小于最低要求数量的USDT，返回失败')
+    def test_payout_019(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("提现超过可用数量的USDT，返回失败"):
+            data = {
+                "amount": "1",
+                "code": "USDT",
+                "address": "0xB76a92f3293b8Fa0f30aA4FfF75325201C2F67F6",
+                "method": "ERC20"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'WALLET000003' in r.text, "提现超过可用数量的USDT，返回失败错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_020 查询提现详情')
+    def test_payout_020(self):
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
         with allure.step("查询提现详情"):
@@ -283,10 +438,10 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert 'status' in r.text, "查询提现详情错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_014 使用错误id查询提现详情')
-    def test_payout_014(self):
+    @allure.testcase('test_payout_021 使用错误id查询提现详情')
+    def test_payout_021(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])[
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
                 'accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
@@ -300,10 +455,10 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert 'no rows in result set' in r.text, "使用错误id查询提现详情错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_015 有Kyc用户添加ETH常用收款地址')
-    def test_payout_015(self):
+    @allure.testcase('test_payout_022 有Kyc用户添加ETH常用收款地址')
+    def test_payout_022(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("有Kyc用户添加ETH常用收款地址"):

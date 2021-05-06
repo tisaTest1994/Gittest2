@@ -773,3 +773,50 @@ class TestSavingApi:
             with allure.step("校验返回值"):
                 assert 'items' in r.text, "获取今日之前的利息列表错误，返回值是{}".format(r.text)
 
+    @allure.testcase('test_saving_021 确定利息派发日期是T+1')
+    def test_saving_021(self):
+        with allure.step("获取产品product_id"):
+            r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+            product_id = []
+            for i in r.json():
+                product_id.append(i['product_id'])
+        with allure.step("确定利息派发日期是T+1"):
+            # 随机获取一个id
+            id = random.choice(product_id)
+            logger.info('产品id是{}'.format(id))
+            r = session.request('GET', url='{}/earn/products/{}'.format(env_url, id), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            earning_start_time = r.json()['earning_start_time']
+            logger.info('计息时间戳是{}'.format(earning_start_time))
+            # 获得现在时间
+            now_time = str(time.time()).split('.')[0]
+            logger.info('现在时间戳是{}'.format(now_time))
+            assert int(now_time) + 28800 <= int(earning_start_time), '确定利息派发日期是T+1错误'
+
+    @allure.testcase('test_saving_022 确定赎回日期是T+1')
+    def test_saving_022(self):
+        with allure.step("获取产品product_id"):
+            r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+            product_id = []
+            for i in r.json():
+                product_id.append(i['product_id'])
+        with allure.step("确定赎回日期是T+1"):
+            # 随机获取一个id
+            id = random.choice(product_id)
+            logger.info('产品id是{}'.format(id))
+            r = session.request('GET', url='{}/earn/products/{}'.format(env_url, id), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            redeem_settle_time = r.json()['redeem_settle_time']
+            logger.info('计息时间戳是{}'.format(redeem_settle_time))
+            # 获得现在时间
+            now_time = str(time.time()).split('.')[0]
+            logger.info('现在时间戳是{}'.format(now_time))
+            assert int(now_time) + 28800 <= int(redeem_settle_time), '确定赎回日期是T+1错误'
