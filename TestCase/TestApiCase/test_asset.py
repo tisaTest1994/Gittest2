@@ -61,6 +61,5 @@ class TestAssetApi:
             # 获取昨天UTC23:59的价格
             yesterday_time = datetime.datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d") + '0000'
             quote = AccountFunction.get_crypto_quote(type=i, open_time=yesterday_time)
-            yesterday_quote = json.loads(str(quote))['quote']
-            yesterday_amount_list[i] = float(number) * float(yesterday_quote)
+            yesterday_amount_list[i] = float(number) * float(quote)
         print(yesterday_amount_list)
