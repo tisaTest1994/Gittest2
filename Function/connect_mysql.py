@@ -12,6 +12,4 @@ def connect_mysql(db, sql):
         with connection.cursor() as cursor:
             cursor.execute(sql)
             result = cursor.fetchone()
-            connection.close()
-            cursor.close()
             return result
