@@ -94,6 +94,7 @@ class AccountFunction:
                               "select quote from customer_quote_stat where pair='{}USD' and open_time='20210506';".format(
                                   type, open_time))
         # logger.info('{}的quote是{}'.format(type, str(quote)))
+        print(type(quote))
         print(json.loads(quote))
         print(json.loads(quote)['quote'])
         return json.loads(quote)
