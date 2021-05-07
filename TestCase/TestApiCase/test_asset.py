@@ -58,5 +58,7 @@ class TestAssetApi:
                     elif y['user_txn_sub_type'] == 6:
                         number = float(number) + float(json.loads(y['details'])['currency']['amount'])
             # 获取昨天UTC23:59的价格
-            print(utc_zero)
+            yesterday_time = datetime.datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d") + '0000'
+            quote = AccountFunction.get_crypto_quote(type=i, open_time=yesterday_time)
+            print(quote)
             yesterday_number = number

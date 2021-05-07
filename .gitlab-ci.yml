@@ -4,7 +4,6 @@ before_script:
   - apt-get update
   - apt-get install software-properties-common -y
   - apt-get install default-jre -y
-  - apt-get install default-jdk -y
   - apt-get install curl -y
   - apt-get install gzip -y
   - curl -o allure-2.13.9.tgz -Ls https://github.com/allure-framework/allure2/releases/download/2.13.9/allure-2.13.9.tgz
