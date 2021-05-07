@@ -93,5 +93,7 @@ class AccountFunction:
         quote = connect_mysql('marketstat',
                               "select quote from customer_quote_stat where pair='{}USD' and open_time='20210506';".format(
                                   type, open_time))
-        logger.info('{}的quote是{}'.format(type, str(quote)))
+        # logger.info('{}的quote是{}'.format(type, str(quote)))
+        print(json.loads(quote))
+        print(json.loads(quote)['quote'])
         return json.loads(quote)
