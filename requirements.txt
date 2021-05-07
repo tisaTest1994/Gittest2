@@ -83,3 +83,4 @@ wxpy==0.3.9.8
 yarl==1.6.3
 zope.event==4.5.0
 zope.interface==5.4.0
+pytz~=2021.1

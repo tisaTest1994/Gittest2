@@ -76,4 +76,21 @@ class AccountFunction:
                         balance_type_available_amount = y['amount']
         return balance_type_available_amount
 
+    # 获取当前某个币的资产价值，用USD结算
+    @staticmethod
+    def get_crypto_abs_amount(type, account=email['email'], password=email['password']):
+        accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
+        headers['Authorization'] = "Bearer " + accessToken
+        headers['X-Currency'] = 'USD'
+        r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
+        for i in r.json()['wallets']:
+            if i['code'] == type:
+                return i['abs_amount']
 
+    # 获取quote值
+    @staticmethod
+    def get_crypto_quote(type='BTC', open_time='20210506'):
+        quote = connect_mysql('marketstat',
+                              "select quote from customer_quote_stat where pair='{}USD' and open_time='20210506';".format(
+                                  type, open_time))
+        logger.info('{}的quote是{}'.format(type, quote))

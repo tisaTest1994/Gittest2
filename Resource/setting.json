@@ -20,5 +20,5 @@
       "host": "rds-cluster-cluster.cluster-cyxbmvlfoqo7.ap-southeast-1.rds.amazonaws.com",
       "port": 3306
   },
-  "crypto_list": ["BTC", "USDT", "ETH"]
+  "crypto_list": ["BTC", "USDT", "ETH", "EUR"]
 }
