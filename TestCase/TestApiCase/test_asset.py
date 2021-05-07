@@ -32,6 +32,7 @@ class TestAssetApi:
         accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         headers['Authorization'] = "Bearer " + accessToken
         headers['X-Currency'] = 'USD'
+        yesterday_amount_list = {}
         for i in crypto_list:
             with allure.step("获得{}现在数量".format(i)):
                 number = AccountFunction.get_crypto_number(crypto_type=i)
@@ -60,5 +61,6 @@ class TestAssetApi:
             # 获取昨天UTC23:59的价格
             yesterday_time = datetime.datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d") + '0000'
             quote = AccountFunction.get_crypto_quote(type=i, open_time=yesterday_time)
-            print(quote)
-            yesterday_number = number
+            yesterday_quote = json.loads(quote)['quote']
+            yesterday_amount_list[i] = float(number) * float(yesterday_quote)
+        print(yesterday_amount_list)
