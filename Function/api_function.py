@@ -94,7 +94,7 @@ class AccountFunction:
         if 'None' not in str(quote):
             print(str(quote).split("'"))
             #quote_number = str(quote).split("'")[3]
-            logger.info('{}的quote是{}'.format(type, quote_number))
+            #logger.info('{}的quote是{}'.format(type, quote_number))
             #return quote_number
         else:
             return "mysql 查询出问题"
