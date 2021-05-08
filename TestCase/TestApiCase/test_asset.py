@@ -1,6 +1,7 @@
 from Function.api_function import *
 from run import *
 from Function.log import *
+from decimal import *
 import allure
 
 
@@ -61,5 +62,5 @@ class TestAssetApi:
             # 获取昨天UTC23:59的价格
             yesterday_time = datetime.datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d") + '0000'
             quote = AccountFunction.get_crypto_quote(type=i, open_time=yesterday_time)
-            yesterday_amount_list[i] = float(number) * float(quote)
+            yesterday_amount_list[i] = (Decimal(number) * Decimal(quote)).quantize(Decimal('0.00'), ROUND_FLOOR)
             print(yesterday_amount_list)

@@ -90,13 +90,18 @@ class AccountFunction:
     # 获取quote值
     @staticmethod
     def get_crypto_quote(type='BTC', open_time='20210506'):
-        sql = "select quote from customer_quote_stat where pair='{}USD' and open_time='{}';".format(type, open_time)
+        if type == 'EUR':
+            sql = "select quote from customer_quote_stat where pair='USDEUR' and open_time='{}';".format(open_time)
+        else:
+            sql = "select quote from customer_quote_stat where pair='{}USD' and open_time='{}';".format(type, open_time)
         logger.info('sql命令是{}'.format(sql))
         quote = connect_mysql('marketstat', sql=sql)
         if 'None' not in str(quote):
             print(str(quote).split("'"))
             quote_number = str((str(quote).split("'"))[3])
             logger.info('{}的quote是{}'.format(type, quote_number))
+            if type == 'EUR':
+                quote_number = 1/float(quote_number)
             return quote_number
         else:
-            return "mysql 查询出问题"
+            assert False, '获取quote失败，返回{}'.format(str(quote))
