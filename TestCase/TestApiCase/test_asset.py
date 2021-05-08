@@ -62,4 +62,4 @@ class TestAssetApi:
             yesterday_time = datetime.datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d") + '0000'
             quote = AccountFunction.get_crypto_quote(type=i, open_time=yesterday_time)
             yesterday_amount_list[i] = float(number) * float(quote)
-        print(yesterday_amount_list)
+            print(yesterday_amount_list)
