@@ -94,18 +94,14 @@ class AccountFunction:
 
     # 获取quote值
     @staticmethod
-    def get_crypto_quote(type='BTC', open_time='20210506'):
-        if type == 'EUR':
-            sql = "select quote from customer_quote_stat where pair='USDEUR' and open_time='{}';".format(open_time)
-        else:
-            sql = "select quote from customer_quote_stat where pair='{}USD' and open_time='{}';".format(type, open_time)
+    def get_crypto_quote(pair_type='middle', type='BTC', limit_time='2021-05-07 08:00:00'):
+        sql = "select {} from quote where pair = '{}-USD' and purpose = 'Customer' and valid_until > '{}' limit 1;".\
+            format(pair_type, type, limit_time)
         logger.info('sql命令是{}'.format(sql))
-        quote = connect_mysql('marketstat', sql=sql)
+        quote = connect_mysql('pricing', sql=sql)
         if 'None' not in str(quote):
             print(str(quote).split("'"))
             quote_number = str((str(quote).split("'"))[3])
-            if type == 'EUR':
-                quote_number = 1 / float(quote_number)
             logger.info('{}的quote是{}'.format(type, quote_number))
             return quote_number
         else:
@@ -121,6 +117,7 @@ class AccountFunction:
         headers['X-Currency'] = 'USD'
         # "获得现在数量币数量"
         number = AccountFunction.get_crypto_number(type=type)
+        # 获得交易记录
         data = {
             "pagination_request": {
                 "cursor": "0",
@@ -133,7 +130,7 @@ class AccountFunction:
         r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers,
                             timeout=10)
         for y in r.json()['transactions']:
-            if y['created_at'] >= utc_zero:
+            if y['updated_at'] >= utc_zero:
                 if y['user_txn_sub_type'] == 1:
                     number = float(number) - float(json.loads(y['details'])['currency']['amount'])
                 elif y['user_txn_sub_type'] == 2 and json.loads(y['details'])['but_currency']['code'] == type:
@@ -145,11 +142,34 @@ class AccountFunction:
                 elif y['user_txn_sub_type'] == 6:
                     number = float(number) + float(json.loads(y['details'])['currency']['amount'])
         # 获取昨天UTC23:59的价格
-        yesterday_time = datetime.datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d") + '0000'
-        quote = AccountFunction.get_crypto_quote(type=type, open_time=yesterday_time)
+        yesterday_time = datetime.datetime.now(tz=pytz.timezone('UTC')).strftime("%Y-%m-%d") + ' 0:00:00'
+        quote = AccountFunction.get_crypto_quote(type=type, limit_time=yesterday_time)
         yesterday_amount = (Decimal(number) * Decimal(quote)).quantize(Decimal('0.00'), ROUND_FLOOR)
         # 获得当前价格
         now_amount = AccountFunction.get_crypto_abs_amount(type=type, account=account, password=password)
         today_increase = (Decimal(now_amount) - Decimal(yesterday_amount)).quantize(Decimal('0.00'), ROUND_FLOOR)
         return str(today_increase)
+
+    # 获得总持仓成本
+    @staticmethod
+    def get_cost(type='ETH', account=email['email'], password=email['password']):
+        # 获得交易记录
+        accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
+        headers['Authorization'] = "Bearer " + accessToken
+        headers['X-Currency'] = 'USD'
+        data = {
+            "pagination_request": {
+                "cursor": "0",
+                "page_size": 9999999
+            },
+            "user_txn_sub_types": [1, 2, 6],
+            "statuses": [2],
+            "codes": [type]
+        }
+        r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers,
+                            timeout=10)
+        for y in r.json()['transactions']:
+            if y['user_txn_sub_type'] == 6:
+                #amount = AccountFunction.get_crypto_quote(type=type, open_time='20210506')
+                order_time = time.strftime("%Y%m%d%H%M", time.localtime(y['updated_at']))
 

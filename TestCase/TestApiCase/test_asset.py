@@ -25,45 +25,6 @@ class TestAssetApi:
                     if i == y['code']:
                         assert AccountFunction.get_crypto_abs_amount(i) == y['value'], '{}币种当前资产市值是{},接口返回值是{}.查询每个币种当前资产市值错误'.format(i, AccountFunction.get_crypto_abs_amount(i), y['value'])
 
-    @allure.testcase('test_asset_01102 查询每个币种今日损益')
-    def test_asset_00112(self):
-        with allure.step("获取本日utc0点"):
-            utc_zero = get_zero_utc_time()
-        crypto_list = get_json()['crypto_list']
-        accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        headers['X-Currency'] = 'USD'
-        list = []
-        for i in crypto_list:
-            with allure.step("获得{}现在数量".format(i)):
-                number = AccountFunction.get_crypto_number(crypto_type=i)
-            data = {
-                "pagination_request": {
-                    "cursor": "0",
-                    "page_size": 9999999
-                },
-                "user_txn_sub_types": [1, 2, 4, 6],
-                "statuses": [2],
-                "codes": [i]
-            }
-            r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers, timeout=10)
-            for y in r.json()['transactions']:
-                if y['created_at'] >= utc_zero:
-                    if y['user_txn_sub_type'] == 1:
-                        number = float(number) - float(json.loads(y['details'])['currency']['amount'])
-                    elif y['user_txn_sub_type'] == 2 and json.loads(y['details'])['but_currency']['code'] == i:
-                        number = float(number) - float(json.loads(y['details'])['but_currency']['amount'])
-                    elif y['user_txn_sub_type'] == 2 and json.loads(y['details'])['sell_currency']['code'] == i:
-                        number = float(number) + float(json.loads(y['details'])['but_currency']['amount'])
-                    elif y['user_txn_sub_type'] == 4:
-                        number = float(number) - float(json.loads(y['details'])['currency']['amount'])
-                    elif y['user_txn_sub_type'] == 6:
-                        number = float(number) + float(json.loads(y['details'])['currency']['amount'])
-            # 获取昨天UTC23:59的价格
-            yesterday_time = datetime.datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d") + '0000'
-            quote = AccountFunction.get_crypto_quote(type=i, open_time=yesterday_time)
-            end = {}
-
     @allure.testcase('test_asset_002 查询每个币种今日损益')
     def test_asset_002(self):
         crypto_list = get_json()['crypto_list']
