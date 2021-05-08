@@ -25,15 +25,15 @@ class TestAssetApi:
                     if i == y['code']:
                         assert AccountFunction.get_crypto_abs_amount(i) == y['value'], '{}币种当前资产市值是{},接口返回值是{}.查询每个币种当前资产市值错误'.format(i, AccountFunction.get_crypto_abs_amount(i), y['value'])
 
-    @allure.testcase('test_asset_002 查询每个币种今日损益')
-    def test_asset_002(self):
+    @allure.testcase('test_asset_01102 查询每个币种今日损益')
+    def test_asset_00112(self):
         with allure.step("获取本日utc0点"):
             utc_zero = get_zero_utc_time()
         crypto_list = get_json()['crypto_list']
         accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
         headers['Authorization'] = "Bearer " + accessToken
         headers['X-Currency'] = 'USD'
-        yesterday_amount_list = {}
+        list = []
         for i in crypto_list:
             with allure.step("获得{}现在数量".format(i)):
                 number = AccountFunction.get_crypto_number(crypto_type=i)
@@ -62,5 +62,11 @@ class TestAssetApi:
             # 获取昨天UTC23:59的价格
             yesterday_time = datetime.datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d") + '0000'
             quote = AccountFunction.get_crypto_quote(type=i, open_time=yesterday_time)
-            yesterday_amount_list[i] = (Decimal(number) * Decimal(quote)).quantize(Decimal('0.00'), ROUND_FLOOR)
-            print(yesterday_amount_list)
+            end = {}
+
+    @allure.testcase('test_asset_002 查询每个币种今日损益')
+    def test_asset_002(self):
+        crypto_list = get_json()['crypto_list']
+        for i in crypto_list:
+            today_increase = AccountFunction.get_today_increase(type=i)
+            print(today_increase)
