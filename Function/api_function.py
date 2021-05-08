@@ -95,5 +95,4 @@ class AccountFunction:
                                   type, open_time))
         logger.info('{}的quote是{}'.format(type, str(quote)))
         print(str(quote))
-        print(json.loads(str(quote))['quote'])
-        return json.loads(str(quote))['quote']
+        print(str(quote).split("'"))
