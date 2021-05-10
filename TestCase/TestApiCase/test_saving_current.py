@@ -797,14 +797,14 @@ class TestSavingCurrentApi:
             logger.info('现在时间戳是{}'.format(now_time))
             assert int(now_time) + 28800 <= int(earning_start_time), '确定利息派发日期是T+1错误'
 
-    @allure.testcase('test_saving_current_022 确定赎回日期是T+1')
+    @allure.testcase('test_saving_current_022 确定赎回日期是D+1')
     def test_saving_current_022(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
             product_id = []
             for i in r.json():
                 product_id.append(i['product_id'])
-        with allure.step("确定赎回日期是T+1"):
+        with allure.step("确定赎回日期是D+1"):
             # 随机获取一个id
             id = random.choice(product_id)
             logger.info('产品id是{}'.format(id))
@@ -819,5 +819,5 @@ class TestSavingCurrentApi:
             # 获得现在时间
             now_time = str(time.time()).split('.')[0]
             logger.info('现在时间戳是{}'.format(now_time))
-            assert int(now_time) + 28800 <= int(redeem_settle_time), '确定赎回日期是T+1错误'
+            assert int(now_time) + 28800 <= int(redeem_settle_time), '确定赎回日期是D+1错误'
 

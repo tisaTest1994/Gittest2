@@ -169,7 +169,14 @@ class AccountFunction:
         r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers,
                             timeout=10)
         for y in r.json()['transactions']:
+            cost = 0
+            if y['user_txn_sub_type'] == 1:
+                print(y)
+                order_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(y['updated_at']))
+            if y['user_txn_sub_type'] == 2:
+                order_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(y['updated_at']))
             if y['user_txn_sub_type'] == 6:
-                #amount = AccountFunction.get_crypto_quote(type=type, open_time='20210506')
-                order_time = time.strftime("%Y%m%d%H%M", time.localtime(y['updated_at']))
+                order_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(y['updated_at']))
+                amount = json.loads(y['details'])['currency']['amount']
+                print(amount)
 
