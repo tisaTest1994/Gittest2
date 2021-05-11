@@ -110,11 +110,11 @@ class TestConvertApi:
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
                         buy_amount_wallet_balance = AccountFunction.get_crypto_number(account=email['email'],
                                                                                       password=email['password'],
-                                                                                      crypto_type=cryptos[0])
+                                                                                      type=cryptos[0])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
                         sell_amount_wallet_balance = AccountFunction.get_crypto_number(account=email['email'],
                                                                                        password=email['password'],
-                                                                                       crypto_type=cryptos[1])
+                                                                                       type=cryptos[1])
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         buy_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -159,9 +159,9 @@ class TestConvertApi:
                     logger.info('换汇返回值{}'.format(r.text))
                     assert r.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[0])
+                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], type=cryptos[0])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[1])
+                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], type=cryptos[1])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[0],
                                                                                                buy_amount_wallet_balance,
                                                                                                buy_amount,
@@ -176,11 +176,11 @@ class TestConvertApi:
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
                         buy_amount_wallet_balance = AccountFunction.get_crypto_number(account=email['email'],
                                                                                       password=email['password'],
-                                                                                      crypto_type=cryptos[1])
+                                                                                      type=cryptos[1])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
                         sell_amount_wallet_balance = AccountFunction.get_crypto_number(account=email['email'],
                                                                                        password=email['password'],
-                                                                                       crypto_type=cryptos[0])
+                                                                                       type=cryptos[0])
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         buy_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -225,9 +225,9 @@ class TestConvertApi:
                     logger.info('换汇返回值{}'.format(r1.text))
                     assert r1.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r1.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[1])
+                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], type=cryptos[1])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[0])
+                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], type=cryptos[0])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[1],
                                                                                                buy_amount_wallet_balance,
                                                                                                buy_amount,
@@ -242,11 +242,11 @@ class TestConvertApi:
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
                         buy_amount_wallet_balance = AccountFunction.get_crypto_number(account=email['email'],
                                                                                       password=email['password'],
-                                                                                      crypto_type=cryptos[0])
+                                                                                      type=cryptos[0])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
                         sell_amount_wallet_balance = AccountFunction.get_crypto_number(account=email['email'],
                                                                                        password=email['password'],
-                                                                                       crypto_type=cryptos[1])
+                                                                                       type=cryptos[1])
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         sell_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -291,9 +291,9 @@ class TestConvertApi:
                     logger.info('换汇返回值{}'.format(r2.text))
                     assert r2.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r2.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[0])
+                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], type=cryptos[0])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[1])
+                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], type=cryptos[1])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[0],
                                                                                                buy_amount_wallet_balance,
                                                                                                buy_amount,
@@ -308,11 +308,11 @@ class TestConvertApi:
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
                         buy_amount_wallet_balance = AccountFunction.get_crypto_number(account=email['email'],
                                                                                       password=email['password'],
-                                                                                      crypto_type=cryptos[1])
+                                                                                      type=cryptos[1])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
                         sell_amount_wallet_balance = AccountFunction.get_crypto_number(account=email['email'],
                                                                                        password=email['password'],
-                                                                                       crypto_type=cryptos[0])
+                                                                                       type=cryptos[0])
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         sell_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -356,9 +356,9 @@ class TestConvertApi:
                     logger.info('换汇返回值{}'.format(r3.text))
                     assert r3.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[1])
+                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], type=cryptos[1])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], crypto_type=cryptos[0])
+                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(account=email['email'], password=email['password'], type=cryptos[0])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[1],
                                                                                                buy_amount_wallet_balance,
                                                                                                buy_amount,

@@ -70,14 +70,14 @@ class AccountFunction:
 
     # 获取钱包指定币种数量
     @staticmethod
-    def get_crypto_number(type='BTC', account=email['email'], password=email['password']):
+    def get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE', account=email['email'], password=email['password']):
         accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
         headers['Authorization'] = "Bearer " + accessToken
         r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
         for i in r.json():
-            if i['code'] == type and i['wallet_type'] == 'BALANCE':
+            if i['code'] == type and i['wallet_type'] == wallet_type:
                 for y in i['balances']:
-                    if y['type'] == 'BALANCE_TYPE_AVAILABLE':
+                    if y['type'] == balance_type:
                         balance_type_available_amount = y['amount']
         return balance_type_available_amount
 
@@ -100,7 +100,6 @@ class AccountFunction:
         logger.info('sql命令是{}'.format(sql))
         quote = connect_mysql('pricing', sql=sql)
         if 'None' not in str(quote):
-            print(str(quote).split("'"))
             quote_number = str((str(quote).split("'"))[3])
             logger.info('{}的quote是{}'.format(type, quote_number))
             return quote_number
@@ -179,4 +178,16 @@ class AccountFunction:
                 order_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(y['updated_at']))
                 amount = json.loads(y['details'])['currency']['amount']
                 print(amount)
+
+    # 查询交易状态
+    @staticmethod
+    def get_transaction_status(transaction_id, type, account=email['email'], password=email['password']):
+        accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
+        headers['Authorization'] = "Bearer " + accessToken
+        headers['X-Currency'] = 'USD'
+        params = {
+            'txn_sub_type': type
+        }
+        r = session.request('GET', url='{}/txn/{}'.format(env_url, transaction_id), params=params, headers=headers)
+        return r.json()['transaction']['status']
 
