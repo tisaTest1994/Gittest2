@@ -391,6 +391,7 @@ class TestSavingFixApi:
 
     @allure.testcase('test_saving_fix_006 购买定期产品最大额度')
     def test_saving_fix_006(self):
+        sleep(5)
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
                 'accessToken']
@@ -712,4 +713,4 @@ class TestSavingFixApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            print(r.json())
+            assert r.json() is not None, '查询申购项目的交易记录失败，返回值是{}'.format(r.text)
