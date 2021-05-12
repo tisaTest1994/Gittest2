@@ -405,6 +405,7 @@ class TestSavingCurrentApi:
                     BTCList.append(i)
             if len(BTCList) >= 1:
                 BTC_item = random.choice(BTCList)
+                logger.info('产品信息是{}'.format(BTC_item))
         with allure.step("赎回项目前，总共持有金额"):
             r2 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']), headers=headers)
             total_holding_old = r2.json()['total_holding']['amount']
@@ -474,6 +475,7 @@ class TestSavingCurrentApi:
                     BTCList.append(i)
             if len(BTCList) >= 1:
                 BTC_item = random.choice(BTCList)
+                logger.info('产品信息是{}'.format(BTC_item))
         with allure.step("赎回项目前，总共持有金额"):
             r2 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']), headers=headers)
             total_holding_old = r2.json()['total_holding']['amount']
@@ -543,6 +545,7 @@ class TestSavingCurrentApi:
                     BTCList.append(i)
             if len(BTCList) >= 1:
                 BTC_item = random.choice(BTCList)
+                logger.info('产品信息是{}'.format(BTC_item))
         with allure.step("赎回项目前，总共持有金额"):
             r2 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, BTC_item['product_id']), headers=headers)
             total_holding_old = r2.json()['total_holding']['amount']
@@ -795,7 +798,8 @@ class TestSavingCurrentApi:
             # 获得现在时间
             now_time = str(time.time()).split('.')[0]
             logger.info('现在时间戳是{}'.format(now_time))
-            assert int(now_time) + 28800 <= int(earning_start_time), '确定利息派发日期是T+1错误'
+            assert int(now_time) <= int(earning_start_time), '确定利息派发日期是T+1错误'
+            assert int(now_time) + 86400 >= int(earning_start_time), '确定利息派发日期是T+1错误'
 
     @allure.testcase('test_saving_current_022 确定赎回日期是D+1')
     def test_saving_current_022(self):
@@ -819,5 +823,5 @@ class TestSavingCurrentApi:
             # 获得现在时间
             now_time = str(time.time()).split('.')[0]
             logger.info('现在时间戳是{}'.format(now_time))
-            assert int(now_time) + 28800 <= int(redeem_settle_time), '确定赎回日期是D+1错误'
-
+            assert int(now_time) <= int(redeem_settle_time), '确定赎回日期是D+1错误'
+            assert int(now_time) + 86400 >= int(redeem_settle_time), '确定赎回日期是D+1错误'

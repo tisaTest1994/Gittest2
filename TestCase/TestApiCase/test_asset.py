@@ -28,6 +28,6 @@ class TestAssetApi:
     @allure.testcase('test_asset_002 查询每个币种今日损益')
     def test_asset_002(self):
         crypto_list = get_json()['crypto_list']
-        for i in crypto_list:
-            today_increase = AccountFunction.get_today_increase(type=i)
-            print(today_increase)
+        # for i in crypto_list:
+        #     today_increase = AccountFunction.get_today_increase(type=i)
+        #     print(today_increase)
