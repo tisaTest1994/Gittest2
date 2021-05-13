@@ -152,13 +152,12 @@ class TestPayoutApi:
                 "isValid": True,
                 "whitelisted": False
             }
-            r = session.request('PUT', url='{}/account/myPayee/{}'.format(env_url, '300'), data=json.dumps(data),
-                                 headers=headers)
+            r = session.request('PUT', url='{}/account/myPayee/{}'.format(env_url, '300'), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'ACC_MY_PAYEE_000001' in r.text, "更新使用不存在id收款地址错误，返回值是{}".format(r.text)
 
@@ -182,7 +181,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert "payeeList" in r.text, "删除收款地址错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_009 根据不存在的删除收款地址')
+    @allure.testcase('test_payout_009 删除不存在的收款地址')
     def test_payout_009(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
@@ -230,7 +229,7 @@ class TestPayoutApi:
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("提现BTC成功"):
             data = {
-                "amount": "0.000128",
+                "amount": "0.0128",
                 "code": "BTC",
                 "address": "tb1qw5vxujxtp0zqueman28cwm344tucezhxenvfrg",
                 "method": ""
@@ -252,7 +251,7 @@ class TestPayoutApi:
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("提现ETH成功"):
             data = {
-                "amount": "0.0008",
+                "amount": "0.2008",
                 "code": "ETH",
                 "address": "0x428DA40C585514022b2eB537950d5AB5C7365a07",
                 "method": "ERC20"
@@ -274,7 +273,7 @@ class TestPayoutApi:
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("提现USDT成功"):
             data = {
-                "amount": "22",
+                "amount": "41",
                 "code": "USDT",
                 "address": "0x428DA40C585514022b2eB537950d5AB5C7365a07",
                 "method": "ERC20"
@@ -364,7 +363,7 @@ class TestPayoutApi:
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("提现小于最低要求数量的BTC，返回失败"):
             data = {
-                "amount": "0.000000013",
+                "amount": "0.0000000013",
                 "code": "BTC",
                 "address": "tb1qw5vxujxtp0zqueman28cwm344tucezhxenvfrg",
                 "method": ""
@@ -376,7 +375,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'WALLET000003' in r.text, "提现小于最低要求数量的BTC，返回失败错误，返回值是{}".format(r.text)
+            assert 'PAYOUTTXN000025' in r.text, "提现小于最低要求数量的BTC，返回失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_018 提现小于最低要求数量的ETH，返回失败')
     def test_payout_018(self):
@@ -397,9 +396,9 @@ class TestPayoutApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'WALLET000003' in r.text, "提现小于最低要求数量的ETH，返回失败错误，返回值是{}".format(r.text)
+            assert 'PAYOUTTXN000025' in r.text, "提现小于最低要求数量的ETH，返回失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_019 提现小于最低要求数量的USDT，返回失败')
     def test_payout_019(self):
@@ -422,7 +421,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'WALLET000003' in r.text, "提现超过可用数量的USDT，返回失败错误，返回值是{}".format(r.text)
+            assert 'PAYOUTTXN000025' in r.text, "提现超过可用数量的USDT，返回失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_020 查询提现详情')
     def test_payout_020(self):

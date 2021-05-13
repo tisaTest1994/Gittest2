@@ -19,6 +19,17 @@ class AccountFunction:
         assert 'accessToken' in r.text, "成功注册用户错误，返回值是{}".format(r.json())
         return r.json()
 
+    # 获取用户token
+    @staticmethod
+    def get_operate_account_token(account, password):
+        data = {
+            "username": account,
+            "password": password
+        }
+        r = session.request('POST', url='{}/operator/operator/login'.format(env_url), data=json.dumps(data),
+                            headers=headers, timeout=3)
+        return r.json()
+
     # 注册
     @staticmethod
     def sign_up(account='', password='Zcdsw123'):

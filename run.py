@@ -20,7 +20,7 @@ citizenCountryCodeList = get_json()['citizenCountryCodeList']
 
 class sessions(requests.Session):
     def request(self, *args, **kwargs):
-        kwargs.setdefault('timeout', 3)
+        kwargs.setdefault('timeout', 5)
         return super(sessions, self).request(*args, **kwargs)
 
 
