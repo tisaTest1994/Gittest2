@@ -694,8 +694,8 @@ class TestSavingFixApi:
         with allure.step("校验返回值"):
             assert transaction_id in r.text, '查询申购项目的交易记录详情错误, 返回值是{}'.format(r.text)
 
-    @allure.testcase('test_saving_fix_010 查询申购项目的交易记录')
-    def test_saving_fix_009(self):
+    @allure.testcase('test_saving_fix_010 查询申购BTC项目的交易记录')
+    def test_saving_fix_010(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
                 'accessToken']
@@ -718,3 +718,53 @@ class TestSavingFixApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json() is not None, '查询申购项目的交易记录失败，返回值是{}'.format(r.text)
+
+    @allure.testcase('test_saving_fix_011 查询申购ETH项目的交易记录')
+    def test_saving_fix_011(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+            headers['X-Currency'] = 'USD'
+        with allure.step("查询申购项目的交易记录"):
+            params = {
+                'tx_type': "1",
+                'cursor': 0,
+                'size': 900,
+                'order': "1",
+                'code': "ETH"
+            }
+            r = session.request('GET', url='{}/earn/fix/transactions'.format(env_url), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() is not None, '查询申购ETH项目的交易记录失败，返回值是{}'.format(r.text)
+
+    @allure.testcase('test_saving_fix_010 查询申购USDT项目的交易记录')
+    def test_saving_fix_009(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
+                'accessToken']
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+            headers['X-Currency'] = 'USD'
+        with allure.step("查询申购项目的交易记录"):
+            params = {
+                'tx_type': "1",
+                'cursor': 0,
+                'size': 900,
+                'order': "1",
+                'code': "USDT"
+            }
+            r = session.request('GET', url='{}/earn/fix/transactions'.format(env_url), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() is not None, '查询申购USDT项目的交易记录失败，返回值是{}'.format(r.text)
