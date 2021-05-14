@@ -353,11 +353,12 @@ class TestSavingCurrentApi:
         with allure.step("投资金额小于最小投资USDT数量"):
             data = {
                 "tx_type": 1,
-                "amount": "0.1",
+                "amount": "0.009",
                 "code": BTC_item['code']
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
                                  data=json.dumps(data), headers=headers)
+            print(data)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))

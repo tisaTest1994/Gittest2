@@ -101,7 +101,7 @@ class TestPayoutApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("使用不存在id获取常用收款地址"):
-            r = session.request('GET', url='{}/account/myPayee/{}'.format(env_url, '300'), headers=headers)
+            r = session.request('GET', url='{}/account/myPayee/{}'.format(env_url, '1111300'), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -146,7 +146,7 @@ class TestPayoutApi:
         with allure.step("更新使用不存在id收款地址"):
             data = {
                 "nickName": "alan EUR ERC20",
-                "currency": "EUR",
+                "currency": "ETH",
                 "method": "ERC20",
                 "address": generate_string(30),
                 "isValid": True,
@@ -157,9 +157,9 @@ class TestPayoutApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'ACC_MY_PAYEE_000001' in r.text, "更新使用不存在id收款地址错误，返回值是{}".format(r.text)
+            assert 'Invalid payee address' in r.text, "更新使用不存在id收款地址错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_008 删除常用收款地址')
     def test_payout_008(self):
@@ -189,7 +189,7 @@ class TestPayoutApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("凭借空id号删除地址"):
-            r = session.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, '300'), headers=headers)
+            r = session.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, '123131300'), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -427,6 +427,7 @@ class TestPayoutApi:
     def test_payout_020(self):
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
+            logger.info('transaction_id是{}'.format(transaction_id))
         with allure.step("查询提现详情"):
             r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id), headers=headers)
         with allure.step("状态码和返回值"):

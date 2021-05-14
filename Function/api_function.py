@@ -45,7 +45,7 @@ class AccountFunction:
 
     # 提现获取交易id
     @staticmethod
-    def get_payout_transaction_id(account=email['email'], password=email['password'], amount='0.0007',
+    def get_payout_transaction_id(account=email['email'], password=email['password'], amount='0.03',
                                   address='0x428DA40C585514022b2eB537950d5AB5C7365a07'):
         accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
         headers['Authorization'] = "Bearer " + accessToken

@@ -707,7 +707,8 @@ class TestSavingFixApi:
                 'tx_type': "1",
                 'cursor': 0,
                 'size': 900,
-                'order': "1"
+                'order': "1",
+                'code': "BTC"
             }
             r = session.request('GET', url='{}/earn/fix/transactions'.format(env_url), params=params, headers=headers)
         with allure.step("状态码和返回值"):

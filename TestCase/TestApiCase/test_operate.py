@@ -53,7 +53,7 @@ class TestOperateApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['account'] is not None, '检索用户失败，返回值是{}'.format(r.text)
+            assert r.json()['accounts'] is not None, '检索用户失败，返回值是{}'.format(r.text)
 
     @allure.testcase('test_operate_003 管理员查询用户信息')
     def test_operate_003(self):
