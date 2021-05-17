@@ -124,7 +124,7 @@ class TestSavingCurrentApi:
         with allure.step("有足够BTC的用户发起购买BTC投资项目成功"):
             data = {
                 "tx_type": 1,
-                "amount": "0.00087",
+                "amount": "0.0087",
                 "code": BTC_item['code']
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']), data=json.dumps(data), headers=headers)
