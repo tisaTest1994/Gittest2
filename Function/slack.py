@@ -1,5 +1,5 @@
 import slackweb
-import time
+from time import sleep
 import csv
 import requests
 from Function.common_function import *
@@ -22,6 +22,7 @@ def get_test_result():
 
 # 和slack交互
 def slack_report():
+    sleep(2)
     slackUrl = get_json()['slackUrl']
     slack = slackweb.Slack(url=slackUrl)
     result = get_test_result()
