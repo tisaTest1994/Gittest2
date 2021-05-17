@@ -1,6 +1,6 @@
 import pytest
 from Function.slack import *
-from Function.connect_mysql import *
+from Function.operate_sql import *
 from time import sleep
 
 
@@ -29,7 +29,7 @@ session = sessions()
 if __name__ == '__main__':
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
-    pytest.main(['TestCase/TestApiCase/', '-v', '--alluredir', './Reports'])
+    pytest.main(['TestCase/TestApiCase/test_convert_order', '-v', '--alluredir', './Reports'])
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     slack_report()
 

@@ -1,5 +1,4 @@
-import datetime
-
+from datetime import *
 import logger
 from faker import Faker
 import random
@@ -76,3 +75,13 @@ def get_zero_utc_time():
     return time.mktime(time.strptime(utc_zero, '%Y-%m-%d %H:%M:%S'))
 
 
+# 切分一天时间
+def get_zero_time(day_time='2021-05-17'):
+    dt = datetime(int(day_time.split('-')[0]), int(day_time.split('-')[1]), int(day_time.split('-')[2]))
+    timestamp = dt.replace(tzinfo=timezone.utc).timestamp()
+    time_list = []
+    i = timestamp
+    while i < timestamp + 86400:
+        i = i + 60
+        time_list.append(i)
+    return time_list

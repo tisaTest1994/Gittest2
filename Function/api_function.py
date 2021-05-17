@@ -19,7 +19,7 @@ class AccountFunction:
         assert 'accessToken' in r.text, "成功注册用户错误，返回值是{}".format(r.json())
         return r.json()
 
-    # 获取用户token
+    # 获取operate用户 token
     @staticmethod
     def get_operate_account_token(account, password):
         data = {
@@ -68,7 +68,7 @@ class AccountFunction:
         r1 = session.request('GET', url='{}/earn/products/{}/next_yield'.format(env_url, productId), headers=headers)
         return r1.json()['next_yield']
 
-    # 获取换汇报价
+    # 获取当前换汇报价
     @staticmethod
     def get_quote(pair):
         cryptos = pair.split('-')
@@ -102,20 +102,6 @@ class AccountFunction:
         for i in r.json()['wallets']:
             if i['code'] == type:
                 return i['abs_amount']
-
-    # 获取quote值
-    @staticmethod
-    def get_crypto_quote(pair_type='middle', type='BTC', limit_time='2021-05-07 08:00:00'):
-        sql = "select {} from quote where pair = '{}-USD' and purpose = 'Customer' and valid_until > '{}' limit 1;".\
-            format(pair_type, type, limit_time)
-        logger.info('sql命令是{}'.format(sql))
-        quote = connect_mysql('pricing', sql=sql)
-        if 'None' not in str(quote):
-            quote_number = str((str(quote).split("'"))[3])
-            logger.info('{}的quote是{}'.format(type, quote_number))
-            return quote_number
-        else:
-            assert False, '获取quote失败，返回{}'.format(str(quote))
 
     # 获得今日损益
     @staticmethod
