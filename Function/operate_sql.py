@@ -38,6 +38,6 @@ class sqlFunction:
         start_time = datetime.utcfromtimestamp(end_time - 60).strftime("%Y-%m-%d %H:%M:%S")
         end_time = datetime.utcfromtimestamp(end_time).strftime("%Y-%m-%d %H:%M:%S")
         sql = "select * from book_detail where created_at >= '{}' and created_at < '{}';".format(start_time, end_time)
-        print(sql)
         info = sqlFunction().connect_mysql('hedging', sql=sql)
-        print(info)
+        if info is not None:
+            return info
