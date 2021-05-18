@@ -12,3 +12,4 @@ class TestConvertOrderApi:
         cfx_info = []
         for i in time_list:
             cfx_info.append(sqlFunction().get_cfx_detail(end_time=i))
+        print(cfx_info)
