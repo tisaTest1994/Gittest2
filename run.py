@@ -17,10 +17,13 @@ email = get_json()['email']
 global citizenCountryCodeList
 citizenCountryCodeList = get_json()['citizenCountryCodeList']
 
+global accountToken
+accountToken = ''
+
 
 class sessions(requests.Session):
     def request(self, *args, **kwargs):
-        kwargs.setdefault('timeout', 10)
+        kwargs.setdefault('timeout', 3)
         return super(sessions, self).request(*args, **kwargs)
 
 
@@ -29,7 +32,7 @@ session = sessions()
 if __name__ == '__main__':
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
-    pytest.main(['TestCase/TestApiCase/test_convert_order.py', '-v', '--alluredir', './Reports'])
+    pytest.main(['TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     slack_report()
 

@@ -1,5 +1,3 @@
-import json
-
 from Function.api_function import *
 from run import *
 from Function.log import *
@@ -9,6 +7,10 @@ import allure
 
 # saving相关cases
 class TestSavingFixApi:
+    
+    # 初始化class
+    def setup_class(self):
+        AccountFunction.add_headers()
 
     @allure.testcase('test_saving_fix_001 获取定期产品列表')
     def test_saving_fix_001(self):
@@ -65,11 +67,6 @@ class TestSavingFixApi:
 
     @allure.testcase('test_saving_fix_004 购买定期产品')
     def test_saving_fix_004(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['X-Currency'] = 'USD'
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
         for i in r.json():
@@ -222,12 +219,6 @@ class TestSavingFixApi:
 
     @allure.testcase('test_saving_fix_005 购买定期产品最小额度')
     def test_saving_fix_005(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['X-Currency'] = 'USD'
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
         for i in r.json():
@@ -394,12 +385,6 @@ class TestSavingFixApi:
     @allure.testcase('test_saving_fix_006 购买定期产品最大额度')
     def test_saving_fix_006(self):
         sleep(5)
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['X-Currency'] = 'USD'
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
         for i in r.json():
@@ -583,12 +568,6 @@ class TestSavingFixApi:
 
     @allure.testcase('test_saving_fix_007 项目不传预计派息金额')
     def test_saving_fix_007(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['X-Currency'] = 'USD'
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
             product_info = random.choice(random.choice(r.json())['products'])
@@ -617,12 +596,6 @@ class TestSavingFixApi:
 
     @allure.testcase('test_saving_fix_008 项目传入错误预计派息金额')
     def test_saving_fix_008(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['X-Currency'] = 'USD'
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
             product_info = random.choice(random.choice(r.json())['products'])
@@ -650,12 +623,6 @@ class TestSavingFixApi:
 
     @allure.testcase('test_saving_fix_009 查询申购项目的交易记录详情')
     def test_saving_fix_009(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['X-Currency'] = 'USD'
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
             product_info = random.choice(random.choice(r.json())['products'])
@@ -696,12 +663,6 @@ class TestSavingFixApi:
 
     @allure.testcase('test_saving_fix_010 查询申购BTC项目的交易记录')
     def test_saving_fix_010(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['X-Currency'] = 'USD'
         with allure.step("查询申购项目的交易记录"):
             params = {
                 'tx_type': "1",
@@ -721,12 +682,6 @@ class TestSavingFixApi:
 
     @allure.testcase('test_saving_fix_011 查询申购ETH项目的交易记录')
     def test_saving_fix_011(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['X-Currency'] = 'USD'
         with allure.step("查询申购项目的交易记录"):
             params = {
                 'tx_type': "1",
@@ -746,12 +701,6 @@ class TestSavingFixApi:
 
     @allure.testcase('test_saving_fix_010 查询申购USDT项目的交易记录')
     def test_saving_fix_009(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['X-Currency'] = 'USD'
         with allure.step("查询申购项目的交易记录"):
             params = {
                 'tx_type': "1",

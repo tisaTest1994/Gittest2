@@ -1,3 +1,4 @@
+import run
 from run import *
 from Function.log import *
 from decimal import *
@@ -8,16 +9,24 @@ class AccountFunction:
 
     # 获取用户token
     @staticmethod
-    def get_account_token(account, password):
+    def get_account_token(account=email['email'], password=email['password']):
         data = {
             "username": account,
             "password": password
         }
         r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-                            headers=headers, timeout=3)
+                            headers=headers)
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'accessToken' in r.text, "成功注册用户错误，返回值是{}".format(r.json())
-        return r.json()
+        return r.json()['accessToken']
+
+    # 加headers，只能默认账户
+    @staticmethod
+    def add_headers(currency='USD'):
+        if run.accountToken == '':
+            run.accountToken = AccountFunction.get_account_token()
+        headers['Authorization'] = "Bearer " + run.accountToken
+        headers['X-Currency'] = currency
 
     # 获取operate用户 token
     @staticmethod
@@ -45,10 +54,7 @@ class AccountFunction:
 
     # 提现获取交易id
     @staticmethod
-    def get_payout_transaction_id(account=email['email'], password=email['password'], amount='0.03',
-                                  address='0x428DA40C585514022b2eB537950d5AB5C7365a07'):
-        accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
+    def get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07'):
         data = {
             "amount": amount,
             "code": "ETH",
@@ -62,9 +68,7 @@ class AccountFunction:
 
     # 获取下次清算金额
     @staticmethod
-    def get_interest(productId, account=email['email'], password=email['password']):
-        accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
+    def get_interest(productId):
         r1 = session.request('GET', url='{}/earn/products/{}/next_yield'.format(env_url, productId), headers=headers)
         return r1.json()['next_yield']
 
@@ -81,10 +85,8 @@ class AccountFunction:
 
     # 获取钱包指定币种数量
     @staticmethod
-    def get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE', account=email['email'], password=email['password']):
-        accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+    def get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE'):
+        r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers, timeout=10)
         for i in r.json():
             if i['code'] == type and i['wallet_type'] == wallet_type:
                 for y in i['balances']:
@@ -94,10 +96,7 @@ class AccountFunction:
 
     # 获取当前某个币的当前资产价值，用USD结算
     @staticmethod
-    def get_crypto_abs_amount(type='BTC', account=email['email'], password=email['password']):
-        accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        headers['X-Currency'] = 'USD'
+    def get_crypto_abs_amount(type='BTC'):
         r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
         for i in r.json()['wallets']:
             if i['code'] == type:
@@ -108,9 +107,7 @@ class AccountFunction:
     def get_today_increase(type='BTC', account=email['email'], password=email['password']):
         # 获取本日utc0点
         utc_zero = get_zero_utc_time()
-        accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        headers['X-Currency'] = 'USD'
+
         # "获得现在数量币数量"
         number = AccountFunction.get_crypto_number(type=type)
         # 获得交易记录
@@ -148,11 +145,9 @@ class AccountFunction:
 
     # 获得总持仓成本
     @staticmethod
-    def get_cost(type='ETH', account=email['email'], password=email['password']):
+    def get_cost(type='ETH'):
         # 获得交易记录
-        accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        headers['X-Currency'] = 'USD'
+
         data = {
             "pagination_request": {
                 "cursor": "0",
@@ -178,10 +173,8 @@ class AccountFunction:
 
     # 查询交易状态
     @staticmethod
-    def get_transaction_status(transaction_id, type, account=email['email'], password=email['password']):
-        accessToken = AccountFunction.get_account_token(account=account, password=password)['accessToken']
-        headers['Authorization'] = "Bearer " + accessToken
-        headers['X-Currency'] = 'USD'
+    def get_transaction_status(transaction_id, type):
+
         params = {
             'txn_sub_type': type
         }

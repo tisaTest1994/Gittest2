@@ -7,12 +7,12 @@ import allure
 # pay in相关cases
 class TestPayInApi:
 
+    # 初始化class
+    def setup_class(self):
+        AccountFunction.add_headers()
+
     @allure.testcase('test_pay_in_001 查询转入记录（不指定链）')
     def test_pay_in_001(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询转入记录"):
             currency = ['USDT', 'BTC', 'ETH']
             data = {}
@@ -30,11 +30,6 @@ class TestPayInApi:
 
     @allure.testcase('test_pay_in_002 查询不到转入记录（使用错误币种）')
     def test_pay_in_002(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询不到转入记录"):
             data = {
                 'code': 'US345'
@@ -50,11 +45,6 @@ class TestPayInApi:
 
     @allure.testcase('test_pay_in_003 查询转入记录（使用转币链查询）')
     def test_pay_in_003(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询转入记录"):
             data = {
                 'code': 'ETH',
@@ -71,11 +61,6 @@ class TestPayInApi:
 
     @allure.testcase('test_pay_in_004 查询转入记录（使用错误转币链查询）')
     def test_pay_in_004(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'],  password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询转入记录"):
             data = {
                 'code': 'ETH',

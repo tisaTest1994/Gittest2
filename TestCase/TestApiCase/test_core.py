@@ -7,13 +7,12 @@ import allure
 # core相关cases
 class TestCoreApi:
 
+    # 初始化class
+    def setup_class(self):
+        AccountFunction.add_headers()
+
     @allure.testcase('test_core_001 查询钱包所有币种详细金额以及报价，以美元价格返回')
     def test_core_001(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['X-Currency'] = 'USD'
         with allure.step("查询钱包所有币种详细金额以及报价，以美元价格返回"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
@@ -26,10 +25,6 @@ class TestCoreApi:
 
     @allure.testcase('test_core_002 查询钱包所有币种金额')
     def test_core_002(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询钱包所有币种金额"):
             r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
@@ -42,11 +37,6 @@ class TestCoreApi:
 
     @allure.testcase('test_core_003 查询钱包某个币种的详细信息')
     def test_core_003(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询钱包某个币种的详细信息"):
             r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
             id = r.json()[0]["id"]
@@ -77,10 +67,6 @@ class TestCoreApi:
 
     @allure.testcase('test_core_005 查询钱包中的所有币种投资于SAVING中的金额')
     def test_core_005(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询钱包中的所有币种投资于SAVING中的金额"):
             params = {
                 'type': 'SAVING'
@@ -96,10 +82,6 @@ class TestCoreApi:
 
     @allure.testcase('test_core_006 查询钱包中的所有币种投资于BALANCE中的金额')
     def test_core_006(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询钱包中的所有币种投资于BALANCE中的金额"):
             params = {
                 'type': 'BALANCE'
@@ -115,10 +97,6 @@ class TestCoreApi:
 
     @allure.testcase('test_core_007 查询钱包BTC金额')
     def test_core_007(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询钱包BTC金额"):
             params = {
                 'code': 'BTC'
@@ -134,11 +112,6 @@ class TestCoreApi:
 
     @allure.testcase('test_core_008 查询钱包ETH金额')
     def test_core_008(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])[
-                'accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询钱包ETH金额"):
             params = {
                 'code': 'ETH'
@@ -154,10 +127,6 @@ class TestCoreApi:
 
     @allure.testcase('test_core_009 查询钱包USDT金额')
     def test_core_009(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询钱包USDT金额"):
             params = {
                 'code': 'USDT'
@@ -173,16 +142,13 @@ class TestCoreApi:
 
     @allure.testcase('test_core_010 查询钱包所有币种详细金额以及报价，以欧元价格返回')
     def test_core_010(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['X-Currency'] = 'EUR'
+        headers['X-Currency'] = 'EUR'
         with allure.step("查询钱包所有币种详细金额以及报价，以欧元价格返回"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
+        headers['X-Currency'] = 'USD'
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):

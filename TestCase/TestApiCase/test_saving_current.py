@@ -8,6 +8,10 @@ import allure
 # saving相关cases
 class TestSavingCurrentApi:
 
+    # 初始化class
+    def setup_class(self):
+        AccountFunction.add_headers()
+
     @allure.testcase('test_saving_current_001 获取产品列表')
     def test_saving_current_001(self):
         with allure.step("获取产品列表"):
@@ -67,10 +71,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_004 获取多条交易记录')
     def test_saving_current_004(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
             product_id = []
@@ -96,10 +96,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_005 有足够BTC的用户发起购买BTC投资项目成功')
     def test_saving_current_005(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择BTC投资项目"):
@@ -155,10 +151,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_006 有足够ETH的用户发起购买ETH投资项目成功')
     def test_saving_current_006(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择ETH投资项目"):
@@ -214,10 +206,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_007 有足够USDT的用户发起购买USDT投资项目成功')
     def test_saving_current_007(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择USDT投资项目"):
@@ -275,10 +263,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_008 投资金额小于最小投资BTC数量')
     def test_saving_current_008(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择ETH投资项目"):
@@ -306,10 +290,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_009 投资金额小于最小投资ETH数量')
     def test_saving_current_009(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择ETH投资项目"):
@@ -337,10 +317,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_010 投资金额小于最小投资USDT数量')
     def test_saving_current_010(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择ETH投资项目"):
@@ -369,10 +345,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_011 获取产品持有情况')
     def test_saving_current_011(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
             product_id = []
@@ -393,10 +365,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_012 赎回BTC投资项目成功')
     def test_saving_current_012(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择BTC投资项目"):
@@ -463,10 +431,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_013 赎回ETH投资项目成功')
     def test_saving_current_013(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择ETH投资项目"):
@@ -533,10 +497,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_014 赎回USDT投资项目成功')
     def test_saving_current_014(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择USDT投资项目"):
@@ -603,10 +563,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_015 赎回金额超过最大的可赎回BTC数量')
     def test_saving_current_015(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择BTC投资项目"):
@@ -634,10 +590,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_016 赎回金额超过最大的可赎回ETH数量')
     def test_saving_current_016(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择ETH投资项目"):
@@ -665,10 +617,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_017 赎回金额超过最大的可赎回USDT数量')
     def test_saving_current_017(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
         with allure.step("选择BTC投资项目"):
@@ -696,10 +644,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_018 正在赎回金额等于wallet中冻结金额')
     def test_saving_current_018(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
             product = random.choice(r.json())
@@ -722,10 +666,6 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_019 校验明日计息金额')
     def test_saving_current_019(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=email['email'], password=email['password'])['accessToken']
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取产品product"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
             product = random.choice(r.json())
@@ -733,7 +673,7 @@ class TestSavingCurrentApi:
             # 随机获取一个id
             id = product['product_id']
             logger.info('项目id是{}'.format(id))
-            interest = AccountFunction.get_interest(id, account=email['email'], password=email['password'])
+            interest = AccountFunction.get_interest(id)
             logger.info('通过接口得到明日的利息是{}'.format(interest))
         with allure.step("自己计算明天计息情况"):
             with allure.step("获得计息利率"):
