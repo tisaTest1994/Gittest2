@@ -11,5 +11,7 @@ class TestConvertOrderApi:
         time_list = get_zero_time(day_time='2021-05-14')
         cfx_info = []
         for i in time_list:
-            cfx_info.append(sqlFunction().get_cfx_detail(end_time=i))
+            info = sqlFunction().get_cfx_detail(end_time=i)
+            if info is not None:
+                cfx_info.append(info)
         print(cfx_info)
