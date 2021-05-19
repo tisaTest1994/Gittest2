@@ -105,7 +105,7 @@ class TestConvertApi:
                             buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
                                                         str(buy_amount).split('.')[1][:6])
                     else:
-                        buy_amount = random.uniform(10, 30.10)
+                        buy_amount = random.uniform(20, 40.10)
                         if len(str(buy_amount).split('.')[1]) >= 2:
                             buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
                                                         str(buy_amount).split('.')[1][:2])
@@ -171,7 +171,7 @@ class TestConvertApi:
                             buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
                                                         str(buy_amount).split('.')[1][:6])
                     else:
-                        buy_amount = random.uniform(10, 30.10)
+                        buy_amount = random.uniform(20, 40.10)
                         if len(str(buy_amount).split('.')[1]) >= 2:
                             buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
                                                         str(buy_amount).split('.')[1][:2])
@@ -237,7 +237,7 @@ class TestConvertApi:
                             sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
                                                          str(sell_amount).split('.')[1][:6])
                     else:
-                        sell_amount = random.uniform(10, 30.10)
+                        sell_amount = random.uniform(20, 40.10)
                         if len(str(sell_amount).split('.')[1]) >= 2:
                             sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
                                                          str(sell_amount).split('.')[1][:2])
@@ -303,7 +303,7 @@ class TestConvertApi:
                             sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
                                                          str(sell_amount).split('.')[1][:6])
                     else:
-                        sell_amount = random.uniform(10, 30.10)
+                        sell_amount = random.uniform(20, 40.10)
                         if len(str(sell_amount).split('.')[1]) >= 2:
                             sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
                                                          str(sell_amount).split('.')[1][:2])
