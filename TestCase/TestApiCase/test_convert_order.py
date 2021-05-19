@@ -9,7 +9,7 @@ class TestConvertOrderApi:
 
     @allure.testcase('test_convert_order_001 根据id编号查询单笔交易')
     def test_convert_order_001(self):
-        time_list = get_zero_time(day_time='2021-05-14')
+        time_list = get_zero_time(day_time='2021-05-18')
         cfx_info = []
         for i in time_list:
             info = sqlFunction().get_cfx_detail(end_time=i)
