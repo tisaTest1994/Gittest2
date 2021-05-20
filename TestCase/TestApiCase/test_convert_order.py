@@ -31,6 +31,6 @@ class TestConvertOrderApi:
                         ETH_number = Decimal(ETH_number) - Decimal(z['buy_us_amount'])
                     elif z['buy_us'] == 'USDT' and z['sell_us'] == 'ETH':
                         ETH_number = Decimal(ETH_number) + Decimal(z['sell_us_amount'])
-            logger.info('在{}时间断内需要问bybit卖出{}的BTC'.format(y, BTC_number))
-            logger.info('在{}时间断内需要问bybit卖出{}的ETH'.format(y, ETH_number))
+            logger.info('在{}时间断内需要卖出{}的BTC'.format(y, BTC_number))
+            logger.info('在{}时间断内需要卖出{}的ETH'.format(y, ETH_number))
 
