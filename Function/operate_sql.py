@@ -15,7 +15,7 @@ class sqlFunction:
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql)
-                result = cursor.fetchone()
+                result = cursor.fetchall()
                 return result
 
     # 获取quote值
