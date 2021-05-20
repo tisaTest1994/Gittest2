@@ -13,7 +13,7 @@ class TestConvertOrderApi:
         cfx_info = []
         for i in time_list:
             info = sqlFunction().get_cfx_detail(end_time=i)
-            if info is not None:
+            if info is not None and '()' not in str(info):
                  cfx_info.append(info)
         print(cfx_info)
         # cfx_info = [{'id': 344, 'deal_no': '8e594e34-852e-4b58-9ee5-a9847c369fa4', 'counterparty': '5b879a4e-b96a-4e82-9094-f4e7edf96fc0', 'created_at': datetime.datetime(2021, 5, 20, 5, 26, 19), 'transaction_time': datetime.datetime(2021, 5, 20, 5, 26, 20), 'trading_amount': '0.01', 'pnl_amount': '392.002605', 'rate': '39200.2605', 'trading_direction': 1, 'pnl_direction': 2, 'maturity_date': '', 'source_type': 1, 'book_id': 1, 'aggregation_no': 1621488420, 'gnl': '0.392395', 'cost': '39239.5'}, {'id': 345, 'deal_no': 'd0542635-89b2-46e9-98ff-cfeb5a017198', 'counterparty': '0f9e2184-2708-4a81-8aff-44f25781968e', 'created_at': datetime.datetime(2021, 5, 20, 6, 16, 19), 'transaction_time': datetime.datetime(2021, 5, 20, 6, 16, 19), 'trading_amount': '1', 'pnl_amount': '15.16727395', 'rate': '15.16727395', 'trading_direction': 1, 'pnl_direction': 2, 'maturity_date': '', 'source_type': 1, 'book_id': 2, 'aggregation_no': 1621491420, 'gnl': '0.01518246', 'cost': '15.18245641'}, {'id': 347, 'deal_no': '206e5e50-f134-4c2e-83da-b643a6a12fe5', 'counterparty': '0f9e2184-2708-4a81-8aff-44f25781968e', 'created_at': datetime.datetime(2021, 5, 20, 6, 17, 39), 'transaction_time': datetime.datetime(2021, 5, 20, 6, 17, 40), 'trading_amount': '0.01149488', 'pnl_amount': '30', 'rate': '2609.85725', 'trading_direction': 2, 'pnl_direction': 1, 'maturity_date': '', 'source_type': 1, 'book_id': 3, 'aggregation_no': 1621491480, 'gnl': '0.02997', 'cost': '2607.25'}]
