@@ -77,8 +77,8 @@ class TestConvertApi:
             r2 = session.request('GET',
                                  url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[1], cryptos[0])),
                                  headers=headers)
-            logger.info('客户买入{},卖出{},我们给出的汇率是{}'.format(cryptos[1], cryptos[0], str(float(r2.json()['quote']))[
-                                                                                :len(str(r1.json()['quote']))]))
+            logger.info('客户买入{},卖出{},我们给出的汇率是{}'.format(cryptos[1], cryptos[0], str(float(
+                str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]))))
             assert float(str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]) <= float(
                 r1.json()['quote']), "{}汇率对出现了问题".format(i)
 
