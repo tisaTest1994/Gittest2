@@ -19,7 +19,8 @@ class TestConvertOrderApi:
             book_id = sqlFunction().connect_mysql('hedging', sql=sql)
             biz_id = '{}:{}'.format(y, book_id)
             sql = "select rate from order where biz_id='{}'".format(biz_id)
-            rate = book_id = sqlFunction().connect_mysql('cfxorder', sql=sql)
+            rate = sqlFunction().connect_mysql('cfxorder', sql=sql)
+            print(rate)
             BTC_number = 0
             ETH_number = 0
             BTC_number_two_profit = 0
