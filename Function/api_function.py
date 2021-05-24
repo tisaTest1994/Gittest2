@@ -214,7 +214,6 @@ class AccountFunction:
                         cfx_dict['order_time'] = z['aggregation_no']
                         profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
-                        btc_number = btc_number + float(z['trading_amount'])
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, y['gnl'])
                 elif z['book_id'] == 2:
                     if z['trading_direction'] == 1:
