@@ -258,5 +258,6 @@ class AccountFunction:
                         profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, y['gnl'])
+                cfx_dict['cost'] = z['cost']
                 cfx_list.append(cfx_dict)
         return cfx_list
