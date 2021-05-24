@@ -18,7 +18,7 @@ class TestConvertOrderApi:
             sql = "select book_id from book_aggregation where aggregation_no = '{}';".format(y)
             book_id = sqlFunction().connect_mysql('hedging', sql=sql)[0]['book_id']
             biz_id = '{}:{}'.format(y, book_id)
-            sql = "select rate from order where biz_id='{}';".format(biz_id)
+            sql = "select rate from cfxorder.order where biz_id='{}';".format(biz_id)
             print(sql)
             rate = sqlFunction().connect_mysql('cfxorder', sql=sql)
             print(rate)
