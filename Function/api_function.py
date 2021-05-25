@@ -313,6 +313,7 @@ class AccountFunction:
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                     elif z['trading_direction'] == 2:
+                        print(z)
                         cfx_dict['buy_us'] = 'USDT'
                         cfx_dict['sell_us'] = 'EUR'
                         cfx_dict['buy_us_amount'] = z['trading_amount']
