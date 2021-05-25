@@ -183,7 +183,7 @@ class AccountFunction:
 
     # 获取一天cfx数据
     @staticmethod
-    def get_cfx_info(day_time='2021-05-20'):
+    def get_cfx_info(day_time='2021-05-25'):
         time_list = get_zero_time(day_time=day_time)
         cfx_info = []
         for i in time_list:
@@ -250,6 +250,69 @@ class AccountFunction:
                     elif z['trading_direction'] == 2:
                         cfx_dict['buy_us'] = 'ETH'
                         cfx_dict['sell_us'] = 'USDT'
+                        cfx_dict['buy_us_amount'] = z['trading_amount']
+                        cfx_dict['sell_us_amount'] = z['pnl_amount']
+                        cfx_dict['profit'] = z['gnl']
+                        cfx_dict['order_time'] = z['aggregation_no']
+                        profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
+                        profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
+                        assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, y['gnl'])
+                elif z['book_id'] == 4:
+                    if z['trading_direction'] == 1:
+                        cfx_dict['buy_us'] = 'EUR'
+                        cfx_dict['sell_us'] = 'BTC'
+                        cfx_dict['buy_us_amount'] = z['pnl_amount']
+                        cfx_dict['sell_us_amount'] = z['trading_amount']
+                        cfx_dict['profit'] = z['gnl']
+                        cfx_dict['order_time'] = z['aggregation_no']
+                        profit = Decimal(z['trading_amount']) * (Decimal(z['cost']) - Decimal(z['rate']))
+                        profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
+                        assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
+                    elif z['trading_direction'] == 2:
+                        cfx_dict['buy_us'] = 'BTC'
+                        cfx_dict['sell_us'] = 'EUR'
+                        cfx_dict['buy_us_amount'] = z['trading_amount']
+                        cfx_dict['sell_us_amount'] = z['pnl_amount']
+                        cfx_dict['profit'] = z['gnl']
+                        cfx_dict['order_time'] = z['aggregation_no']
+                        profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
+                        profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
+                        assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, y['gnl'])
+                elif z['book_id'] == 5:
+                    if z['trading_direction'] == 1:
+                        cfx_dict['buy_us'] = 'EUR'
+                        cfx_dict['sell_us'] = 'ETH'
+                        cfx_dict['buy_us_amount'] = z['pnl_amount']
+                        cfx_dict['sell_us_amount'] = z['trading_amount']
+                        cfx_dict['profit'] = z['gnl']
+                        cfx_dict['order_time'] = z['aggregation_no']
+                        profit = Decimal(z['trading_amount']) * (Decimal(z['cost']) - Decimal(z['rate']))
+                        profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
+                        assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
+                    elif z['trading_direction'] == 2:
+                        cfx_dict['buy_us'] = 'ETH'
+                        cfx_dict['sell_us'] = 'EUR'
+                        cfx_dict['buy_us_amount'] = z['trading_amount']
+                        cfx_dict['sell_us_amount'] = z['pnl_amount']
+                        cfx_dict['profit'] = z['gnl']
+                        cfx_dict['order_time'] = z['aggregation_no']
+                        profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
+                        profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
+                        assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, y['gnl'])
+                elif z['book_id'] == 6:
+                    if z['trading_direction'] == 1:
+                        cfx_dict['buy_us'] = 'EUR'
+                        cfx_dict['sell_us'] = 'USDT'
+                        cfx_dict['buy_us_amount'] = z['pnl_amount']
+                        cfx_dict['sell_us_amount'] = z['trading_amount']
+                        cfx_dict['profit'] = z['gnl']
+                        cfx_dict['order_time'] = z['aggregation_no']
+                        profit = Decimal(z['trading_amount']) * (Decimal(z['cost']) - Decimal(z['rate']))
+                        profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
+                        assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
+                    elif z['trading_direction'] == 2:
+                        cfx_dict['buy_us'] = 'USDT'
+                        cfx_dict['sell_us'] = 'EUR'
                         cfx_dict['buy_us_amount'] = z['trading_amount']
                         cfx_dict['sell_us_amount'] = z['pnl_amount']
                         cfx_dict['profit'] = z['gnl']

@@ -563,3 +563,14 @@ class TestConvertApi:
         r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
         logger.info('申请换汇参数{}'.format(data))
         assert 'CFXTXN000021:amount calculation error' in r.text, '使用错误金额换汇交易错误,返回值是{}'.format(r.text)
+
+    @allure.testcase('test_convert_009 获取换汇汇率对')
+    def test_convert_009(self):
+        r = session.request('GET', url='{}/txn/cfx/codes'.format(env_url))
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'codes' in r.text, "选择的国家代码可以成功申请注册验证码失败，返回值是{}".format(r.text)
