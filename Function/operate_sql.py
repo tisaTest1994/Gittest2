@@ -52,8 +52,8 @@ class sqlFunction:
 
     # 根据时间获取第二层损益
     @staticmethod
-    def get_one_floor(transaction_id):
-        sql = "select * from movement where aggregation_no='{}' and book_id={};".format(aggregation_no, book_id)
+    def get_two_floor(transaction_id):
+        sql = "select * from movement where transaction_id='{}';".format(transaction_id)
         info = sqlFunction().connect_mysql('wallet', sql=sql)
         if info is not None and '()' not in str(info):
             return info
