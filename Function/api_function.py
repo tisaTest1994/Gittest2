@@ -183,7 +183,7 @@ class AccountFunction:
 
     # 获取一天cfx数据
     @staticmethod
-    def get_cfx_info(day_time='2021-05-25'):
+    def get_cfx_info(day_time='2021-05-26'):
         time_list = get_zero_time(day_time=day_time)
         cfx_info = []
         for i in time_list:
