@@ -56,8 +56,6 @@ class TestConvertOrderApi:
                 # 获得bybit利率
                 parity = AccountFunction.get_bybit_parities(aggregation_no=y, book_id=x)
                 # 第2层损益
-                print(1111)
-                print(str(book_profit_dict['{}_number'.format(cfx_book[x])]))
                 if str(book_profit_dict['{}_number'.format(cfx_book[x])]) != '0':
                     amount = Decimal(parity) * Decimal(book_profit_dict['{}_number'.format(cfx_book[x])]) - Decimal(amount_dict['{}_amount'.format(cfx_book[x])])
-                    print('第2层损益{}'.format(amount))
+                    logger.info('第2层损益{}'.format(amount))
