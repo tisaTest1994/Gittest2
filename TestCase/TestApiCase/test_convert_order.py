@@ -53,6 +53,6 @@ class TestConvertOrderApi:
                 # 获得数据库中的损益记录
                 info = sqlFunction.get_one_floor(aggregation_no=y, book_id=x)
                 print(info)
-                if info['exposure_direction'] == 1:
+                if info[0]['exposure_direction'] == 1:
                     logger.info('交易对{}在{}时间中要卖出{}数量的{}货币'.format(cfx_book[x], y, book_profit_dict['{}_number'.format(cfx_book[x])], str(cfx_book[x]).split('-')[0]))
                     assert Decimal(info['trading_amount']) == book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(y, book_profit_dict['{}_number'.format(cfx_book[x])])
