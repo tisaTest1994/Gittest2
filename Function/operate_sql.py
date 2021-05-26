@@ -61,9 +61,8 @@ class sqlFunction:
     # 获取bybit利率
     @staticmethod
     def get_bybit_parities(aggregation_no, book_id):
-        sql = "select * from cfxorder.order where biz_id='{}';".format('{}:{}'.format(aggregation_no, book_id))
-        rate = sqlFunction().connect_mysql('cfxorder', sql=sql)
-        if rate is not None and '()' not in str(rate):
-            print(rate)
-            return rate[0]
+        sql = "select * from order where biz_id='{}';".format('{}:{}'.format(aggregation_no, book_id))
+        info = sqlFunction().connect_mysql('cfxorder', sql=sql)
+        if info is not None and '()' not in str(info):
+            return info[0]
 
