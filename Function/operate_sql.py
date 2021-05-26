@@ -39,7 +39,7 @@ class sqlFunction:
         end_time = datetime.utcfromtimestamp(end_time).strftime("%Y-%m-%d %H:%M:%S")
         sql = "select * from book_detail where created_at >= '{}' and created_at < '{}';".format(start_time, end_time)
         info = sqlFunction().connect_mysql('hedging', sql=sql)
-        if info is not None:
+        if info is not None and '()' not in str(info):
             return info
 
     # 根据时间获取第一层损益

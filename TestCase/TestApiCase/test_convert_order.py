@@ -40,6 +40,7 @@ class TestConvertOrderApi:
                                 amount_dict['{}_amount'.format(d)] = '{}.{}'.format(str(amount_dict['{}_amount'.format(d)]).split('.')[0], str(amount_dict['{}_amount'.format(d)]).split('.')[1][:6])
                             else:
                                 amount_dict['{}_amount'.format(d)] = '{}.{}'.format(str(amount_dict['{}_amount'.format(d)]).split('.')[0], str(amount_dict['{}_amount'.format(d)]).split('.')[1][:2])
+
             # 按照货币对算第1层损益
             for x in cfx_book.keys():
                 # 获得数据库中的损益记录
@@ -52,22 +53,9 @@ class TestConvertOrderApi:
                     if info['exposure_direction'] == 2:
                         logger.info('交易对{}在{}时间中要卖出{}数量的{}货币'.format(cfx_book[x], y, -book_profit_dict['{}_number'.format(cfx_book[x])], str(cfx_book[x]).split('-')[0]))
                         assert Decimal(info['trading_amount']) == -book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(y, book_profit_dict['{}_number'.format(cfx_book[x])])
-            # 按照货币对开始准备计算第2层损益
-
-
-            # sql = "select book_id from book_aggregation where aggregation_no = '{}';".format(y)
-            # book_id = sqlFunction().connect_mysql('hedging', sql=sql)[0]['book_id']
-            # biz_id = '{}:{}'.format(y, book_id)
-            # sql = "select rate from cfxorder.order where biz_id='{}';".format(biz_id)
-            # rate = sqlFunction().connect_mysql('cfxorder', sql=sql)[0]['rate']
-            # print(rate)
-
-    @allure.testcase('test_convert_order_001 根据id编号查询单笔交易')
-    def test_convert_order_002(self):
-        y = '1621996440'
-        sql = "select book_id from book_aggregation where aggregation_no = '{}';".format(y)
-        book_id = sqlFunction().connect_mysql('hedging', sql=sql)[0]['book_id']
-        biz_id = '{}:{}'.format(y, book_id)
-        sql = "select rate from cfxorder.order where biz_id='{}';".format(biz_id)
-        rate = sqlFunction().connect_mysql('cfxorder', sql=sql)[0]['rate']
-        print(rate)
+                # 获得bybit利率
+                parity = AccountFunction.get_bybit_parities(aggregation_no=y, book_id=x)
+                print(parity)
+                # 第2层损益
+                amount = Decimal(parity) * Decimal(book_profit_dict['{}_number'.format(cfx_book[x])]) - Decimal(amount_dict['{}_amount'.format(cfx_book[x])])
+                print('第2层损益{}'.format(amount))
