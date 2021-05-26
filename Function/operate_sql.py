@@ -57,3 +57,13 @@ class sqlFunction:
         info = sqlFunction().connect_mysql('wallet', sql=sql)
         if info is not None and '()' not in str(info):
             return info
+
+    # 获取bybit利率
+    @staticmethod
+    def get_bybit_parities(aggregation_no, book_id):
+        biz_id = '{}:{}'.format(aggregation_no, book_id)
+        sql = "select rate from cfxorder.order where biz_id='{}';".format(biz_id)
+        rate = sqlFunction().connect_mysql('cfxorder', sql=sql)
+        if rate is not None and '()' not in str(rate):
+            return rate[0]
+

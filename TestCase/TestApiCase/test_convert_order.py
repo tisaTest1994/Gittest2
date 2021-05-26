@@ -12,8 +12,7 @@ class TestConvertOrderApi:
         # 获得 cfx_book
         cfx_book = get_json()['cfx_book']
         # 从数据库拿到某日数据
-        #cfx_info = AccountFunction.get_cfx_info()
-        cfx_info = [{'buy_us': 'BTC', 'sell_us': 'ETH', 'buy_us_amount': '0.1486675', 'sell_us_amount': '2.05985186', 'profit': '0.00205779', 'order_time': 1621996380, 'cost': '13.84158659'}, {'buy_us': 'ETH', 'sell_us': 'BTC', 'buy_us_amount': '0.01246212', 'sell_us_amount': '0.00090126', 'profit': '0.00001247', 'order_time': 1621996380, 'cost': '13.84116779'}, {'buy_us': 'BTC', 'sell_us': 'ETH', 'buy_us_amount': '0.00698478', 'sell_us_amount': '0.09730376', 'profit': '0.0000972', 'order_time': 1621996380, 'cost': '13.91689662'}, {'buy_us': 'ETH', 'sell_us': 'BTC', 'buy_us_amount': '0.54615875', 'sell_us_amount': '0.03928477', 'profit': '0.0005467', 'order_time': 1621996380, 'cost': '13.91647356'}, {'buy_us': 'BTC', 'sell_us': 'USDT', 'buy_us_amount': '0.09164082', 'sell_us_amount': '3605.727837', 'profit': '3.602125', 'order_time': 1621996380, 'cost': '39307'}, {'buy_us': 'USDT', 'sell_us': 'BTC', 'buy_us_amount': '23.385875', 'sell_us_amount': '0.00059555', 'profit': '0.023408', 'order_time': 1621996380, 'cost': '39306.5'}, {'buy_us': 'BTC', 'sell_us': 'USDT', 'buy_us_amount': '0.00085489', 'sell_us_amount': '33.636899', 'profit': '0.033603', 'order_time': 1621996440, 'cost': '39307'}, {'buy_us': 'USDT', 'sell_us': 'BTC', 'buy_us_amount': '5929.547387', 'sell_us_amount': '0.15103202', 'profit': '5.935482', 'order_time': 1621996440, 'cost': '39299.5'}, {'buy_us': 'BTC', 'sell_us': 'EUR', 'buy_us_amount': '0.1456557', 'sell_us_amount': '4684.03', 'profit': '4.67', 'order_time': 1621996440, 'cost': '32126.126466'}, {'buy_us': 'EUR', 'sell_us': 'BTC', 'buy_us_amount': '27.64', 'sell_us_amount': '0.00086123', 'profit': '0.02', 'order_time': 1621996440, 'cost': '32125.71811'}, {'buy_us': 'BTC', 'sell_us': 'EUR', 'buy_us_amount': '0.00081098', 'sell_us_amount': '26.08', 'profit': '0.02', 'order_time': 1621996440, 'cost': '32126.126466'}, {'buy_us': 'EUR', 'sell_us': 'BTC', 'buy_us_amount': '1392.01', 'sell_us_amount': '0.04337347', 'profit': '1.39', 'order_time': 1621996440, 'cost': '32125.71811'}, {'buy_us': 'ETH', 'sell_us': 'USDT', 'buy_us_amount': '0.05319855', 'sell_us_amount': '150.500091', 'profit': '0.150349', 'order_time': 1621996440, 'cost': '2826.2'}, {'buy_us': 'USDT', 'sell_us': 'ETH', 'buy_us_amount': '24.130362', 'sell_us_amount': '0.00856771', 'profit': '0.024154', 'order_time': 1621996500, 'cost': '2819.25'}, {'buy_us': 'ETH', 'sell_us': 'USDT', 'buy_us_amount': '0.0106915', 'sell_us_amount': '30.172708', 'profit': '0.030142', 'order_time': 1621996500, 'cost': '2819.3'}, {'buy_us': 'USDT', 'sell_us': 'ETH', 'buy_us_amount': '286.282665', 'sell_us_amount': '0.10164733', 'profit': '0.286569', 'order_time': 1621996500, 'cost': '2819.25'}, {'buy_us': 'ETH', 'sell_us': 'EUR', 'buy_us_amount': '0.16303195', 'sell_us_amount': '376.03', 'profit': '0.37', 'order_time': 1621996500, 'cost': '2304.185494'}, {'buy_us': 'EUR', 'sell_us': 'ETH', 'buy_us_amount': '20.45', 'sell_us_amount': '0.00888419', 'profit': '0.02', 'order_time': 1621996500, 'cost': '2304.144658'}, {'buy_us': 'ETH', 'sell_us': 'EUR', 'buy_us_amount': '0.014386', 'sell_us_amount': '33.16', 'profit': '0.03', 'order_time': 1621996500, 'cost': '2302.715415'}, {'buy_us': 'EUR', 'sell_us': 'ETH', 'buy_us_amount': '246.83', 'sell_us_amount': '0.10730386', 'profit': '0.24', 'order_time': 1621996560, 'cost': '2302.674579'}, {'buy_us': 'USDT', 'sell_us': 'EUR', 'buy_us_amount': '23.805924', 'sell_us_amount': '19.5', 'profit': '0.01', 'order_time': 1621996560, 'cost': '0.818338'}, {'buy_us': 'EUR', 'sell_us': 'USDT', 'buy_us_amount': '32.83', 'sell_us_amount': '40.158038', 'profit': '0.03', 'order_time': 1621996560, 'cost': '0.818338'}, {'buy_us': 'USDT', 'sell_us': 'EUR', 'buy_us_amount': '34.230354', 'sell_us_amount': '28.04', 'profit': '0.02', 'order_time': 1621996560, 'cost': '0.818338'}, {'buy_us': 'EUR', 'sell_us': 'USDT', 'buy_us_amount': '22.99', 'sell_us_amount': '28.130509', 'profit': '0.02', 'order_time': 1621996560, 'cost': '0.818338'}]
+        cfx_info = AccountFunction.get_cfx_info()
         # 拆分每一天
         time_info = []
         for i in cfx_info:
@@ -54,10 +53,12 @@ class TestConvertOrderApi:
                         logger.info('交易对{}在{}时间中要卖出{}数量的{}货币'.format(cfx_book[x], y, -book_profit_dict['{}_number'.format(cfx_book[x])], str(cfx_book[x]).split('-')[0]))
                         assert Decimal(info['trading_amount']) == -book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(y, book_profit_dict['{}_number'.format(cfx_book[x])])
                 # 获得bybit利率
-                parity = AccountFunction.get_bybit_parities(aggregation_no=y, book_id=x)
+                cfx_order_info = sqlFunction.get_bybit_parities(aggregation_no=y, book_id=x)
+                bybit_rate = cfx_order_info['rate']
+                quote_amount = cfx_order_info['quote_amount']
                 # 第2层损益
                 if str(book_profit_dict['{}_number'.format(cfx_book[x])]) != '0':
-                    amount = Decimal(parity) * Decimal(book_profit_dict['{}_number'.format(cfx_book[x])])
+                    amount = Decimal(bybit_rate) * Decimal(book_profit_dict['{}_number'.format(cfx_book[x])])
                     if '.' in str(amount):
                         if str(cfx_book[x]).split('-')[1] == 'ETH' or str(cfx_book[x]).split('-')[1] == 'BTC':
                             amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:8])
@@ -65,6 +66,7 @@ class TestConvertOrderApi:
                             amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:6])
                         else:
                             amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:2])
+                    assert quote_amount == Decimal(amount_dict['{}_amount'.format(cfx_book[x])]), '{},{}'.format(quote_amount, Decimal(amount_dict['{}_amount'.format(cfx_book[x])]))
                     logger.info('第2层损益{}'.format(Decimal(amount) - Decimal(amount_dict['{}_amount'.format(cfx_book[x])])))
                     wallet_info = sqlFunction.get_two_floor('{}:{}'.format(y, x))
                     print(wallet_info)

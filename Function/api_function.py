@@ -322,13 +322,5 @@ class AccountFunction:
                 cfx_list.append(cfx_dict)
         return cfx_list
 
-    # 获取bybit利率
-    @staticmethod
-    def get_bybit_parities(aggregation_no, book_id):
-        # sql = "select book_id from book_aggregation where aggregation_no = '{}';".format(aggregation_no)
-        # book_id = sqlFunction().connect_mysql('hedging', sql=sql)[0]['book_id']
-        biz_id = '{}:{}'.format(aggregation_no, book_id)
-        sql = "select rate from cfxorder.order where biz_id='{}';".format(biz_id)
-        rate = sqlFunction().connect_mysql('cfxorder', sql=sql)
-        if rate is not None and '()' not in str(rate):
-            return rate[0]['rate']
+
+
