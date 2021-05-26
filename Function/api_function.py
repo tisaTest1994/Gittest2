@@ -162,14 +162,12 @@ class AccountFunction:
         for y in r.json()['transactions']:
             cost = 0
             if y['user_txn_sub_type'] == 1:
-                print(y)
                 order_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(y['updated_at']))
             if y['user_txn_sub_type'] == 2:
                 order_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(y['updated_at']))
             if y['user_txn_sub_type'] == 6:
                 order_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(y['updated_at']))
                 amount = json.loads(y['details'])['currency']['amount']
-                print(amount)
 
     # 查询交易状态
     @staticmethod
@@ -277,8 +275,6 @@ class AccountFunction:
                         cfx_dict['order_time'] = z['aggregation_no']
                         profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])
-                        print(z['gnl'])
-                        print(Decimal(profit))
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                 elif z['book_id'] == 5:
                     if z['trading_direction'] == 1:
@@ -313,7 +309,6 @@ class AccountFunction:
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                     elif z['trading_direction'] == 2:
-                        print(z)
                         cfx_dict['buy_us'] = 'USDT'
                         cfx_dict['sell_us'] = 'EUR'
                         cfx_dict['buy_us_amount'] = z['trading_amount']

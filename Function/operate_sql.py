@@ -41,3 +41,12 @@ class sqlFunction:
         info = sqlFunction().connect_mysql('hedging', sql=sql)
         if info is not None:
             return info
+
+    # 根据时间获取第一层损益
+    @staticmethod
+    def get_one_floor(aggregation_no, book_id):
+        sql = "select * from book_aggregation where aggregation_no='{}' and book_id={};".format(aggregation_no, book_id)
+        info = sqlFunction().connect_mysql('hedging', sql=sql)
+        if info is not None:
+            return info
+
