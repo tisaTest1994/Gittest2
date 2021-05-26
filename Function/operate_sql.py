@@ -47,7 +47,6 @@ class sqlFunction:
     def get_one_floor(aggregation_no, book_id):
         sql = "select * from book_aggregation where aggregation_no='{}' and book_id={};".format(aggregation_no, book_id)
         info = sqlFunction().connect_mysql('hedging', sql=sql)
-        if info is not None:
-            print(info)
-            return info[0]
+        if info is not None and '()' not in str(info):
+            return info
 

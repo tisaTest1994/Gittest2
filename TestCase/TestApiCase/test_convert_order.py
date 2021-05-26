@@ -20,53 +20,39 @@ class TestConvertOrderApi:
             time_info.append(i['order_time'])
         time_info = list(set(time_info))
         for y in time_info:
-            BTC_ETH_number = 0
-            BTC_USDT_number = 0
-            BTC_EUR_number = 0
-            ETH_USDT_number = 0
-            ETH_EUR_number = 0
-            USDT_EUR_number = 0
+            book_profit_dict = {'BTC-ETH_number': 0, 'BTC-USDT_number': 0, 'BTC-EUR_number': 0, 'ETH-USDT_number': 0,
+                                'ETH-EUR_number': 0, 'USDT-EUR_number': 0}
             for z in cfx_info:
                 if y == z['order_time']:
                     if z['buy_us'] == 'BTC' and z['sell_us'] == 'ETH':
-                        BTC_ETH_number = Decimal(BTC_ETH_number) - Decimal(z['buy_us_amount'])
+                        book_profit_dict['BTC-ETH_number'] = Decimal(book_profit_dict['BTC-ETH_number']) - Decimal(z['buy_us_amount'])
                     elif z['buy_us'] == 'ETH' and z['sell_us'] == 'BTC':
-                        BTC_ETH_number = Decimal(BTC_ETH_number) + Decimal(z['sell_us_amount'])
+                        book_profit_dict['BTC-ETH_number'] = Decimal(book_profit_dict['BTC-ETH_number']) + Decimal(z['sell_us_amount'])
                     elif z['buy_us'] == 'BTC' and z['sell_us'] == 'USDT':
-                        BTC_USDT_number = Decimal(BTC_USDT_number) - Decimal(z['buy_us_amount'])
+                        book_profit_dict['BTC-USDT_number'] = Decimal(book_profit_dict['BTC-USDT_number']) - Decimal(z['buy_us_amount'])
                     elif z['buy_us'] == 'USDT' and z['sell_us'] == 'BTC':
-                        BTC_USDT_number = Decimal(BTC_USDT_number) + Decimal(z['sell_us_amount'])
+                        book_profit_dict['BTC-USDT_number'] = Decimal(book_profit_dict['BTC-USDT_number']) + Decimal(z['sell_us_amount'])
                     elif z['buy_us'] == 'ETH' and z['sell_us'] == 'USDT':
-                        ETH_USDT_number = Decimal(ETH_USDT_number) - Decimal(z['buy_us_amount'])
+                        book_profit_dict['ETH-USDT_number'] = Decimal(book_profit_dict['ETH-USDT_number']) - Decimal(z['buy_us_amount'])
                     elif z['buy_us'] == 'USDT' and z['sell_us'] == 'ETH':
-                        ETH_USDT_number = Decimal(ETH_USDT_number) + Decimal(z['sell_us_amount'])
+                        book_profit_dict['ETH-USDT_number'] = Decimal(book_profit_dict['ETH-USDT_number']) + Decimal(z['sell_us_amount'])
                     elif z['buy_us'] == 'BTC' and z['sell_us'] == 'EUR':
-                        BTC_EUR_number = Decimal(BTC_EUR_number) - Decimal(z['buy_us_amount'])
+                        book_profit_dict['BTC-EUR_number'] = Decimal(book_profit_dict['BTC-EUR_number']) - Decimal(z['buy_us_amount'])
                     elif z['buy_us'] == 'EUR' and z['sell_us'] == 'BTC':
-                        BTC_EUR_number = Decimal(BTC_EUR_number) + Decimal(z['sell_us_amount'])
+                        book_profit_dict['BTC-EUR_number'] = Decimal(book_profit_dict['BTC-EUR_number']) + Decimal(z['sell_us_amount'])
                     elif z['buy_us'] == 'ETH' and z['sell_us'] == 'EUR':
-                        ETH_EUR_number = Decimal(ETH_EUR_number) - Decimal(z['buy_us_amount'])
+                        book_profit_dict['ETH-EUR_number'] = Decimal(book_profit_dict['ETH-EUR_number']) - Decimal(z['buy_us_amount'])
                     elif z['buy_us'] == 'EUR' and z['sell_us'] == 'ETH':
-                        ETH_EUR_number = Decimal(ETH_EUR_number) + Decimal(z['sell_us_amount'])
+                        book_profit_dict['ETH-EUR_number'] = Decimal(book_profit_dict['ETH-EUR_number']) + Decimal(z['sell_us_amount'])
                     elif z['buy_us'] == 'USDT' and z['sell_us'] == 'EUR':
-                        USDT_EUR_number = Decimal(USDT_EUR_number) - Decimal(z['buy_us_amount'])
+                        book_profit_dict['USDT-EUR_number'] = Decimal(book_profit_dict['USDT-EUR_number']) - Decimal(z['buy_us_amount'])
                     elif z['buy_us'] == 'EUR' and z['sell_us'] == 'USDT':
-                        USDT_EUR_number = Decimal(USDT_EUR_number) + Decimal(z['sell_us_amount'])
+                        book_profit_dict['USDT-EUR_number'] = Decimal(book_profit_dict['USDT-EUR_number']) + Decimal(z['sell_us_amount'])
             # 按照货币对算第层损益
             for x in cfx_book.keys():
                 # 获得数据库中的损益记录
                 info = sqlFunction.get_one_floor(aggregation_no=y, book_id=x)
-                if cfx_book[x] == 'BTC-USDT':
-                    if info['exposure_direction'] == 1:
-                        logger.info('{}在{}时间断内需要卖出{}的BTC'.format(cfx_book[x], y, BTC_USDT_number))
-                        assert Decimal(info['trading_amount']) == BTC_USDT_number, 'BTC_ETH_number error'
-                    elif info['exposure_direction'] == 2:
-                        logger.info('{}在{}时间断内需要买入{}的BTC'.format(cfx_book[x], y, -BTC_USDT_number))
-                        assert -Decimal(info['trading_amount']) == BTC_USDT_number, 'BTC_ETH_number error'
-
-            # logger.info('BTC-ETH在{}时间断内需要卖出{}的BTC'.format(y, BTC_ETH_number))
-            # logger.info('BTC-USDT在{}时间断内需要卖出{}的BTC'.format(y, BTC_USDT_number))
-            # logger.info('BTC-EUR在{}时间断内需要卖出{}的BTC'.format(y, BTC_EUR_number))
-            # logger.info('ETH-USDT在{}时间断内需要卖出{}的BTC'.format(y, ETH_USDT_number))
-            # logger.info('ETH-EUR在{}时间断内需要卖出{}的ETH'.format(y, ETH_EUR_number))
-            # logger.info('USDT-EUR在{}时间断内需要卖出{}的USDT'.format(y, USDT_EUR_number))
+                print(info)
+                if info['exposure_direction'] == 1:
+                    logger.info('交易对{}在{}时间中要卖出{}数量的{}货币'.format(cfx_book[x], y, book_profit_dict['{}_number'.format(cfx_book[x])], str(cfx_book[x]).split('-')[0]))
+                    assert Decimal(info['trading_amount']) == book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(y, book_profit_dict['{}_number'.format(cfx_book[x])])
