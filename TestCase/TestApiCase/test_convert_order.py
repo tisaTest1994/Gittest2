@@ -55,7 +55,9 @@ class TestConvertOrderApi:
                         assert Decimal(info['trading_amount']) == -book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(y, book_profit_dict['{}_number'.format(cfx_book[x])])
                 # 获得bybit利率
                 parity = AccountFunction.get_bybit_parities(aggregation_no=y, book_id=x)
-                print(parity)
                 # 第2层损益
-                amount = Decimal(parity) * Decimal(book_profit_dict['{}_number'.format(cfx_book[x])]) - Decimal(amount_dict['{}_amount'.format(cfx_book[x])])
-                print('第2层损益{}'.format(amount))
+                print(1111)
+                print(str(book_profit_dict['{}_number'.format(cfx_book[x])]))
+                if str(book_profit_dict['{}_number'.format(cfx_book[x])]) != '0':
+                    amount = Decimal(parity) * Decimal(book_profit_dict['{}_number'.format(cfx_book[x])]) - Decimal(amount_dict['{}_amount'.format(cfx_book[x])])
+                    print('第2层损益{}'.format(amount))
