@@ -57,5 +57,14 @@ class TestConvertOrderApi:
                 parity = AccountFunction.get_bybit_parities(aggregation_no=y, book_id=x)
                 # 第2层损益
                 if str(book_profit_dict['{}_number'.format(cfx_book[x])]) != '0':
-                    amount = Decimal(parity) * Decimal(book_profit_dict['{}_number'.format(cfx_book[x])]) - Decimal(amount_dict['{}_amount'.format(cfx_book[x])])
-                    logger.info('第2层损益{}'.format(amount))
+                    amount = Decimal(parity) * Decimal(book_profit_dict['{}_number'.format(cfx_book[x])])
+                    if '.' in str(amount):
+                        if str(cfx_book[x]).split('-')[1] == 'ETH' or str(cfx_book[x]).split('-')[1] == 'BTC':
+                            amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:8])
+                        elif str(cfx_book[x]).split('-')[1] == 'ETH' or str(cfx_book[x]).split('-')[1] == 'BTC':
+                            amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:6])
+                        else:
+                            amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:2])
+                    logger.info('第2层损益{}'.format(Decimal(amount) - Decimal(amount_dict['{}_amount'.format(cfx_book[x])])))
+
+
