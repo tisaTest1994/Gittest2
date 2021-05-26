@@ -28,5 +28,6 @@
   "crypto_list": ["BTC", "USDT", "ETH", "EUR"],
   "operate_admin_account": {
     "email": "zhangsan@test.com", "password": "zhangsan"
-  }
+  },
+  "cfx_book": {"1": "BTC-USDT", "2": "BTC-ETH", "3": "ETH-USDT", "4": "BTC-EUR", "5": "ETH-EUR", "6": "USDT-EUR"}
 }
