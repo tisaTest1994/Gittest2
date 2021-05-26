@@ -56,11 +56,11 @@ class TestConvertOrderApi:
                         USDT_EUR_number = Decimal(USDT_EUR_number) + Decimal(z['sell_us_amount'])
             info = sqlFunction.get_one_floor(aggregation_no=y, book_id=1)
             if info['exposure_direction'] == 1:
-                logger.info('BTC-ETH在{}时间断内需要卖出{}的BTC'.format(y, BTC_ETH_number))
-                assert Decimal(info['trading_amount']) == BTC_ETH_number, 'BTC_ETH_number error'
+                logger.info('BTC-USDT在{}时间断内需要卖出{}的BTC'.format(y, BTC_USDT_number))
+                assert Decimal(info['trading_amount']) == BTC_USDT_number, 'BTC_ETH_number error'
             elif info['exposure_direction'] == 2:
-                logger.info('BTC-ETH在{}时间断内需要买入{}的BTC'.format(y, -BTC_ETH_number))
-                assert -Decimal(info['trading_amount']) == BTC_ETH_number, 'BTC_ETH_number error'
+                logger.info('BTC-USDT在{}时间断内需要买入{}的BTC'.format(y, -BTC_USDT_number))
+                assert -Decimal(info['trading_amount']) == BTC_USDT_number, 'BTC_ETH_number error'
 
             # logger.info('BTC-ETH在{}时间断内需要卖出{}的BTC'.format(y, BTC_ETH_number))
             # logger.info('BTC-USDT在{}时间断内需要卖出{}的BTC'.format(y, BTC_USDT_number))
