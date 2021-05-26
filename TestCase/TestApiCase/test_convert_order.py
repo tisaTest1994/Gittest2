@@ -56,12 +56,13 @@ class TestConvertOrderApi:
             for x in cfx_book.keys():
                 # 获得数据库中的损益记录
                 info = sqlFunction.get_one_floor(aggregation_no=y, book_id=x)
-                if info['exposure_direction'] == 1:
-                    logger.info('BTC-USDT在{}时间断内需要卖出{}的BTC'.format(y, BTC_USDT_number))
-                    assert Decimal(info['trading_amount']) == BTC_USDT_number, 'BTC_ETH_number error'
-                elif info['exposure_direction'] == 2:
-                    logger.info('BTC-USDT在{}时间断内需要买入{}的BTC'.format(y, -BTC_USDT_number))
-                    assert -Decimal(info['trading_amount']) == BTC_USDT_number, 'BTC_ETH_number error'
+                if cfx_book[x] == 'BTC-USDT':
+                    if info['exposure_direction'] == 1:
+                        logger.info('{}在{}时间断内需要卖出{}的BTC'.format(cfx_book[x], y, BTC_USDT_number))
+                        assert Decimal(info['trading_amount']) == BTC_USDT_number, 'BTC_ETH_number error'
+                    elif info['exposure_direction'] == 2:
+                        logger.info('{}在{}时间断内需要买入{}的BTC'.format(cfx_book[x], y, -BTC_USDT_number))
+                        assert -Decimal(info['trading_amount']) == BTC_USDT_number, 'BTC_ETH_number error'
 
             # logger.info('BTC-ETH在{}时间断内需要卖出{}的BTC'.format(y, BTC_ETH_number))
             # logger.info('BTC-USDT在{}时间断内需要卖出{}的BTC'.format(y, BTC_USDT_number))
