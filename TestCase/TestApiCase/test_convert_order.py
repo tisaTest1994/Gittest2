@@ -54,6 +54,7 @@ class TestConvertOrderApi:
                         assert Decimal(info['trading_amount']) == -book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(y, book_profit_dict['{}_number'.format(cfx_book[x])])
                 # 获得bybit利率
                 cfx_order_info = sqlFunction.get_order_info(aggregation_no=y, book_id=x)
+                print(cfx_order_info)
                 bybit_rate = cfx_order_info['rate']
                 quote_amount = cfx_order_info['quote_amount']
                 # 第2层损益
