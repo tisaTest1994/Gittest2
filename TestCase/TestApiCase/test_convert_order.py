@@ -67,8 +67,6 @@ class TestConvertOrderApi:
                                 amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:6])
                             else:
                                 amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:2])
-                        print(Decimal(quote_amount))
-                        print(Decimal(amount_dict['{}_amount'.format(cfx_book[x])]))
                         assert Decimal(quote_amount) == -Decimal(
                             amount_dict['{}_amount'.format(cfx_book[x])]), '{},{}'.format(quote_amount, Decimal(
                             amount_dict['{}_amount'.format(cfx_book[x])]))
