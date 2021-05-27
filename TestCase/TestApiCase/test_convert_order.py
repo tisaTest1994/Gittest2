@@ -12,7 +12,7 @@ class TestConvertOrderApi:
         # 获得 cfx_book
         cfx_book = get_json()['cfx_book']
         # 从数据库拿到某日数据
-        cfx_info = AccountFunction.get_cfx_info()
+        cfx_info = AccountFunction.get_cfx_info(day_time='2021-05-27')
         # 拆分每一天
         time_info = []
         for i in cfx_info:
