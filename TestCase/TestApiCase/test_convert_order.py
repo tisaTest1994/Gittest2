@@ -32,14 +32,7 @@ class TestConvertOrderApi:
                         elif z['buy_us'] == str(d).split('-')[1] and z['sell_us'] == str(d).split('-')[0]:
                             book_profit_dict['{}_number'.format(d)] = Decimal(book_profit_dict['{}_number'.format(d)]) + Decimal(z['sell_us_amount'])
                             amount_dict['{}_amount'.format(d)] = Decimal(amount_dict['{}_amount'.format(d)]) + Decimal(z['buy_us_amount'])
-                        if '.' in str(amount_dict['{}_amount'.format(d)]):
-                            if str(d).split('-')[1] == 'ETH' or str(d).split('-')[1] == 'BTC':
-                                amount_dict['{}_amount'.format(d)] = '{}.{}'.format(str(amount_dict['{}_amount'.format(d)]).split('.')[0], str(amount_dict['{}_amount'.format(d)]).split('.')[1][:8])
-                            elif str(d).split('-')[1] == 'USDT':
-                                amount_dict['{}_amount'.format(d)] = '{}.{}'.format(str(amount_dict['{}_amount'.format(d)]).split('.')[0], str(amount_dict['{}_amount'.format(d)]).split('.')[1][:6])
-                            else:
-                                amount_dict['{}_amount'.format(d)] = '{}.{}'.format(str(amount_dict['{}_amount'.format(d)]).split('.')[0], str(amount_dict['{}_amount'.format(d)]).split('.')[1][:2])
-            # 按照货币对算第1层损益
+                # 按照货币对算第1层损益
             for x in cfx_book.keys():
                 # 获得数据库中的损益记录
                 info = sqlFunction.get_one_floor(aggregation_no=y, book_id=x)
