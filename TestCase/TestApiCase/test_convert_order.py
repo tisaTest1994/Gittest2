@@ -21,13 +21,14 @@ class TestConvertOrderApi:
         for y in time_info:
             # 基准货币数量
             book_profit_dict = {'BTC-ETH_number': 0, 'BTC-USDT_number': 0, 'BTC-EUR_number': 0, 'ETH-USDT_number': 0, 'ETH-EUR_number': 0, 'USDT-EUR_number': 0}
-            # 中间
+            # 中间数量
             amount_dict = {'BTC-ETH_amount': 0, 'BTC-USDT_amount': 0, 'BTC-EUR_amount': 0, 'ETH-USDT_amount': 0, 'ETH-EUR_amount': 0, 'USDT-EUR_amount': 0}
             for z in cfx_info:
                 if y == z['order_time']:
                     for d in cfx_book.values():
                         if z['buy_us'] == str(d).split('-')[0] and z['sell_us'] == str(d).split('-')[1]:
                             book_profit_dict['{}_number'.format(d)] = Decimal(book_profit_dict['{}_number'.format(d)]) - Decimal(z['buy_us_amount'])
+
                             amount_dict['{}_amount'.format(d)] = Decimal(amount_dict['{}_amount'.format(d)]) - Decimal(z['buy_us_amount']) * Decimal(z['cost'])
                         elif z['buy_us'] == str(d).split('-')[1] and z['sell_us'] == str(d).split('-')[0]:
                             book_profit_dict['{}_number'.format(d)] = Decimal(book_profit_dict['{}_number'.format(d)]) + Decimal(z['sell_us_amount'])
@@ -54,7 +55,6 @@ class TestConvertOrderApi:
                         assert Decimal(info['trading_amount']) == -book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(y, book_profit_dict['{}_number'.format(cfx_book[x])])
                     # 获得bybit利率
                     cfx_order_info = sqlFunction.get_order_info(aggregation_no=y, book_id=x)
-                    print(cfx_order_info)
                     bybit_rate = cfx_order_info['rate']
                     quote_amount = cfx_order_info['quote_amount']
                     # 第2层损益
@@ -63,13 +63,11 @@ class TestConvertOrderApi:
                         if '.' in str(amount):
                             if str(cfx_book[x]).split('-')[1] == 'ETH' or str(cfx_book[x]).split('-')[1] == 'BTC':
                                 amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:8])
-                            elif str(cfx_book[x]).split('-')[1] == 'ETH' or str(cfx_book[x]).split('-')[1] == 'BTC':
+                            elif str(cfx_book[x]).split('-')[1] == 'USDT':
                                 amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:6])
                             else:
                                 amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:2])
-                        assert Decimal(quote_amount) == -Decimal(
-                            amount_dict['{}_amount'.format(cfx_book[x])]), '{},{}'.format(quote_amount, Decimal(
-                            amount_dict['{}_amount'.format(cfx_book[x])]))
+                        assert Decimal(quote_amount) == - Decimal(amount_dict['{}_amount'.format(cfx_book[x])]), '货币总量数据库反馈是{},计算是{}'.format(quote_amount, Decimal(amount_dict['{}_amount'.format(cfx_book[x])]))
                         logger.info(
                             '第2层损益{}'.format(Decimal(amount) - Decimal(amount_dict['{}_amount'.format(cfx_book[x])])))
                         wallet_info = sqlFunction.get_two_floor('{}:{}'.format(y, x))
