@@ -200,8 +200,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['trading_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['cost']) - Decimal(z['rate']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
+                        profit = Decimal(profit) - Decimal(z['pnl_amount'])
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                     elif z['trading_direction'] == 2:
                         cfx_dict['buy_us'] = 'BTC'
@@ -210,8 +211,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['pnl_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
+                        profit = Decimal(z['pnl_amount']) - Decimal(profit)
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                 elif z['book_id'] == 2:
                     if z['trading_direction'] == 1:
@@ -221,8 +223,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['trading_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['cost']) - Decimal(z['rate']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:8])
+                        profit = Decimal(profit) - Decimal(z['pnl_amount'])
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                     elif z['trading_direction'] == 2:
                         cfx_dict['buy_us'] = 'BTC'
@@ -231,8 +234,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['pnl_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:8])
+                        profit = Decimal(z['pnl_amount']) - Decimal(profit)
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                 elif z['book_id'] == 3:
                     if z['trading_direction'] == 1:
@@ -242,8 +246,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['trading_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['cost']) - Decimal(z['rate']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
+                        profit = Decimal(profit) - Decimal(z['pnl_amount'])
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                     elif z['trading_direction'] == 2:
                         cfx_dict['buy_us'] = 'ETH'
@@ -252,8 +257,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['pnl_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
+                        profit = Decimal(z['pnl_amount']) - Decimal(profit)
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                 elif z['book_id'] == 4:
                     if z['trading_direction'] == 1:
@@ -263,8 +269,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['trading_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['cost']) - Decimal(z['rate']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])
+                        profit = Decimal(profit) - Decimal(z['pnl_amount'])
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                     elif z['trading_direction'] == 2:
                         cfx_dict['buy_us'] = 'BTC'
@@ -273,8 +280,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['pnl_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])
+                        profit = Decimal(z['pnl_amount']) - Decimal(profit)
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                 elif z['book_id'] == 5:
                     if z['trading_direction'] == 1:
@@ -284,8 +292,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['trading_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['cost']) - Decimal(z['rate']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])
+                        profit = Decimal(profit) - Decimal(z['pnl_amount'])
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                     elif z['trading_direction'] == 2:
                         cfx_dict['buy_us'] = 'ETH'
@@ -294,8 +303,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['pnl_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])
+                        profit = Decimal(z['pnl_amount']) - Decimal(profit)
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                 elif z['book_id'] == 6:
                     if z['trading_direction'] == 1:
@@ -305,8 +315,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['trading_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['cost']) - Decimal(z['rate']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])
+                        profit = Decimal(profit) - Decimal(z['pnl_amount'])
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                     elif z['trading_direction'] == 2:
                         cfx_dict['buy_us'] = 'USDT'
@@ -315,8 +326,9 @@ class AccountFunction:
                         cfx_dict['sell_us_amount'] = z['pnl_amount']
                         cfx_dict['profit'] = z['gnl']
                         cfx_dict['order_time'] = z['aggregation_no']
-                        profit = Decimal(z['trading_amount']) * (Decimal(z['rate']) - Decimal(z['cost']))
+                        profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])
+                        profit = Decimal(z['pnl_amount']) - Decimal(profit)
                         assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                 cfx_dict['cost'] = z['cost']
                 cfx_list.append(cfx_dict)
