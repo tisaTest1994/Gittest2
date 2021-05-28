@@ -28,7 +28,6 @@ class TestConvertOrderApi:
                     for d in cfx_book.values():
                         if z['buy_us'] == str(d).split('-')[0] and z['sell_us'] == str(d).split('-')[1]:
                             book_profit_dict['{}_number'.format(d)] = Decimal(book_profit_dict['{}_number'.format(d)]) - Decimal(z['buy_us_amount'])
-
                             amount_dict['{}_amount'.format(d)] = Decimal(amount_dict['{}_amount'.format(d)]) - Decimal(z['sell_us_amount'])
                         elif z['buy_us'] == str(d).split('-')[1] and z['sell_us'] == str(d).split('-')[0]:
                             book_profit_dict['{}_number'.format(d)] = Decimal(book_profit_dict['{}_number'.format(d)]) + Decimal(z['sell_us_amount'])

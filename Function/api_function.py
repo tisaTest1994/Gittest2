@@ -194,8 +194,8 @@ class AccountFunction:
             for z in y:
                 cfx_dict = {}
                 if z['trading_direction'] == 1:
-                    cfx_dict['buy_us'] = str(cfx_book[z['book_id']]).split('-')[1]
-                    cfx_dict['sell_us'] = str(cfx_book[z['book_id']]).split('-')[0]
+                    cfx_dict['buy_us'] = str(cfx_book[str(z['book_id'])]).split('-')[1]
+                    cfx_dict['sell_us'] = str(cfx_book[str(z['book_id'])]).split('-')[0]
                     cfx_dict['buy_us_amount'] = z['pnl_amount']
                     cfx_dict['sell_us_amount'] = z['trading_amount']
                     cfx_dict['profit'] = z['gnl']
@@ -205,8 +205,8 @@ class AccountFunction:
                     profit = Decimal(profit) - Decimal(z['pnl_amount'])
                     assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
                 elif z['trading_direction'] == 2:
-                    cfx_dict['buy_us'] = str(cfx_book[z['book_id']]).split('-')[0]
-                    cfx_dict['sell_us'] = str(cfx_book[z['book_id']]).split('-')[1]
+                    cfx_dict['buy_us'] = str(cfx_book[str(z['book_id'])]).split('-')[0]
+                    cfx_dict['sell_us'] = str(cfx_book[str(z['book_id'])]).split('-')[1]
                     cfx_dict['buy_us_amount'] = z['trading_amount']
                     cfx_dict['sell_us_amount'] = z['pnl_amount']
                     cfx_dict['profit'] = z['gnl']
