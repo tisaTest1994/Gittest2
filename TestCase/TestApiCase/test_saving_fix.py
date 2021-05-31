@@ -72,7 +72,7 @@ class TestSavingFixApi:
         for i in r.json():
             logger.info('定期产品详情。 {}'.format(i))
             for y in i['products']:
-                sleep(2)
+                sleep(5)
                 logger.info('定期产品product_id是{}'.format(y['product_id']))
                 with allure.step("获取购买定期前BTC可用数量"):
                     balance_amount_old = AccountFunction.get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
