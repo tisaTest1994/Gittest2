@@ -40,7 +40,7 @@ class TestSavingFixApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert 'Earn Bit Fixed' in r.text, '获取定期产品详情失败,返回值是{}'.format(r.json())
+                        assert '"code":"USDT"' in r.text, '获取定期产品详情失败,返回值是{}'.format(r.json())
 
     @allure.testcase('test_saving_fix_003 获取定期产品利息列表')
     def test_saving_fix_003(self):
