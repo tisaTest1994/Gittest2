@@ -67,6 +67,20 @@ def get_json():
     return js
 
 
+# 修改资源里面的配置参数
+def write_json(key, value):
+    path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/setting.json'
+    with open(path, "rb+") as f:
+        js = json.load(f)
+    for i in js:
+        if i == key:
+            js[i] = value
+    with open(path, "w") as f:
+        json.dump(js, f, sort_keys=True, indent=2)
+
+
+
+
 # 获得本日UTC时间的0点
 def get_zero_utc_time():
     utc = pytz.timezone('UTC')

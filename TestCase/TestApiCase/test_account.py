@@ -1,7 +1,11 @@
+import json
+
 from Function.api_function import *
 from run import *
 from Function.log import *
 import allure
+import pyotp
+import base64
 
 
 # account相关cases
@@ -674,3 +678,116 @@ class TestAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'SUCCESS' == r.json()['result'], "获取opt二维码不对，目前返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_034 创建opt验证')
+    def test_account_034(self):
+        # 获得opt secretKey
+        r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
+        if "SUCCESS" not in r.text:
+            secretKey = get_json()['secretKey']
+            totp = pyotp.TOTP(secretKey)
+            mfaVerificationCode = totp.now()
+            data = {
+                "mfaVerificationCode": str(mfaVerificationCode),
+                "emailVerificationCode": "666666"
+            }
+            requests.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url),
+                                 data=json.dumps(data), headers=headers)
+            r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
+        secretData = r.json()['totpSecret']
+        secretKey = r.json()['uriParams']['secret']
+        totp = pyotp.TOTP(secretKey)
+        mfaVerificationCode = totp.now()
+        # 创建opt验证
+        data = {
+            "secretData": str(secretData),
+            "mfaVerificationCode": str(mfaVerificationCode),
+            "userLabel": "account",
+            "emailVerificationCode": "666666"
+        }
+        r = requests.request('POST', url='{}/account/security/mfa/otp/enable'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert {} == r.json(), "创建opt验证不对，目前返回值是{}".format(r.text)
+        with allure.step("修改资源表的secretKey"):
+            key = 'secretKey'
+            value = secretKey
+            write_json(key, value)
+
+    @allure.testcase('test_account_035 验证opt code')
+    def test_account_035(self):
+        # 获得opt secretKey
+        r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
+        if "SUCCESS" in r.text:
+            secretData = r.json()['totpSecret']
+            secretKey = r.json()['uriParams']['secret']
+            totp = pyotp.TOTP(secretKey)
+            mfaVerificationCode = totp.now()
+            # 创建opt验证
+            data = {
+                "secretData": str(secretData),
+                "mfaVerificationCode": str(mfaVerificationCode),
+                "userLabel": "account",
+                "emailVerificationCode": "666666"
+            }
+            requests.request('POST', url='{}/account/security/mfa/otp/enable'.format(env_url), data=json.dumps(data),
+                             headers=headers)
+            key = 'secretKey'
+            value = secretKey
+            write_json(key, value)
+        # 验证opt code
+        secretKey = get_json()['secretKey']
+        totp = pyotp.TOTP(secretKey)
+        mfaVerificationCode = totp.now()
+        data = {
+            "totp": str(mfaVerificationCode)
+        }
+        r = requests.request('POST', url='{}/account/security/mfa/otp/verify'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert {} == r.json(), " 验证opt code不对，目前返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_036 删除opt')
+    def test_account_036(self):
+        r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
+        if "SUCCESS" in r.text:
+            # 创建opt
+            secretData = r.json()['totpSecret']
+            secretKey = r.json()['uriParams']['secret']
+            totp = pyotp.TOTP(secretKey)
+            totp.now()
+            # 创建opt验证
+            data = {
+                "secretData": str(secretData),
+                "mfaVerificationCode": str(totp.now()),
+                "userLabel": "account",
+                "emailVerificationCode": "666666"
+            }
+            requests.request('POST', url='{}/account/security/mfa/otp/enable'.format(env_url), data=json.dumps(data), headers=headers)
+            key = 'secretKey'
+            value = secretKey
+            write_json(key, value)
+        # 删除opt
+        secretKey = get_json()['secretKey']
+        totp = pyotp.TOTP(secretKey)
+        mfaVerificationCode = totp.now()
+        data = {
+            "mfaVerificationCode": str(mfaVerificationCode),
+            "emailVerificationCode": "666666"
+        }
+        r = requests.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert {} == r.json(), "删除opt不对，目前返回值是{}".format(r.text)
