@@ -666,6 +666,7 @@ class TestSavingCurrentApi:
 
     @allure.testcase('test_saving_current_019 校验明日计息金额')
     def test_saving_current_019(self):
+        sleep(10)
         with allure.step("获取产品product"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
             product = random.choice(r.json())
@@ -675,6 +676,7 @@ class TestSavingCurrentApi:
             logger.info('项目id是{}'.format(id))
             interest = AccountFunction.get_interest(id)
             logger.info('通过接口得到明日的利息是{}'.format(interest))
+        sleep(2)
         with allure.step("自己计算明天计息情况"):
             with allure.step("获得计息利率"):
                 r = session.request('GET', url='{}/earn/products/{}'.format(env_url, id), headers=headers)
