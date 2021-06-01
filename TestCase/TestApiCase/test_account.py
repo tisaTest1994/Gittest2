@@ -5,7 +5,6 @@ from run import *
 from Function.log import *
 import allure
 import pyotp
-import base64
 
 
 # account相关cases
@@ -791,3 +790,36 @@ class TestAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert {} == r.json(), "删除opt不对，目前返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_037 接受隐私政策版本')
+    def test_account_037(self):
+        data = {
+            "privacyPolicyVersion": 20210528,
+            "termOfServiceVersion": 20210528
+        }
+        r = requests.request('POST', url='{}/account/setting/privacy'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert {} == r.json(), "接受隐私政策版本不对，目前返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_038 查询最新隐私政策版本')
+    def test_account_038(self):
+        r = requests.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
+        data = {
+            "privacyPolicyVersion": r.json()['privacyPolicyVersion'],
+            "termOfServiceVersion": r.json()['termOfServiceVersion']
+        }
+        requests.request('POST', url='{}/account/setting/privacy'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'privacyPolicyVersion' in r.text, "查询最新隐私政策版本不对，目前返回值是{}".format(r.text)
+            # 查询用户信息
+            r1 = requests.request('GET', url='{}/account/info'.format(env_url), headers=headers)
+            print(r1.json()['user']['userPrivacyPolicy'])
+            assert r.json()['privacyPolicyVersion'] == r1.json()['user']['userPrivacyPolicy']['privacyPolicyVersion'], 'privacyPolicyVersion最新版本和个人接受版本不匹配'
+            assert r.json()['termOfServiceVersion'] == r1.json()['user']['userPrivacyPolicy']['termOfServiceVersion'], 'termOfServiceVersion最新版本和个人接受版本不匹配'
