@@ -820,6 +820,25 @@ class TestAccountApi:
             assert 'privacyPolicyVersion' in r.text, "查询最新隐私政策版本不对，目前返回值是{}".format(r.text)
             # 查询用户信息
             r1 = requests.request('GET', url='{}/account/info'.format(env_url), headers=headers)
-            print(r1.json()['user']['userPrivacyPolicy'])
             assert r.json()['privacyPolicyVersion'] == r1.json()['user']['userPrivacyPolicy']['privacyPolicyVersion'], 'privacyPolicyVersion最新版本和个人接受版本不匹配'
             assert r.json()['termOfServiceVersion'] == r1.json()['user']['userPrivacyPolicy']['termOfServiceVersion'], 'termOfServiceVersion最新版本和个人接受版本不匹配'
+
+    @allure.testcase('test_account_039 修改投资目的')
+    def test_account_039(self):
+        data = {
+            "purposes": [
+                "SAVING_OR_INVESTMENT"
+            ]
+        }
+        r = requests.request('POST', url='{}/account/setting/purpose'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert '' in r.text, "修改投资目的不对，目前返回值是{}".format(r.text)
+            useId = get_json()['email']['userId']
+            sql = "SELECT purposes FROM user_registry_purpose where user_id = '{}';".format(useId)
+            purposes = sqlFunction.connect_mysql('account', sql)
+            print(purposes)

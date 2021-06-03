@@ -295,7 +295,7 @@
     "password": "zhangsan"
   },
   "pro": "https://api.cabital.com/api/v1",
-  "secretKey": "KFVWOZDTKRFHQ3DEOVIFATKUPI4U2S3C",
+  "secretKey": "O43UIYTZNRQXC3D2HBBUMZ3TG5AU4U2K",
   "slackTestUrl": "https://hooks.slack.com/services/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",
   "slackUrl": "https://hooks.slack.com/services/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",
   "test": "https://api.latibac.com/api/v1"
