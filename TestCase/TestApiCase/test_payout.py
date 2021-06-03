@@ -185,7 +185,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert '"fee":"0.001"' in r.text, "获取提现费率和提现限制错误，返回值是{}".format(r.text)
+            assert '"code":"ETH"' in r.text, "获取提现费率和提现限制错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_011 提现BTC成功')
     def test_payout_011(self):
@@ -259,11 +259,11 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert 'WALLET000003' in r.text, "提现超过可用数量的BTC，返回失败错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_015 提现超过可用数量的ETH，返回失败')
+    @allure.testcase('test_payout_015 提现超过可用数量的ETH，交易成功。')
     def test_payout_015(self):
         with allure.step("提现超过可用数量的ETH，返回失败"):
             data = {
-                "amount": "999999",
+                "amount": "99999999",
                 "code": "ETH",
                 "address": "0x428DA40C585514022b2eB537950d5AB5C7365a07",
                 "method": "ERC20"
@@ -273,15 +273,15 @@ class TestPayoutApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'WALLET000003' in r.text, "提现超过可用数量的ETH，返回失败错误，返回值是{}".format(r.text)
+            assert 'transaction_id' in r.text, "提现超过可用数量的ETH，交易成功错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_016 提现超过可用数量的USDT，返回失败')
+    @allure.testcase('test_payout_016 提现超过可用数量的USDT，交易成功')
     def test_payout_016(self):
         with allure.step("提现超过可用数量的USDT，返回失败"):
             data = {
-                "amount": "99999999",
+                "amount": "999999999",
                 "code": "USDT",
                 "address": "0xB76a92f3293b8Fa0f30aA4FfF75325201C2F67F6",
                 "method": "ERC20"
@@ -291,9 +291,9 @@ class TestPayoutApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'WALLET000003' in r.text, "提现超过可用数量的USDT，返回失败错误，返回值是{}".format(r.text)
+            assert 'transaction_id' in r.text, "提现超过可用数量的ETH，交易成功错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_017 提现小于最低要求数量的BTC，返回失败')
     def test_payout_017(self):
@@ -311,7 +311,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'PAYOUTTXN000025' in r.text, "提现小于最低要求数量的BTC，返回失败错误，返回值是{}".format(r.text)
+            assert 'min amount' in r.text, "提现小于最低要求数量的BTC，返回失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_018 提现小于最低要求数量的ETH，返回失败')
     def test_payout_018(self):
@@ -329,7 +329,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'PAYOUTTXN000025' in r.text, "提现小于最低要求数量的ETH，返回失败错误，返回值是{}".format(r.text)
+            assert 'min amount' in r.text, "提现小于最低要求数量的ETH，返回失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_019 提现小于最低要求数量的USDT，返回失败')
     def test_payout_019(self):
@@ -347,7 +347,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'PAYOUTTXN000025' in r.text, "提现超过可用数量的USDT，返回失败错误，返回值是{}".format(r.text)
+            assert 'min amount' in r.text, "提现超过可用数量的USDT，返回失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_020 查询提现详情')
     def test_payout_020(self):

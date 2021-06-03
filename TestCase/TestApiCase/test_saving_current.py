@@ -275,7 +275,7 @@ class TestSavingCurrentApi:
         with allure.step("投资金额小于最小投资BTC数量"):
             data = {
                 "tx_type": 1,
-                "amount": "0.00000000167",
+                "amount": "0.00000167",
                 "code": BTC_item['code']
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
@@ -284,7 +284,7 @@ class TestSavingCurrentApi:
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
-                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                assert r.status_code == 500, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert 'amount < min amount' in r.text, "投资金额小于最小投资BTC数量错误，返回值是{}".format(r.text)
 

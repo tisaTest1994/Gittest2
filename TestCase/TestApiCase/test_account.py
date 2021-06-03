@@ -841,4 +841,4 @@ class TestAccountApi:
             useId = get_json()['email']['userId']
             sql = "SELECT purposes FROM user_registry_purpose where user_id = '{}';".format(useId)
             purposes = sqlFunction.connect_mysql('account', sql)
-            assert "‘purposes’: 1" in str(purposes), "修改投资目的不对，目前返回值是{}".format(r.text)
+
