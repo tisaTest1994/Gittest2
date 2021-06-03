@@ -39,7 +39,7 @@ logger==1.4
 loguru==0.5.3
 lxml==4.6.3
 MarkupSafe==1.1.1
-msgpack==1.0.2
+msgpack==1.0.21.0.82
 mss==4.0.3
 multidict==5.1.0
 namedlist==1.8
@@ -48,7 +48,6 @@ opencv-contrib-python==4.5.1.48
 packaging==20.9
 Pillow==8.1.2
 pluggy==0.13.1
-pocoui==1.1.0
 protobuf==3.15.8
 psutil==5.8.0
 py==1.10.0
