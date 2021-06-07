@@ -23,8 +23,7 @@ class AccountFunction:
     # 加headers，只能默认账户
     @staticmethod
     def add_headers(currency='USD'):
-        if run.accountToken == '':
-            run.accountToken = AccountFunction.get_account_token()
+        run.accountToken = AccountFunction.get_account_token()
         headers['Authorization'] = "Bearer " + run.accountToken
         headers['X-Currency'] = currency
 
@@ -63,6 +62,7 @@ class AccountFunction:
         }
         r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
                             headers=headers)
+        print(r.headers)
         logger.info('获取的交易订单json是{}'.format(r.text))
         return r.json()['transaction_id']
 

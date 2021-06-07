@@ -28,8 +28,7 @@ class TestPayoutApi:
                 "method": "ERC20",
                 "address": "test-address"
             }
-            r = session.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
+            r = session.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data), headers=headers)
         AccountFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
