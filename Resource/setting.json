@@ -264,10 +264,13 @@
     "EUR"
   ],
   "email": {
-    "accountId": "0f9e2184-2708-4a81-8aff-44f25781968e",
-    "email": "yilei6@cabital.com",
+    "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
+    "email": "richard.wan@cabital.com",
+    "host": "imap.gmail.com",
     "password": "Zcdsw123",
-    "userId": "218265c2-2266-4c7e-a7c7-0d61f5802ad1"
+    "port": "993",
+    "security_code": "kkmqebcswyxbijwx",
+    "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
   },
   "env": "test",
   "env support": [
@@ -295,7 +298,7 @@
     "password": "zhangsan"
   },
   "pro": "https://api.cabital.com/api/v1",
-  "secretKey": "O43UIYTZNRQXC3D2HBBUMZ3TG5AU4U2K",
+  "secretKey": "GBCESNBUKZEUI33UKQYHG4STG4ZHA5SD",
   "slackTestUrl": "https://hooks.slack.com/services/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",
   "slackUrl": "https://hooks.slack.com/services/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",
   "test": "https://api.latibac.com/api/v1"
