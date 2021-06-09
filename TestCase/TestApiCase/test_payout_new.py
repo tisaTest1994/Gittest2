@@ -1,5 +1,4 @@
 from Function.api_function import *
-from Function.operate_email import *
 from run import *
 from Function.log import *
 import allure
@@ -139,8 +138,8 @@ class TestPayoutNewApi:
         with allure.step("校验返回值"):
             assert r.json()['transaction_id'] is not None, "MFA认证提现ETH成功错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_020 查询提现详情')
-    def test_payout_020(self):
+    @allure.testcase('test_payout_008 查询提现详情')
+    def test_payout_008(self):
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
             logger.info('transaction_id是{}'.format(transaction_id))
@@ -154,10 +153,10 @@ class TestPayoutNewApi:
         with allure.step("校验返回值"):
             assert 'status' in r.text, "查询提现详情错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_021 使用错误id查询提现详情')
-    def test_payout_021(self):
+    @allure.testcase('test_payout_009 使用错误id查询提现详情')
+    def test_payout_009(self):
         with allure.step("查询提现详情"):
-            r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, '468422531310-3fa0-4bd1-9d46-4467dfa9ce52'), headers=headers)
+            r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, '4684225231310-3fa0-4bd1-9d46-4467dfa9ce52'), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))

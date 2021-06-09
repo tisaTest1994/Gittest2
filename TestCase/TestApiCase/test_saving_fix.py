@@ -377,8 +377,6 @@ class TestSavingFixApi:
                         assert Decimal(balance_amount_old) == Decimal(balance_amount_latest), '购买定期产品最小额度错误,购买前钱包USDT数量{},购买后钱包USDT数量{}'.format(balance_amount_old, balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(saving_amount_latest), '购买定期产品最小额度错误,购买前活期USDT数量{},购买后活期USDT数量{}'.format(saving_amount_old, saving_amount_latest)
                         assert Decimal(fix_amount_old) == Decimal(fix_amount_latest), '购买定期产品最小额度错误,购买前定期USDT数量{},购买后定期USDT数量{}'.format(balance_amount_old,  balance_amount_latest)
-
-
                 else:
                     assert False, "币种不对，购买定期产品失败。"
 

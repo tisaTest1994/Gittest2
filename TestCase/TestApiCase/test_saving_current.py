@@ -265,6 +265,7 @@ class TestSavingCurrentApi:
     def test_saving_current_008(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+            print(r.json())
         with allure.step("选择ETH投资项目"):
             BTCList = []
             for i in r.json():

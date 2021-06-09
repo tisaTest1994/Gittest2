@@ -85,7 +85,7 @@ class TestConvertApi:
     @allure.testcase('test_convert_005 换汇交易')
     def test_convert_005(self):
         with allure.step("换汇交易"):
-            List = ['BTC-ETH', 'BTC-USDT', 'BTC-EUR', 'ETH-USDT', 'ETH-EUR', 'USDT-EUR']
+            List = ['BTC-ETH', 'BTC-USDT', 'ETH-USDT']
             # 获取换汇值
             for i in List:
                 cryptos = i.split('-')

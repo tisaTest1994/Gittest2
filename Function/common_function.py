@@ -1,11 +1,15 @@
+from Function.common_function import *
 from datetime import *
-import logger
 from faker import Faker
 import random
 import json
 import os
 import pytz
 import time
+import imaplib
+import email
+import chardet
+import logger
 
 
 # 获取当前时间
@@ -79,8 +83,6 @@ def write_json(key, value):
         json.dump(js, f, sort_keys=True, indent=2)
 
 
-
-
 # 获得本日UTC时间的0点
 def get_zero_utc_time():
     utc = pytz.timezone('UTC')
@@ -99,3 +101,24 @@ def get_zero_time(day_time='2021-05-17'):
         i = i + 60
         time_list.append(i)
     return time_list
+
+
+# 查询邮件
+def get_email():
+    email_info = get_json()['email']
+    account = email_info['email']
+    security_code = email_info['security_code']
+    host = email_info['host']
+    port = email_info['port']
+    client = imaplib.IMAP4_SSL(host=host, port=port)
+    client.login(account, security_code)
+    # 选择收件夹
+    client.select('INBOX')
+    type, data = client.search(None, 'ALL')
+    num = str(len(str(data[0], 'utf-8').split(' ')))
+    typ, data = client.fetch(num.encode(), '(RFC822)')
+    encoding = chardet.detect(data[0][1])
+    msg = email.message_from_string(data[0][1].decode(encoding['encoding']))
+    text, enc = email.header.decode_header(msg['subject'])[0]
+    title = text.decode(enc) if enc else text
+    return {"title": title, "body": data[0][1].decode(encoding['encoding'])}
