@@ -23,7 +23,7 @@ class TestAccountApi:
                 "citizenCountryCode": citizenCountryCode,
                 "password": "Zcdsw123"
             }
-            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers, timeout=3)
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))

@@ -16,9 +16,8 @@ class AccountFunction:
             "password": password
         }
         r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-                            headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'accessToken' in r.text, "成功注册用户错误，返回值是{}".format(r.json())
+                            headers=headers, timeout=100)
+        print(r.json()['accessToken'])
         return r.json()['accessToken']
 
     # 加headers，只能默认账户
