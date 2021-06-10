@@ -164,3 +164,8 @@ class TestPayoutNewApi:
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'no rows in result set' in r.text, "使用错误id查询提现详情错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_010 欧元提现')
+    def test_payout_010(self):
+        with allure.step("欧元提现"):
+            pass
