@@ -17,7 +17,6 @@ class AccountFunction:
         }
         r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
                             headers=headers, timeout=100)
-        print(r.json()['accessToken'])
         return r.json()['accessToken']
 
     # 加headers，只能默认账户
