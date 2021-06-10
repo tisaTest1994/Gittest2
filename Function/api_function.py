@@ -48,7 +48,7 @@ class AccountFunction:
             "password": password
         }
         session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers,
-                        timeout=3)
+                        timeout=10)
 
     # 提现获取交易id
     @staticmethod
@@ -69,9 +69,8 @@ class AccountFunction:
             "address": address,
             "method": "ERC20"
         }
-        r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
-                            headers=headers)
-        print(r.headers)
+        print(headers)
+        r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
         logger.info('获取的交易订单json是{}'.format(r.text))
         return r.json()['transaction_id']
 

@@ -23,7 +23,7 @@ accountToken = ''
 
 class sessions(requests.Session):
     def request(self, *args, **kwargs):
-        kwargs.setdefault('timeout', 10)
+        kwargs.setdefault('timeout', 5)
         return super(sessions, self).request(*args, **kwargs)
 
 
