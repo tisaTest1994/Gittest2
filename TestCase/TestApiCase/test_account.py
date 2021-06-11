@@ -717,6 +717,7 @@ class TestAccountApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert {} == r.json(), "创建opt验证不对，目前返回值是{}".format(r.text)
+        AccountFunction.add_headers()
 
     @allure.testcase('test_account_035 验证opt code')
     def test_account_035(self):

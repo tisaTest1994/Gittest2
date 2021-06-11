@@ -588,7 +588,7 @@ class TestSavingFixApi:
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
-                assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+                assert r.status_code == 500, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert 'field maturity_interest.amount is not set' in r.text, '项目不传预计派息金额错误, 返回值是{}'.format(r.text)
 
