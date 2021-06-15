@@ -8,8 +8,7 @@ class MyUser(HttpUser):
                     'yilei5@cabital.com', 'yilei6@cabital.com', 'yilei7@cabital.com', 'yilei8@cabital.com',
                     'yilei9@cabital.com', 'yilei10@cabital.com', 'yilei11@cabital.com', 'yilei12@cabital.com',
                     'yilei13@cabital.com', 'yilei14@cabital.com']
-    min_wait = 100
-    max_wait = 6000
+
 
     @task(6)
     def core(self):

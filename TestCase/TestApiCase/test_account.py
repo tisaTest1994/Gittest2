@@ -667,7 +667,10 @@ class TestAccountApi:
 
     @allure.testcase('test_account_033 获取opt二维码')
     def test_account_033(self):
+        run.accountToken = AccountFunction.get_account_token(account='yilei4@cabital.com')
+        headers['Authorization'] = "Bearer " + run.accountToken
         r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
+        AccountFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -678,7 +681,7 @@ class TestAccountApi:
 
     @allure.testcase('test_account_034 创建opt验证，并且删除。')
     def test_account_034(self):
-        run.accountToken = AccountFunction.get_account_token(account='yilei8@cabital.com')
+        run.accountToken = AccountFunction.get_account_token(account='yilei3@cabital.com')
         headers['Authorization'] = "Bearer " + run.accountToken
         # 获得opt secretKey
         r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
@@ -693,7 +696,8 @@ class TestAccountApi:
             }
             requests.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data), headers=headers)
             write_json('secretKeyForTest', ' ')
-        r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
+        else:
+            r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
         if "SUCCESS" in r.text:
             secretData = r.json()['totpSecret']
             secretKey = r.json()['uriParams']['secret']
@@ -784,7 +788,7 @@ class TestAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert '' in r.text, "修改投资目的不对，目前返回值是{}".format(r.text)
-            useId = get_json()['email']['userId']
-            sql = "SELECT purposes FROM user_registry_purpose where user_id = '{}';".format(useId)
-            purposes = sqlFunction.connect_mysql('account', sql)
+            # useId = get_json()['email']['userId']
+            # sql = "SELECT purposes FROM user_registry_purpose where user_id = '{}';".format(useId)
+            # purposes = sqlFunction.connect_mysql('account', sql)
 
