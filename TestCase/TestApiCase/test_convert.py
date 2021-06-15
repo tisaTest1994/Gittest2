@@ -370,7 +370,7 @@ class TestConvertApi:
         r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
         logger.info('申请换汇参数{}'.format(data))
         logger.info('超时换汇交易返回值是{}'.format(r.text))
-        assert 'CFXTXN000012:invalid Rate' in r.text, '超时换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
+        assert 'rpc error: code = Unknown desc = invalid Rate' in r.text, '超时换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
 
     @allure.testcase('test_convert_007 小于接受的最小值换汇交易')
     def test_convert_007(self):
@@ -421,7 +421,7 @@ class TestConvertApi:
                     r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                         headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    assert 'CFXTXN000013' in r.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
+                    assert 'rpc error: code = Unknown desc = invalid Amount' in r.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
                 with allure.step("major_ccy 是buy值，逆兑换 "):
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         buy_amount = random.uniform(0.0001, 0.00019)
@@ -463,7 +463,7 @@ class TestConvertApi:
                     r1 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                          headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    assert 'CFXTXN000013' in r1.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r1.text)
+                    assert 'rpc error: code = Unknown desc = invalid Amount' in r1.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r1.text)
                 with allure.step("major_ccy 是sell值，正兑换 "):
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         sell_amount = random.uniform(0.0001, 0.00019)
@@ -505,7 +505,7 @@ class TestConvertApi:
                     r2 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                          headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    assert 'CFXTXN000013' in r2.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r2.text)
+                    assert 'rpc error: code = Unknown desc = invalid Amount' in r2.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r2.text)
                 with allure.step("major_ccy 是sell值，逆兑换 "):
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         sell_amount = random.uniform(0.0001, 0.00019)
@@ -547,7 +547,7 @@ class TestConvertApi:
                     r3 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                          headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    assert 'CFXTXN000013' in r3.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
+                    assert 'rpc error: code = Unknown desc = invalid Amount' in r3.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
 
     @allure.testcase('test_convert_008 使用错误金额换汇交易')
     def test_convert_008(self):
@@ -562,7 +562,7 @@ class TestConvertApi:
         }
         r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
         logger.info('申请换汇参数{}'.format(data))
-        assert 'CFXTXN000021:amount calculation error' in r.text, '使用错误金额换汇交易错误,返回值是{}'.format(r.text)
+        assert 'rpc error: code = Unknown desc = amount calculation error' in r.text, '使用错误金额换汇交易错误,返回值是{}'.format(r.text)
 
     @allure.testcase('test_convert_009 获取换汇汇率对')
     def test_convert_009(self):

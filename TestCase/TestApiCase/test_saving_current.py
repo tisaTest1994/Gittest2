@@ -587,7 +587,7 @@ class TestSavingCurrentApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'EARNINGTXN000019:not enough saving balance' in r.text, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
+            assert 'EARNINGTXN000019' in r.text, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_current_016 赎回金额超过最大的可赎回ETH数量')
     def test_saving_current_016(self):
@@ -614,7 +614,7 @@ class TestSavingCurrentApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'EARNINGTXN000019:not enough saving balance' in r.text, "赎回金额超过最大的可赎回ETH数量错误，返回值是{}".format(r.text)
+            assert 'EARNINGTXN000019' in r.text, "赎回金额超过最大的可赎回ETH数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_current_017 赎回金额超过最大的可赎回USDT数量')
     def test_saving_current_017(self):
@@ -641,7 +641,7 @@ class TestSavingCurrentApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'EARNINGTXN000019:not enough saving balance' in r.text, "赎回金额超过最大的可赎回USDT数量错误，返回值是{}".format(r.text)
+            assert 'EARNINGTXN000019' in r.text, "赎回金额超过最大的可赎回USDT数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_current_018 正在赎回金额等于wallet中冻结金额')
     def test_saving_current_018(self):
