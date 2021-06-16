@@ -713,7 +713,6 @@ class TestAccountApi:
                 "emailVerificationCode": "666666"
             }
             r = requests.request('POST', url='{}/account/security/mfa/otp/enable'.format(env_url), data=json.dumps(data), headers=headers)
-            AccountFunction.add_headers()
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -721,10 +720,22 @@ class TestAccountApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert {} == r.json(), "创建opt验证不对，目前返回值是{}".format(r.text)
+        # 删除opt
+        secretKey = get_json()['secretKeyForTest']
+        totp = pyotp.TOTP(secretKey)
+        mfaVerificationCode = totp.now()
+        data = {
+            "mfaVerificationCode": str(mfaVerificationCode),
+            "emailVerificationCode": "666666"
+        }
+        requests.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data),
+                         headers=headers)
+        write_json('secretKeyForTest', ' ')
         AccountFunction.add_headers()
 
     @allure.testcase('test_account_035 验证opt code')
     def test_account_035(self):
+        AccountFunction.add_headers()
         # 验证opt code
         secretKey = get_json()['secretKey']
         totp = pyotp.TOTP(secretKey)

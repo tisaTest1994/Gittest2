@@ -54,7 +54,7 @@ class AccountFunction:
     @staticmethod
     def get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07'):
         requests.request('GET', url='{}/account/security/mfa/email/sendVerificationCode'.format(env_url), headers=headers)
-        sleep(30)
+        sleep(40)
         email_info = get_email()
         assert '[Cabital] Confirm your email' == email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(email_info['title'])
         code = str(email_info['body']).split('"code":')[1].split('"')[1]
