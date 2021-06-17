@@ -115,16 +115,15 @@ class AccountFunction:
     def get_today_increase(type='BTC', account=email['email'], password=email['password']):
         # 获取本日utc0点
         utc_zero = get_zero_utc_time()
-
         # "获得现在数量币数量"
         number = AccountFunction.get_crypto_number(type=type)
         # 获得交易记录
         data = {
             "pagination_request": {
                 "cursor": "0",
-                "page_size": 9999999
+                "page_size": 99999
             },
-            "user_txn_sub_types": [1, 2, 4, 6],
+            "user_txn_sub_types": [1, 2, 4, 6, 7],
             "statuses": [2],
             "codes": [type]
         }
@@ -143,8 +142,8 @@ class AccountFunction:
                 elif y['user_txn_sub_type'] == 6:
                     number = float(number) + float(json.loads(y['details'])['currency']['amount'])
         # 获取昨天UTC23:59的价格
-        yesterday_time = datetime.datetime.now(tz=pytz.timezone('UTC')).strftime("%Y-%m-%d") + ' 0:00:00'
-        quote = AccountFunction.get_crypto_quote(type=type, limit_time=yesterday_time)
+        yesterday_time = datetime.now(tz=pytz.timezone('UTC')).strftime("%Y-%m-%d") + ' 0:00:00'
+        quote = sqlFunction.get_crypto_quote(type=type, limit_time=yesterday_time)
         yesterday_amount = (Decimal(number) * Decimal(quote)).quantize(Decimal('0.00'), ROUND_FLOOR)
         # 获得当前价格
         now_amount = AccountFunction.get_crypto_abs_amount(type=type, account=account, password=password)
@@ -155,7 +154,6 @@ class AccountFunction:
     @staticmethod
     def get_cost(type='ETH'):
         # 获得交易记录
-
         data = {
             "pagination_request": {
                 "cursor": "0",
@@ -180,7 +178,6 @@ class AccountFunction:
     # 查询交易状态
     @staticmethod
     def get_transaction_status(transaction_id, type):
-
         params = {
             'txn_sub_type': type
         }
@@ -236,6 +233,3 @@ class AccountFunction:
                 cfx_dict['cost'] = z['cost']
                 cfx_list.append(cfx_dict)
         return cfx_list
-
-
-

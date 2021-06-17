@@ -86,7 +86,7 @@ def write_json(key, value):
 # 获得本日UTC时间的0点
 def get_zero_utc_time():
     utc = pytz.timezone('UTC')
-    utc_zero = datetime.datetime.now(tz=utc).strftime("%Y-%m-%d") + ' 0:00:00'
+    utc_zero = datetime.now(tz=utc).strftime("%Y-%m-%d") + ' 0:00:00'
     logger.logger.info('UTC时间{}0点的时间戳是{}'.format(utc, utc_zero))
     return time.mktime(time.strptime(utc_zero, '%Y-%m-%d %H:%M:%S'))
 

@@ -1,5 +1,6 @@
 import pymysql.cursors
 from Function.common_function import *
+from Function.log import *
 
 
 class sqlFunction:
@@ -21,7 +22,7 @@ class sqlFunction:
     # 获取quote值
     @staticmethod
     def get_crypto_quote(pair_type='middle', type='BTC', limit_time='2021-05-07 08:00:00'):
-        sql = "select {} from quote where pair = '{}-USD' and purpose = 'Customer' and valid_until > '{}' limit 1;". \
+        sql = "select {} from quote where pair = '{}-USD' and purpose = 'Customer' and valid_until >= '{}' limit 1;". \
             format(pair_type, type, limit_time)
         logger.info('sql命令是{}'.format(sql))
         quote = sqlFunction().connect_mysql('pricing', sql=sql)
