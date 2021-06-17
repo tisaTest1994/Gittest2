@@ -260,8 +260,7 @@
   "crypto_list": [
     "BTC",
     "USDT",
-    "ETH",
-    "EUR"
+    "ETH"
   ],
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",

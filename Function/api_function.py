@@ -53,10 +53,12 @@ class AccountFunction:
     # 提现获取交易id
     @staticmethod
     def get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07'):
-        requests.request('GET', url='{}/account/security/mfa/email/sendVerificationCode'.format(env_url), headers=headers)
+        requests.request('GET', url='{}/account/security/mfa/email/sendVerificationCode'.format(env_url),
+                         headers=headers)
         sleep(40)
         email_info = get_email()
-        assert '[Cabital] Confirm your email' == email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(email_info['title'])
+        assert '[Cabital] Confirm your email' == email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(
+            email_info['title'])
         code = str(email_info['body']).split('"code":')[1].split('"')[1]
         secretKey = get_json()['secretKey']
         totp = pyotp.TOTP(secretKey)
@@ -70,7 +72,8 @@ class AccountFunction:
             "method": "ERC20"
         }
         print(headers)
-        r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
+                            headers=headers)
         logger.info('获取的交易订单json是{}'.format(r.text))
         return r.json()['transaction_id']
 
@@ -91,7 +94,7 @@ class AccountFunction:
         logger.info('获得报价的服务器时间是{}'.format(strTime))
         return r1.json()
 
-    # 获取钱包指定币种数量
+    # 获取钱包指定币种某个交易状态的数量
     @staticmethod
     def get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE'):
         r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers, timeout=10)
@@ -101,6 +104,18 @@ class AccountFunction:
                     if y['type'] == balance_type:
                         balance_type_available_amount = y['amount']
         return balance_type_available_amount
+
+    # 获取钱包指定币种全部数量
+    @staticmethod
+    def get_all_crypto_number():
+        r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
+        crypto_list = get_json()['crypto_list']
+        number_dict = {}
+        for i in r.json()['wallets']:
+            for y in crypto_list:
+                if i['code'] == y:
+                    number_dict[y] = i['amount']
+        return number_dict
 
     # 获取当前某个币的当前资产价值，用USD结算
     @staticmethod
@@ -112,43 +127,47 @@ class AccountFunction:
 
     # 获得今日损益
     @staticmethod
-    def get_today_increase(type='BTC', account=email['email'], password=email['password']):
-        # 获取本日utc0点
-        utc_zero = get_zero_utc_time()
-        # "获得现在数量币数量"
-        number = AccountFunction.get_crypto_number(type=type)
-        # 获得交易记录
-        data = {
-            "pagination_request": {
-                "cursor": "0",
-                "page_size": 99999
-            },
-            "user_txn_sub_types": [1, 2, 4, 6, 7],
-            "statuses": [2],
-            "codes": [type]
-        }
-        r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers,
-                            timeout=10)
-        for y in r.json()['transactions']:
-            if y['updated_at'] >= utc_zero:
+    def get_today_increase():
+        crypto_list = get_json()['crypto_list']
+        # 当前全部货币数量
+        number_dict = AccountFunction.get_all_crypto_number()
+        # 今天utc0点时间
+        yesterday_time = datetime.now(tz=pytz.timezone('UTC')).strftime("%Y-%m-%d") + ' 0:00:00'
+        for i in crypto_list:
+            # 目前货币数量
+            number = number_dict[i]
+            data = {
+                "pagination_request": {
+                    "cursor": "0",
+                    "page_size": 99999
+                },
+                "user_txn_sub_types": [1, 2, 4, 6, 7],
+                "statuses": [2],
+                "codes": [i],
+                "created_from": int(get_zero_utc_time())
+            }
+            r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers)
+            for y in r.json()['transactions']:
                 if y['user_txn_sub_type'] == 1:
                     number = float(number) - float(json.loads(y['details'])['currency']['amount'])
-                elif y['user_txn_sub_type'] == 2 and json.loads(y['details'])['but_currency']['code'] == type:
-                    number = float(number) - float(json.loads(y['details'])['but_currency']['amount'])
-                elif y['user_txn_sub_type'] == 2 and json.loads(y['details'])['sell_currency']['code'] == type:
-                    number = float(number) + float(json.loads(y['details'])['but_currency']['amount'])
+                elif y['user_txn_sub_type'] == 2 and json.loads(y['details'])['buy_currency']['code'] == i:
+                    number = float(number) - float(json.loads(y['details'])['buy_currency']['amount'])
+                elif y['user_txn_sub_type'] == 2 and json.loads(y['details'])['sell_currency']['code'] == i:
+                    number = float(number) + float(json.loads(y['details'])['buy_currency']['amount'])
                 elif y['user_txn_sub_type'] == 4:
                     number = float(number) - float(json.loads(y['details'])['currency']['amount'])
                 elif y['user_txn_sub_type'] == 6:
                     number = float(number) + float(json.loads(y['details'])['currency']['amount'])
-        # 获取昨天UTC23:59的价格
-        yesterday_time = datetime.now(tz=pytz.timezone('UTC')).strftime("%Y-%m-%d") + ' 0:00:00'
-        quote = sqlFunction.get_crypto_quote(type=type, limit_time=yesterday_time)
-        yesterday_amount = (Decimal(number) * Decimal(quote)).quantize(Decimal('0.00'), ROUND_FLOOR)
-        # 获得当前价格
-        now_amount = AccountFunction.get_crypto_abs_amount(type=type, account=account, password=password)
-        today_increase = (Decimal(now_amount) - Decimal(yesterday_amount)).quantize(Decimal('0.00'), ROUND_FLOOR)
-        return str(today_increase)
+                elif y['user_txn_sub_type'] == 7:
+                    number = float(number) - float(json.loads(y['details'])['currency']['amount'])
+            # 获取昨天UTC23:59的汇率价格
+            quote = sqlFunction.get_crypto_quote(type=i, limit_time=yesterday_time)
+            yesterday_amount = (Decimal(number) * Decimal(quote)).quantize(Decimal('0.00'), ROUND_FLOOR)
+            print(yesterday_amount)
+        # # 获得当前价格
+        # now_amount = AccountFunction.get_crypto_abs_amount(type=type, account=account, password=password)
+        # today_increase = (Decimal(now_amount) - Decimal(yesterday_amount)).quantize(Decimal('0.00'), ROUND_FLOOR)
+        # return str(today_increase)
 
     # 获得总持仓成本
     @staticmethod
@@ -206,7 +225,8 @@ class AccountFunction:
                     cfx_dict['profit'] = z['gnl']
                     cfx_dict['order_time'] = z['aggregation_no']
                     profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
-                    if str(cfx_book[str(z['book_id'])]).split('-')[1] == 'BTC' or str(cfx_book[str(z['book_id'])]).split('-')[1] == 'ETH':
+                    if str(cfx_book[str(z['book_id'])]).split('-')[1] == 'BTC' or \
+                            str(cfx_book[str(z['book_id'])]).split('-')[1] == 'ETH':
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:8])
                     elif str(cfx_book[str(z['book_id'])]).split('-')[1] == 'USDT':
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
@@ -222,7 +242,8 @@ class AccountFunction:
                     cfx_dict['profit'] = z['gnl']
                     cfx_dict['order_time'] = z['aggregation_no']
                     profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
-                    if str(cfx_book[str(z['book_id'])]).split('-')[1] == 'BTC' or str(cfx_book[str(z['book_id'])]).split('-')[1] == 'ETH':
+                    if str(cfx_book[str(z['book_id'])]).split('-')[1] == 'BTC' or \
+                            str(cfx_book[str(z['book_id'])]).split('-')[1] == 'ETH':
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:8])
                     elif str(cfx_book[str(z['book_id'])]).split('-')[1] == 'USDT':
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])

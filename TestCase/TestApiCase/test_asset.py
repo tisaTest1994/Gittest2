@@ -28,7 +28,7 @@ class TestAssetApi:
 
     @allure.testcase('test_asset_002 ')
     def test_asset_002(self):
-        a = AccountFunction.get_today_increase(type='BTC')
+        a = AccountFunction.get_today_increase()
         print(a)
 
 
