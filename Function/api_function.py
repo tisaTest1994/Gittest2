@@ -163,11 +163,10 @@ class AccountFunction:
             # 获取昨天UTC23:59的汇率价格
             quote = sqlFunction.get_crypto_quote(type=i, day_time=yesterday_time)
             yesterday_amount = (Decimal(number) * Decimal(quote)).quantize(Decimal('0.00'), ROUND_FLOOR)
-            print(yesterday_amount)
-        # # 获得当前价格
-        # now_amount = AccountFunction.get_crypto_abs_amount(type=type, account=account, password=password)
-        # today_increase = (Decimal(now_amount) - Decimal(yesterday_amount)).quantize(Decimal('0.00'), ROUND_FLOOR)
-        # return str(today_increase)
+            # 获得当前价格
+            now_amount = AccountFunction.get_crypto_abs_amount(type=i)
+            today_increase = (Decimal(now_amount) - Decimal(yesterday_amount)).quantize(Decimal('0.00'), ROUND_FLOOR)
+        return str(today_increase)
 
     # 获得总持仓成本
     @staticmethod
