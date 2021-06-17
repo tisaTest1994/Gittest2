@@ -132,7 +132,7 @@ class AccountFunction:
         # 当前全部货币数量
         number_dict = AccountFunction.get_all_crypto_number()
         # 今天utc0点时间
-        yesterday_time = datetime.now(tz=pytz.timezone('UTC')).strftime("%Y-%m-%d") + ' 0:00:00'
+        yesterday_time = datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d")
         for i in crypto_list:
             # 目前货币数量
             number = number_dict[i]
@@ -161,7 +161,7 @@ class AccountFunction:
                 elif y['user_txn_sub_type'] == 7:
                     number = float(number) - float(json.loads(y['details'])['currency']['amount'])
             # 获取昨天UTC23:59的汇率价格
-            quote = sqlFunction.get_crypto_quote(type=i, limit_time=yesterday_time)
+            quote = sqlFunction.get_crypto_quote(type=i, day_time=yesterday_time)
             yesterday_amount = (Decimal(number) * Decimal(quote)).quantize(Decimal('0.00'), ROUND_FLOOR)
             print(yesterday_amount)
         # # 获得当前价格
