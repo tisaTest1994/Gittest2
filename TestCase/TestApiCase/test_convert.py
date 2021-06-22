@@ -136,6 +136,7 @@ class TestConvertApi:
                     logger.info('申请换汇参数{}'.format(data))
                     sleep(8)
                     logger.info('换汇返回值{}'.format(r.text))
+                    print(r.text)
                     assert r.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
                         buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[0])

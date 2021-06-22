@@ -630,7 +630,7 @@ class TestSavingCurrentApi:
         with allure.step("赎回USDT投资项目成功"):
             data = {
                 "tx_type": 2,
-                "amount": "100000000",
+                "amount": "1000000",
                 "code": BTC_item['code']
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
@@ -769,3 +769,21 @@ class TestSavingCurrentApi:
             logger.info('现在时间戳是{}'.format(now_time))
             assert int(now_time) <= int(redeem_settle_time), '确定赎回日期是D+1错误'
             assert int(now_time) + 86400 >= int(redeem_settle_time), '确定赎回日期是D+1错误'
+
+    # @allure.testcase('test_saving_current_023 申购之后立马赎回')
+    # def test_saving_current_023(self):
+    #     data = {
+    #         "tx_type": 1,
+    #         "amount": "7.01327",
+    #         "code": 'ETH'
+    #     }
+    #     r = session.request('POST', url='https://api.latibac.com/api/v1/earn/products/a1220392-194c-432c-a961-eff561bb72b2/transactions',data=json.dumps(data), headers=headers)
+    #     print(r.json())
+    #
+    #     data = {
+    #         "tx_type": 2,
+    #         "amount": "7.00087",
+    #         "code": 'ETH'
+    #     }
+    #     r = session.request('POST', url='https://api.latibac.com/api/v1/earn/products/a1220392-194c-432c-a961-eff561bb72b1/transactions', data=json.dumps(data), headers=headers)
+    #     print(r.json())

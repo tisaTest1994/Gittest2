@@ -133,6 +133,7 @@ class AccountFunction:
         number_dict = AccountFunction.get_all_crypto_number()
         # 今天utc0点时间
         yesterday_time = datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d")
+        today_increase = {}
         for i in crypto_list:
             # 目前货币数量
             number = number_dict[i]
@@ -158,6 +159,7 @@ class AccountFunction:
                     number = float(number) - float(json.loads(y['details'])['currency']['amount'])
                 elif y['user_txn_sub_type'] == 6:
                     number = float(number) + float(json.loads(y['details'])['currency']['amount'])
+                    print(y)
                 elif y['user_txn_sub_type'] == 7:
                     number = float(number) - float(json.loads(y['details'])['currency']['amount'])
             # 获取昨天UTC23:59的汇率价格
@@ -165,7 +167,7 @@ class AccountFunction:
             yesterday_amount = (Decimal(number) * Decimal(quote)).quantize(Decimal('0.00'), ROUND_FLOOR)
             # 获得当前价格
             now_amount = AccountFunction.get_crypto_abs_amount(type=i)
-            today_increase = (Decimal(now_amount) - Decimal(yesterday_amount)).quantize(Decimal('0.00'), ROUND_FLOOR)
+            today_increase[i] = (Decimal(yesterday_amount) - Decimal(now_amount)).quantize(Decimal('0.00'), ROUND_FLOOR)
         return str(today_increase)
 
     # 获得总持仓成本
