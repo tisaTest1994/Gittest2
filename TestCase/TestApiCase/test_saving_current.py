@@ -287,7 +287,7 @@ class TestSavingCurrentApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'EARNINGTXN000013' in r.text, "投资金额小于最小投资BTC数量错误，返回值是{}".format(r.text)
+                assert 'Minimum: 0.001 BTC' in r.text, "投资金额小于最小投资BTC数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_current_009 投资金额小于最小投资ETH数量')
     def test_saving_current_009(self):
@@ -314,7 +314,7 @@ class TestSavingCurrentApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'EARNINGTXN000013' in r.text, "投资金额小于最小投资ETH数量错误，返回值是{}".format(r.text)
+                assert 'Minimum: 0.01 ETH' in r.text, "投资金额小于最小投资ETH数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_current_010 投资金额小于最小投资USDT数量')
     def test_saving_current_010(self):
@@ -342,7 +342,7 @@ class TestSavingCurrentApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'EARNINGTXN000013' in r.text, "投资金额小于最小投资USDT数量错误，返回值是{}".format(r.text)
+                assert 'Minimum: 0.01 USDT' in r.text, "投资金额小于最小投资USDT数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_current_011 获取产品持有情况')
     def test_saving_current_011(self):

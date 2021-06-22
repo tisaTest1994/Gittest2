@@ -273,7 +273,7 @@ class TestSavingFixApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert 'EARNINGTXN000013' in r.text, '购买定期产品最小额度错误, 返回值是{}'.format(r.text)
+                        assert 'Minimum:' in r.text, '购买定期产品最小额度错误, 返回值是{}'.format(r.text)
                         assert Decimal(balance_amount_old) == Decimal(balance_amount_latest), '购买定期产品最小额度错误,购买前钱包BTC数量{},购买后钱包BTC数量{}'.format(balance_amount_old, balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(saving_amount_latest), '购买定期产品最小额度错误,购买前活期BTC数量{},购买后活期BTC数量{}'.format(saving_amount_old, saving_amount_latest)
                         assert Decimal(fix_amount_old) == Decimal(fix_amount_latest), '购买定期产品最小额度错误,购买前定期BTC数量{},购买后定期BTC数量{}'.format(balance_amount_old,  balance_amount_latest)
@@ -323,7 +323,7 @@ class TestSavingFixApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert 'EARNINGTXN000013' in r.text, '购买定期产品最小额度错误, 返回值是{}'.format(r.text)
+                        assert 'Minimum:' in r.text, '购买定期产品最小额度错误, 返回值是{}'.format(r.text)
                         assert Decimal(balance_amount_old) == Decimal(balance_amount_latest), '购买定期产品最小额度错误,购买前钱包ETH数量{},购买后钱包BTC数量{}'.format(balance_amount_old, balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(saving_amount_latest), '购买定期产品最小额度错误,购买前活期ETH数量{},购买后活期BTC数量{}'.format(saving_amount_old, saving_amount_latest)
                         assert Decimal(fix_amount_old) == Decimal(fix_amount_latest), '购买定期产品最小额度错误,购买前定期ETH数量{},购买后定期ETH数量{}'.format(balance_amount_old,  balance_amount_latest)
@@ -373,7 +373,7 @@ class TestSavingFixApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert 'EARNINGTXN000013' in r.text, '购买定期产品最小额度错误, 返回值是{}'.format(r.text)
+                        assert 'Minimum:' in r.text, '购买定期产品最小额度错误, 返回值是{}'.format(r.text)
                         assert Decimal(balance_amount_old) == Decimal(balance_amount_latest), '购买定期产品最小额度错误,购买前钱包USDT数量{},购买后钱包USDT数量{}'.format(balance_amount_old, balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(saving_amount_latest), '购买定期产品最小额度错误,购买前活期USDT数量{},购买后活期USDT数量{}'.format(saving_amount_old, saving_amount_latest)
                         assert Decimal(fix_amount_old) == Decimal(fix_amount_latest), '购买定期产品最小额度错误,购买前定期USDT数量{},购买后定期USDT数量{}'.format(balance_amount_old,  balance_amount_latest)
@@ -437,7 +437,7 @@ class TestSavingFixApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert 'EARNINGTXN000014' in r.text, '购买定期产品最大额度错误, 返回值是{}'.format(r.text)
+                        assert 'Maximum:' in r.text, '购买定期产品最大额度错误, 返回值是{}'.format(r.text)
                         assert Decimal(balance_amount_old) == Decimal(
                             balance_amount_latest), '购买定期产品最大额度错误,购买前钱包BTC数量{},购买后钱包BTC数量{}'.format(balance_amount_old,
                                                                                                     balance_amount_latest)
@@ -493,7 +493,7 @@ class TestSavingFixApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert 'EARNINGTXN000014' in r.text, '购买定期产品最大额度错误, 返回值是{}'.format(r.text)
+                        assert 'Maximum:' in r.text, '购买定期产品最大额度错误, 返回值是{}'.format(r.text)
                         assert Decimal(balance_amount_old) == Decimal(
                             balance_amount_latest), '购买定期产品最大额度错误,购买前钱包ETH数量{},购买后钱包BTC数量{}'.format(balance_amount_old,
                                                                                                     balance_amount_latest)
@@ -549,7 +549,7 @@ class TestSavingFixApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert 'EARNINGTXN000014' in r.text, '购买定期产品最大额度错误, 返回值是{}'.format(r.text)
+                        assert 'Maximum:' in r.text, '购买定期产品最大额度错误, 返回值是{}'.format(r.text)
                         assert Decimal(balance_amount_old) == Decimal(
                             balance_amount_latest), '购买定期产品最大额度错误,购买前钱包USDT数量{},购买后钱包USDT数量{}'.format(
                             balance_amount_old, balance_amount_latest)

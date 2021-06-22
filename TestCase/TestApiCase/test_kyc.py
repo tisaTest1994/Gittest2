@@ -26,7 +26,7 @@ class TestKycApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'KYC_CASE_000006' in r.text, "通过kyc的用户，获取kyc上传token失败错误，返回值是{}".format(r.text)
+            assert 'Exist pass case.' in r.text, "通过kyc的用户，获取kyc上传token失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_002 未通过kyc的用户，获取kyc上传token')
     def test_kyc_002(self):

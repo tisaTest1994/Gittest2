@@ -41,7 +41,7 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'method is not support reason' in r.text, "查询不到转入记录（使用错误币种）错误，返回值是{}".format(r.text)
+                assert 'method is not support' in r.text, "查询不到转入记录（使用错误币种）错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_pay_in_003 查询转入记录（使用转币链查询）')
     def test_pay_in_003(self):
@@ -73,4 +73,4 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'method is not support reason' in r.text, "查询转入记录（使用错误转币链查询）错误，返回值是{}".format(r.text)
+                assert 'method is not support' in r.text, "查询转入记录（使用错误转币链查询）错误，返回值是{}".format(r.text)

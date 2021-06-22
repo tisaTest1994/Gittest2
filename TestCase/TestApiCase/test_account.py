@@ -54,7 +54,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'ACC_REGISTRY_000002' in r.text, "用户已经存在错误，返回值是{}".format(r.text)
+            assert 'The email address has been registered' in r.text, "用户已经存在错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_003 注册时，输入错误验证码导致注册失败')
     def test_account_003(self):
@@ -63,7 +63,7 @@ class TestAccountApi:
         with allure.step("注册"):
             data = {
                 "emailAddress": generate_email(),
-                "verificationCode": "1666666",
+                "verificationCode": "166666",
                 "citizenCountryCode": citizenCountryCode,
                 "password": "Zcdsw123"
             }
@@ -75,7 +75,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'COMMON_000006' in r.text, "注册时，输入错误验证码导致注册失败，返回值是{}".format(r.text)
+            assert 'The verification code was wrong' in r.text, "注册时，输入错误验证码导致注册失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_004 选择的国家代码可以成功申请注册验证码')
     def test_account_004(self):
@@ -115,7 +115,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "ACC_REGISTRY_000002" in r.text, "申请注册验证码的邮箱已注册错误，返回值是{}".format(r.text)
+            assert "The email address has been registered" in r.text, "申请注册验证码的邮箱已注册错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_006 申请注册验证码邮箱在黑名单')
     def test_account_006(self):
@@ -134,7 +134,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "ACC_REGISTRY_000001" in r.text, "申请注册验证码邮箱在黑名单错误，返回值是{}".format(r.text)
+            assert "Registration failed. Please contact our customer service if the problem persists" in r.text, "申请注册验证码邮箱在黑名单错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_007 登录已经注册账号')
     def test_account_007(self):
@@ -174,7 +174,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 404, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'ACC_LOGIN_000001' in r.text, "登录已经注册账号输入错误密码错误，返回值是{}".format(r.text)
+            assert 'Incorrect account or password.' in r.text, "登录已经注册账号输入错误密码错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_009 登录未注册账号')
     def test_account_009(self):
@@ -191,7 +191,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 404, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'ACC_LOGIN_000001' in r.text, "登录已经注册账号输入错误密码错误，返回值是{}".format(r.text)
+            assert 'Incorrect account or password.' in r.text, "登录已经注册账号输入错误密码错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_010 登录已经注册的黑名单账号')
     def test_account_010(self):
@@ -249,7 +249,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 401, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'ACC_LOGIN_000003' in r.text, "用错误的token刷新token错误，返回值是{}".format(r.text)
+            assert 'Refresh token error' in r.text, "用错误的token刷新token错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_013 用空的token刷新token')
     def test_account_013(self):
@@ -265,7 +265,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'COMMON_000006' in r.text, "用空的token刷新token错误，返回值是{}".format(r.text)
+            assert 'Invalid refresh token' in r.text, "用空的token刷新token错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_014 修改密码')
     def test_account_014(self):
@@ -334,7 +334,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "ACC_RESET_000001" in r.text, "使用错误原始密码修改密码错误，返回值是{}".format(r.text)
+            assert "Invalid original password." in r.text, "使用错误原始密码修改密码错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_017 忘记密码验证码')
     def test_account_017(self):
@@ -370,7 +370,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "ACC_USER_000002" in r.text, "用户未注册忘记密码验证码错误，返回值是{}".format(r.text)
+            assert "The email address is not registered." in r.text, "用户未注册忘记密码验证码错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_019 忘记密码')
     def test_account_019(self):
@@ -410,7 +410,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "ACC_USER_000002" in r.text, "未注册用户忘记密码失败错误，返回值是{}".format(r.text)
+            assert "The email address is not registered." in r.text, "未注册用户忘记密码失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_021 用户忘记密码验证码错误')
     def test_account_021(self):
@@ -433,7 +433,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "ACC_VERIFY_CODE_000001" in r.text, "用户忘记密码验证码错误错误，返回值是{}".format(r.text)
+            assert "The verification code was wrong." in r.text, "用户忘记密码验证码错误错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_022 查询用户信息')
     def test_account_022(self):
@@ -526,7 +526,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "ACC_LEGAL_ENTITY_000001" in r.text, "申请注册验证码,使用白名单外国家代码被拒绝错误，返回值是{}".format(r.text)
+            assert "Sorry, this country is temporarily not supported. Your email will be notified when we launch in your country." in r.text, "申请注册验证码,使用白名单外国家代码被拒绝错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_026 用户使用特殊符号注册')
     def test_account_026(self):
@@ -568,7 +568,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'COMMON_000006' in r.text, "注册用户验证码缺少位数输入错误，返回值是{}".format(r.text)
+            assert 'Invalid verification code' in r.text, "注册用户验证码缺少位数输入错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_028 注册用户验证码输入字符')
     def test_account_028(self):
@@ -589,7 +589,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'COMMON_000006' in r.text, "注册用户验证码输入字符错误，返回值是{}".format(r.text)
+            assert 'Invalid verification code' in r.text, "注册用户验证码输入字符错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_029 登录已经注册账号密码使用特殊字符')
     def test_account_029(self):
@@ -803,3 +803,23 @@ class TestAccountApi:
             # sql = "SELECT purposes FROM user_registry_purpose where user_id = '{}';".format(useId)
             # purposes = sqlFunction.connect_mysql('account', sql)
 
+    @allure.testcase('test_account_039 注册时，多输入几位验证码导致注册失败')
+    def test_account_039(self):
+        with allure.step("获取随机国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+        with allure.step("注册"):
+            data = {
+                "emailAddress": generate_email(),
+                "verificationCode": "1366666",
+                "citizenCountryCode": citizenCountryCode,
+                "password": "Zcdsw123"
+            }
+            r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'Invalid verification code' in r.text, "注册时，输入错误验证码导致注册失败，返回值是{}".format(r.text)
