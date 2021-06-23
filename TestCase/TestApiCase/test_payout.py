@@ -142,11 +142,9 @@ class TestPayoutApi:
         with allure.step("p/l验证"):
             sleep(5)
             sql = "select * from transaction_history where transaction_id='{}';".format(r.json()['transaction_id'])
-            print(sql)
             sql_info = sqlFunction.connect_mysql(db='assetstat', sql=sql)
-            print(sql_info)
+            assert sql_info[0] is not None, "payout的P/L错误，sql命令是{}".format(sql)
 
-    @allure.testcase('test_payout_008 查询提现详情')
     def test_payout_008(self):
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
