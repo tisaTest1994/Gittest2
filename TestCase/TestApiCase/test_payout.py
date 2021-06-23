@@ -7,7 +7,7 @@ import allure
 import pyotp
 
 
-class TestPayoutNewApi:
+class TestPayoutApi:
 
     # 初始化class
     def setup_class(self):
