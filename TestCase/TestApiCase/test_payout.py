@@ -116,8 +116,15 @@ class TestPayoutApi:
             requests.request('GET', url='{}/account/security/mfa/email/sendVerificationCode'.format(env_url), headers=headers)
             sleep(30)
         with allure.step("获取邮件中的验证码"):
-            email_info = get_email()
-            assert '[Cabital] Confirm your email' == email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(email_info['title'])
+            sleep_time = 0
+            while sleep_time < 80:
+                sleep_time = sleep_time + 5
+                sleep(5)
+                email_info = get_email()
+                if '[Cabital] Confirm your email' == email_info['title']:
+                    break
+            assert '[Cabital] Confirm your email' == email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(
+                email_info['title'])
             code = str(email_info['body']).split('"code":')[1].split('"')[1]
             secretKey = get_json()['secretKey']
             totp = pyotp.TOTP(secretKey)
@@ -144,6 +151,14 @@ class TestPayoutApi:
             sql = "select * from transaction_history where transaction_id='{}';".format(r.json()['transaction_id'])
             sql_info = sqlFunction.connect_mysql(db='assetstat', sql=sql)
             assert sql_info[0] is not None, "payout的P/L错误，sql命令是{}".format(sql)
+        with allure.step("wallet internal_balance验证"):
+            sleep(5)
+            sql = "select wallet_id from internal_balance where transaction_id='{}';".format(r.json()['transaction_id'])
+            sql_info = sqlFunction.connect_mysql(db='wallet', sql=sql)
+            for i in sql_info:
+                print(i)
+                assert i is not None, "payout的P/L错误，sql命令是{}".format(sql)
+
 
     def test_payout_008(self):
         with allure.step("获得交易transaction_id"):

@@ -62,8 +62,7 @@ class AccountFunction:
             email_info = get_email()
             if '[Cabital] Confirm your email' == email_info['title']:
                 break
-        assert '[Cabital] Confirm your email' == email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(
-            email_info['title'])
+        assert '[Cabital] Confirm your email' == email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(email_info['title'])
         code = str(email_info['body']).split('"code":')[1].split('"')[1]
         secretKey = get_json()['secretKey']
         totp = pyotp.TOTP(secretKey)
