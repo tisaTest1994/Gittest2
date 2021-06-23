@@ -157,7 +157,7 @@ class TestPayoutApi:
             sql_info = sqlFunction.connect_mysql(db='wallet', sql=sql)
             for i in sql_info:
                 print(i)
-                assert i is not None, "payout的P/L错误，sql命令是{}".format(sql)
+                assert i['wallet_id'] is not None, "payout的P/L错误，sql命令是{}".format(sql)
 
 
     def test_payout_008(self):
