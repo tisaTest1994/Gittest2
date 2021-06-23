@@ -5,10 +5,10 @@ import os
 
 
 class MyUser(HttpUser):
-    account_list = ['yilei6@cabital.com']
+    account_list = get_json()['account_list']
     wait_time = between(0.25, 0.5)
 
-    @task(1)
+    @task(2)
     def core(self):
         accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken
@@ -17,9 +17,9 @@ class MyUser(HttpUser):
         if r.status_code == 200:
             print("success: {}".format(r.json()))
         else:
-            print("failed: {}".format(r.text))
+            print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
 
-    @task(1)
+    @task(0)
     def cfx(self):
         accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken
@@ -269,6 +269,116 @@ class MyUser(HttpUser):
                                                                                     sell_amount_wallet_balance,
                                                                                     sell_amount,
                                                                                     sell_amount_wallet_balance_latest))
+
+    @task(2)
+    def earn_current(self):
+        accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
+        headers['Authorization'] = "Bearer " + accessToken
+        headers['X-Currency'] = 'USD'
+        data = {
+            "tx_type": 1,
+            "amount": "0.02327",
+            "code": 'ETH'
+        }
+        r = self.client.post(url='{}/earn/products/a1220392-194c-432c-a961-eff561bb72b2/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        if r.status_code == 200:
+            print("success: {}".format(r.json()))
+        else:
+            print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
+
+    @task(1)
+    def redeem_current(self):
+        accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
+        headers['Authorization'] = "Bearer " + accessToken
+        headers['X-Currency'] = 'USD'
+        data = {
+            "tx_type": 2,
+            "amount": "0.00087",
+            "code": 'ETH'
+        }
+        r = self.client.post(url='{}/earn/products/a1220392-194c-432c-a961-eff561bb72b2/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        if r.status_code == 200:
+            print("success: {}".format(r.json()))
+        else:
+            print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
+
+    @task(1)
+    def fixed(self):
+        accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
+        headers['Authorization'] = "Bearer " + accessToken
+        headers['X-Currency'] = 'USD'
+        with allure.step("获取定期产品列表"):
+            r = self.client.get(url='{}/earn/fix/products'.format(env_url), headers=headers)
+        for i in r.json():
+            for y in i['products']:
+                sleep(5)
+                if i['code'] == 'BTC':
+                    data = {
+                        "subscribe_amount": {
+                            "code": i["code"],
+                            "amount": "0.00124"
+                        },
+                        "maturity_interest": {
+                            "code": i["code"],
+                            "amount": "0.01"
+                        }
+                    }
+                    data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * Decimal(y['apy']) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
+                    r = self.client.post(url='{}/earn/fix/products/{}/transactions'.format(env_url, y['product_id']), data=json.dumps(data), headers=headers)
+                    if r.status_code == 200:
+                        print("success: {}".format(r.json()))
+                    else:
+                        print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
+                elif i['code'] == 'ETH':
+                    data = {
+                        "subscribe_amount": {
+                            "code": i["code"],
+                            "amount": "0.0224"
+                        },
+                        "maturity_interest": {
+                            "code": i["code"],
+                            "amount": "0.01"
+                        }
+                    }
+                    data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * Decimal(y['apy']) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
+                    r = self.client.post(url='{}/earn/fix/products/{}/transactions'.format(env_url, y['product_id']), data=json.dumps(data), headers=headers)
+                    if r.status_code == 200:
+                        print("success: {}".format(r.json()))
+                    else:
+                        print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
+                elif i['code'] == 'USDT':
+                    data = {
+                        "subscribe_amount": {
+                            "code": i["code"],
+                            "amount": "22"
+                        },
+                        "maturity_interest": {
+                            "code": i["code"],
+                            "amount": "0.01"
+                        }
+                    }
+                    data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * Decimal(y['apy']) / Decimal(365)).quantize(Decimal('0.000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
+                    r = self.client.post(url='{}/earn/fix/products/{}/transactions'.format(env_url, y['product_id']), data=json.dumps(data), headers=headers)
+                    if r.status_code == 200:
+                        print("success: {}".format(r.json()))
+                    else:
+                        print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
+
+    @task(1)
+    def get_market(self):
+        for i in ['BTCEUR', 'BTCUSD', 'ETHEUR', 'ETHUSD', 'USDEUR']:
+            for y in ['10', '60', 'D', 'W', 'M']:
+                params = {
+                    "pair": i,
+                    "interval": y,
+                    "from_time": "0",
+                    "to_time": str(datetime.now().timestamp()).split('.')[0]
+                }
+                r = self.client.get(url='{}/marketstat/public/quote-chart'.format(env_url), params=params)
+                if r.status_code == 200:
+                    print("success: {}".format(r.json()))
+                else:
+                    print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
 
 
 if __name__ == "__main__":

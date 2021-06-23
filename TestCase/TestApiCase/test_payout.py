@@ -139,6 +139,11 @@ class TestPayoutNewApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['transaction_id'] is not None, "MFA认证提现ETH成功错误，返回值是{}".format(r.text)
+        with allure.step("p/l验证"):
+            sql = "select * from transaction_history where transaction_id='{}';".format(r.json()['transaction_id'])
+            print(sql)
+            sql_info = sqlFunction.connect_mysql(db='assetstat', sql=sql)
+            print(sql_info)
 
     @allure.testcase('test_payout_008 查询提现详情')
     def test_payout_008(self):

@@ -301,5 +301,6 @@
   "secretKeyForTest": " ",
   "slackTestUrl": "https://hooks.slack.com/services/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",
   "slackUrl": "https://hooks.slack.com/services/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",
-  "test": "https://api.latibac.com/api/v1"
+  "test": "https://api.latibac.com/api/v1",
+  "account_list": ["yilei6@cabital.com", "yilei7@cabital.com", "yilei8@cabital.com", "yilei10@cabital.com", "yilei22@cabital.com", "yilei24@cabital.com", "yilei25@cabital.com"]
 }

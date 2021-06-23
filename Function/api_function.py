@@ -26,7 +26,7 @@ class AccountFunction:
         headers['Authorization'] = "Bearer " + run.accountToken
         headers['X-Currency'] = currency
 
-    # 获取operate用户 token
+    # 获取operate用户的token
     @staticmethod
     def get_operate_account_token(account, password):
         data = {
