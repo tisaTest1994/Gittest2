@@ -141,7 +141,7 @@ class TestPayoutApi:
             assert r.json()['transaction_id'] is not None, "MFA认证提现ETH成功错误，返回值是{}".format(r.text)
         with allure.step("p/l验证"):
             sleep(5)
-            sql = "select * from transaction_history where transaction_id='132{}';".format(r.json()['transaction_id'])
+            sql = "select * from transaction_history where transaction_id='{}';".format(r.json()['transaction_id'])
             sql_info = sqlFunction.connect_mysql(db='assetstat', sql=sql)
             assert sql_info[0] is not None, "payout的P/L错误，sql命令是{}".format(sql)
 
