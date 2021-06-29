@@ -437,15 +437,6 @@ class TestAccountApi:
 
     @allure.testcase('test_account_022 查询用户信息')
     def test_account_022(self):
-        with allure.step("忘记密码"):
-            account = generate_email()
-            password = 'Zcdsw123'
-            with allure.step("提前先注册好"):
-                AccountFunction.sign_up(account, password)
-        with allure.step("获取token"):
-            accessToken = AccountFunction.get_account_token(account=account, password=password)
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
         with allure.step("查询用户信息"):
             r = requests.request('GET', url='{}/account/info'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):

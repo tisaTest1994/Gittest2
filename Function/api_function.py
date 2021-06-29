@@ -4,6 +4,9 @@ from Function.log import *
 from decimal import *
 import time
 import pyotp
+from hashlib import sha256
+import hmac
+import base64
 
 
 class AccountFunction:
@@ -60,9 +63,9 @@ class AccountFunction:
             sleep_time = sleep_time + 5
             sleep(5)
             email_info = get_email()
-            if '[Cabital] Confirm your email' == email_info['title']:
+            if '[Cabital] Verify Your Email' in email_info['title']:
                 break
-        assert '[Cabital] Confirm your email' == email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(email_info['title'])
+        assert '[Cabital] Verify Your Email' in email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(email_info['title'])
         code = str(email_info['body']).split('"code":')[1].split('"')[1]
         secretKey = get_json()['secretKey']
         totp = pyotp.TOTP(secretKey)
@@ -259,3 +262,18 @@ class AccountFunction:
                 cfx_dict['cost'] = z['cost']
                 cfx_list.append(cfx_dict)
         return cfx_list
+
+    @staticmethod
+    def get_sign(data, key):
+        key = key.encode('utf-8')
+        message = data.encode('utf-8')
+        sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
+        sign = str(sign, 'utf-8')
+        return sign
+
+    @staticmethod
+    def make_access_sign(unix_time, method, url, body):
+        data = '{}{}{}{}'.format(unix_time, method, url, body)
+        key = get_json()['kycSecretKey']
+        sign = AccountFunction.get_sign(data, key)
+        return sign

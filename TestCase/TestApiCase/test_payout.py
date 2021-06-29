@@ -121,9 +121,9 @@ class TestPayoutApi:
                 sleep_time = sleep_time + 5
                 sleep(5)
                 email_info = get_email()
-                if '[Cabital] Confirm your email' == email_info['title']:
+                if '[Cabital] Verify Your Email' in email_info['title']:
                     break
-            assert '[Cabital] Confirm your email' == email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(
+            assert '[Cabital] Verify Your Email' in email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(
                 email_info['title'])
             code = str(email_info['body']).split('"code":')[1].split('"')[1]
             secretKey = get_json()['secretKey']
@@ -135,7 +135,7 @@ class TestPayoutApi:
             data = {
                 "amount": "0.02",
                 "code": "ETH",
-                "address": "0x21306970c072395b5A44e394982EFE4c7d722895",
+                "address": "0xbff7F3e265B03287F52251a4D9A85D620e34b81B",
                 "method": "ERC20"
             }
             r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
@@ -159,13 +159,13 @@ class TestPayoutApi:
                 print(i)
                 assert i['wallet_id'] is not None, "payout的P/L错误，sql命令是{}".format(sql)
 
-
     def test_payout_008(self):
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
             logger.info('transaction_id是{}'.format(transaction_id))
         with allure.step("查询提现详情"):
             r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id), headers=headers)
+            print(r.json())
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -267,3 +267,4 @@ class TestPayoutApi:
         #     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         # with allure.step("校验返回值"):
         #     assert r.json()['fee'] == {"code":"EUR","amount":"0"}, "预交验法币提现错误，返回值是{}".format(r.text)
+

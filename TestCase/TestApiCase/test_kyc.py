@@ -1,3 +1,5 @@
+import json
+import http.client
 from Function.api_function import *
 from run import *
 from Function.log import *
@@ -6,6 +8,9 @@ import allure
 
 # kyc相关cases
 class TestKycApi:
+
+    kyc_url = get_json()['kycUrl']
+    kyc_headers = get_json()['kycHeaders']
 
     # 初始化class
     def setup_class(self):
@@ -86,3 +91,91 @@ class TestKycApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'id' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
+
+# 以下是提供给bybit的kyc接口
+
+    @allure.testcase('test_kyc_005 创建Kyc case')
+    def test_kyc_005(self):
+        externalCaseId = generate_string(30)
+        kyc_headers = self.kyc_headers
+        data = {
+            "externalCaseId": externalCaseId,
+            "screenType": "INDIVIDUAL",
+            "fullName": "John Doe",
+            "individualInfo": {
+                "gender": "MALE",
+                "dob": "2002-02-02",
+                "nationality": "JPN",
+                "residentialCountry": "HKG"
+            },
+            "organizationInfo": {
+                "registeredCountry": "HKG"
+            }
+        }
+        unix_time = int(time.time())
+        sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases', body=json.dumps(data))
+        kyc_headers['ACCESS-SIGN'] = sign
+        kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+        r = session.request('POST', url='{}/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
+        print(r.url)
+        print(r.text)
+
+
+        conn = http.client.HTTPSConnection('api.pipedream.com')
+        conn.request("GET", '/v1/sources/dc_yLujK7K/event_summaries?expand=event', '', {
+            'Authorization': 'Bearer <api_key>',
+        })
+
+        res = conn.getresponse()
+        data = res.read()
+
+        print(data.decode("utf-8"))
+
+    @allure.testcase('test_kyc_006 查询Kyc case')
+    def test_kyc_006(self):
+        kyc_headers = self.kyc_headers
+        unix_time = int(time.time())
+        sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                url='{}/cases'.format(self.kyc_url))
+        caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
+        kyc_headers['ACCESS-SIGN'] = sign
+        kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+        r = session.request('GET', url='{}/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+        print(r.text)
+
+    @allure.testcase('test_kyc_007 打开特定 KYC Case 的持续性扫描')
+    def test_kyc_007(self):
+        kyc_headers = self.kyc_headers
+        caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
+        r = session.request('POST', url='{}/cases/{}/ogs'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+        print(r.text)
+
+    @allure.testcase('test_kyc_008 关闭特定 KYC Case 的持续性扫描')
+    def test_kyc_008(self):
+        kyc_headers = self.kyc_headers
+        caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
+        r = session.request('DELETE', url='{}/cases/{}/ogs'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+        print(r.text)
+
+    @allure.testcase('test_kyc_008 关闭特定 KYC Case 的持续性扫描')
+    def test_kyc_009(self):
+        kyc_headers = self.kyc_headers
+        caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
+        data = {
+            "decision": "ACCEPT",
+            "comment": "决策备注"
+        }
+        r = session.request('POST', url='{}/cases/{}/decision'.format(self.kyc_url, caseSystemId), data=json.dumps(data), headers=kyc_headers)
+        print(r.text)
+
+
+    def test_kyc_015(self):
+        conn = http.client.HTTPSConnection('api.pipedream.com')
+        conn.request("GET", '/v1/sources/dc_yLujK7K/event_summaries?expand=event', '', {
+            'Authorization': 'Bearer 7759a7e3653dcef8500ffe2c577102e6',
+        })
+        res = conn.getresponse()
+        data = res.read()
+
+
+        print(data.decode("utf-8"))

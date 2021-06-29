@@ -1,5 +1,14 @@
 {
   "PRIVATE-TOKEN": "tjkst4kHzfDPwyThPoX-",
+  "account_list": [
+    "yilei6@cabital.com",
+    "yilei7@cabital.com",
+    "yilei8@cabital.com",
+    "yilei10@cabital.com",
+    "yilei22@cabital.com",
+    "yilei24@cabital.com",
+    "yilei25@cabital.com"
+  ],
   "blacklist": {
     "email": "yilei1@cabital.com",
     "password": "Zcdsw123"
@@ -268,7 +277,7 @@
     "host": "imap.gmail.com",
     "password": "Zcdsw123",
     "port": "993",
-    "security_code": "kkmqebcswyxbijwx",
+    "security_code": "ilyjqzbyoljfvtwy",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
   },
   "env": "test",
@@ -280,6 +289,13 @@
     "Content-Encoding": "deflate",
     "Content-Type": "application/json"
   },
+  "kycApiKey": "bce4fc7f8b4448d3b4f199af43924d75",
+  "kycHeaders": {
+    "ACCESS-KEY": "bce4fc7f8b4448d3b4f199af43924d75",
+    "Content-Type": "application/json"
+  },
+  "kycSecretKey": "Mjk0MjE0Y2VlYjUzNDNmOTgwYmJhYzJkZTRjNzQ0NGI=",
+  "kycUrl": "https://caas.latibac.com/api/v1",
   "language": "Cn",
   "language support": [
     "All",
@@ -301,6 +317,5 @@
   "secretKeyForTest": " ",
   "slackTestUrl": "https://hooks.slack.com/services/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",
   "slackUrl": "https://hooks.slack.com/services/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",
-  "test": "https://api.latibac.com/api/v1",
-  "account_list": ["yilei6@cabital.com", "yilei7@cabital.com", "yilei8@cabital.com", "yilei10@cabital.com", "yilei22@cabital.com", "yilei24@cabital.com", "yilei25@cabital.com"]
+  "test": "https://api.latibac.com/api/v1"
 }

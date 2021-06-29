@@ -122,3 +122,5 @@ def get_email():
     text, enc = email.header.decode_header(msg['subject'])[0]
     title = text.decode(enc) if enc else text
     return {"title": title, "body": data[0][1].decode(encoding['encoding'])}
+
+
