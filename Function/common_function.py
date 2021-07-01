@@ -46,7 +46,7 @@ def generate_phone():
 
 # 生成随机邮箱账号
 def generate_email(Type='random', rang='random'):
-    email_type = ["@qq.com", "@163.com", "@126.com", "@189.com", "@cabital.com", "@gmail.com"]
+    email_type = ["@qq.com", "@163.com", "@126.com", "@189.com", "@gmail.com"]
     # 如果没有指定邮箱类型，默认在 email_type中随机一个
     if Type == 'random':
         random_email = random.choice(email_type)

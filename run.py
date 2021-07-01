@@ -20,6 +20,9 @@ citizenCountryCodeList = get_json()['citizenCountryCodeList']
 global accountToken
 accountToken = ''
 
+global kyc_type
+kyc_type = 'test'
+
 
 class sessions(requests.Session):
     def request(self, *args, **kwargs):

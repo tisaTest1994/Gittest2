@@ -7,6 +7,7 @@ import pyotp
 from hashlib import sha256
 import hmac
 import base64
+import http.client
 
 
 class AccountFunction:
@@ -272,8 +273,30 @@ class AccountFunction:
         return sign
 
     @staticmethod
-    def make_access_sign(unix_time, method, url, body):
-        data = '{}{}{}{}'.format(unix_time, method, url, body)
-        key = get_json()['kycSecretKey']
+    def make_access_sign(unix_time, method, url, body=''):
+        if body == '':
+            data = '{}{}{}'.format(unix_time, method, url)
+        else:
+            data = '{}{}{}{}'.format(unix_time, method, url, body)
+        key = get_json()['kyc'][kyc_type]['kycSecretKey']
         sign = AccountFunction.get_sign(data, key)
         return sign
+
+    @staticmethod
+    def get_webhook():
+        conn = http.client.HTTPSConnection('api.pipedream.com')
+        webhook = get_json()['kyc'][kyc_type]['webhook']
+        conn.request("GET", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer 7759a7e3653dcef8500ffe2c577102e6'})
+        res = conn.getresponse()
+        data = res.read()
+        return data.decode("utf-8")
+
+    @staticmethod
+    def delete_old_webhook():
+        conn = http.client.HTTPSConnection('api.pipedream.com')
+        webhook = get_json()['kyc'][kyc_type]['webhook']
+        conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '',
+                     {'Authorization': 'Bearer 7759a7e3653dcef8500ffe2c577102e6'})
+        res = conn.getresponse()
+        data = res.read()
+        print(data.decode("utf-8"))
