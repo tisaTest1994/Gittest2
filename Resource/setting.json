@@ -296,7 +296,7 @@
         "Content-Type": "application/json"
       },
       "kycSecretKey": "Mjk0MjE0Y2VlYjUzNDNmOTgwYmJhYzJkZTRjNzQ0NGI=",
-      "kycUrl": "https://caas.latibac.com/api/v1",
+      "kycUrl": "https://caas.latibac.com",
       "webhook": "dc_yLujK7K"
       },
     "pro": {
@@ -305,7 +305,7 @@
         "Content-Type": "application/json"
       },
       "kycSecretKey": "YmM0ZDZkZGExMmUyNDhiNDk5MTA2YjJjYzRmNmY1OTc=",
-      "kycUrl": "https://sandbox-caas.cabital.com/api/v1",
+      "kycUrl": "https://sandbox-caas.cabital.com",
       "webhook": "dc_0duNQ21"
       }
   },
@@ -330,5 +330,6 @@
   "secretKeyForTest": " ",
   "slackTestUrl": "https://hooks.slack.com/services/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",
   "slackUrl": "https://hooks.slack.com/services/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",
-  "test": "https://api.latibac.com/api/v1"
+  "test": "https://api.latibac.com/api/v1",
+  "operateUrl": "https://opapi.cabital.io/api/v1"
 }

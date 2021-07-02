@@ -23,6 +23,9 @@ accountToken = ''
 global kyc_type
 kyc_type = 'test'
 
+global operateUrl
+operateUrl = get_json()['operateUrl']
+
 
 class sessions(requests.Session):
     def request(self, *args, **kwargs):

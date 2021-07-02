@@ -115,12 +115,12 @@ class TestKycApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases', body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases', body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
         with allure.step("创建Kyc case"):
-            r = session.request('POST', url='{}/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -128,22 +128,26 @@ class TestKycApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
-        sleep(450)
         with allure.step("获取新的wehbook"):
-            webhook_info = AccountFunction.get_webhook()
-        for i in json.loads(webhook_info)['data']:
-            if i['e']['path'] == '/webhook/screen/case/pending':
-                caseSystemId = i['e']['body']['caseSystemId']
-                logger.info('caseSystemId是{}'.format(caseSystemId))
-            if i['e']['path'] == '/webhook/screen/case/reviewed':
-                suggestion = i['e']['body']['suggestion']
-                assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+            sleep_time = 0
+            while sleep_time < 500:
+                sleep_time = sleep_time + 30
+                sleep(30)
+                webhook_info = AccountFunction.get_webhook()
+                for i in json.loads(webhook_info)['data']:
+                    if i['e']['path'] == '/webhook/screen/case/pending':
+                        caseSystemId = i['e']['body']['caseSystemId']
+                        logger.info('caseSystemId是{}'.format(caseSystemId))
+                    if i['e']['path'] == '/webhook/screen/case/reviewed':
+                        suggestion = i['e']['body']['suggestion']
+                        assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+                        break
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/cases/{}'.format(caseSystemId))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('GET', url='{}/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+            r = session.request('GET', url='{}/api/v1/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -158,10 +162,10 @@ class TestKycApi:
                 "decision": "ACCEPT",
                 "comment": "决策备注"
             }
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases/{}/decision'.format(caseSystemId), body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases/{}/decision'.format(caseSystemId), body=json.dumps(data))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('POST', url='{}/cases/{}/decision'.format(self.kyc_url, caseSystemId), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases/{}/decision'.format(self.kyc_url, caseSystemId), data=json.dumps(data), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -169,7 +173,7 @@ class TestKycApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
-        sleep(450)
+        sleep(60)
         with allure.step("获取新的wehbook"):
             webhook_info = AccountFunction.get_webhook()
         for i in json.loads(webhook_info)['data']:
@@ -181,13 +185,16 @@ class TestKycApi:
     @allure.testcase('test_kyc_006 打开特定KYC Case的持续性扫描')
     def test_kyc_006(self):
         kyc_headers = self.kyc_headers
-        caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
+        if kyc_type == 'test':
+            caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
+        elif kyc_type == 'pro':
+            caseSystemId = 'b1eb6d06-b86d-4b21-9106-0d47c7d94c19'
         unix_time = int(time.time())
         sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                url='/cases/{}/ogs'.format(caseSystemId))
+                                                url='/api/v1/cases/{}/ogs'.format(caseSystemId))
         kyc_headers['ACCESS-SIGN'] = sign
         kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-        r = session.request('POST', url='{}/cases/{}/ogs'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+        r = session.request('POST', url='{}/api/v1/cases/{}/ogs'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -200,12 +207,15 @@ class TestKycApi:
     def test_kyc_007(self):
         kyc_headers = self.kyc_headers
         unix_time = int(time.time())
-        caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
+        if kyc_type == 'test':
+            caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
+        elif kyc_type == 'pro':
+            caseSystemId = 'b1eb6d06-b86d-4b21-9106-0d47c7d94c19'
         sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='DELETE',
-                                                url='/cases/{}/ogs'.format(caseSystemId))
+                                                url='/api/v1/cases/{}/ogs'.format(caseSystemId))
         kyc_headers['ACCESS-SIGN'] = sign
         kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-        r = session.request('DELETE', url='{}/cases/{}/ogs'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+        r = session.request('DELETE', url='{}/api/v1/cases/{}/ogs'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -217,7 +227,10 @@ class TestKycApi:
     @allure.testcase('test_kyc_008 使用已经创建过的externalCaseId创建Kyc case')
     def test_kyc_008(self):
         with allure.step("准备测试数据"):
-            externalCaseId = 'weoEKFPJPzmhKnXSZTdinkyfJeehLS'
+            if kyc_type == 'test':
+                externalCaseId = 'weoEKFPJPzmhKnXSZTdinkyfJeehLS'
+            elif kyc_type == 'pro':
+                externalCaseId = 'Y3WZCW0LxN8rDPDb3C1JifwbrA4Sxy'
             kyc_headers = self.kyc_headers
             data = {
                 "externalCaseId": externalCaseId,
@@ -234,12 +247,12 @@ class TestKycApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases', body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases', body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
         with allure.step("创建Kyc case"):
-            r = session.request('POST', url='{}/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -254,10 +267,10 @@ class TestKycApi:
         unix_time = int(time.time())
         caseSystemId = "7829411a-955a-4ed0-b96c-729c63ea5009"
         sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
-                                                url='/cases/{}'.format(caseSystemId))
+                                                url='/api/v1/cases/{}'.format(caseSystemId))
         kyc_headers['ACCESS-SIGN'] = sign
         kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-        r = session.request('GET', url='{}/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+        r = session.request('GET', url='{}/api/v1/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -289,12 +302,12 @@ class TestKycApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases', body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases', body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
         with allure.step("创建Kyc case"):
-            r = session.request('POST', url='{}/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -302,22 +315,26 @@ class TestKycApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
-        sleep(450)
         with allure.step("获取新的wehbook"):
-            webhook_info = AccountFunction.get_webhook()
-        for i in json.loads(webhook_info)['data']:
-            if i['e']['path'] == '/webhook/screen/case/pending':
-                caseSystemId = i['e']['body']['caseSystemId']
-                logger.info('caseSystemId是{}'.format(caseSystemId))
-            if i['e']['path'] == '/webhook/screen/case/reviewed':
-                suggestion = i['e']['body']['suggestion']
-                assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+            sleep_time = 0
+            while sleep_time < 500:
+                sleep_time = sleep_time + 30
+                sleep(30)
+                webhook_info = AccountFunction.get_webhook()
+                for i in json.loads(webhook_info)['data']:
+                    if i['e']['path'] == '/webhook/screen/case/pending':
+                        caseSystemId = i['e']['body']['caseSystemId']
+                        logger.info('caseSystemId是{}'.format(caseSystemId))
+                    if i['e']['path'] == '/webhook/screen/case/reviewed':
+                        suggestion = i['e']['body']['suggestion']
+                        assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+                        break
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/cases/{}'.format(caseSystemId))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('GET', url='{}/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+            r = session.request('GET', url='{}/api/v1/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -332,10 +349,10 @@ class TestKycApi:
                 "decision": "REJECT",
                 "comment": "决策备注"
             }
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases/{}/decision'.format(caseSystemId), body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases/{}/decision'.format(caseSystemId), body=json.dumps(data))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('POST', url='{}/cases/{}/decision'.format(self.kyc_url, caseSystemId), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases/{}/decision'.format(self.kyc_url, caseSystemId), data=json.dumps(data), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -343,14 +360,19 @@ class TestKycApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
-        sleep(450)
         with allure.step("获取新的wehbook"):
-            webhook_info = AccountFunction.get_webhook()
-        for i in json.loads(webhook_info)['data']:
-            if i['e']['path'] == '/webhook/screen/case/completed':
-                assert '决策备注' == i['e']['body']['comment'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
-                assert 'REJECT' == i['e']['body']['decision'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
-                logger.info('最终kyc结果webhook是{}'.format(i))
+            sleep_time = 0
+            while sleep_time < 500:
+                sleep_time = sleep_time + 30
+                sleep(30)
+                webhook_info = AccountFunction.get_webhook()
+                for i in json.loads(webhook_info)['data']:
+                    if i['e']['path'] == '/webhook/screen/case/completed':
+                        assert '决策备注' == i['e']['body']['comment'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
+                        assert 'REJECT' == i['e']['body']['decision'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
+                        logger.info('最终kyc结果webhook是{}'.format(i))
+                        break
+
 
     @allure.testcase('test_kyc_011 创建直接pending cases Kyc case后查询cases')
     def test_kyc_011(self):
@@ -367,12 +389,12 @@ class TestKycApi:
                 "individualInfo": {"gender": "MALE"}
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases', body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases', body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
         with allure.step("创建Kyc case"):
-            r = session.request('POST', url='{}/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -380,22 +402,26 @@ class TestKycApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
-        sleep(450)
         with allure.step("获取新的wehbook"):
-            webhook_info = AccountFunction.get_webhook()
-        for i in json.loads(webhook_info)['data']:
-            if i['e']['path'] == '/webhook/screen/case/pending':
-                caseSystemId = i['e']['body']['caseSystemId']
-                logger.info('caseSystemId是{}'.format(caseSystemId))
-            if i['e']['path'] == '/webhook/screen/case/reviewed':
-                suggestion = i['e']['body']['suggestion']
-                assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+            sleep_time = 0
+            while sleep_time < 500:
+                sleep_time = sleep_time + 30
+                sleep(30)
+                webhook_info = AccountFunction.get_webhook()
+                for i in json.loads(webhook_info)['data']:
+                    if i['e']['path'] == '/webhook/screen/case/pending':
+                        caseSystemId = i['e']['body']['caseSystemId']
+                        logger.info('caseSystemId是{}'.format(caseSystemId))
+                    if i['e']['path'] == '/webhook/screen/case/reviewed':
+                        suggestion = i['e']['body']['suggestion']
+                        assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+                        break
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/cases/{}'.format(caseSystemId))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('GET', url='{}/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+            r = session.request('GET', url='{}/api/v1/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -405,7 +431,7 @@ class TestKycApi:
                 assert externalCaseId == r.json()['externalCaseId'], "获取case信息错误，返回值是{}".format(r.text)
                 assert 'PENDING' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_kyc_012 创建直接pass 个人 Kyc case后查询cases。然后开启ogs扫描')
+    @allure.testcase('test_kyc_012 创建直接pass 个人 Kyc case后查询cases。然后开启ogs扫描错误')
     def test_kyc_012(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -428,12 +454,12 @@ class TestKycApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases', body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases', body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
         with allure.step("创建Kyc case"):
-            r = session.request('POST', url='{}/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -441,22 +467,26 @@ class TestKycApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
-        sleep(450)
         with allure.step("获取新的wehbook"):
-            webhook_info = AccountFunction.get_webhook()
-        for i in json.loads(webhook_info)['data']:
-            if i['e']['path'] == '/webhook/screen/case/pending':
-                caseSystemId = i['e']['body']['caseSystemId']
-                logger.info('caseSystemId是{}'.format(caseSystemId))
-            if i['e']['path'] == '/webhook/screen/case/reviewed':
-                suggestion = i['e']['body']['suggestion']
-                assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+            sleep_time = 0
+            while sleep_time < 500:
+                sleep_time = sleep_time + 30
+                sleep(30)
+                webhook_info = AccountFunction.get_webhook()
+                for i in json.loads(webhook_info)['data']:
+                    if i['e']['path'] == '/webhook/screen/case/pending':
+                        caseSystemId = i['e']['body']['caseSystemId']
+                        logger.info('caseSystemId是{}'.format(caseSystemId))
+                    if i['e']['path'] == '/webhook/screen/case/reviewed':
+                        suggestion = i['e']['body']['suggestion']
+                        assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+                        break
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/cases/{}'.format(caseSystemId))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('GET', url='{}/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+            r = session.request('GET', url='{}/api/v1/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -468,10 +498,10 @@ class TestKycApi:
         with allure.step("打开ogs扫描"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                    url='/cases/{}/ogs'.format(caseSystemId))
+                                                    url='/api/v1/cases/{}/ogs'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('POST', url='{}/cases/{}/ogs'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases/{}/ogs'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -480,7 +510,7 @@ class TestKycApi:
             with allure.step("校验返回值"):
                 assert '"code":"001003"' in r.text, "打开pending中的KYC Case的持续性扫描错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_kyc_013 创建直接pass 个人 Kyc case后查询cases。然后关闭ogs扫描')
+    @allure.testcase('test_kyc_013 创建直接pass 个人 Kyc case后查询cases。然后关闭ogs扫描错误')
     def test_kyc_013(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -503,12 +533,12 @@ class TestKycApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases', body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases', body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
         with allure.step("创建Kyc case"):
-            r = session.request('POST', url='{}/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -516,22 +546,26 @@ class TestKycApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
-        sleep(450)
         with allure.step("获取新的wehbook"):
-            webhook_info = AccountFunction.get_webhook()
-        for i in json.loads(webhook_info)['data']:
-            if i['e']['path'] == '/webhook/screen/case/pending':
-                caseSystemId = i['e']['body']['caseSystemId']
-                logger.info('caseSystemId是{}'.format(caseSystemId))
-            if i['e']['path'] == '/webhook/screen/case/reviewed':
-                suggestion = i['e']['body']['suggestion']
-                assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+            sleep_time = 0
+            while sleep_time < 500:
+                sleep_time = sleep_time + 30
+                sleep(30)
+                webhook_info = AccountFunction.get_webhook()
+                for i in json.loads(webhook_info)['data']:
+                    if i['e']['path'] == '/webhook/screen/case/pending':
+                        caseSystemId = i['e']['body']['caseSystemId']
+                        logger.info('caseSystemId是{}'.format(caseSystemId))
+                    if i['e']['path'] == '/webhook/screen/case/reviewed':
+                        suggestion = i['e']['body']['suggestion']
+                        assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+                        break
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/cases/{}'.format(caseSystemId))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('GET', url='{}/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+            r = session.request('GET', url='{}/api/v1/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -543,10 +577,10 @@ class TestKycApi:
         with allure.step("关闭ogs扫描"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='DELETE',
-                                                    url='/cases/{}/ogs'.format(caseSystemId))
+                                                    url='/api/v1/cases/{}/ogs'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('DELETE', url='{}/cases/{}/ogs'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+            r = session.request('DELETE', url='{}/api/v1/cases/{}/ogs'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -578,12 +612,12 @@ class TestKycApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases', body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases', body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
         with allure.step("创建Kyc case"):
-            r = session.request('POST', url='{}/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -598,10 +632,10 @@ class TestKycApi:
                 "decision": "ACCEPT",
                 "comment": "决策备注"
             }
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases/{}/decision'.format(caseSystemId), body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases/{}/decision'.format(caseSystemId), body=json.dumps(data))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('POST', url='{}/cases/{}/decision'.format(self.kyc_url, caseSystemId), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases/{}/decision'.format(self.kyc_url, caseSystemId), data=json.dumps(data), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -627,12 +661,12 @@ class TestKycApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases', body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases', body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
         with allure.step("创建Kyc case"):
-            r = session.request('POST', url='{}/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -640,22 +674,26 @@ class TestKycApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
-        sleep(450)
         with allure.step("获取新的wehbook"):
-            webhook_info = AccountFunction.get_webhook()
-        for i in json.loads(webhook_info)['data']:
-            if i['e']['path'] == '/webhook/screen/case/pending':
-                caseSystemId = i['e']['body']['caseSystemId']
-                logger.info('caseSystemId是{}'.format(caseSystemId))
-            if i['e']['path'] == '/webhook/screen/case/reviewed':
-                suggestion = i['e']['body']['suggestion']
-                assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+            sleep_time = 0
+            while sleep_time < 500:
+                sleep_time = sleep_time + 30
+                sleep(30)
+                webhook_info = AccountFunction.get_webhook()
+                for i in json.loads(webhook_info)['data']:
+                    if i['e']['path'] == '/webhook/screen/case/pending':
+                        caseSystemId = i['e']['body']['caseSystemId']
+                        logger.info('caseSystemId是{}'.format(caseSystemId))
+                    if i['e']['path'] == '/webhook/screen/case/reviewed':
+                        suggestion = i['e']['body']['suggestion']
+                        assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
+                        break
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/cases/{}'.format(caseSystemId))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('GET', url='{}/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+            r = session.request('GET', url='{}/api/v1/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -670,10 +708,10 @@ class TestKycApi:
                 "decision": "ACCEPT",
                 "comment": "决策备注"
             }
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/cases/{}/decision'.format(caseSystemId), body=json.dumps(data))
+            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases/{}/decision'.format(caseSystemId), body=json.dumps(data))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('POST', url='{}/cases/{}/decision'.format(self.kyc_url, caseSystemId), data=json.dumps(data), headers=kyc_headers)
+            r = session.request('POST', url='{}/api/v1/cases/{}/decision'.format(self.kyc_url, caseSystemId), data=json.dumps(data), headers=kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -681,11 +719,18 @@ class TestKycApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
-        sleep(450)
+
         with allure.step("获取新的wehbook"):
-            webhook_info = AccountFunction.get_webhook()
-        for i in json.loads(webhook_info)['data']:
-            if i['e']['path'] == '/webhook/screen/case/completed':
-                assert '决策备注' == i['e']['body']['comment'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
-                assert 'ACCEPT' == i['e']['body']['decision'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
-                logger.info('最终kyc结果webhook是{}'.format(i))
+            sleep_time = 0
+            while sleep_time < 500:
+                sleep_time = sleep_time + 30
+                sleep(30)
+                webhook_info = AccountFunction.get_webhook()
+                for i in json.loads(webhook_info)['data']:
+                    if i['e']['path'] == '/webhook/screen/case/completed':
+                        assert '决策备注' == i['e']['body']['comment'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
+                        assert 'ACCEPT' == i['e']['body']['decision'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
+                        logger.info('最终kyc结果webhook是{}'.format(i))
+                        break
+
+

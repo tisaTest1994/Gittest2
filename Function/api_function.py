@@ -37,8 +37,7 @@ class AccountFunction:
             "username": account,
             "password": password
         }
-        r = session.request('POST', url='{}/operator/operator/login'.format(env_url), data=json.dumps(data),
-                            headers=headers, timeout=3)
+        r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data), headers=headers)
         return r.json()
 
     # 注册

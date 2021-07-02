@@ -17,7 +17,7 @@ class TestOperateApi:
             "username": account['email'],
             "password": account['password']
         }
-        r = session.request('POST', url='{}/operator/operator/login'.format(env_url), data=json.dumps(data), headers=headers)
+        r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -46,7 +46,7 @@ class TestOperateApi:
                 "order": "asc"
             }
         }
-        r = session.request('POST', url='{}/operator/operator/users/search'.format(env_url), data=json.dumps(data), headers=headers)
+        r = session.request('POST', url='{}/operator/operator/users/search'.format(operateUrl), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -61,7 +61,7 @@ class TestOperateApi:
             accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
-        r = session.request('GET', url='{}/operator/operator/user/info/{}'.format(env_url, email['userId']), headers=headers)
+        r = session.request('GET', url='{}/operator/operator/user/info/{}'.format(operateUrl, email['userId']), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -76,7 +76,7 @@ class TestOperateApi:
             accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
-        r = session.request('GET', url='{}/operator/operator/user/info/{}'.format(env_url, email['userId']), headers=headers)
+        r = session.request('GET', url='{}/operator/operator/user/info/{}'.format(operateUrl, email['userId']), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -104,7 +104,7 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = session.request('POST', url='{}/operator/operator/cases/search'.format(env_url), data=json.dumps(data), headers=headers)
+        r = session.request('POST', url='{}/operator/operator/cases/search'.format(operateUrl), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -133,11 +133,11 @@ class TestOperateApi:
                     "order": "desc"
                 }
             }
-            r = session.request('POST', url='{}/operator/operator/cases/search'.format(env_url), data=json.dumps(data),
+            r = session.request('POST', url='{}/operator/operator/cases/search'.format(operateUrl), data=json.dumps(data),
                                 headers=headers)
             case_id = random.choice(r.json()['caseList'])['caseId']
             logger.info('case_id是{}'.format(case_id))
-        r = session.request('GET', url='{}/operator/operator/case/{}/detail'.format(env_url, case_id), headers=headers)
+        r = session.request('GET', url='{}/operator/operator/case/{}/detail'.format(operateUrl, case_id), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -162,7 +162,7 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/payin/search'.format(env_url), data=json.dumps(data), headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/txns/payin/search'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -187,11 +187,11 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/payin/search'.format(env_url), data=json.dumps(data), headers=headers)
+        r = requests.request('POST', url='{}/operatorapi/txns/payin/search'.format(operateUrl), data=json.dumps(data), headers=headers)
         logger.info('payin信息{}'.format(r.text))
         transaction_id = random.choice(r.json()['transactions'])['transaction_id']
         with allure.step("查询payin具体信息"):
-            r = requests.request('GET', url='{}/operatorapi/txns/payin/{}'.format(env_url, transaction_id), headers=headers)
+            r = requests.request('GET', url='{}/operatorapi/txns/payin/{}'.format(operateUrl, transaction_id), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -216,7 +216,7 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/cfx/search'.format(env_url), data=json.dumps(data), headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/txns/cfx/search'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -241,11 +241,11 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/cfx/search'.format(env_url), data=json.dumps(data), headers=headers)
+        r = requests.request('POST', url='{}/operatorapi/txns/cfx/search'.format(operateUrl), data=json.dumps(data), headers=headers)
         logger.info('payin信息{}'.format(r.text))
         transaction_id = random.choice(r.json()['transactions'])['transaction_id']
         with allure.step("检索cfx交易明细"):
-            r = requests.request('GET', url='{}/operatorapi/txns/cfx/{}'.format(env_url, transaction_id), headers=headers)
+            r = requests.request('GET', url='{}/operatorapi/txns/cfx/{}'.format(operateUrl, transaction_id), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -270,7 +270,7 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/payout/search'.format(env_url), data=json.dumps(data), headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/txns/payout/search'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -295,11 +295,11 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/payout/search'.format(env_url), data=json.dumps(data), headers=headers)
+        r = requests.request('POST', url='{}/operatorapi/txns/payout/search'.format(operateUrl), data=json.dumps(data), headers=headers)
         logger.info('payin信息{}'.format(r.text))
         transaction_id = random.choice(r.json()['transactions'])['transaction_id']
         with allure.step("查询payin具体信息"):
-            r = requests.request('GET', url='{}/operatorapi/txns/payout/{}'.format(env_url, transaction_id), headers=headers)
+            r = requests.request('GET', url='{}/operatorapi/txns/payout/{}'.format(operateUrl, transaction_id), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -324,7 +324,7 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/earn/search'.format(env_url), data=json.dumps(data), headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/txns/earn/search'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -349,11 +349,11 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/payin/search'.format(env_url), data=json.dumps(data), headers=headers)
+        r = requests.request('POST', url='{}/operatorapi/txns/payin/search'.format(operateUrl), data=json.dumps(data), headers=headers)
         logger.info('payin信息{}'.format(r.text))
         transaction_id = random.choice(r.json()['transactions'])['transaction_id']
         with allure.step("检索earn交易明细"):
-            r = requests.request('GET', url='{}/operatorapi/txns/payin/{}'.format(env_url, transaction_id), headers=headers)
+            r = requests.request('GET', url='{}/operatorapi/txns/payin/{}'.format(operateUrl, transaction_id), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -378,7 +378,7 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/interest/search'.format(env_url), data=json.dumps(data), headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/txns/interest/search'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -403,11 +403,11 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/interest/search'.format(env_url), data=json.dumps(data), headers=headers)
+        r = requests.request('POST', url='{}/operatorapi/txns/interest/search'.format(operateUrl), data=json.dumps(data), headers=headers)
         logger.info('interest信息{}'.format(r.text))
         interests_id = random.choice(r.json()['interests'])['interest_id']
         with allure.step("检索earn交易明细"):
-            r = requests.request('GET', url='{}/operatorapi/txns/interest/{}'.format(env_url, interests_id), headers=headers)
+            r = requests.request('GET', url='{}/operatorapi/txns/interest/{}'.format(operateUrl, interests_id), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -432,7 +432,7 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/yield/search'.format(env_url), data=json.dumps(data), headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/txns/yield/search'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -457,11 +457,11 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/yield/search'.format(env_url), data=json.dumps(data), headers=headers)
+        r = requests.request('POST', url='{}/operatorapi/txns/yield/search'.format(operateUrl), data=json.dumps(data), headers=headers)
         logger.info('yield信息{}'.format(r.text))
         yield_id = random.choice(r.json()['yields'])['yield_id']
         with allure.step("检索yield交易明细"):
-            r = requests.request('GET', url='{}/operatorapi/txns/yield/{}'.format(env_url, yield_id), headers=headers)
+            r = requests.request('GET', url='{}/operatorapi/txns/yield/{}'.format(operateUrl, yield_id), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -486,7 +486,7 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/payout/search'.format(env_url), data=json.dumps(data), headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/txns/payout/search'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -511,11 +511,11 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/txns/payout/search'.format(env_url), data=json.dumps(data), headers=headers)
+        r = requests.request('POST', url='{}/operatorapi/txns/payout/search'.format(operateUrl), data=json.dumps(data), headers=headers)
         logger.info('payout信息{}'.format(r.text))
         transaction_id = random.choice(r.json()['transactions'])['transaction_id']
         with allure.step("检索yield交易明细"):
-            r = requests.request('GET', url='{}/operatorapi/txns/payout/{}'.format(env_url, transaction_id), headers=headers)
+            r = requests.request('GET', url='{}/operatorapi/txns/payout/{}'.format(operateUrl, transaction_id), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -540,7 +540,7 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/orders/payin/search'.format(env_url), data=json.dumps(data), headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/orders/payin/search'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -565,11 +565,11 @@ class TestOperateApi:
                 "order": "desc"
             }
         }
-        r = requests.request('POST', url='{}/operatorapi/orders/payin/search'.format(env_url), data=json.dumps(data), headers=headers)
+        r = requests.request('POST', url='{}/operatorapi/orders/payin/search'.format(operateUrl), data=json.dumps(data), headers=headers)
         logger.info('payin order信息{}'.format(r.text))
         order_id = random.choice(r.json()['orders'])['order_id']
         with allure.step("检索yield交易明细"):
-            r = requests.request('GET', url='{}/operatorapi/orders/payin/{}'.format(env_url, order_id), headers=headers)
+            r = requests.request('GET', url='{}/operatorapi/orders/payin/{}'.format(operateUrl, order_id), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -587,7 +587,7 @@ class TestOperateApi:
         data = {
             "productSubType": 2
         }
-        r = requests.request('POST', url='{}/operatorapi/products'.format(env_url), data=json.dumps(data), headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/products'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -605,7 +605,7 @@ class TestOperateApi:
         data = {
             "productSubType": 1
         }
-        r = requests.request('POST', url='{}/operatorapi/products'.format(env_url), data=json.dumps(data), headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/products'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -622,7 +622,7 @@ class TestOperateApi:
             headers['Authorization'] = "Bearer " + accessToken
         data = {
         }
-        r = requests.request('POST', url='{}/operatorapi/products'.format(env_url), data=json.dumps(data), headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/products'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
