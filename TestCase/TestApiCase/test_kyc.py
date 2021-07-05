@@ -138,10 +138,8 @@ class TestKycApi:
                     if i['e']['path'] == '/webhook/screen/case/pending':
                         caseSystemId = i['e']['body']['caseSystemId']
                         logger.info('caseSystemId是{}'.format(caseSystemId))
-                    if i['e']['path'] == '/webhook/screen/case/reviewed':
-                        suggestion = i['e']['body']['suggestion']
-                        assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
-                        break
+                    if i['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == i['e']['body']['suggestion']:
+                        sleep_time = 501
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -173,14 +171,18 @@ class TestKycApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
-        sleep(60)
-        with allure.step("获取新的wehbook"):
-            webhook_info = AccountFunction.get_webhook()
-        for i in json.loads(webhook_info)['data']:
-            if i['e']['path'] == '/webhook/screen/case/completed':
-                assert '决策备注' == i['e']['body']['comment'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
-                assert 'ACCEPT' == i['e']['body']['decision'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
-                logger.info('最终kyc结果webhook是{}'.format(i))
+        sleep_time = 0
+        while sleep_time < 500:
+            sleep_time = sleep_time + 30
+            sleep(30)
+            with allure.step("获取新的wehbook"):
+                webhook_info = AccountFunction.get_webhook()
+            for i in json.loads(webhook_info)['data']:
+                if i['e']['path'] == '/webhook/screen/case/completed':
+                    assert '决策备注' == i['e']['body']['comment'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
+                    assert 'ACCEPT' == i['e']['body']['decision'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
+                    logger.info('最终kyc结果webhook是{}'.format(i))
+                    sleep_time = 501
 
     @allure.testcase('test_kyc_006 打开特定KYC Case的持续性扫描')
     def test_kyc_006(self):
@@ -328,7 +330,7 @@ class TestKycApi:
                     if i['e']['path'] == '/webhook/screen/case/reviewed':
                         suggestion = i['e']['body']['suggestion']
                         assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
-                        break
+                        sleep_time = 501
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -371,8 +373,7 @@ class TestKycApi:
                         assert '决策备注' == i['e']['body']['comment'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
                         assert 'REJECT' == i['e']['body']['decision'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
                         logger.info('最终kyc结果webhook是{}'.format(i))
-                        break
-
+                        sleep_time = 501
 
     @allure.testcase('test_kyc_011 创建直接pending cases Kyc case后查询cases')
     def test_kyc_011(self):
@@ -412,10 +413,7 @@ class TestKycApi:
                     if i['e']['path'] == '/webhook/screen/case/pending':
                         caseSystemId = i['e']['body']['caseSystemId']
                         logger.info('caseSystemId是{}'.format(caseSystemId))
-                    if i['e']['path'] == '/webhook/screen/case/reviewed':
-                        suggestion = i['e']['body']['suggestion']
-                        assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
-                        break
+                        sleep_time = 501
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -480,7 +478,7 @@ class TestKycApi:
                     if i['e']['path'] == '/webhook/screen/case/reviewed':
                         suggestion = i['e']['body']['suggestion']
                         assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
-                        break
+                        sleep_time = 501
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -559,7 +557,7 @@ class TestKycApi:
                     if i['e']['path'] == '/webhook/screen/case/reviewed':
                         suggestion = i['e']['body']['suggestion']
                         assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
-                        break
+                        sleep_time = 501
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -643,15 +641,24 @@ class TestKycApi:
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert '"code":"001003"' in r.text, "提前发送确认接受结果信息错误，返回值是{}".format(r.text)
+        sleep_time = 0
+        while sleep_time < 500:
+            sleep_time = sleep_time + 30
+            sleep(30)
+            webhook_info = AccountFunction.get_webhook()
+            for i in json.loads(webhook_info)['data']:
+                if i['e']['path'] == '/webhook/screen/case/reviewed':
+                    AccountFunction.delete_old_webhook()
+                    sleep_time = 501
 
     @allure.testcase('test_kyc_015 创建直接pass 企业 Kyc case后查询cases,最后发送接受结果信息')
     def test_kyc_015(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
+            kyc_headers = self.kyc_headers
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
-            kyc_headers = self.kyc_headers
             data = {
                 "externalCaseId": externalCaseId,
                 "screenType": "ORGANISATION",
@@ -684,10 +691,8 @@ class TestKycApi:
                     if i['e']['path'] == '/webhook/screen/case/pending':
                         caseSystemId = i['e']['body']['caseSystemId']
                         logger.info('caseSystemId是{}'.format(caseSystemId))
-                    if i['e']['path'] == '/webhook/screen/case/reviewed':
-                        suggestion = i['e']['body']['suggestion']
-                        assert 'SUGGEST_TO_ACCEPT' == suggestion, '测试结果不通过，结果是{}'.format(i['e']['body']['suggestion'])
-                        break
+                    if i['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == i['e']['body']['suggestion']:
+                        sleep_time = 501
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -719,7 +724,6 @@ class TestKycApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
-
         with allure.step("获取新的wehbook"):
             sleep_time = 0
             while sleep_time < 500:
@@ -731,6 +735,6 @@ class TestKycApi:
                         assert '决策备注' == i['e']['body']['comment'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
                         assert 'ACCEPT' == i['e']['body']['decision'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
                         logger.info('最终kyc结果webhook是{}'.format(i))
-                        break
+                        sleep_time = 501
 
 

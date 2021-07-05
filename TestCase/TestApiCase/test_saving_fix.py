@@ -7,7 +7,7 @@ import allure
 
 # saving相关cases
 class TestSavingFixApi:
-    
+
     # 初始化class
     def setup_class(self):
         AccountFunction.add_headers()
@@ -697,8 +697,8 @@ class TestSavingFixApi:
         with allure.step("校验返回值"):
             assert r.json() is not None, '查询申购ETH项目的交易记录失败，返回值是{}'.format(r.text)
 
-    @allure.testcase('test_saving_fix_010 查询申购USDT项目的交易记录')
-    def test_saving_fix_009(self):
+    @allure.testcase('test_saving_fix_012 查询申购USDT项目的交易记录')
+    def test_saving_fix_012(self):
         with allure.step("查询申购项目的交易记录"):
             params = {
                 'tx_type': "1",

@@ -294,8 +294,54 @@ class AccountFunction:
     def delete_old_webhook():
         conn = http.client.HTTPSConnection('api.pipedream.com')
         webhook = get_json()['kyc'][kyc_type]['webhook']
-        conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '',
-                     {'Authorization': 'Bearer 7759a7e3653dcef8500ffe2c577102e6'})
+        conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer 7759a7e3653dcef8500ffe2c577102e6'})
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+
+    # 活期申购
+    @staticmethod
+    def subscribe():
+        r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+        product_list = random.choice(r.json())
+        code = product_list['code']
+        product_id = product_list['product_id']
+        if code == 'USDT':
+            amount = '20'
+        else:
+            amount = "0.01327"
+        data = {
+            "tx_type": 1,
+            "amount": amount,
+            "code": code
+        }
+        r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
+        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        assert 'tx_id' in r.text, "赎回错误，返回值是{}".format(r.text)
+        return {'product_id': product_id, 'code': code, 'tx_id': r.json()['tx_id']}
+
+    # 定期申购
+    @staticmethod
+    def subscribe_fix():
+        r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
+        product_list = random.choice(random.choice(r.json())['products'])
+        code = product_list['code']
+        product_id = product_list['product_id']
+        if code == 'USDT':
+            amount = '20'
+        else:
+            amount = "0.01327"
+        data = {
+            "subscribe_amount": {
+                "code": code,
+                "amount": amount
+            },
+            "maturity_interest": {
+                "code": code,
+                "amount": amount
+            }
+        }
+        r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
+        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        assert 'tx_id' in r.text, "赎回错误，返回值是{}".format(r.text)
+        return {'product_id': product_id, 'code': code, 'tx_id': r.json()['tx_id']}
+
