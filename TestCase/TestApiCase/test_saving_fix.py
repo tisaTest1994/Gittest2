@@ -715,3 +715,196 @@ class TestSavingFixApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json() is not None, '查询申购USDT项目的交易记录失败，返回值是{}'.format(r.text)
+
+    @allure.testcase('test_saving_fix_013 更新（打开）某笔交易的复投状态')
+    def test_saving_fix_013(self):
+        with allure.step("申购一笔产品，并且获取信息"):
+            product_list = AccountFunction.subscribe_fix()
+        with allure.step("打开这笔申购的自动复投"):
+            data = {
+                "auto_renew": True
+            }
+            r = session.request('POST', url='{}/earn/fix/transactions/{}/renew'.format(env_url, product_list['tx_id']), data=json.dumps(data), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['update_result'] == True, '更新（打开）某笔交易的复投状态错误, 返回值是{}'.format(r.text)
+
+    @allure.testcase('test_saving_fix_014 更新（关闭）某笔交易的复投状态')
+    def test_saving_fix_014(self):
+        with allure.step("申购一笔产品，并且获取信息"):
+            product_list = AccountFunction.subscribe_fix()
+        with allure.step("打开这笔申购的自动复投"):
+            data = {
+                "auto_renew": True
+            }
+            session.request('POST', url='{}/earn/fix/transactions/{}/renew'.format(env_url, product_list['tx_id']), data=json.dumps(data), headers=headers)
+        with allure.step("关闭这笔申购的自动复投"):
+            data = {
+                "auto_renew": False
+            }
+            r = session.request('POST', url='{}/earn/fix/transactions/{}/renew'.format(env_url, product_list['tx_id']), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['update_result'] == True, '更新（关闭）某笔交易的复投状态错误, 返回值是{}'.format(r.text)
+
+    @allure.testcase('test_saving_fix_015 更新错误交易id的复投状态')
+    def test_saving_fix_015(self):
+        with allure.step("打开这笔申购的自动复投"):
+            data = {
+                "auto_renew": True
+            }
+            r = session.request('POST', url='{}/earn/fix/transactions/{}/renew'.format(env_url, '131231231231231'), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['code'] == 'EARNINGTXN000036', '更新错误交易id的复投状态错误, 返回值是{}'.format(r.text)
+
+    @allure.testcase('test_saving_fix_016 申购定期时，直接打开复投开关')
+    def test_saving_fix_016(self):
+        r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
+        product_list = random.choice(random.choice(r.json())['products'])
+        code = product_list['code']
+        product_id = product_list['product_id']
+        if code == 'USDT':
+            amount = '20'
+        else:
+            amount = "0.01327"
+        data = {
+            "subscribe_amount": {
+                "code": code,
+                "amount": amount
+            },
+            "maturity_interest": {
+                "code": code,
+                "amount": amount
+            },
+            "auto_renew": True
+        }
+        r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'tx_id' in r.text, "申购定期时，直接打开复投开关错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_saving_fix_017 申购定期时，直接关闭复投开关')
+    def test_saving_fix_017(self):
+        r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
+        product_list = random.choice(random.choice(r.json())['products'])
+        code = product_list['code']
+        product_id = product_list['product_id']
+        if code == 'USDT':
+            amount = '20'
+        else:
+            amount = "0.01327"
+        data = {
+            "subscribe_amount": {
+                "code": code,
+                "amount": amount
+            },
+            "maturity_interest": {
+                "code": code,
+                "amount": amount
+            },
+            "auto_renew": False
+        }
+        r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'tx_id' in r.text, "申购定期时，直接关闭复投开关错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_saving_fix_018 查询包含复投的交易记录')
+    def test_saving_fix_018(self):
+        with allure.step("申购一笔产品，并且获取信息"):
+            r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
+            product_list = random.choice(random.choice(r.json())['products'])
+            code = product_list['code']
+            product_id = product_list['product_id']
+            if code == 'USDT':
+                amount = '20'
+            else:
+                amount = "0.01327"
+            data = {
+                "subscribe_amount": {
+                    "code": code,
+                    "amount": amount
+                },
+                "maturity_interest": {
+                    "code": code,
+                    "amount": amount
+                },
+                "auto_renew": True
+            }
+            r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
+            transaction_id = r.json()['tx_id']
+        with allure.step("查询申购项目的交易记录"):
+            params = {
+                'tx_type': "1",
+                'cursor': 0,
+                'size': 900,
+                'order': "1",
+                'code': product_list['code']
+            }
+            r = session.request('GET', url='{}/earn/fix/transactions'.format(env_url), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            for i in r.json()['transactions']:
+                if transaction_id == i['transaction_id']:
+                    assert i['auto_renew'] == True, "查询包含复投的交易记录错误，返回值是{}".format(i)
+                    assert i['time_line']['renew_subscription_id'] == '', "查询包含复投的交易记录错误，返回值是{}".format(i)
+
+    @allure.testcase('test_saving_fix_019 查询包含复投的交易记录详情信息')
+    def test_saving_fix_019(self):
+        with allure.step("申购一笔产品，并且获取信息"):
+            r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
+            product_list = random.choice(random.choice(r.json())['products'])
+            code = product_list['code']
+            product_id = product_list['product_id']
+            if code == 'USDT':
+                amount = '20'
+            else:
+                amount = "0.01327"
+            data = {
+                "subscribe_amount": {
+                    "code": code,
+                    "amount": amount
+                },
+                "maturity_interest": {
+                    "code": code,
+                    "amount": amount
+                },
+                "auto_renew": True
+            }
+            r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
+            transaction_id = r.json()['tx_id']
+        with allure.step("查询申购项目的交易记录信息"):
+            r = session.request('GET', url='{}/earn/fix/transactions/{}'.format(env_url, transaction_id), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['auto_renew'] == True, "查询包含复投的交易记录错误，返回值是{}".format(r.json())
+            assert r.json()['time_line']['renew_subscription_id'] == '', "查询包含复投的交易记录错误，返回值是{}".format(r.json())
