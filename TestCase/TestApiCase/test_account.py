@@ -658,7 +658,7 @@ class TestAccountApi:
 
     @allure.testcase('test_account_033 获取opt二维码')
     def test_account_033(self):
-        run.accountToken = AccountFunction.get_account_token(account='yilei4@cabital.com')
+        run.accountToken = AccountFunction.get_account_token(account='yilei1@163.com')
         headers['Authorization'] = "Bearer " + run.accountToken
         r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
         AccountFunction.add_headers()
@@ -672,7 +672,7 @@ class TestAccountApi:
 
     @allure.testcase('test_account_034 创建opt验证，并且删除。')
     def test_account_034(self):
-        run.accountToken = AccountFunction.get_account_token(account='yilei3@cabital.com')
+        run.accountToken = AccountFunction.get_account_token(account='yilei3@163.com')
         headers['Authorization'] = "Bearer " + run.accountToken
         # 获得opt secretKey
         r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)

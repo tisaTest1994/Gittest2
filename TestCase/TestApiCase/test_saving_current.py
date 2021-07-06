@@ -69,14 +69,14 @@ class TestSavingCurrentApi:
             with allure.step("校验返回值"):
                 assert 'items' in r.text, "获取今日之后的利息列表错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_saving_current_004 获取多条交易记录')
+    @allure.testcase('test_saving_current_004 获取交易记录')
     def test_saving_current_004(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
             product_id = []
             for i in r.json():
                 product_id.append(i['product_id'])
-        with allure.step("获取多条交易记录"):
+        with allure.step("获取交易记录"):
             # 随机获取一个id
             id = random.choice(product_id)
             logger.info('id是{}'.format(id))
@@ -584,9 +584,23 @@ class TestSavingCurrentApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'EARNINGTXN000019' in r.text, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
+            assert 'tx_id' in r.text, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
+            transaction_id = r.json()['tx_id']
+        with allure.step("通过transaction_id查询交易是否成功"):
+            params = {
+                'product_id': BTC_item['product_id'],
+                'transaction_id': transaction_id
+            }
+            r = session.request('GET', url='{}/earn/products/{}/transactions/{}'.format(env_url, BTC_item['product_id'], transaction_id), params=json.dumps(params), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['status'] == 3, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_current_016 赎回金额超过最大的可赎回ETH数量')
     def test_saving_current_016(self):
@@ -611,9 +625,25 @@ class TestSavingCurrentApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'EARNINGTXN000019' in r.text, "赎回金额超过最大的可赎回ETH数量错误，返回值是{}".format(r.text)
+            assert 'tx_id' in r.text, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
+            transaction_id = r.json()['tx_id']
+        with allure.step("通过transaction_id查询交易是否成功"):
+            params = {
+                'product_id': BTC_item['product_id'],
+                'transaction_id': transaction_id
+            }
+            r = session.request('GET', url='{}/earn/products/{}/transactions/{}'.format(env_url, BTC_item['product_id'],
+                                                                                        transaction_id),
+                                params=json.dumps(params), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['status'] == 3, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_current_017 赎回金额超过最大的可赎回USDT数量')
     def test_saving_current_017(self):
@@ -638,9 +668,25 @@ class TestSavingCurrentApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'EARNINGTXN000019' in r.text, "赎回金额超过最大的可赎回USDT数量错误，返回值是{}".format(r.text)
+            assert 'tx_id' in r.text, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
+            transaction_id = r.json()['tx_id']
+        with allure.step("通过transaction_id查询交易是否成功"):
+            params = {
+                'product_id': BTC_item['product_id'],
+                'transaction_id': transaction_id
+            }
+            r = session.request('GET', url='{}/earn/products/{}/transactions/{}'.format(env_url, BTC_item['product_id'],
+                                                                                        transaction_id),
+                                params=json.dumps(params), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['status'] == 3, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_saving_current_018 正在赎回金额等于wallet中冻结金额')
     def test_saving_current_018(self):
@@ -768,3 +814,12 @@ class TestSavingCurrentApi:
             logger.info('现在时间戳是{}'.format(now_time))
             assert int(now_time) <= int(redeem_settle_time), '确定赎回日期是D+1错误'
             assert int(now_time) + 86400 >= int(redeem_settle_time), '确定赎回日期是D+1错误'
+
+
+
+
+
+
+
+
+

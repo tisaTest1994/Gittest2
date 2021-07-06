@@ -290,15 +290,6 @@
     "Content-Type": "application/json"
   },
   "kyc": {
-    "test": {
-      "kycHeaders": {
-        "ACCESS-KEY": "bce4fc7f8b4448d3b4f199af43924d75",
-        "Content-Type": "application/json"
-      },
-      "kycSecretKey": "Mjk0MjE0Y2VlYjUzNDNmOTgwYmJhYzJkZTRjNzQ0NGI=",
-      "kycUrl": "https://caas.latibac.com",
-      "webhook": "dc_yLujK7K"
-      },
     "pro": {
       "kycHeaders": {
         "ACCESS-KEY": "c6cd1f01f4974ad6b0f43b8f0dee973a",
@@ -307,7 +298,16 @@
       "kycSecretKey": "YmM0ZDZkZGExMmUyNDhiNDk5MTA2YjJjYzRmNmY1OTc=",
       "kycUrl": "https://sandbox-caas.cabital.com",
       "webhook": "dc_0duNQ21"
-      }
+    },
+    "test": {
+      "kycHeaders": {
+        "ACCESS-KEY": "bce4fc7f8b4448d3b4f199af43924d75",
+        "Content-Type": "application/json"
+      },
+      "kycSecretKey": "Mjk0MjE0Y2VlYjUzNDNmOTgwYmJhYzJkZTRjNzQ0NGI=",
+      "kycUrl": "https://caas.latibac.com",
+      "webhook": "dc_yLujK7K"
+    }
   },
   "language": "Cn",
   "language support": [
@@ -321,6 +321,7 @@
     "password": "IwOH1yANZgom4kTV",
     "port": 3306
   },
+  "operateUrl": "https://opapi.cabital.io/api/v1",
   "operate_admin_account": {
     "email": "zhangsan@test.com",
     "password": "zhangsan"
@@ -330,6 +331,5 @@
   "secretKeyForTest": " ",
   "slackTestUrl": "https://hooks.slack.com/services/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",
   "slackUrl": "https://hooks.slack.com/services/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",
-  "test": "https://api.latibac.com/api/v1",
-  "operateUrl": "https://opapi.cabital.io/api/v1"
+  "test": "https://api.latibac.com/api/v1"
 }
