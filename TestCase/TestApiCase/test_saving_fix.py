@@ -1,3 +1,5 @@
+import json
+
 from Function.api_function import *
 from run import *
 from Function.log import *
@@ -907,4 +909,48 @@ class TestSavingFixApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['auto_renew'] == True, "查询包含复投的交易记录错误，返回值是{}".format(r.json())
-            assert r.json()['time_line']['renew_subscription_id'] == '', "查询包含复投的交易记录错误，返回值是{}".format(r.json())
+            assert r.json()['time_line']['renew_subscription_id'] == '', "查询包含复投的交易记录详情信息错误，返回值是{}".format(r.json())
+
+    @allure.testcase('test_saving_fix_020 通过分页查询包含复投的交易记录详情信息')
+    def test_saving_fix_020(self):
+        with allure.step("申购一笔产品，并且获取信息"):
+            r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
+            product_list = random.choice(random.choice(r.json())['products'])
+            code = product_list['code']
+            product_id = product_list['product_id']
+            if code == 'USDT':
+                amount = '20'
+            else:
+                amount = "0.01327"
+            data = {
+                "subscribe_amount": {
+                    "code": code,
+                    "amount": amount
+                },
+                "maturity_interest": {
+                    "code": code,
+                    "amount": amount
+                },
+                "auto_renew": True
+            }
+            r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
+            transaction_id = r.json()['tx_id']
+        with allure.step("通过分页查询交易记录信息"):
+            data = {
+                "pagination_request": {
+                    "cursor": "0",
+                    "page_size": 100
+                },
+                "user_txn_sub_types": [3],
+                "statuses": [1, 2, 3, 4],
+                "codes": ["ETH", "BTC", "USDT"]
+            }
+            r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            for i in r.json()['transactions']:
+                if i['transaction_id'] == transaction_id:
+                    assert json.loads(i['details'])['subscribe_type'] == 0, "通过分页查询包含复投的交易记录详情信息错误，返回值是{}".format(r.json())
