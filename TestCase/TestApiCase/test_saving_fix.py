@@ -1,5 +1,3 @@
-import json
-
 from Function.api_function import *
 from run import *
 from Function.log import *
@@ -561,8 +559,6 @@ class TestSavingFixApi:
                         assert Decimal(fix_amount_old) == Decimal(
                             fix_amount_latest), '购买定期产品最大额度错误,购买前定期USDT数量{},购买后定期USDT数量{}'.format(balance_amount_old,
                                                                                                   balance_amount_latest)
-
-
                 else:
                     assert False, "币种不对，购买定期产品失败。"
 
