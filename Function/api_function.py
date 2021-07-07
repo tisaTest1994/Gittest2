@@ -271,6 +271,7 @@ class AccountFunction:
         sign = str(sign, 'utf-8')
         return sign
 
+    # 验签
     @staticmethod
     def make_access_sign(unix_time, method, url, body=''):
         if body == '':
@@ -281,6 +282,7 @@ class AccountFunction:
         sign = AccountFunction.get_sign(data, key)
         return sign
 
+    # 获得webhook
     @staticmethod
     def get_webhook():
         conn = http.client.HTTPSConnection('api.pipedream.com')
@@ -290,6 +292,7 @@ class AccountFunction:
         data = res.read()
         return data.decode("utf-8")
 
+    # 删除webhook
     @staticmethod
     def delete_old_webhook():
         conn = http.client.HTTPSConnection('api.pipedream.com')
@@ -328,8 +331,11 @@ class AccountFunction:
         product_id = product_list['product_id']
         if code == 'USDT':
             amount = '20'
+            interest_amount = str(((Decimal(amount) * Decimal(product_list['apy']) / Decimal(365)).quantize(Decimal('0.000000'), ROUND_FLOOR)) * Decimal(product_list['tenor']))
         else:
             amount = "0.01327"
+            interest_amount = str(((Decimal(amount) * Decimal(product_list['apy']) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(product_list['tenor']))
+
         data = {
             "subscribe_amount": {
                 "code": code,
@@ -337,7 +343,7 @@ class AccountFunction:
             },
             "maturity_interest": {
                 "code": code,
-                "amount": amount
+                "amount": interest_amount
             }
         }
         r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)

@@ -623,43 +623,17 @@ class TestSavingFixApi:
 
     @allure.testcase('test_saving_fix_009 查询申购项目的交易记录详情')
     def test_saving_fix_009(self):
-        with allure.step("获取定期产品列表"):
-            r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
-            product_info = random.choice(random.choice(r.json())['products'])
-        with allure.step("申购一笔项目"):
-            logger.info('申购项目信息是{}'.format(product_info))
-            data = {
-                "subscribe_amount": {
-                    "code": product_info['code'],
-                    "amount": "0.00124"
-                },
-                "maturity_interest": {
-                    "code": product_info['code'],
-                    "amount": "0.01"
-                }
-            }
-            if product_info['code'] == 'USDT':
-                data['subscribe_amount']['amount'] = '30'
-                data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * Decimal(
-                    product_info['apy']) / Decimal(365)).quantize(Decimal('0.000000'), ROUND_FLOOR)) * Decimal(
-                    product_info['tenor']))
-            else:
-                data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * Decimal(
-                    product_info['apy']) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(product_info['tenor']))
-                r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_info['product_id']),
-                                data=json.dumps(data), headers=headers)
-                transaction_id = r.json()['tx_id']
-                with allure.step("校验返回值"):
-                    assert AccountFunction.get_transaction_status(transaction_id=transaction_id, type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(product_info['product_id'], r.text)
-        with allure.step("查看交易记录详情"):
-            r = session.request('GET', url='{}/earn/fix/transactions/{}'.format(env_url, transaction_id), headers=headers)
+        with allure.step("申购一笔定期"):
+            transaction_info = AccountFunction.subscribe_fix()
+        with allure.step("查询申购项目的交易记录详情"):
+            r = session.request('GET', url='{}/earn/fix/transactions/{}'.format(env_url, transaction_info['tx_id']), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert transaction_id in r.text, '查询申购项目的交易记录详情错误, 返回值是{}'.format(r.text)
+            assert transaction_info['tx_id'] in r.text, '查询申购项目的交易记录详情错误, 返回值是{}'.format(r.text)
 
     @allure.testcase('test_saving_fix_010 查询申购BTC项目的交易记录')
     def test_saving_fix_010(self):
