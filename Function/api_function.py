@@ -14,46 +14,40 @@ class AccountFunction:
 
     # 获取用户token
     @staticmethod
-    def get_account_token(account=email['email'], password=email['password']):
+    def get_account_token(account=email['email'], password=email['password'], type='cabital'):
         data = {
             "username": account,
             "password": password
         }
-        r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-                            headers=headers, timeout=100)
-        return r.json()['accessToken']
+        if type == "operate":
+            r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data),
+                                headers=headers)
+        else:
+            r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
+        if r.text is None:
+            return "登录获得token错误，返回值是{}".format(r.text)
+        else:
+            return r.json()['accessToken']
 
-    # 加headers，只能默认账户
+    # 加headers，只能默认账户,使用usd
     @staticmethod
     def add_headers(currency='USD'):
         run.accountToken = AccountFunction.get_account_token()
         headers['Authorization'] = "Bearer " + run.accountToken
         headers['X-Currency'] = currency
 
-    # 获取operate用户的token
-    @staticmethod
-    def get_operate_account_token(account, password):
-        data = {
-            "username": account,
-            "password": password
-        }
-        r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data), headers=headers)
-        return r.json()
-
     # 注册
     @staticmethod
     def sign_up(account='', password='Zcdsw123'):
-        citizenCountryCode = random.choice(citizenCountryCodeList)
         data = {
             "emailAddress": account,
             "verificationCode": "666666",
-            "citizenCountryCode": citizenCountryCode,
+            "citizenCountryCode": random.choice(citizenCountryCodeList),
             "password": password
         }
-        session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers,
-                        timeout=10)
+        session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
 
-    # 提现获取交易id
+    # 提现ETH获取交易id
     @staticmethod
     def get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07'):
         requests.request('GET', url='{}/account/security/mfa/email/sendVerificationCode'.format(env_url),
@@ -78,7 +72,6 @@ class AccountFunction:
             "address": address,
             "method": "ERC20"
         }
-        print(headers)
         r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
                             headers=headers)
         logger.info('获取的交易订单json是{}'.format(r.text))
@@ -94,12 +87,10 @@ class AccountFunction:
     @staticmethod
     def get_quote(pair):
         cryptos = pair.split('-')
-        r1 = session.request('GET',
-                             url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[0], cryptos[1])),
-                             headers=headers)
-        strTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(r1.json()['valid_until'])))
+        r = session.request('GET', url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[0], cryptos[1])), headers=headers)
+        strTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(r.json()['valid_until'])))
         logger.info('获得报价的服务器时间是{}'.format(strTime))
-        return r1.json()
+        return r.json()
 
     # 获取钱包指定币种某个交易状态的数量
     @staticmethod
@@ -263,14 +254,6 @@ class AccountFunction:
                 cfx_list.append(cfx_dict)
         return cfx_list
 
-    @staticmethod
-    def get_sign(data, key):
-        key = key.encode('utf-8')
-        message = data.encode('utf-8')
-        sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
-        sign = str(sign, 'utf-8')
-        return sign
-
     # 验签
     @staticmethod
     def make_access_sign(unix_time, method, url, body=''):
@@ -279,7 +262,10 @@ class AccountFunction:
         else:
             data = '{}{}{}{}'.format(unix_time, method, url, body)
         key = get_json()['kyc'][kyc_type]['kycSecretKey']
-        sign = AccountFunction.get_sign(data, key)
+        key = key.encode('utf-8')
+        message = data.encode('utf-8')
+        sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
+        sign = str(sign, 'utf-8')
         return sign
 
     # 获得webhook

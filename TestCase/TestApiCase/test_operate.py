@@ -29,7 +29,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_002 检索用户')
     def test_operate_002(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -58,7 +58,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_003 管理员查询用户信息')
     def test_operate_003(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         r = session.request('GET', url='{}/operator/operator/user/info/{}'.format(operateUrl, email['userId']), headers=headers)
@@ -73,7 +73,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_004 管理员刷新token')
     def test_operate_004(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         r = session.request('GET', url='{}/operator/operator/user/info/{}'.format(operateUrl, email['userId']), headers=headers)
@@ -88,7 +88,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_005 检索cases')
     def test_operate_005(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -116,7 +116,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_006 获取cases详情')
     def test_operate_006(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获得cases id"):
@@ -149,7 +149,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_007 检索payin交易')
     def test_operate_007(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -174,7 +174,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_008 检索payin交易明细')
     def test_operate_008(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -203,7 +203,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_009 检索cfx交易')
     def test_operate_009(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -228,7 +228,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_010 检索cfx交易明细')
     def test_operate_010(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -257,7 +257,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_011 检索payout交易')
     def test_operate_011(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -282,7 +282,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_012 检索payout交易明细')
     def test_operate_012(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -311,7 +311,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_013 检索earn交易')
     def test_operate_013(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -336,7 +336,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_014 检索earn交易明细')
     def test_operate_014(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -365,7 +365,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_015 检索interest交易')
     def test_operate_015(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -390,7 +390,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_016 检索interest交易明细')
     def test_operate_016(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -419,7 +419,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_017 检索yield')
     def test_operate_017(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -444,7 +444,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_018 检索yield交易明细')
     def test_operate_018(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -473,7 +473,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_019 检索payout')
     def test_operate_019(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -498,7 +498,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_020 检索payout交易明细')
     def test_operate_020(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -527,7 +527,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_021 检索payin order')
     def test_operate_021(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -552,7 +552,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_022 检索payin order交易明细')
     def test_operate_022(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -581,7 +581,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_023 检索活期产品')
     def test_operate_023(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -599,7 +599,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_024 检索定期产品')
     def test_operate_024(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
@@ -617,7 +617,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_025 检索所有产品')
     def test_operate_025(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_operate_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'])['accessToken']
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         data = {
