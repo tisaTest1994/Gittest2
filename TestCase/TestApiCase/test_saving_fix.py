@@ -95,7 +95,7 @@ class TestSavingFixApi:
                             "amount": "0.01"
                         }
                     }
-                    data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * Decimal(y['apy']) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
+                    data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * (Decimal(y['apy']) / 100 ) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
                     r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, y['product_id']), data=json.dumps(data), headers=headers)
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
@@ -142,7 +142,7 @@ class TestSavingFixApi:
                             "amount": "0.01"
                         }
                     }
-                    data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * Decimal(y['apy']) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
+                    data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * (Decimal(y['apy']) / 100 ) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
                     r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, y['product_id']), data=json.dumps(data), headers=headers)
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
@@ -189,7 +189,7 @@ class TestSavingFixApi:
                             "amount": "0.01"
                         }
                     }
-                    data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * Decimal(y['apy']) / Decimal(365)).quantize(Decimal('0.000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
+                    data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * (Decimal(y['apy']) / 100 ) / Decimal(365)).quantize(Decimal('0.000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
                     r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, y['product_id']), data=json.dumps(data), headers=headers)
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
@@ -744,63 +744,13 @@ class TestSavingFixApi:
 
     @allure.testcase('test_saving_fix_016 申购定期时，直接打开复投开关')
     def test_saving_fix_016(self):
-        r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
-        product_list = random.choice(random.choice(r.json())['products'])
-        code = product_list['code']
-        product_id = product_list['product_id']
-        if code == 'USDT':
-            amount = '20'
-        else:
-            amount = "0.01327"
-        data = {
-            "subscribe_amount": {
-                "code": code,
-                "amount": amount
-            },
-            "maturity_interest": {
-                "code": code,
-                "amount": amount
-            },
-            "auto_renew": True
-        }
-        r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert 'tx_id' in r.text, "申购定期时，直接打开复投开关错误，返回值是{}".format(r.text)
+        transaction_info = AccountFunction.subscribe_fix(auto_renew=True)
+        logger.info("交易信息是{}".format(transaction_info))
 
     @allure.testcase('test_saving_fix_017 申购定期时，直接关闭复投开关')
     def test_saving_fix_017(self):
-        r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
-        product_list = random.choice(random.choice(r.json())['products'])
-        code = product_list['code']
-        product_id = product_list['product_id']
-        if code == 'USDT':
-            amount = '20'
-        else:
-            amount = "0.01327"
-        data = {
-            "subscribe_amount": {
-                "code": code,
-                "amount": amount
-            },
-            "maturity_interest": {
-                "code": code,
-                "amount": amount
-            },
-            "auto_renew": False
-        }
-        r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert 'tx_id' in r.text, "申购定期时，直接关闭复投开关错误，返回值是{}".format(r.text)
+        transaction_info = AccountFunction.subscribe_fix()
+        logger.info("交易信息是{}".format(transaction_info))
 
     @allure.testcase('test_saving_fix_018 查询包含复投的交易记录')
     def test_saving_fix_018(self):

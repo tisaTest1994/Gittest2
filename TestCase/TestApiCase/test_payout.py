@@ -135,7 +135,7 @@ class TestPayoutApi:
             data = {
                 "amount": "0.02",
                 "code": "ETH",
-                "address": "0xB4cB0F7673E81820876869EdE8cD3D394B24e436",
+                "address": "0x454d1E19938294E74b8b1127aCE315d0F94d506f",
                 "method": "ERC20"
             }
             r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)

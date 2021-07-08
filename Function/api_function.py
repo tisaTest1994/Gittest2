@@ -310,18 +310,18 @@ class AccountFunction:
 
     # 定期申购
     @staticmethod
-    def subscribe_fix():
+    def subscribe_fix(auto_renew=False):
         r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
         product_list = random.choice(random.choice(r.json())['products'])
+        logger.info('项目信息是{}'.format(product_list))
         code = product_list['code']
         product_id = product_list['product_id']
         if code == 'USDT':
             amount = '20'
-            interest_amount = str(((Decimal(amount) * Decimal(product_list['apy']) / Decimal(365)).quantize(Decimal('0.000000'), ROUND_FLOOR)) * Decimal(product_list['tenor']))
+            interest_amount = str(((Decimal(amount) * (Decimal(product_list['apy']) / 100) / Decimal(365)).quantize(Decimal('0.000000'), ROUND_FLOOR)) * Decimal(product_list['tenor']))
         else:
             amount = "0.01327"
-            interest_amount = str(((Decimal(amount) * Decimal(product_list['apy']) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(product_list['tenor']))
-
+            interest_amount = str(((Decimal(amount) * (Decimal(product_list['apy']) / 100) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(product_list['tenor']))
         data = {
             "subscribe_amount": {
                 "code": code,
@@ -330,8 +330,10 @@ class AccountFunction:
             "maturity_interest": {
                 "code": code,
                 "amount": interest_amount
-            }
+            },
+            "auto_renew": auto_renew
         }
+        logger.info('申购信息是{}'.format(data))
         r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert 'tx_id' in r.text, "赎回错误，返回值是{}".format(r.text)
