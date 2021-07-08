@@ -54,7 +54,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'The email address has been registered' in r.text, "用户已经存在错误，返回值是{}".format(r.text)
+            assert 'Registration failed. Please contact our customer service if the problem persists.' in r.text, "用户已经存在错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_003 注册时，输入错误验证码导致注册失败')
     def test_account_003(self):
@@ -113,9 +113,9 @@ class TestAccountApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "The email address has been registered" in r.text, "申请注册验证码的邮箱已注册错误，返回值是{}".format(r.text)
+            assert '{}' == r.text, "申请注册验证码的邮箱已注册错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_006 申请注册验证码邮箱在黑名单')
     def test_account_006(self):
@@ -132,9 +132,9 @@ class TestAccountApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "Registration failed. Please contact our customer service if the problem persists" in r.text, "申请注册验证码邮箱在黑名单错误，返回值是{}".format(r.text)
+            assert '{}' == r.text, "申请注册验证码邮箱在黑名单错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_007 登录已经注册账号')
     def test_account_007(self):
@@ -410,7 +410,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "The email address is not registered." in r.text, "未注册用户忘记密码失败错误，返回值是{}".format(r.text)
+            assert "The verification code was wrong." in r.text, "未注册用户忘记密码失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_021 用户忘记密码验证码错误')
     def test_account_021(self):
