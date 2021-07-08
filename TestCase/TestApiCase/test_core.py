@@ -157,6 +157,8 @@ class TestCoreApi:
 
     @allure.testcase('test_core_011 查询客户状态')
     def test_core_011(self):
+        run.accountToken = AccountFunction.get_account_token(account='yilei7@163.com')
+        headers['Authorization'] = "Bearer " + run.accountToken
         with allure.step("查询客户状态"):
             r = session.request('GET', url='{}/core/beginnerguide'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
