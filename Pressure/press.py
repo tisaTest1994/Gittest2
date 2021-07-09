@@ -6,7 +6,7 @@ import os
 
 class MyUser(HttpUser):
     account_list = get_json()['account_list']
-    wait_time = between(0.25, 0.5)
+    wait_time = between(0.2, 0.5)
 
     @task(2)
     def core(self):
@@ -19,7 +19,7 @@ class MyUser(HttpUser):
         else:
             print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
 
-    @task(0)
+    @task(1)
     def cfx(self):
         accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken

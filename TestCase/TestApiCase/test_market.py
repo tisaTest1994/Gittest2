@@ -1,11 +1,17 @@
 from run import *
 from Function.log import *
 from datetime import datetime
+from Function.api_function import *
 import allure
 
 
 # market相关cases
 class TestMarketApi:
+
+    # 初始化class
+    def setup_class(self):
+        AccountFunction.add_headers()
+
     @allure.testcase('test_market_001 获得价格曲线')
     def test_market_001(self):
         for i in ['BTCEUR', 'BTCUSD', 'ETHEUR', 'ETHUSD', 'USDEUR']:
@@ -48,5 +54,19 @@ class TestMarketApi:
     @allure.testcase('test_market_003 给测试环境注资')
     def test_market_003(self):
         with allure.step("给测试环境注资"):
-            r = session.request('GET', url='https://faucet.ropsten.be/donate/0xaE346B37A0A7ffd5F224Cc2fC2c4C0E1bC541D67')
-            print(r.json())
+            session.request('GET', url='https://faucet.ropsten.be/donate/0xaE346B37A0A7ffd5F224Cc2fC2c4C0E1bC541D67')
+
+    @allure.testcase('test_market_004 首页获得数字货币报价')
+    def test_market_004(self):
+        with allure.step("首页获得数字货币报价"):
+            params = {
+                'codes': 'BTC,ETH'
+            }
+            r = requests.request('GET', url='{}/marketstat/public/tickers'.format(env_url), params=params, headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'abs_amount' in r.text, "首页获得数字货币报价失败，返回值是{}".format(r.text)
