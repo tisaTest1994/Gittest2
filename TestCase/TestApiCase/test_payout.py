@@ -112,6 +112,8 @@ class TestPayoutApi:
 
     @allure.testcase('test_payout_007 MFA认证提现ETH成功')
     def test_payout_007(self):
+        run.accountToken = AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
+        headers['Authorization'] = "Bearer " + run.accountToken
         with allure.step("发邮件"):
             requests.request('GET', url='{}/account/security/mfa/email/sendVerificationCode'.format(env_url), headers=headers)
             sleep(30)
@@ -123,22 +125,22 @@ class TestPayoutApi:
                 email_info = get_email()
                 if '[Cabital] Verify Your Email' in email_info['title']:
                     break
-            assert '[Cabital] Verify Your Email' in email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(
-                email_info['title'])
+            assert '[Cabital] Verify Your Email' in email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(email_info['title'])
             code = str(email_info['body']).split('"code":')[1].split('"')[1]
             secretKey = get_json()['secretKey']
             totp = pyotp.TOTP(secretKey)
             mfaVerificationCode = totp.now()
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['email'], code)
+            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
         with allure.step("提现ETH成功"):
             data = {
-                "amount": "0.02",
+                "amount": "5.02",
                 "code": "ETH",
                 "address": "0x454d1E19938294E74b8b1127aCE315d0F94d506f",
                 "method": "ERC20"
             }
             r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)
+        AccountFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -164,8 +166,11 @@ class TestPayoutApi:
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
             logger.info('transaction_id是{}'.format(transaction_id))
+            run.accountToken = AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
+            headers['Authorization'] = "Bearer " + run.accountToken
         with allure.step("查询提现详情"):
             r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id), headers=headers)
+            AccountFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))

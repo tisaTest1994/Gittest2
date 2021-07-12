@@ -50,8 +50,11 @@ class AccountFunction:
     # 提现ETH获取交易id
     @staticmethod
     def get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07'):
+        run.accountToken = AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
+        headers['Authorization'] = "Bearer " + run.accountToken
         requests.request('GET', url='{}/account/security/mfa/email/sendVerificationCode'.format(env_url),
                          headers=headers)
+        sleep(30)
         sleep_time = 0
         while sleep_time < 80:
             sleep_time = sleep_time + 5
@@ -65,7 +68,7 @@ class AccountFunction:
         totp = pyotp.TOTP(secretKey)
         mfaVerificationCode = totp.now()
         headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-        headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['email'], code)
+        headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
         data = {
             "amount": amount,
             "code": "ETH",
@@ -75,6 +78,7 @@ class AccountFunction:
         r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
                             headers=headers)
         logger.info('获取的交易订单json是{}'.format(r.text))
+        AccountFunction.add_headers()
         return r.json()['transaction_id']
 
     # 获取下次清算金额
@@ -256,14 +260,14 @@ class AccountFunction:
 
     # 验签
     @staticmethod
-    def make_access_sign(unix_time, method, url, body=''):
+    def make_access_sign(unix_time, method, url, body='', key=get_json()['kyc'][kyc_type]['kycSecretKey']):
         if body == '':
             data = '{}{}{}'.format(unix_time, method, url)
         else:
             data = '{}{}{}{}'.format(unix_time, method, url, body)
-        key = get_json()['kyc'][kyc_type]['kycSecretKey']
         key = key.encode('utf-8')
         message = data.encode('utf-8')
+        print(message)
         sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
         sign = str(sign, 'utf-8')
         return sign

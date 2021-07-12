@@ -138,6 +138,9 @@ class TestKycApi:
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                         sleep_time = 501
+                        with allure.step("wehbook验签"):
+                            webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=json.dumps(y['e']['bodyRaw']))
+                            #assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))

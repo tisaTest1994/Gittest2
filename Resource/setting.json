@@ -276,6 +276,7 @@
     "email": "richard.wan@cabital.com",
     "host": "imap.gmail.com",
     "password": "Zcdsw123",
+    "payout_email": "external.qa@cabital.com",
     "port": "993",
     "security_code": "ilyjqzbyoljfvtwy",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
@@ -327,7 +328,7 @@
     "password": "zhangsan"
   },
   "pro": "https://api.cabital.com/api/v1",
-  "secretKey": "IRIFOMJZNRDDK3ZZJV4U6QRXOV4G4U2J",
+  "secretKey": "GNYEQ2SHINCXQY3GGJQWKRCWJN3GS2LO",
   "secretKeyForTest": " ",
   "slackTestUrl": "https://hooks.slack.com/services/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",
   "slackUrl": "https://hooks.slack.com/services/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",

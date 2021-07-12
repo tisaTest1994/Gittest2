@@ -813,7 +813,7 @@ class TestSavingCurrentApi:
             now_time = str(time.time()).split('.')[0]
             logger.info('现在时间戳是{}'.format(now_time))
             assert int(now_time) <= int(redeem_settle_time), '确定赎回日期是D+1错误'
-            assert int(now_time) + 86400 >= int(redeem_settle_time), '确定赎回日期是D+1错误'
+            assert int(now_time) + 86400*2 >= int(redeem_settle_time), '确定赎回日期是D+1错误'
 
 
 

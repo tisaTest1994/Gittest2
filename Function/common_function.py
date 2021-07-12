@@ -116,10 +116,11 @@ def get_email():
     type, data = client.search(None, 'ALL')
     num = str(len(str(data[0], 'utf-8').split(' ')))
     typ, data = client.fetch(num.encode(), '(RFC822)')
-    encoding = chardet.detect(data[0][1])
-    msg = email.message_from_string(data[0][1].decode(encoding['encoding']))
-    text, enc = email.header.decode_header(msg['subject'])[0]
-    title = text.decode(enc) if enc else text
-    return {"title": title, "body": data[0][1].decode(encoding['encoding'])}
-
-
+    if data[0] is not None:
+        encoding = chardet.detect(data[0][1])
+        msg = email.message_from_string(data[0][1].decode(encoding['encoding']))
+        text, enc = email.header.decode_header(msg['subject'])[0]
+        title = text.decode(enc) if enc else text
+        return {"title": title, "body": data[0][1].decode(encoding['encoding'])}
+    else:
+        return {'title': 'error, data is None.'}
