@@ -11,7 +11,7 @@ class TestPayInApi:
     def setup_class(self):
         AccountFunction.add_headers()
 
-    @allure.testcase('test_pay_in_001 查询转入记录（不指定链）')
+    @allure.testcase('test_pay_in_001 查询转入地址记录（不指定链）')
     def test_pay_in_001(self):
         with allure.step("查询转入记录"):
             currency = ['USDT', 'BTC', 'ETH']
@@ -26,9 +26,9 @@ class TestPayInApi:
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
-                    assert r.json() == [] or 'code' in r.text, "查询转入记录（不指定链）错误，返回值是{}".format(r.text)
+                    assert r.json() == [] or 'code' in r.text, "查询查询转入地址记录（不指定链）错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_pay_in_002 查询不到转入记录（使用错误币种）')
+    @allure.testcase('test_pay_in_002 查询不到转入地址记录（使用错误币种）')
     def test_pay_in_002(self):
         with allure.step("查询不到转入记录"):
             data = {
@@ -41,9 +41,9 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'method is not support' in r.text, "查询不到转入记录（使用错误币种）错误，返回值是{}".format(r.text)
+                assert 'method is not support' in r.text, "查询不到转入地址记录（使用错误币种）错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_pay_in_003 查询转入记录（使用转币链查询）')
+    @allure.testcase('test_pay_in_003 查询转入地址记录（指定链）')
     def test_pay_in_003(self):
         with allure.step("查询转入记录"):
             data = {
@@ -57,9 +57,9 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'ERC20' in r.text, "查询转入记录（使用转币链查询）错误，返回值是{}".format(r.text)
+                assert 'ERC20' in r.text, "查询转入地址记录（指定链）错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_pay_in_004 查询转入记录（使用错误转币链查询）')
+    @allure.testcase('test_pay_in_004 查询不到转入地址记录（使用错误链查询）')
     def test_pay_in_004(self):
         with allure.step("查询转入记录"):
             data = {
@@ -73,4 +73,4 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'method is not support' in r.text, "查询转入记录（使用错误转币链查询）错误，返回值是{}".format(r.text)
+                assert 'method is not support' in r.text, "查询不到转入地址记录（使用错误链查询）错误，返回值是{}".format(r.text)

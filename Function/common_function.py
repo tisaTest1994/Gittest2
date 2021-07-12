@@ -1,4 +1,3 @@
-from Function.common_function import *
 from datetime import *
 from faker import Faker
 import random
@@ -59,8 +58,8 @@ def generate_email(Type='random', rang='random'):
         rang_len = int(rang)
     number = "0123456789qbcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPWRSTUVWXYZ"
     __randomNumber = "".join(random.choice(number) for i in range(rang_len))
-    email = __randomNumber + random_email
-    return email
+    email_account = __randomNumber + random_email
+    return email_account
 
 
 # 获得资源里面的配置参数

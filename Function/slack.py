@@ -42,6 +42,7 @@ def slack_report():
     slack.notify(attachments=attachment)
 
 
+# 获得build id
 def get_job_id():
     headers = {
         "PRIVATE-TOKEN": get_json()['PRIVATE-TOKEN']

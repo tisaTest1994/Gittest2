@@ -159,13 +159,13 @@ class TestPayoutApi:
                 print(i)
                 assert i['wallet_id'] is not None, "payout的P/L错误，sql命令是{}".format(sql)
 
+    @allure.testcase('test_payout_008 查询提现详情')
     def test_payout_008(self):
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
             logger.info('transaction_id是{}'.format(transaction_id))
         with allure.step("查询提现详情"):
             r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id), headers=headers)
-            print(r.json())
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))

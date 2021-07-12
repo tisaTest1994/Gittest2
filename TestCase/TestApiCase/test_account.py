@@ -12,7 +12,7 @@ class TestAccountApi:
     def setup_class(self):
         AccountFunction.add_headers()
 
-    @allure.testcase('test_account_001 注册用户成功')
+    @allure.testcase('test_account_001 成功注册新用户')
     def test_account_001(self):
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(citizenCountryCodeList)
@@ -30,7 +30,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'accessToken' in r.text, "注册用户失败，返回值是{}".format(r.text)
+            assert 'accessToken' in r.text, "注册新用户失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_002 注册用户时，用户已经存在（正常流程不会存在此问题）')
     def test_account_002(self):
