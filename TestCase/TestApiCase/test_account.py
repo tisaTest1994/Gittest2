@@ -82,7 +82,7 @@ class TestAccountApi:
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(citizenCountryCodeList)
             data = {
-                "emailAddress": "zcdsw159@cabital.com",
+                "emailAddress": "zcdsw159@163.com",
                 "citizenCountryCode": citizenCountryCode
             }
             r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
@@ -123,7 +123,7 @@ class TestAccountApi:
             citizenCountryCode = random.choice(citizenCountryCodeList)
         with allure.step("用黑名单邮箱申请注册验证码"):
             data = {
-                "emailAddress": "yilei100@cabital.com",
+                "emailAddress": "yilei100@163.com",
                 "citizenCountryCode": citizenCountryCode
             }
             r = requests.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
@@ -726,8 +726,9 @@ class TestAccountApi:
 
     @allure.testcase('test_account_035 验证opt code')
     def test_account_035(self):
-        AccountFunction.add_headers()
         # 验证opt code
+        run.accountToken = AccountFunction.get_account_token(account='external.qa@cabital.com')
+        headers['Authorization'] = "Bearer " + run.accountToken
         secretKey = get_json()['secretKey']
         totp = pyotp.TOTP(secretKey)
         mfaVerificationCode = totp.now()
@@ -735,6 +736,7 @@ class TestAccountApi:
             "totp": str(mfaVerificationCode)
         }
         r = requests.request('POST', url='{}/account/security/mfa/otp/verify'.format(env_url), data=json.dumps(data), headers=headers)
+        AccountFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))

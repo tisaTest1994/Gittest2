@@ -134,7 +134,7 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
         with allure.step("提现ETH成功"):
             data = {
-                "amount": "5.02",
+                "amount": "0.02",
                 "code": "ETH",
                 "address": "0x454d1E19938294E74b8b1127aCE315d0F94d506f",
                 "method": "ERC20"
