@@ -139,8 +139,8 @@ class TestKycApi:
                     if y['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                         sleep_time = 501
                         with allure.step("wehbook验签"):
-                            webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=json.dumps(y['e']['bodyRaw']))
-                            #assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
+                            webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
+                            assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -184,6 +184,10 @@ class TestKycApi:
                     assert 'ACCEPT' == i['e']['body']['decision'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
                     logger.info('最终kyc结果webhook是{}'.format(i))
                     sleep_time = 501
+                    webhook_sign = AccountFunction.make_access_sign(unix_time=i['e']['headers']['access-timestamp'],
+                                                                    method=i['e']['method'], url=i['e']['path'],
+                                                                    body=i['e']['bodyRaw'])
+                    assert webhook_sign == i['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(i['e'])
 
     @allure.testcase('test_kyc_006 打开特定KYC Case的持续性扫描')
     def test_kyc_006(self):
@@ -290,6 +294,10 @@ class TestKycApi:
                 if i['e']['path'] == '/webhook/screen/case/reviewed':
                     AccountFunction.delete_old_webhook()
                     sleep_time = 501
+                    webhook_sign = AccountFunction.make_access_sign(unix_time=i['e']['headers']['access-timestamp'],
+                                                                    method=i['e']['method'], url=i['e']['path'],
+                                                                    body=i['e']['bodyRaw'])
+                    assert webhook_sign == i['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(i['e'])
 
     @allure.testcase('test_kyc_010 创建直接pass 个人 Kyc case后查询cases,最后发送不接受结果信息')
     def test_kyc_010(self):
@@ -337,6 +345,10 @@ class TestKycApi:
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                         sleep_time = 501
+                        webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'],
+                                                                        method=y['e']['method'], url=y['e']['path'],
+                                                                        body=y['e']['bodyRaw'])
+                        assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -380,6 +392,10 @@ class TestKycApi:
                         assert 'REJECT' == i['e']['body']['decision'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
                         logger.info('最终kyc结果webhook是{}'.format(i))
                         sleep_time = 501
+                        webhook_sign = AccountFunction.make_access_sign(unix_time=i['e']['headers']['access-timestamp'],
+                                                                        method=i['e']['method'], url=i['e']['path'],
+                                                                        body=i['e']['bodyRaw'])
+                        assert webhook_sign == i['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(i['e'])
 
     @allure.testcase('test_kyc_011 创建直接pending cases Kyc case后查询cases')
     def test_kyc_011(self):
@@ -421,6 +437,11 @@ class TestKycApi:
                         caseSystemId = i['e']['body']['caseSystemId']
                         logger.info('caseSystemId是{}'.format(caseSystemId))
                         sleep_time = 501
+                        webhook_sign = AccountFunction.make_access_sign(unix_time=i['e']['headers']['access-timestamp'],
+                                                                        method=i['e']['method'], url=i['e']['path'],
+                                                                        body=i['e']['bodyRaw'])
+                        assert webhook_sign == i['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(i['e'])
+
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -482,6 +503,10 @@ class TestKycApi:
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                         sleep_time = 501
+                        webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'],
+                                                                        method=y['e']['method'], url=y['e']['path'],
+                                                                        body=y['e']['bodyRaw'])
+                        assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -557,6 +582,10 @@ class TestKycApi:
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                         sleep_time = 501
+                        webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'],
+                                                                        method=y['e']['method'], url=y['e']['path'],
+                                                                        body=y['e']['bodyRaw'])
+                        assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -649,6 +678,10 @@ class TestKycApi:
                 if i['e']['path'] == '/webhook/screen/case/reviewed':
                     AccountFunction.delete_old_webhook()
                     sleep_time = 501
+                    webhook_sign = AccountFunction.make_access_sign(unix_time=i['e']['headers']['access-timestamp'],
+                                                                    method=i['e']['method'], url=i['e']['path'],
+                                                                    body=i['e']['bodyRaw'])
+                    assert webhook_sign == i['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(i['e'])
 
     @allure.testcase('test_kyc_015 创建直接pass 企业 Kyc case后查询cases,最后发送接受结果信息')
     def test_kyc_015(self):
@@ -690,6 +723,10 @@ class TestKycApi:
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                         sleep_time = 501
+                        webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'],
+                                                                        method=y['e']['method'], url=y['e']['path'],
+                                                                        body=y['e']['bodyRaw'])
+                        assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
@@ -733,3 +770,7 @@ class TestKycApi:
                         assert 'ACCEPT' == i['e']['body']['decision'], '接受kyc结果后，webhook出现问题。webhook返回值是{}'.format(i)
                         logger.info('最终kyc结果webhook是{}'.format(i))
                         sleep_time = 501
+                        webhook_sign = AccountFunction.make_access_sign(unix_time=i['e']['headers']['access-timestamp'],
+                                                                        method=i['e']['method'], url=i['e']['path'],
+                                                                        body=i['e']['bodyRaw'])
+                        assert webhook_sign == i['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(i['e'])
