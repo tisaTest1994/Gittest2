@@ -8,6 +8,9 @@ from time import sleep
 global env_url
 env_url = get_json()[get_json()['env']]
 
+global operateUrl
+operateUrl = get_json()['operateUrl']
+
 global headers
 headers = get_json()['headers']
 
@@ -23,9 +26,6 @@ accountToken = ''
 global kyc_type
 kyc_type = 'test'
 
-global operateUrl
-operateUrl = get_json()['operateUrl']
-
 
 class sessions(requests.Session):
     def request(self, *args, **kwargs):
@@ -39,6 +39,7 @@ if __name__ == '__main__':
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
     pytest.main(['TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
+    sleep(2)
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     slack_report()
 

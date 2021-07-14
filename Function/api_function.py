@@ -20,8 +20,7 @@ class AccountFunction:
             "password": password
         }
         if type == "operate":
-            r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data),
-                                headers=headers)
+            r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data), headers=headers)
         else:
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
         if r.text is None:
