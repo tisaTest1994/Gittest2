@@ -5,7 +5,7 @@ stages:
   - build
   - test
 
-build:
+build_env:
   stage: build
   tags:
     - python
@@ -23,10 +23,10 @@ build:
 
 apiTest:
   stage: test
+  needs:
+    - job: build_env
   tags:
     - python
-  needs:
-    - job: build
   script:
     - python run.py
   artifacts:
