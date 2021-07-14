@@ -5,7 +5,9 @@ stages:
   - build
   - test
 
-install:
+build:
+  tags:
+    - python
   stage: build
   script:
     - apt-get update
@@ -19,7 +21,9 @@ install:
     - pip install --upgrade pip
     - pip install -r requirements.txt
 
-apiTest:
+test-apiTest:
+  tags:
+    - python
   stage: test
   script:
     - python run.py
