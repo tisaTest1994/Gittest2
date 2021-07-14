@@ -1,14 +1,11 @@
 default:
   image: python:3.9.1
 
-stages:
-  - install
-  - test
 
 install:
   tags:
     - python
-  stage: install
+  stage: build
   script:
     - apt-get update
     - apt-get install software-properties-common -y
