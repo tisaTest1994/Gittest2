@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from Function.slack import *
 from Function.operate_sql import *
@@ -35,6 +37,7 @@ class sessions(requests.Session):
 session = sessions()
 
 if __name__ == '__main__':
+    os.system('ls')
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
     pytest.main(['TestCase/TestApiCase', '-v', '--alluredir', './Reports'])

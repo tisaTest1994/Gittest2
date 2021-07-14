@@ -1,10 +1,29 @@
 image: python:3.9.1
 
+stages: # 分段
+  - install
+  - apiTest
 
-apiTest:
-  stage: test
+install:
   tags:
     - python
+  stage: install
+  script:
+    - apt-get update
+    - apt-get install software-properties-common -y
+    - apt-get install default-jre -y
+    - apt-get install curl -y
+    - apt-get install gzip -y
+    - curl -o allure-2.13.9.tgz -Ls https://github.com/allure-framework/allure2/releases/download/2.13.9/allure-2.13.9.tgz
+    - tar -zxvf allure-2.13.9.tgz -C /opt/
+    - ln -s /opt/allure-2.13.9/bin/allure /usr/bin/allure
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+
+apiTest:
+  tags:
+    - python
+  stage: apiTest
   script:
     - python run.py
   artifacts:
