@@ -1,7 +1,6 @@
 import pytest
 from Function.slack import *
 from Function.operate_sql import *
-from time import sleep
 
 
 # 选择环境，得到环境url
@@ -39,7 +38,6 @@ if __name__ == '__main__':
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
     pytest.main(['TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
-    sleep(2)
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     slack_report()
 
