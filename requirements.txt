@@ -10,3 +10,4 @@ chardet~=4.0.0
 logger~=1.4
 Faker~=6.6.1
 locust~=1.4.4
+allure-pytest~=2.8.36
