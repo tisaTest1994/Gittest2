@@ -32,4 +32,9 @@ apiTest:
       - Reports
     expire_in: 1 week
 
-
+UITest:
+  stage: test
+  tags:
+    - python
+  script:
+    - echo `pwd`
