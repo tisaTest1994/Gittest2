@@ -6,12 +6,10 @@ allure-python-commons==2.8.36
 aniso8601==8.0.0
 apipkg==1.5
 asgiref==3.2.3
-astunparse==1.6.3
 async-timeout==3.0.1
 attrdict==2.0.1
 attrs==20.3.0
 cached-property==1.5.2
-cachetools==4.2.2
 certifi==2020.12.5
 chardet==4.0.0
 click==7.1.2
