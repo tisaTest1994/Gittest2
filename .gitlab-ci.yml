@@ -25,7 +25,8 @@ apiTest:
   stage: test
   tags:
     - python
-  needs: build
+  needs:
+    - job: build
   script:
     - python run.py
   artifacts:
