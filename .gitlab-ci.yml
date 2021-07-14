@@ -1,15 +1,8 @@
 default:
   image: python:3.9.1
 
-stages:
-  - build
-  - test
 
-build_env:
-  stage: build
-  tags:
-    - python
-  script:
+before_script:
     - apt-get update
     - apt-get install software-properties-common -y
     - apt-get install default-jre -y
@@ -22,9 +15,6 @@ build_env:
     - pip install -r requirements.txt
 
 apiTest:
-  stage: test
-  needs:
-    - job: build_env
   tags:
     - python
   script:
