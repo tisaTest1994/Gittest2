@@ -1,10 +1,11 @@
+default:
+  image: python:3.9.1
+
 stages:
   - build
   - test
 
 install:
-  tags:
-    - python
   stage: build
   script:
     - apt-get update
@@ -19,8 +20,6 @@ install:
     - pip install -r requirements.txt
 
 apiTest:
-  tags:
-    - python
   stage: test
   script:
     - python run.py
