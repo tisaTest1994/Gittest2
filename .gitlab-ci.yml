@@ -25,16 +25,10 @@ apiTest:
   stage: test
   tags:
     - python
+  needs: build
   script:
     - python run.py
   artifacts:
     paths:
       - Reports
     expire_in: 1 week
-
-UITest:
-  stage: test
-  tags:
-    - python
-  script:
-    - echo `pwd`
