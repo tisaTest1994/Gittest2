@@ -6,9 +6,9 @@ stages:
   - test
 
 build:
+  stage: build
   tags:
     - python
-  stage: build
   script:
     - apt-get update
     - apt-get install software-properties-common -y
@@ -21,10 +21,10 @@ build:
     - pip install --upgrade pip
     - pip install -r requirements.txt
 
-test-apiTest:
+apiTest:
+  stage: test
   tags:
     - python
-  stage: test
   script:
     - python run.py
   artifacts:
