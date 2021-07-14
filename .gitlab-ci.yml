@@ -1,6 +1,9 @@
 default:
   image: python:3.9.1
 
+stages:
+  - build
+  - test
 
 install:
   tags:
