@@ -1,8 +1,5 @@
-image: python:3.9.1
-
-stages: # 分段
-  - install
-  - apiTest
+default:
+  image: python:3.9.1
 
 install:
   tags:
@@ -23,7 +20,7 @@ install:
 apiTest:
   tags:
     - python
-  stage: apiTest
+  stage: test
   script:
     - python run.py
   artifacts:
