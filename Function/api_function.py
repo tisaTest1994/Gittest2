@@ -23,6 +23,7 @@ class AccountFunction:
             r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data), headers=headers)
         else:
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
+        print(r.text)
         if r.text is None:
             return "登录获得token错误，返回值是{}".format(r.text)
         else:
