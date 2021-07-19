@@ -37,7 +37,7 @@ class sessions(requests.Session):
 session = sessions()
 
 if __name__ == '__main__':
-    os.system('yum install net-tools -y')
+    os.system('apt-get install net-tools -y')
     os.system('ifconfig -a')
     # if not os.path.exists('Reports'):
     #     os.makedirs('Reports')
