@@ -37,10 +37,8 @@ class sessions(requests.Session):
 session = sessions()
 
 if __name__ == '__main__':
-    os.system('apt-get install net-tools -y')
-    os.system('ifconfig -a')
-    # if not os.path.exists('Reports'):
-    #     os.makedirs('Reports')
-    # pytest.main(['./TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
-    # os.system("allure generate ./Reports  -o ./Reports/html --clean")
-    # slack_report()
+    if not os.path.exists('Reports'):
+        os.makedirs('Reports')
+    pytest.main(['./TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
+    os.system("allure generate ./Reports  -o ./Reports/html --clean")
+    slack_report()
