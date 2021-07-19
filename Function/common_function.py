@@ -124,3 +124,6 @@ def get_email():
         return {"title": title, "body": data[0][1].decode(encoding['encoding'])}
     else:
         return {'title': 'error, data is None.'}
+
+
+
