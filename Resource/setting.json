@@ -281,6 +281,12 @@
     "security_code": "ilyjqzbyoljfvtwy",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
   },
+  "app_package_debug": {
+    "package_name": "com.cabital.cabital.debug"
+  },
+  "app_package_pro": {
+    "package_name": "com.cabital.cabital.debug"
+  },
   "env": "test",
   "env support": [
     "test",
