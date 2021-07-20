@@ -1,4 +1,6 @@
 from datetime import *
+
+import requests
 from faker import Faker
 import random
 import json
@@ -63,8 +65,8 @@ def generate_email(Type='random', rang='random'):
 
 
 # 获得资源里面的配置参数
-def get_json():
-    path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/setting.json'
+def get_json(file='setting.json'):
+    path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/{}'.format(file)
     with open(path, "rb+") as f:
         js = json.load(f)
     return js
@@ -126,4 +128,12 @@ def get_email():
         return {'title': 'error, data is None.'}
 
 
+# 查询语言map
+def get_language_map():
+    r = requests.request('GET', url='http://10.10.20.117:8888/translation/{}'.format(get_json()['language']))
+    path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages.json'
+    with open(path, "w") as f:
+        json.dump(r.json()['data'], f, sort_keys=True, indent=2)
 
+
+get_language_map()

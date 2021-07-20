@@ -149,6 +149,7 @@ class TestPayoutApi:
         with allure.step("p/l验证"):
             sleep(5)
             sql = "select * from transaction_history where transaction_id='{}';".format(r.json()['transaction_id'])
+            print(sql)
             sql_info = sqlFunction.connect_mysql(db='assetstat', sql=sql)
             assert sql_info[0] is not None, "payout的P/L错误，sql命令是{}".format(sql)
         with allure.step("wallet internal_balance验证"):

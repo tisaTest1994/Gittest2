@@ -1,5 +1,3 @@
-import os
-
 import pytest
 from Function.slack import *
 from Function.operate_sql import *
@@ -27,6 +25,15 @@ accountToken = ''
 global kyc_type
 kyc_type = 'test'
 
+global ui_type
+ui_type = 'test'
+
+global package_name
+if ui_type == 'test':
+    package_name = get_json()['app_package_debug']['package_name']
+elif ui_type == 'pro':
+    package_name = get_json()['app_package_pro']['package_name']
+
 
 class sessions(requests.Session):
     def request(self, *args, **kwargs):
@@ -37,10 +44,8 @@ class sessions(requests.Session):
 session = sessions()
 
 if __name__ == '__main__':
-    os.system('apt-get install net-tools -y')
-    os.system('ifconfig -a')
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
-    pytest.main(['./TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
+    pytest.main(['./TestCase/TestApiCase/test_payout.py::TestPayoutApi::test_payout_007', '-v', '--alluredir', './Reports'])
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     slack_report()

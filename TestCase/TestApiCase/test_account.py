@@ -816,3 +816,27 @@ class TestAccountApi:
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'Invalid verification code' in r.text, "注册时，输入错误验证码导致注册失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_040 获得邀请人数和奖励')
+    def test_account_040(self):
+        with allure.step("获得邀请人数和奖励"):
+            r = requests.request('GET', url='{}/recruit/referal/referees'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert '"count":0,"amount":0' in r.text, "获得邀请人数和奖励失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_041 获得邀请码和链接')
+    def test_account_041(self):
+        with allure.step("获得邀请人数和奖励"):
+            r = requests.request('GET', url='{}/recruit/referal/code'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['code'] is not None, "获得邀请人数和奖励失败，返回值是{}".format(r.text)

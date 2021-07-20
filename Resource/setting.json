@@ -316,11 +316,10 @@
       "webhook": "dc_yLujK7K"
     }
   },
-  "language": "Cn",
+  "language": "en",
   "language support": [
-    "All",
-    "Cn",
-    "En"
+    "zh",
+    "en"
   ],
   "mysql": {
     "account": "testuser",

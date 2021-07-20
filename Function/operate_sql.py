@@ -1,5 +1,5 @@
 import pymysql.cursors
-from Function.common_function import *
+from Function.api_common_function import *
 from Function.log import *
 
 

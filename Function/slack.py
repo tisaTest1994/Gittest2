@@ -2,7 +2,7 @@ import slackweb
 from time import sleep
 import csv
 import requests
-from Function.common_function import *
+from Function.api_common_function import *
 
 
 # 获取测试结果
