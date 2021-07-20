@@ -157,7 +157,6 @@ class TestPayoutApi:
             sql = "select wallet_id from internal_balance where transaction_id='{}';".format(r.json()['transaction_id'])
             sql_info = sqlFunction.connect_mysql(db='wallet', sql=sql)
             for i in sql_info:
-                print(i)
                 assert i['wallet_id'] is not None, "payout的P/L错误，sql命令是{}".format(sql)
 
     @allure.testcase('test_payout_008 查询提现详情')

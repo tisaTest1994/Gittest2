@@ -8,10 +8,6 @@ import allure
 # market相关cases
 class TestMarketApi:
 
-    # 初始化class
-    def setup_class(self):
-        AccountFunction.add_headers()
-
     @allure.testcase('test_market_001 获得价格曲线')
     def test_market_001(self):
         for i in ['BTCEUR', 'BTCUSD', 'ETHEUR', 'ETHUSD', 'USDEUR']:

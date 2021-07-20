@@ -10,10 +10,6 @@ class TestKycApi:
     kyc_url = get_json()['kyc'][kyc_type]['kycUrl']
     kyc_headers = get_json()['kyc'][kyc_type]['kycHeaders']
 
-    # 初始化class
-    def setup_class(self):
-        AccountFunction.add_headers()
-
     @allure.testcase('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
     def test_kyc_001(self):
         with allure.step("随机获得国家代码"):

@@ -8,10 +8,6 @@ import pyotp
 # account相关cases
 class TestAccountApi:
 
-    # 初始化class
-    def setup_class(self):
-        AccountFunction.add_headers()
-
     @allure.testcase('test_account_001 成功注册新用户')
     def test_account_001(self):
         with allure.step("获取随机国家代码"):

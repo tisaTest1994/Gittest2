@@ -100,6 +100,7 @@ class AccountFunction:
     @staticmethod
     def get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE'):
         r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers, timeout=10)
+        print(r.text)
         for i in r.json():
             if i['code'] == type and i['wallet_type'] == wallet_type:
                 for y in i['balances']:
@@ -343,3 +344,5 @@ class AccountFunction:
         assert 'tx_id' in r.text, "赎回错误，返回值是{}".format(r.text)
         return {'product_id': product_id, 'code': code, 'tx_id': r.json()['tx_id']}
 
+
+AccountFunction.add_headers()

@@ -7,10 +7,6 @@ import allure
 # core相关cases
 class TestCoreApi:
 
-    # 初始化class
-    def setup_class(self):
-        AccountFunction.add_headers()
-
     @allure.testcase('test_core_001 查询钱包所有币种详细金额以及报价，以美元价格返回')
     def test_core_001(self):
         with allure.step("查询钱包所有币种详细金额以及报价，以美元价格返回"):

@@ -1,4 +1,3 @@
-from run import *
 from Function.ui_function import *
 import allure
 
@@ -20,5 +19,7 @@ class TestAccountUi:
         with allure.step("登录"):
             UiFunction.login(account=email['email'], password=email['password'])
             sleep(5)
-            poco("Welcome Back").offspring("android.view.View")[0].click()
+        with allure.step("登出"):
+            UiFunction.logout()
+            sleep(3)
 
