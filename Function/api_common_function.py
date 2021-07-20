@@ -134,6 +134,3 @@ def get_language_map():
     path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages.json'
     with open(path, "w") as f:
         json.dump(r.json()['data'], f, sort_keys=True, indent=2)
-
-
-get_language_map()
