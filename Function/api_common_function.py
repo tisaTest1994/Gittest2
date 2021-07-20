@@ -130,7 +130,7 @@ def get_email():
 
 # 查询语言map
 def get_language_map():
-    r = requests.request('GET', url='http://10.10.20.117:8888/translation/{}'.format(get_json()['language']))
+    r = requests.request('GET', url='http://10.10.20.117:8888/translation/{}'.format(get_json()['language']), timeout=20)
     path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages.json'
     with open(path, "w") as f:
         json.dump(r.json()['data'], f, sort_keys=True, indent=2)
