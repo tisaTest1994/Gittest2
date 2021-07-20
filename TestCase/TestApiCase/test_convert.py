@@ -9,6 +9,9 @@ from time import sleep
 # convert相关cases
 class TestConvertApi:
 
+    # 初始化class
+    def setup_class(self):
+        AccountFunction.add_headers()
 
     @allure.testcase('test_convert_001 根据id编号查询单笔交易')
     def test_convert_001(self):

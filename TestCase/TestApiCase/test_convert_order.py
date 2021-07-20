@@ -7,6 +7,10 @@ from decimal import *
 # convert order相关cases
 class TestConvertOrderApi:
 
+    # 初始化class
+    def setup_class(self):
+        AccountFunction.add_headers()
+
     @allure.testcase('test_convert_order_001 根据id编号查询单笔交易')
     def test_convert_order_001(self):
         # 获得 cfx_book

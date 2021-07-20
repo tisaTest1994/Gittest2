@@ -8,6 +8,10 @@ import allure
 # saving相关cases
 class TestSavingCurrentApi:
 
+    # 初始化class
+    def setup_class(self):
+        AccountFunction.add_headers()
+
     @allure.testcase('test_saving_current_001 获取产品列表')
     def test_saving_current_001(self):
         with allure.step("获取产品列表"):

@@ -7,6 +7,10 @@ import allure
 
 class TestAssetApi:
 
+    # 初始化class
+    def setup_class(self):
+        AccountFunction.add_headers()
+
     @allure.testcase('test_asset_001 查询每个币种当前资产市值')
     def test_asset_001(self):
         crypto_list = get_json()['crypto_list']

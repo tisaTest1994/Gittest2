@@ -7,7 +7,10 @@ poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=Fa
 
 # 点击某个text
 def click(text):
-    text_string = get_json(file='multiple_languages.json')[text]
+    if text in get_json(file='multiple_languages.json').keys():
+        text_string = get_json(file='multiple_languages.json')[text]
+    else:
+        text_string = text
     poco(text_string).wait_for_appearance(timeout=20)
     poco(text_string).click()
 

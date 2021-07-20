@@ -344,5 +344,3 @@ class AccountFunction:
         assert 'tx_id' in r.text, "赎回错误，返回值是{}".format(r.text)
         return {'product_id': product_id, 'code': code, 'tx_id': r.json()['tx_id']}
 
-
-AccountFunction.add_headers()

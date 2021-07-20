@@ -7,6 +7,9 @@ import allure
 # pay in相关cases
 class TestPayInApi:
 
+    # 初始化class
+    def setup_class(self):
+        AccountFunction.add_headers()
 
     @allure.testcase('test_pay_in_001 查询转入地址记录（不指定链）')
     def test_pay_in_001(self):
