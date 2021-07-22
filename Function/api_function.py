@@ -23,7 +23,6 @@ class AccountFunction:
             r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data), headers=headers)
         else:
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
-        print(r.text)
         if r.text is None:
             return "登录获得token错误，返回值是{}".format(r.text)
         else:
@@ -54,7 +53,6 @@ class AccountFunction:
         headers['Authorization'] = "Bearer " + run.accountToken
         requests.request('GET', url='{}/account/security/mfa/email/sendVerificationCode'.format(env_url),
                          headers=headers)
-        sleep(30)
         sleep_time = 0
         while sleep_time < 80:
             sleep_time = sleep_time + 5
@@ -100,7 +98,6 @@ class AccountFunction:
     @staticmethod
     def get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE'):
         r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers, timeout=10)
-        print(r.text)
         for i in r.json():
             if i['code'] == type and i['wallet_type'] == wallet_type:
                 for y in i['balances']:
@@ -344,3 +341,5 @@ class AccountFunction:
         assert 'tx_id' in r.text, "赎回错误，返回值是{}".format(r.text)
         return {'product_id': product_id, 'code': code, 'tx_id': r.json()['tx_id']}
 
+
+AccountFunction.add_headers()

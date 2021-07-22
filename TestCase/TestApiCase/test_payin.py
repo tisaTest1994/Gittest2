@@ -18,8 +18,7 @@ class TestPayInApi:
             data = {}
             for i in currency:
                 data['code'] = i
-                r = session.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data,
-                                     headers=headers)
+                r = session.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data, headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))

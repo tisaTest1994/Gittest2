@@ -8,6 +8,9 @@ class UiFunction:
         # 先判断是否已经登录
         if check('CB214', type=1) is True:
             pass
+        # 判断升级提示
+        elif check('CB196', type=1, wait_time_max=5) is True:
+            click('CB196')
         else:
             # 点击登录
             click('CB172')
@@ -21,6 +24,9 @@ class UiFunction:
                 # 输入账户密码
                 text(account)
                 text(password)
+                # 判断升级提示
+                if check('CB196', type=1, wait_time_max=5) is True:
+                    click('CB196')
                 # 判断登录到首页
                 click('CB214')
 

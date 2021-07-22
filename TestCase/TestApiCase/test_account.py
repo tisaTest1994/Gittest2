@@ -827,7 +827,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert '"count":0,"amount":0' in r.text, "获得邀请人数和奖励失败，返回值是{}".format(r.text)
+            assert '{"count":0' in r.text, "获得邀请人数和奖励失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_041 获得邀请码和链接')
     def test_account_041(self):
@@ -840,3 +840,57 @@ class TestAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['code'] is not None, "获得邀请人数和奖励失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_042 referal注册用户')
+    def test_account_042(self):
+        with allure.step("获取随机国家代码"):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+        with allure.step("注册"):
+            data = {
+                "emailAddress": generate_email(),
+                "verificationCode": "666666",
+                "citizenCountryCode": citizenCountryCode,
+                "password": "Zcdsw123",
+                "metadata": {
+                    "referral": {
+                    "code": "6EM7LK"
+                    }
+                }
+            }
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
+            logger.info('邮箱是{}'.format(data['emailAddress']))
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'accessToken' in r.text, "注册新用户失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_043 查询指定版本的隐私政策')
+    def test_account_043(self):
+        with allure.step("获取最新隐私版本号"):
+            r = requests.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
+        with allure.step("查询指定版本的隐私政策"):
+            r = session.request('GET', url='{}/account/privacy/{}'.format(env_url, r.json()['privacyPolicyVersion']), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert '"version":' in r.text, "查询指定版本的隐私政策失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_044 查询指定版本的服务条款')
+    def test_account_044(self):
+        with allure.step("获取最新隐私版本号"):
+            r = requests.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
+        with allure.step("查询指定版本的服务条款"):
+            r = session.request('GET', url='{}/account/tos/{}'.format(env_url, r.json()['termOfServiceVersion']), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert '"version":' in r.text, "查询指定版本的服务条款失败，返回值是{}".format(r.text)

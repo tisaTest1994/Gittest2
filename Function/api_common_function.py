@@ -134,3 +134,19 @@ def get_language_map():
     path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages.json'
     with open(path, "w") as f:
         json.dump(r.json()['data'], f, sort_keys=True, indent=2)
+
+
+# 控制货币单位长度
+def crypto_len(number, type):
+    if '.' in str(number):
+        if type == 'BTC' or type == 'ETH':
+            if len(str(number).split('.')[1]) > 8:
+                end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1][:8])
+        elif type == 'USDT':
+            if len(str(number).split('.')[1]) > 6:
+                end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1][:6])
+        else:
+            if len(str(number).split('.')[1]) > 2:
+                end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1][:2])
+    return end_number
+
