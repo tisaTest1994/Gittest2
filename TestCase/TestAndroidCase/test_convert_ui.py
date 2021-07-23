@@ -78,7 +78,7 @@ class TestConvertUi:
         with allure.step("检查汇率转换显示的汇率"):
             logger.info('汇率是1{}{}{}'.format(pairs[list(pairs.keys())[0]][0], quote_display, list(pairs.keys())[0]))
             sleep(2)
-            poco(name='android:id/content').offspring(name='1{}{}{}'.format(pairs[list(pairs.keys())[0]][0], quote_display, list(pairs.keys())[0])).click()
+            poco(name='android:id/content').offspring(nameMatches='1{}{}{}'.format(pairs[list(pairs.keys())[0]][0], quote_display, list(pairs.keys())[0])).click()
 
             #check('1{}\{}\{}.*'.format(pairs[list(pairs.keys())[0]][0], quote_display, list(pairs.keys())[0]), type='nameMatches')
         with allure.step("点击汇率转换按钮"):
