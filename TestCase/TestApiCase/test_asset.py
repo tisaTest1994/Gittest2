@@ -26,9 +26,5 @@ class TestAssetApi:
                     if i == y['code']:
                         assert AccountFunction.get_crypto_abs_amount(i) == y['value'], '{}币种当前资产市值是{},接口返回值是{}.查询每个币种当前资产市值错误'.format(i, AccountFunction.get_crypto_abs_amount(i), y['value'])
 
-    @allure.testcase('test_asset_002 ')
-    def test_asset_002(self):
-        a = AccountFunction.get_today_increase()
-        print(a)
 
 

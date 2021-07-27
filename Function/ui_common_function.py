@@ -39,3 +39,23 @@ def check(text, type=2, wait_time_max=20):
         assert poco(text_string).exists() is True, "页面元素{}不存在,翻译码是{}".format(text_string, text)
 
 
+# 数量加入,
+def add_comma_number(number):
+    if '.' in str(number):
+        number_int = str(number).split('.')[0]
+        number_radix = str(number).split('.')[1]
+    else:
+        number_int = str(number)
+        number_radix = ''
+    count = 0
+    sumstr = ''
+    for one_str in number_int[::-1]:  # 注意循环是倒着输出的
+        count += 1  # 计数
+        if count % 3 == 0 and count != len(number_int):  # 如果count等于3或3的倍数并且不等于总长度
+            one_str = ',' + one_str  # 当前循环的字符串前面加逗号
+            sumstr = one_str + sumstr  # 拼接当前字符串
+        else:
+            sumstr = one_str + sumstr  # 正常拼接字符串
+    if number_radix != '':
+        sumstr = sumstr + '.' + number_radix
+    return sumstr

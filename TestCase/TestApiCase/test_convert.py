@@ -137,7 +137,7 @@ class TestConvertApi:
                     r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                         headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    sleep(8)
+                    sleep(12)
                     logger.info('换汇返回值{}'.format(r.text))
                     print(r.text)
                     assert r.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
@@ -204,7 +204,7 @@ class TestConvertApi:
                     r1 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                          headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    sleep(8)
+                    sleep(12)
                     logger.info('换汇返回值{}'.format(r1.text))
                     assert r1.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r1.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
@@ -270,7 +270,7 @@ class TestConvertApi:
                     r2 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                          headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    sleep(8)
+                    sleep(12)
                     logger.info('换汇返回值{}'.format(r2.text))
                     assert r2.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r2.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
@@ -336,7 +336,7 @@ class TestConvertApi:
                     r3 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                          headers=headers)
                     logger.info('申请换汇参数{}'.format(data))
-                    sleep(8)
+                    sleep(12)
                     logger.info('换汇返回值{}'.format(r3.text))
                     assert r3.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):

@@ -133,9 +133,9 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
         with allure.step("提现ETH成功"):
             data = {
-                "amount": "0.02",
+                "amount": "0.52",
                 "code": "ETH",
-                "address": "0xdCFC8497e39aaF526Ff72D055959eB964c18B5dA",
+                "address": "0x8D62b7C60491e5295c90D544B11F33966a3B2B7b",
                 "method": "ERC20"
             }
             r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data), headers=headers)

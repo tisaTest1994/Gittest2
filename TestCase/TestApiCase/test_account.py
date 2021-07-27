@@ -827,7 +827,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert '{"count":0' in r.text, "获得邀请人数和奖励失败，返回值是{}".format(r.text)
+            assert 'count' in r.json().keys(), "获得邀请人数和奖励失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_041 获得邀请码和链接')
     def test_account_041(self):

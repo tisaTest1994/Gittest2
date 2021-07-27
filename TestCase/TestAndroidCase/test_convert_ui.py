@@ -47,7 +47,7 @@ class TestConvertUi:
         with allure.step("验证换汇页面点击MAX"):
             check('{}.*'.format(number), type='textMatches')
 
-    @allure.testcase('test_convert_ui_003 换汇页面点击转换按钮')
+    @allure.testcase('test_convert_ui_003 换汇页面点击汇率转换按钮')
     def test_convert_ui_003(self):
         with allure.step("进入换汇页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -63,7 +63,7 @@ class TestConvertUi:
         with allure.step("验证页面显示sell币种可用的Balance"):
             check("{} {} {}".format(get_json(file='multiple_languages.json')['CB036'], number, pair.split('-')[1]))
 
-    @allure.testcase('test_convert_ui_004 换汇页面点击汇率转换按钮')
+    @allure.testcase('test_convert_ui_004 换汇页面点击汇率查询转换按钮')
     def test_convert_ui_004(self):
         with allure.step("进入换汇页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -79,10 +79,28 @@ class TestConvertUi:
             logger.info('汇率是1{}{}{}'.format(pairs[list(pairs.keys())[0]][0], quote_display, list(pairs.keys())[0]))
             #check('1{}\{}\{}.*'.format(pairs[list(pairs.keys())[0]][0], quote_display, list(pairs.keys())[0]), type='nameMatches')
         with allure.step("点击汇率转换按钮"):
-            os.system('pwd')
-            touch(Template(r'./../../Resource/Photo/cfx_change_pairs.png'))
+            touch(Template(r'./../../Resource/Photos/cfx_change_pairs.png'))
             sleep(5)
 
+    @allure.testcase('test_convert_ui_005 换汇页面切换sell币种')
+    def test_convert_ui_005(self):
+        with allure.step("进入换汇页面"):
+            poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
+            click('CB062')
+        with allure.step("获得换汇汇率对"):
+            r = session.request('GET', url='{}/txn/cfx/codes'.format(env_url))
+            pairs = r.json()['codes']
+            pair = '{}-{}'.format(list(pairs.keys())[0], pairs[list(pairs.keys())[0]][1])
+        with allure.step("点击转换sell按钮"):
+            click(pair.split('-')[0])
+            check('CB212')
+        with allure.step("Api获得币种可用Balance"):
+            number = AccountFunction.get_crypto_number(type=pair.split('-')[1], balance_type='BALANCE_TYPE_AVAILABLE',
+                                                       wallet_type='BALANCE')
+            number = add_comma_number(number)
+        with allure.step("选择其他货币并且检查余额"):
+            check('{}.*'.format('ET'), type='textMatches')
+            check('{} {}'.format(number, pair.split('-')[1]))
 
 
 
