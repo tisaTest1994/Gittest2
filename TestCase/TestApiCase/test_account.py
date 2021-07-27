@@ -872,7 +872,10 @@ class TestAccountApi:
         with allure.step("获取最新隐私版本号"):
             r = requests.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
         with allure.step("查询指定版本的隐私政策"):
-            r = session.request('GET', url='{}/account/privacy/{}'.format(env_url, r.json()['privacyPolicyVersion']), headers=headers)
+            params = {
+                'version': r.json()['privacyPolicyVersion']
+            }
+            r = session.request('GET', url='{}/account/privacy'.format(env_url), params=params, headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -886,7 +889,10 @@ class TestAccountApi:
         with allure.step("获取最新隐私版本号"):
             r = requests.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
         with allure.step("查询指定版本的服务条款"):
-            r = session.request('GET', url='{}/account/tos/{}'.format(env_url, r.json()['termOfServiceVersion']), headers=headers)
+            params = {
+                'version': r.json()['termOfServiceVersion']
+            }
+            r = session.request('GET', url='{}/account/tos'.format(env_url), params=params, headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))

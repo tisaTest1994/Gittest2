@@ -341,5 +341,11 @@ class AccountFunction:
         assert 'tx_id' in r.text, "赎回错误，返回值是{}".format(r.text)
         return {'product_id': product_id, 'code': code, 'tx_id': r.json()['tx_id']}
 
+    # 收取验证码
+    @staticmethod
+    def get_verification_code():
+        r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
+
+
 
 AccountFunction.add_headers()
