@@ -900,3 +900,47 @@ class TestAccountApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert '"version":' in r.text, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_045 忘记密码并且验证code')
+    def test_account_045(self):
+        account = get_json()['email']['payout_email']
+        run.accountToken = AccountFunction.get_account_token(account=account)
+        headers['Authorization'] = "Bearer " + run.accountToken
+        with allure.step("发忘记密码邮件"):
+            code = AccountFunction.get_verification_code('FORGET_PASSWORD', account)
+        with allure.step("验证忘记密码邮件"):
+            AccountFunction.verify_verification_code('FORGET_PASSWORD', account, code)
+        AccountFunction.add_headers()
+
+    @allure.testcase('test_account_045 开启MFA且验证code')
+    def test_account_045(self):
+        account = get_json()['email']['payout_email']
+        run.accountToken = AccountFunction.get_account_token(account=account)
+        headers['Authorization'] = "Bearer " + run.accountToken
+        with allure.step("发忘记密码邮件"):
+            code = AccountFunction.get_verification_code('ENABLE_MFA', account)
+        with allure.step("验证忘记密码邮件"):
+            AccountFunction.verify_verification_code('ENABLE_MFA', account, code)
+        AccountFunction.add_headers()
+
+    @allure.testcase('test_account_045 关闭MFA且验证code')
+    def test_account_045(self):
+        account = get_json()['email']['payout_email']
+        run.accountToken = AccountFunction.get_account_token(account=account)
+        headers['Authorization'] = "Bearer " + run.accountToken
+        with allure.step("发忘记密码邮件"):
+            code = AccountFunction.get_verification_code('DISABLE_MFA', account)
+        with allure.step("验证忘记密码邮件"):
+            AccountFunction.verify_verification_code('DISABLE_MFA', account, code)
+        AccountFunction.add_headers()
+
+    @allure.testcase('test_account_045 MFA且验证code')
+    def test_account_045(self):
+        account = get_json()['email']['payout_email']
+        run.accountToken = AccountFunction.get_account_token(account=account)
+        headers['Authorization'] = "Bearer " + run.accountToken
+        with allure.step("发忘记密码邮件"):
+            code = AccountFunction.get_verification_code('MFA_EMAIL', account)
+        with allure.step("验证忘记密码邮件"):
+            AccountFunction.verify_verification_code('MFA_EMAIL', account, code)
+        AccountFunction.add_headers()

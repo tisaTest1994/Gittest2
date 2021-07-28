@@ -9,6 +9,12 @@
     "yilei24@cabital.com",
     "yilei25@cabital.com"
   ],
+  "app_package_debug": {
+    "package_name": "com.cabital.cabital.debug"
+  },
+  "app_package_pro": {
+    "package_name": "com.cabital.cabital.debug"
+  },
   "blacklist": {
     "email": "yilei1@cabital.com",
     "password": "Zcdsw123"
@@ -278,14 +284,8 @@
     "password": "Zcdsw123",
     "payout_email": "external.qa@cabital.com",
     "port": "993",
-    "security_code": "ilyjqzbyoljfvtwy",
+    "security_code": "oroqtjdckghqrpak",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
-  },
-  "app_package_debug": {
-    "package_name": "com.cabital.cabital.debug"
-  },
-  "app_package_pro": {
-    "package_name": "com.cabital.cabital.debug"
   },
   "env": "test",
   "env support": [
@@ -333,7 +333,7 @@
     "password": "zhangsan"
   },
   "pro": "https://api.cabital.com/api/v1",
-  "secretKey": "GNYEQ2SHINCXQY3GGJQWKRCWJN3GS2LO",
+  "secretKey": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
   "secretKeyForTest": " ",
   "slackTestUrl": "https://hooks.slack.com/services/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",
   "slackUrl": "https://hooks.slack.com/services/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",

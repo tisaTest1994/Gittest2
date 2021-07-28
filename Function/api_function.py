@@ -343,9 +343,41 @@ class AccountFunction:
 
     # 收取验证码
     @staticmethod
-    def get_verification_code():
-        r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
+    def get_verification_code(type, email):
+        data = {
+            "email": email,
+            "type": type
+        }
+        r = session.request('POST', url='{}/account/verify-code/email'.format(env_url), data=json.dumps(data), headers=headers)
+        logger.info('状态码是{}'.format(str(r.status_code)))
+        logger.info('返回值是{}'.format(str(r.text)))
+        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        assert r.json() == {}, "收取验证码失败，返回值是{}".format(r.text)
+        sleep_time = 0
+        sleep(20)
+        while sleep_time < 50:
+            sleep_time = sleep_time + 5
+            sleep(5)
+            email_info = get_email()
+            if '[Cabital] Verify Your Email' in email_info['title']:
+                break
+        assert '[Cabital] Verify Your Email' in email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(email_info['title'])
+        code = str(email_info['body']).split('"code":')[1].split('"')[1]
+        return code
 
+    # 校验验证码
+    @staticmethod
+    def verify_verification_code(type, email, code):
+        data = {
+            "email": email,
+            "type": type,
+            "code": code
+        }
+        r = session.request('POST', url='{}/account/verify-code/email/verify'.format(env_url), data=json.dumps(data), headers=headers)
+        logger.info('状态码是{}'.format(str(r.status_code)))
+        logger.info('返回值是{}'.format(str(r.text)))
+        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        assert r.json() == {}, "校验验证码失败，返回值是{}".format(r.text)
 
 
 AccountFunction.add_headers()
