@@ -130,23 +130,44 @@ def get_email():
 
 # 查询语言map
 def get_language_map():
-    r = requests.request('GET', url='http://10.10.20.117:8888/translation/{}'.format(get_json()['language']), timeout=20)
+    r = requests.request('GET', url='https://mms.cabital.io/translation/{}'.format(get_json()['language']), timeout=20)
     path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages.json'
-    with open(path, "w") as f:
+    with open(path, "w+") as f:
         json.dump(r.json()['data'], f, sort_keys=True, indent=2)
+
+
+# 删除小数点后多余的0
+def delete_extra_zero(n):
+    if isinstance(n, int):
+        return n
+    elif isinstance(n, float):
+        n = str(n).rstrip('0')  # 删除小数点后多余的0
+        n = int(n.rstrip('.')) if n.endswith('.') else float(n)  # 只剩小数点直接转int，否则转回float
+        return n
+    else:
+        return n
 
 
 # 控制货币单位长度
 def crypto_len(number, type):
+    number = delete_extra_zero(number)
     if '.' in str(number):
         if type == 'BTC' or type == 'ETH':
             if len(str(number).split('.')[1]) > 8:
                 end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1][:8])
+            else:
+                end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1])
         elif type == 'USDT':
             if len(str(number).split('.')[1]) > 6:
                 end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1][:6])
+            else:
+                end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1])
         else:
             if len(str(number).split('.')[1]) > 2:
                 end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1][:2])
-    return end_number
+            else:
+                end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1])
+    else:
+        end_number = number
+    return str(end_number)
 

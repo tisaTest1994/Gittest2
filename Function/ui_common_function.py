@@ -59,3 +59,9 @@ def add_comma_number(number):
     if number_radix != '':
         sumstr = sumstr + '.' + number_radix
     return sumstr
+
+
+# 通过转换码获得数据
+def get_ui_text(code):
+    return str(get_json(file='multiple_languages.json')[code])
+
