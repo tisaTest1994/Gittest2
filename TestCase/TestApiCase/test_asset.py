@@ -40,7 +40,6 @@ class TestAssetApi:
 
     @allure.testcase('test_asset_003 获取账户详细损益')
     def test_asset_003(self):
-
         with allure.step("获取账户资金状态"):
             r = session.request('GET', url='{}/assetstatapi/asset_pl_detail'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
