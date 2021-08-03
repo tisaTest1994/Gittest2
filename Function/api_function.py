@@ -51,17 +51,7 @@ class AccountFunction:
     def get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07'):
         run.accountToken = AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
         headers['Authorization'] = "Bearer " + run.accountToken
-        requests.request('GET', url='{}/account/security/mfa/email/sendVerificationCode'.format(env_url),
-                         headers=headers)
-        sleep_time = 0
-        while sleep_time < 80:
-            sleep_time = sleep_time + 5
-            sleep(5)
-            email_info = get_email()
-            if '[Cabital] Verify Your Email' in email_info['title']:
-                break
-        assert '[Cabital] Verify Your Email' in email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(email_info['title'])
-        code = str(email_info['body']).split('"code":')[1].split('"')[1]
+        code = AccountFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
         secretKey = get_json()['secretKey']
         totp = pyotp.TOTP(secretKey)
         mfaVerificationCode = totp.now()
@@ -343,9 +333,9 @@ class AccountFunction:
 
     # 收取验证码
     @staticmethod
-    def get_verification_code(type, email):
+    def get_verification_code(type, account):
         data = {
-            "email": email,
+            "email": account,
             "type": type
         }
         r = session.request('POST', url='{}/account/verify-code/email'.format(env_url), data=json.dumps(data), headers=headers)
@@ -359,9 +349,26 @@ class AccountFunction:
             sleep_time = sleep_time + 5
             sleep(5)
             email_info = get_email()
-            if '[Cabital] Verify Your Email' in email_info['title']:
-                break
-        assert '[Cabital] Verify Your Email' in email_info['title'], '邮件验证码获取失败，获取的邮件标题是是{}'.format(email_info['title'])
+            if type == 'REGISTRY':
+                if '[Cabital] Verify Your Email' in email_info['title']:
+                    break
+                    sleep_time == 51
+            elif type == 'FORGET_PASSWORD':
+                if 'Reset Password Request' in email_info['title']:
+                    break
+                    sleep_time == 51
+            elif type == 'ENABLE_MFA':
+                if 'Enable Google Authenticator' in email_info['title']:
+                    break
+                    sleep_time == 51
+            elif type == 'DISABLE_MFA':
+                if 'Disable Google Authenticator' in email_info['title']:
+                    break
+                    sleep_time == 51
+            elif type == 'MFA_EMAIL':
+                if 'Withdrawal Request' in email_info['title']:
+                    break
+                    sleep_time == 51
         code = str(email_info['body']).split('"code":')[1].split('"')[1]
         return code
 

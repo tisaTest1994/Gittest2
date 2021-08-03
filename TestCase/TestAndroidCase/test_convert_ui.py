@@ -61,7 +61,7 @@ class TestConvertUi:
         with allure.step("Api获得币种可用Balance"):
             number = AccountFunction.get_crypto_number(type=pair.split('-')[1], balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
         with allure.step("验证页面显示sell币种可用的Balance"):
-            check("{} {} {}".format(get_json(file='multiple_languages.json')['CB036'], number, pair.split('-')[1]))
+                check("{} {} {}".format(get_json(file='multiple_languages.json')['CB036'], number, pair.split('-')[1]))
 
     @allure.testcase('test_convert_ui_004 换汇页面点击汇率查询转换按钮')
     def test_convert_ui_004(self):
@@ -74,14 +74,16 @@ class TestConvertUi:
         with allure.step("获得汇率"):
             r = session.request('GET', url='{}/core/quotes/{}'.format(env_url, '{}-{}'.format(pairs[list(pairs.keys())[0]][0], list(pairs.keys())[0])), headers=headers)
             quote_display = crypto_len(number=r.json()['quote'], type=list(pairs.keys())[0])
+            print(r.json())
         with allure.step("检查汇率转换显示的汇率"):
             logger.info('汇率是1{}{}{}'.format(pairs[list(pairs.keys())[0]][0], quote_display, list(pairs.keys())[0]))
             assert add_comma_number(quote_display) in poco(get_ui_text('CB240')).sibling()[6].attr('name'), '汇率对错误，后端返回的汇率对是{}, 前端显示的是{}'.format(add_comma_number(quote_display), poco('Sell').sibling()[6].attr('name'))
         with allure.step("点击汇率转换按钮"):
-            touch(Template(r'./../../Resource/Photos/cfx_change_pairs.png'))
+            touch(Template('./../../Resource/Photos/cfx_change_pairs.png'))
             sleep(5)
         with allure.step("重新获得汇率并取倒数汇率"):
             r = session.request('GET', url='{}/core/quotes/{}'.format(env_url, '{}-{}'.format(pairs[list(pairs.keys())[0]][0], list(pairs.keys())[0])), headers=headers)
+            print(r.json())
             quote_display = crypto_len(number=Decimal(1) / Decimal(r.json()['quote']), type=pairs[list(pairs.keys())[0]][0])
         with allure.step("检查汇率转换显示的汇率"):
             logger.info('汇率是1{}{}{}'.format(list(pairs.keys())[0], quote_display, pairs[list(pairs.keys())[0]][0]))
