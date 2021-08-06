@@ -130,10 +130,10 @@ def get_email():
 
 # 查询语言map
 def get_language_map():
-    r = requests.request('GET', url='https://mms.cabital.io/translation/{}'.format(get_json()['language']), timeout=20)
+    r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(get_json()['language']), timeout=20)
     path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages.json'
-    with open(path, "w+") as f:
-        json.dump(r.json()['data'], f, sort_keys=True, indent=2)
+    with open(path, "w+", encoding='utf8') as f:
+        json.dump(r.json()['data'], f, sort_keys=True, indent=2, ensure_ascii=False)
 
 
 # 删除小数点后多余的0

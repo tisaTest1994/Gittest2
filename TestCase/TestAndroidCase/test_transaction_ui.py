@@ -37,12 +37,18 @@ class TestTransactionUi:
                     "cursor": "0",
                     "page_size": 10
                 },
-                "user_txn_sub_types": [1, 2, 3, 4, 5, 6],
-                "statuses": [1, 2, 3, 4],
                 "codes": ["BTC"]
             }
             r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers)
-            print(r.json())
+            transaction_info = r.json()['transactions'][0]
+            if transaction_info['user_txn_sub_type'] == 2:
+                transaction_text = 'Convert' + str(json.loads(transaction_info['details'])['buy_currency']['amount']) + ' ' + str(json.loads(transaction_info['details'])['buy_currency']['code'])
+            elif transaction_info['user_txn_sub_type'] == 3:
+                transaction_text = 'Subscribe Fixed' + str(json.loads(transaction_info['details'])['currency']['amount']) + ' ' + str(json.loads(transaction_info['details'])['currency']['code'])
+            with allure.step("检车交易transaction"):
+                print(poco('android.view.View').child().child()[0].attr('name'))
+                check(transaction_text, type='textMatches')
+
 
     @allure.testcase('test_transaction_ui_003 查询ETH交易信息')
     def test_transaction_ui_003(self):
