@@ -868,6 +868,7 @@ class TestAccountApi:
                 assert 'accessToken' in r.text, "注册新用户失败，返回值是{}".format(r.text)
         with allure.step("数据库检查"):
             sql = "select * from relation where referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(data['emailAddress'])
+            print(sql)
             relation = sqlFunction.connect_mysql('referral', sql)
             print(relation)
 

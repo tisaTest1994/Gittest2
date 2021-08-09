@@ -646,20 +646,133 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert r.json()['Wallets'] is not None, "获得wallet错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_027 wallet调整余额')
+    @allure.testcase('test_operate_027 wallet调整余额内部户转到客户账户失败')
     def test_operate_027(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
-        params = {
-            "account_id": '96f29441-feb4-495a-a531-96c833e8261a'
+        data = {
+                "debit_wallet_id": "e37e7c9e-95f6-11eb-84c0-067d526cf950",
+                "credit_wallet_id": "bd6608b9-81be-4260-ae8a-6726f8eabddd",
+                "amount": "100",
+                "txn_type": "adjustment",
         }
-        r = requests.request('GET', url='{}/operatorapi/wallets/balance/adjust  '.format(operateUrl), params=params, headers=headers, timeout=100)
+        r = requests.request('POST', url='{}/operatorapi/wallets/balance/adjust'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['Wallets'] is not None, "获得wallet错误，返回值是{}".format(r.text)
+            assert r.json()['is_succeed'] is False, "wallet调整余额内部户转到客户账户失败错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_operate_028 wallet调整余额客户转到内部户账户失败')
+    def test_operate_028(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        data = {
+                "debit_wallet_id": "bd6608b9-81be-4260-ae8a-6726f8eabddd",
+                "credit_wallet_id": "e37e7c9e-95f6-11eb-84c0-067d526cf950",
+                "amount": "100",
+                "txn_type": "adjustment",
+        }
+        r = requests.request('POST', url='{}/operatorapi/wallets/balance/adjust'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['is_succeed'] is False, "wallet调整余额客户转到内部户账户失败错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_operate_029 wallet调整余额内部户账户到内部户账户')
+    def test_operate_029(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        data = {
+                "debit_wallet_id": "77c65bcc-d40b-11eb-8e66-0a3898443cb8",
+                "credit_wallet_id": "e37e7c9e-95f6-11eb-84c0-067d526cf950",
+                "amount": "0.5",
+                "txn_type": "adjustment",
+        }
+        r = requests.request('POST', url='{}/operatorapi/wallets/balance/adjust'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['is_succeed'] is True, "wallet调整余额内部户账户到内部户账户错误，返回值是{}".format(r.text)
+        with allure.step("校验返回值"):
+            pass
+
+
+    @allure.testcase('test_operate_030 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id失败')
+    def test_operate_030(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        data = {
+                "debit_wallet_id": "77c0b45d-d40b-11eb-8e66-0a3898443cb8",
+                "credit_wallet_id": "77bf824e-d40b-11eb-8e66-0a3898443cb8",
+                "amount": "0.5",
+                "txn_type": "adjustment",
+        }
+        r = requests.request('POST', url='{}/operatorapi/wallets/balance/adjust'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['is_succeed'] is False, "wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id失败错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_operate_031 wallet调整余额内部户eth转btc失败')
+    def test_operate_031(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        data = {
+                "debit_wallet_id": "77b5c78e-d40b-11eb-8e66-0a3898443cb8",
+                "credit_wallet_id": "77b9f6b9-d40b-11eb-8e66-0a3898443cb8",
+                "amount": "0.5",
+                "txn_type": "adjustment",
+        }
+        r = requests.request('POST', url='{}/operatorapi/wallets/balance/adjust'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['is_succeed'] is False, "wallet调整余额内部户eth转btc失败错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_operate_032 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id')
+    def test_operate_032(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        data = {
+                "debit_wallet_id": "77c0b45d-d40b-11eb-8e66-0a3898443cb8",
+                "credit_wallet_id": "77bf824e-d40b-11eb-8e66-0a3898443cb8",
+                "amount": "0.5",
+                "txn_type": "adjustment",
+                "value_date": "2021/08/05 19:21:59",
+                "counterparty_txn_id": "7698c69e-a8bc-4429-ae07-a08312264118fd"
+        }
+        r = requests.request('POST', url='{}/operatorapi/wallets/balance/adjust'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['is_succeed'] is True, "wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id错误，返回值是{}".format(r.text)
