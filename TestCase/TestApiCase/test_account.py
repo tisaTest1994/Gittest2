@@ -870,7 +870,7 @@ class TestAccountApi:
             sql = "select relation from relation where referer_id='96f29441-feb4-495a-a531-96c833e8261a' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(data['emailAddress'])
             relation = sqlFunction.connect_mysql('referral', sql)
             print(relation)
-            assert relation[0] == '1', '数据库查询值是{}'.format(relation)
+            assert relation[0]['relation'] == '1', '数据库查询值是{}'.format(relation)
 
 
     @allure.testcase('test_account_043 查询指定版本的隐私政策')
