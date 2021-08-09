@@ -870,8 +870,7 @@ class TestAccountApi:
             sql = "select relation from relation where referer_id='96f29441-feb4-495a-a531-96c833e8261a' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(data['emailAddress'])
             relation = sqlFunction.connect_mysql('referral', sql)
             print(relation)
-            assert relation[0]['relation'] == '1', '数据库查询值是{}'.format(relation)
-
+            assert relation[0]['relation'] == 1, '数据库查询值是{}'.format(relation)
 
     @allure.testcase('test_account_043 查询指定版本的隐私政策')
     def test_account_043(self):
@@ -950,3 +949,28 @@ class TestAccountApi:
         with allure.step("验证忘记密码邮件"):
             AccountFunction.verify_verification_code('MFA_EMAIL', account, code)
         AccountFunction.add_headers()
+
+    @allure.testcase('test_account_046 referal注册用户')
+    def test_account_046(self):
+        for i in range(100):
+            citizenCountryCode = random.choice(citizenCountryCodeList)
+            data = {
+                "emailAddress": generate_email(),
+                "verificationCode": "666666",
+                "citizenCountryCode": citizenCountryCode,
+                "password": "Zcdsw123",
+                "metadata": {
+                    "referral": {
+                    "code": "6EM7LK"
+                    }
+                }
+            }
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
+            logger.info('邮箱是{}'.format(data['emailAddress']))
+            with allure.step("数据库检查"):
+                sql = "select relation from relation where referer_id='96f29441-feb4-495a-a531-96c833e8261a' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(
+                    data['emailAddress'])
+                relation = sqlFunction.connect_mysql('referral', sql)
+                print(relation)
+                assert relation[0]['relation'] == 1, '数据库查询值是{}'.format(relation)
+
