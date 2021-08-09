@@ -627,3 +627,39 @@ class TestOperateApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'product_uuid' in r.text, "检索所有产品错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_operate_026 获得wallet')
+    def test_operate_026(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        params = {
+            "account_id": '96f29441-feb4-495a-a531-96c833e8261a'
+        }
+        r = requests.request('GET', url='{}/operatorapi/wallets'.format(operateUrl), params=params, headers=headers, timeout=100)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['Wallets'] is not None, "获得wallet错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_operate_027 wallet调整余额')
+    def test_operate_027(self):
+        with allure.step("获得token"):
+            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + accessToken
+        params = {
+            "account_id": '96f29441-feb4-495a-a531-96c833e8261a'
+        }
+        r = requests.request('GET', url='{}/operatorapi/wallets/balance/adjust  '.format(operateUrl), params=params, headers=headers, timeout=100)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['Wallets'] is not None, "获得wallet错误，返回值是{}".format(r.text)
