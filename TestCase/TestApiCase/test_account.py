@@ -867,10 +867,10 @@ class TestAccountApi:
             with allure.step("校验返回值"):
                 assert 'accessToken' in r.text, "注册新用户失败，返回值是{}".format(r.text)
         with allure.step("数据库检查"):
-            sql = "select * from relation where referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(data['emailAddress'])
-            print(sql)
+            sql = "select relation from relation where referer_id='96f29441-feb4-495a-a531-96c833e8261a' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(data['emailAddress'])
             relation = sqlFunction.connect_mysql('referral', sql)
             print(relation)
+            assert relation[0] == '1', '数据库查询值是{}'.format(relation)
 
 
     @allure.testcase('test_account_043 查询指定版本的隐私政策')
