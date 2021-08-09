@@ -967,6 +967,7 @@ class TestAccountApi:
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
             logger.info('邮箱是{}'.format(data['emailAddress']))
+            sleep(2)
             with allure.step("数据库检查"):
                 sql = "select relation from relation where referer_id='96f29441-feb4-495a-a531-96c833e8261a' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(
                     data['emailAddress'])
