@@ -717,9 +717,10 @@ class TestOperateApi:
         with allure.step("从数据库获得转账后的balance"):
             payout_amount_new = sqlFunction.connect_mysql('wallet', sql_payout)[0]['amount']
             payin_amount_new = sqlFunction.connect_mysql('wallet', sql_payin)[0]['amount']
+            print(payin_amount_old)
+            print(payin_amount_new)
         assert float(payout_amount_old) - 0.5 == float(payout_amount_new), 'wallet调整余额内部户账户到内部户账户错误，payout_amount_old是{}, payout_amount_new是{}'.format(payout_amount_old, payout_amount_new)
-        assert float(payin_amount_old) + 0.5 == float(
-            payin_amount_old), 'wallet调整余额内部户账户到内部户账户错误，payout_amount_old是{}, payout_amount_new是{}'.format(
+        assert float(payin_amount_old) + 0.5 == float(payin_amount_old), 'wallet调整余额内部户账户到内部户账户错误，payin_amount_old{}, payin_amount_new{}'.format(
             payout_amount_old, payin_amount_new)
 
     @allure.testcase('test_operate_030 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id失败')
