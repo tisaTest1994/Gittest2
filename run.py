@@ -23,7 +23,7 @@ global accountToken
 accountToken = ''
 
 global kyc_type
-kyc_type = 'pro'
+kyc_type = 'test'
 
 global ui_type
 ui_type = 'test'

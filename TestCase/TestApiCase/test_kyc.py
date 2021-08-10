@@ -544,9 +544,9 @@ class TestKycApi:
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
-                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert '"code":"001003"' in r.text, "打开pending中的KYC Case的持续性扫描错误，返回值是{}".format(r.text)
+                assert '{}' in r.text, "打开pending中的KYC Case的持续性扫描错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_013 创建直接pass 个人 Kyc case后查询cases。然后关闭ogs扫描错误')
     def test_kyc_013(self):
@@ -623,9 +623,9 @@ class TestKycApi:
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
-                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert '"code":"001003"' in r.text, "打开pending中的KYC Case的持续性扫描错误，返回值是{}".format(r.text)
+                assert '{}' in r.text, "打开pending中的KYC Case的持续性扫描错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_014 创建直接pass 个人 Kyc case后提前发送结果。')
     def test_kyc_014(self):
