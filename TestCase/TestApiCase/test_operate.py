@@ -720,8 +720,7 @@ class TestOperateApi:
             print(payin_amount_old)
             print(payin_amount_new)
         assert float(payout_amount_old) - 0.5 == float(payout_amount_new), 'wallet调整余额内部户账户到内部户账户错误，payout_amount_old是{}, payout_amount_new是{}'.format(payout_amount_old, payout_amount_new)
-        assert float(payin_amount_old) + 0.5 == float(payin_amount_old), 'wallet调整余额内部户账户到内部户账户错误，payin_amount_old{}, payin_amount_new{}'.format(
-            payout_amount_old, payin_amount_new)
+        assert float(payin_amount_old) + 0.5 == float(payin_amount_old), 'wallet调整余额内部户账户到内部户账户错误，payin_amount_old{}, payin_amount_new{}'.format(payin_amount_old, payin_amount_new)
 
     @allure.testcase('test_operate_030 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id失败')
     def test_operate_030(self):
