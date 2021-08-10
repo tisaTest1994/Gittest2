@@ -711,7 +711,6 @@ class TestOperateApi:
         with allure.step("校验数据库"):
             sql = ""
             relation = sqlFunction.connect_mysql('referral', sql)
-            print(relation)
             assert relation[0]['relation'] == 1, '数据库查询值是{}'.format(relation)
 
     @allure.testcase('test_operate_030 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id失败')
