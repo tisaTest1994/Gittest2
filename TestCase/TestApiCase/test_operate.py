@@ -703,10 +703,8 @@ class TestOperateApi:
         with allure.step("从数据库获得转账前的balance"):
             sql_payout = "select amount from balance where type='1' and wallet_id=(select id from wallet.wallet where wallet_id='{}');".format(data['debit_wallet_id'])
             sql_payin = "select amount from balance where type='1' and wallet_id=(select id from wallet.wallet where wallet_id='{}');".format(data['credit_wallet_id'])
-            payout_amount_old = sqlFunction.connect_mysql('wallet', sql_payout)
-            payin_amount_old = sqlFunction.connect_mysql('wallet', sql_payin)
-            print(payout_amount_old)
-            print(payin_amount_old)
+            payout_amount_old = sqlFunction.connect_mysql('wallet', sql_payout)[0]['amount']
+            payin_amount_old = sqlFunction.connect_mysql('wallet', sql_payin)[0]['amount']
         r = requests.request('POST', url='{}/operatorapi/wallets/balance/adjust'.format(operateUrl), data=json.dumps(data), headers=headers, timeout=100)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -716,9 +714,12 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert r.json()['is_succeed'] is True, "wallet调整余额内部户账户到内部户账户错误，返回值是{}".format(r.text)
         with allure.step("从数据库获得转账后的balance"):
-            payout_amount_new = sqlFunction.connect_mysql('wallet', sql_payout)
-            payin_amount_new = sqlFunction.connect_mysql('wallet', sql_payin)
-            print(payout_amount_new)
+            payout_amount_new = sqlFunction.connect_mysql('wallet', sql_payout)[0]['amount']
+            payin_amount_new = sqlFunction.connect_mysql('wallet', sql_payin)[0]['amount']
+        assert Decimal(payout_amount_old) - 0.5 == Decimal(payout_amount_new), 'wallet调整余额内部户账户到内部户账户错误，payout_amount_old是{}, payout_amount_new是{}'.format(payout_amount_old, payout_amount_new)
+        assert Decimal(payin_amount_old) - 0.5 == Decimal(
+            payin_amount_old), 'wallet调整余额内部户账户到内部户账户错误，payout_amount_old是{}, payout_amount_new是{}'.format(
+            payout_amount_old, payin_amount_new)
 
     @allure.testcase('test_operate_030 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id失败')
     def test_operate_030(self):
