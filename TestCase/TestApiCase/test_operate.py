@@ -713,11 +713,12 @@ class TestOperateApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['is_succeed'] is True, "wallet调整余额内部户账户到内部户账户错误，返回值是{}".format(r.text)
+        sleep(5)
         with allure.step("从数据库获得转账后的balance"):
             payout_amount_new = sqlFunction.connect_mysql('wallet', sql_payout)[0]['amount']
             payin_amount_new = sqlFunction.connect_mysql('wallet', sql_payin)[0]['amount']
         assert float(payout_amount_old) - 0.5 == float(payout_amount_new), 'wallet调整余额内部户账户到内部户账户错误，payout_amount_old是{}, payout_amount_new是{}'.format(payout_amount_old, payout_amount_new)
-        assert float(payin_amount_old) - 0.5 == float(
+        assert float(payin_amount_old) + 0.5 == float(
             payin_amount_old), 'wallet调整余额内部户账户到内部户账户错误，payout_amount_old是{}, payout_amount_new是{}'.format(
             payout_amount_old, payin_amount_new)
 
