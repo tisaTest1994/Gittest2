@@ -41,7 +41,6 @@ def check(text, type=2, wait_time_max=20):
 
 # 数量加入,
 def add_comma_number(number):
-    print(number)
     if '.' in str(number):
         number_int = str(number).split('.')[0]
         number_radix = str(number).split('.')[1]

@@ -32,22 +32,13 @@ class TestTransactionUi:
             click('CB403')
             click('BTC')
         with allure.step("接口获取BTC交易列表"):
-            data = {
-                "pagination_request": {
-                    "cursor": "0",
-                    "page_size": 10
-                },
-                "codes": ["BTC"]
-            }
-            r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers)
-            transaction_info = r.json()['transactions'][0]
-            if transaction_info['user_txn_sub_type'] == 2:
-                transaction_text = 'Convert' + str(json.loads(transaction_info['details'])['buy_currency']['amount']) + ' ' + str(json.loads(transaction_info['details'])['buy_currency']['code'])
-            elif transaction_info['user_txn_sub_type'] == 3:
-                transaction_text = 'Subscribe Fixed' + str(json.loads(transaction_info['details'])['currency']['amount']) + ' ' + str(json.loads(transaction_info['details'])['currency']['code'])
-            with allure.step("检车交易transaction"):
-                print(poco('android.view.View').sibling().child()[0].child().attr('name'))
-                #check(transaction_text, type='textMatches')
+            transaction_info = UiFunction.choose_transaction(crypto_type=['BTC'])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('android.widget.ScrollView').child().child().child()[0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'], poco('android.widget.ScrollView').child().child().child()[0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('android.widget.ScrollView').child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
 
     @allure.testcase('test_transaction_ui_003 查询ETH交易信息')
     def test_transaction_ui_003(self):
@@ -57,6 +48,17 @@ class TestTransactionUi:
         with allure.step("选择币种"):
             click('CB403')
             click('ETH')
+        with allure.step("接口获取ETH交易列表"):
+            transaction_info = UiFunction.choose_transaction(crypto_type=['ETH'])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('android.widget.ScrollView').child().child().child()[
+                0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'],
+                                                         poco('android.widget.ScrollView').child().child().child()[
+                                                             0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('android.widget.ScrollView').child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
 
     @allure.testcase('test_transaction_ui_004 查询USDT交易信息')
     def test_transaction_ui_004(self):
@@ -66,6 +68,17 @@ class TestTransactionUi:
         with allure.step("选择币种"):
             click('CB403')
             click('USDT')
+        with allure.step("接口获取USDT交易列表"):
+            transaction_info = UiFunction.choose_transaction(crypto_type=['USDT'])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('android.widget.ScrollView').child().child().child()[
+                0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'],
+                                                         poco('android.widget.ScrollView').child().child().child()[
+                                                             0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('android.widget.ScrollView').child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
 
     @allure.testcase('test_transaction_ui_005 查询Deposit交易信息')
     def test_transaction_ui_005(self):
@@ -75,15 +88,147 @@ class TestTransactionUi:
         with allure.step("选择交易类型"):
             click('CB020')
             click('CB079')
+        with allure.step("接口获取Deposit交易列表"):
+            transaction_info = UiFunction.choose_transaction(type=[1])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'],poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('Date').parent().child()[4].child().child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_006 查询Deposit交易信息以及详细信息')
+    @allure.testcase('test_transaction_ui_006 查询Withdraw交易信息')
     def test_transaction_ui_006(self):
         with allure.step("进入transaction页面"):
-            poco(get_ui_text('CB214')).parent().child("android.view.View")[1].click()
+            poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
             click('CB284')
-        with allure.step("选择交易类型为Deposit"):
+        with allure.step("选择交易类型"):
             click('CB020')
-            click('CB079')
-        with allure.step("点击某个交易"):
-            print(poco(get_ui_text('CB079')).exists())
-            sleep(20)
+            click('CB307')
+        with allure.step("接口获取Withdraw交易列表"):
+            transaction_info = UiFunction.choose_transaction(type=[6])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'],poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('Date').parent().child()[4].child().child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
+
+    @allure.testcase('test_transaction_ui_007 查询Convert交易信息')
+    def test_transaction_ui_007(self):
+        with allure.step("进入transaction页面"):
+            poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
+            click('CB284')
+        with allure.step("选择交易类型"):
+            click('CB020')
+            click('CB062')
+        with allure.step("接口获取Convert交易列表"):
+            transaction_info = UiFunction.choose_transaction(type=[2])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'],poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('Date').parent().child()[4].child().child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
+
+    @allure.testcase('test_transaction_ui_008 查询Subscribe Flexible交易信息')
+    def test_transaction_ui_008(self):
+        with allure.step("进入transaction页面"):
+            poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
+            click('CB284')
+        with allure.step("选择交易类型"):
+            click('CB020')
+            click('CB259')
+        with allure.step("接口获取Subscribe Flexible交易列表"):
+            transaction_info = UiFunction.choose_transaction(type=[3], product_type=[2])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'],poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('Date').parent().child()[4].child().child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
+
+    @allure.testcase('test_transaction_ui_009 查询Subscribe Fixed交易信息')
+    def test_transaction_ui_009(self):
+        with allure.step("进入transaction页面"):
+            poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
+            click('CB284')
+        with allure.step("选择交易类型"):
+            click('CB020')
+            click('CB258')
+        with allure.step("接口获取Subscribe Flexible交易列表"):
+            transaction_info = UiFunction.choose_transaction(type=[3], product_type=[1])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'],poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('Date').parent().child()[4].child().child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
+
+    @allure.testcase('test_transaction_ui_010 查询Interest交易信息')
+    def test_transaction_ui_010(self):
+        with allure.step("进入transaction页面"):
+            poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
+            click('CB284')
+        with allure.step("选择交易类型"):
+            click('CB020')
+            click('CB162')
+        with allure.step("接口获取Interest交易列表"):
+            transaction_info = UiFunction.choose_transaction(type=[4])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'],poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('Date').parent().child()[4].child().child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
+
+    @allure.testcase('test_transaction_ui_011 查询Maturity交易信息')
+    def test_transaction_ui_011(self):
+        with allure.step("进入transaction页面"):
+            poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
+            click('CB284')
+        with allure.step("选择交易类型"):
+            click('CB020')
+            click('CB176')
+        with allure.step("接口获取Maturity交易列表"):
+            transaction_info = UiFunction.choose_transaction(type=[5], product_type=[1])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'],poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('Date').parent().child()[4].child().child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
+
+    @allure.testcase('test_transaction_ui_012 查询Redeem交易信息')
+    def test_transaction_ui_012(self):
+        with allure.step("进入transaction页面"):
+            poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
+            click('CB284')
+        with allure.step("选择交易类型"):
+            click('CB020')
+            click('CB229')
+        with allure.step("接口获取Redeem交易列表"):
+            transaction_info = UiFunction.choose_transaction(type=[5], product_type=[2])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'],poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('Date').parent().child()[4].child().child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
+
+    @allure.testcase('test_transaction_ui_013 查询Reward交易信息')
+    def test_transaction_ui_013(self):
+        with allure.step("进入transaction页面"):
+            poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
+            click('CB284')
+        with allure.step("选择交易类型"):
+            click('CB020')
+            click('CB401')
+        with allure.step("接口获取Reward交易列表"):
+            transaction_info = UiFunction.choose_transaction(type=[7])
+        with allure.step("检车交易transaction"):
+            assert transaction_info['transaction_text'] in poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'), '第一个项目是{}, 发现{}'.format(transaction_info['transaction_text'],poco('Date').parent().child()[4].child().child().child().child()[0].attr('name'))
+        with allure.step("点击transaction"):
+            poco('Date').parent().child()[4].child().child().child().child()[0].click()
+        with allure.step("检查页面transaction_id"):
+            check(transaction_info['transaction_id'])
