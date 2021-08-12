@@ -5,6 +5,9 @@ class UiFunction:
 
     @staticmethod
     def login(account, password):
+        # 判断升级提示
+        if check('CB196', type=1, wait_time_max=10) is True:
+            click('CB196')
         # 先判断是否已经登录
         if check('CB214', type=1) is True:
             pass
