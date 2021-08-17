@@ -72,6 +72,12 @@ def get_json(file='setting.json'):
     return js
 
 
+# 获得photo的url
+def get_photo():
+    path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/Photos'
+    return path
+
+
 # 修改资源里面的配置参数
 def write_json(key, value):
     path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/setting.json'

@@ -97,3 +97,11 @@ class UiFunction:
         sleep(1)
         return {'transaction_id': transaction_info['transaction_id'], 'transaction_text': transaction_text}
 
+    @staticmethod
+    def choose_display_currency(type='USD'):
+        data = {
+            "language": "EN",
+            "currency": type,
+            "timeZone": "Asia/Hong_Kong"
+        }
+        requests.request('POST', url='{}/account/setting/preference'.format(env_url), data=json.dumps(data), headers=headers)
