@@ -10,6 +10,9 @@ env_url = get_json()[get_json()['env']]
 global operateUrl
 operateUrl = get_json()['operateUrl']
 
+global monitorUrl
+monitorUrl = get_json()['monitorUrl']
+
 global headers
 headers = get_json()['headers']
 
@@ -23,7 +26,7 @@ global accountToken
 accountToken = ''
 
 global kyc_type
-kyc_type = 'pro'
+kyc_type = 'test'
 
 global ui_type
 ui_type = 'test'

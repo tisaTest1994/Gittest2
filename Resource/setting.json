@@ -328,6 +328,7 @@
     "port": 3306
   },
   "operateUrl": "https://opapi.cabital.io/api/v1",
+  "monitorUrl": "https://caas.latibac.com/api/v1",
   "operate_admin_account": {
     "email": "zhangsan@test.com",
     "password": "zhangsan"

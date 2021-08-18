@@ -8,6 +8,7 @@ from hashlib import sha256
 import hmac
 import base64
 import http.client
+from urllib.parse import urlencode
 
 
 class AccountFunction:
@@ -19,8 +20,19 @@ class AccountFunction:
             "username": account,
             "password": password
         }
-        if type == "operate":
+        if type == 'operate':
             r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data), headers=headers)
+        elif type == 'monitor':
+            data = {
+                'username': account,
+                'password': password,
+                'grant_type': 'password',
+                'client_id': 'screen-service'
+            }
+            headers['Authorization'] = 'Basic c2NyZWVuLXNlcnZpY2U6MzJlMjhkZGUtN2QzNy00ODlkLWFhNmEtMzE5NzY5YTQyNjFh'
+            headers['Content-Type'] = 'application/x-www-form-urlencoded'
+            r = session.request('POST', url='https://authserver.latibac.com/auth/realms/digitrade-operator/protocol/openid-connect/token', data=urlencode(data), headers=headers)
+            return r.json()['access_token']
         else:
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
         if r.text is None:
@@ -262,7 +274,7 @@ class AccountFunction:
 
     # 获得webhook
     @staticmethod
-    def get_webhook():
+    def get_webhook(kyc_type=kyc_type):
         conn = http.client.HTTPSConnection('api.pipedream.com')
         webhook = get_json()['kyc'][kyc_type]['webhook']
         conn.request("GET", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer 7759a7e3653dcef8500ffe2c577102e6'})
@@ -272,12 +284,13 @@ class AccountFunction:
 
     # 删除webhook
     @staticmethod
-    def delete_old_webhook():
+    def delete_old_webhook(kyc_type=kyc_type):
         conn = http.client.HTTPSConnection('api.pipedream.com')
         webhook = get_json()['kyc'][kyc_type]['webhook']
         conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer 7759a7e3653dcef8500ffe2c577102e6'})
         res = conn.getresponse()
         data = res.read()
+        sleep(1)
 
     # 活期申购
     @staticmethod
