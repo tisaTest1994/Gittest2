@@ -238,7 +238,7 @@ class TestTransactionUi:
         with allure.step("进入wallet页面"):
             click('CB301')
         with allure.step("选择币种BTC"):
-            poco(get_ui_text('CB307')).parent().child()[4].child().child().click()
+            poco(get_ui_text('CB214')).parent().child()[0].child().child().child().child().child().click()
         with allure.step("接口获取BTC交易列表"):
             transaction_info = UiFunction.choose_transaction(crypto_type=['BTC'])
         with allure.step("检车交易transaction"):
@@ -253,7 +253,7 @@ class TestTransactionUi:
         with allure.step("进入wallet页面"):
             click('CB301')
         with allure.step("选择币种BTC"):
-            poco(get_ui_text('CB307')).parent().child()[4].child().child()[1].click()
+            poco(get_ui_text('CB214')).parent().child()[0].child().child().child().child().child()[1].click()
         with allure.step("接口获取ETH交易列表"):
             transaction_info = UiFunction.choose_transaction(crypto_type=['ETH'])
         with allure.step("检车交易transaction"):
@@ -271,12 +271,8 @@ class TestTransactionUi:
         with allure.step("进入wallet页面"):
             click('CB301')
         with allure.step("选择币种BTC"):
-            poco(get_ui_text('CB307')).swipe('up')
-            poco(get_ui_text('CB307')).swipe('up')
-            poco(get_ui_text('CB307')).swipe('up')
-            poco(get_ui_text('CB307')).swipe('up')
-            check(get_ui_text('CB307'))
-            poco(get_ui_text('CB307')).parent().child()[3].child().child()[2].click()
+            slide(direction='up')
+            poco(get_ui_text('CB214')).parent().child()[0].child().child().child().child().child()[2].click()
         with allure.step("接口获取USDT交易列表"):
             transaction_info = UiFunction.choose_transaction(crypto_type=['USDT'])
         with allure.step("检车交易transaction"):

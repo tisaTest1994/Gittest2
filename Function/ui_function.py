@@ -47,7 +47,7 @@ class UiFunction:
         click('CB172')
 
     @staticmethod
-    def choose_transaction(crypto_type=['BTC', 'ETH', 'USDT'], num=0, type=[1, 2, 3, 4, 5, 6, 7], product_type=[1, 2]):
+    def choose_transaction(crypto_type=['BTC', 'ETH', 'USDT'], num=0, type=[1, 2, 3, 4, 5, 6, 7], product_sub_type=[1, 2]):
         if 3 in type or 5 in type:
             data = {
                 "pagination_request": {
@@ -56,7 +56,7 @@ class UiFunction:
                 },
                 "user_txn_sub_types": type,
                 "codes": crypto_type,
-                "product_sub_types": product_type
+                "product_sub_types": product_sub_type
             }
         else:
             data = {
@@ -75,18 +75,18 @@ class UiFunction:
         elif transaction_info['user_txn_sub_type'] == 2:
             transaction_text = 'Convert\n' + add_comma_number(str(json.loads(transaction_info['details'])['buy_currency']['amount']))
         elif transaction_info['user_txn_sub_type'] == 3:
-            if product_type == [1]:
+            if transaction_info['product_sub_type'] == 1:
                 transaction_text = 'Subscribe Fixed\n' + add_comma_number(str(json.loads(transaction_info['details'])['currency']['amount']))
-            elif product_type == [2]:
+            elif transaction_info['product_sub_type'] == 2:
                 transaction_text = 'Subscribe Flexible\n' + add_comma_number(str(json.loads(transaction_info['details'])['currency']['amount']))
             else:
                 transaction_text = 'Subscribe'
         elif transaction_info['user_txn_sub_type'] == 4:
             transaction_text = 'Interest\n' + add_comma_number(str(json.loads(transaction_info['details'])['currency']['amount']))
         elif transaction_info['user_txn_sub_type'] == 5:
-            if product_type == [1]:
+            if transaction_info['product_sub_type'] == 1:
                 transaction_text = 'Maturity\n' + add_comma_number(str(json.loads(transaction_info['details'])['currency']['amount']))
-            elif product_type == [2]:
+            elif transaction_info['product_sub_type'] == 2:
                 transaction_text = 'Redeem\n' + add_comma_number(str(json.loads(transaction_info['details'])['currency']['amount']))
             else:
                 transaction_text = 'Maturity'
@@ -105,3 +105,7 @@ class UiFunction:
             "timeZone": "Asia/Hong_Kong"
         }
         requests.request('POST', url='{}/account/setting/preference'.format(env_url), data=json.dumps(data), headers=headers)
+        # 下拉刷新
+        click('CB214')
+        slide('down')
+        sleep(2)

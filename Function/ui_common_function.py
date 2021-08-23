@@ -65,3 +65,18 @@ def add_comma_number(number):
 def get_ui_text(code):
     return str(get_json(file='multiple_languages.json')[code])
 
+
+# 滑动
+def slide(direction, cycle=1):
+    xy = poco.get_screen_size()
+    w = xy[0]
+    h = xy[1]
+    for i in range(cycle):
+        if direction == 'up':
+            swipe([w/2, h*0.8], [w/2, h*0.4])
+        elif direction == 'down':
+            swipe([w/2, h*0.3], [w/2, h*0.9])
+        elif direction == 'left':
+            swipe([w*0.9, h/2], [w*0.15, h/2])
+        elif direction == 'right':
+            swipe([w*0.15, h/2], [w*0.9, h/2])
