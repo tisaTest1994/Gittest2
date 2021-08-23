@@ -19,7 +19,7 @@ class MyUser(HttpUser):
         else:
             print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
 
-    @task(1)
+    @task(0)
     def cfx(self):
         accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken
@@ -270,7 +270,7 @@ class MyUser(HttpUser):
                                                                                     sell_amount,
                                                                                     sell_amount_wallet_balance_latest))
 
-    @task(2)
+    @task(0)
     def earn_current(self):
         accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken
@@ -286,7 +286,7 @@ class MyUser(HttpUser):
         else:
             print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
 
-    @task(1)
+    @task(0)
     def redeem_current(self):
         accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken
@@ -302,7 +302,7 @@ class MyUser(HttpUser):
         else:
             print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
 
-    @task(1)
+    @task(0)
     def fixed(self):
         accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken
@@ -364,7 +364,7 @@ class MyUser(HttpUser):
                     else:
                         print("failed: status code is {}, 返回值是 {}".format(r.status_code, r.text))
 
-    @task(1)
+    @task(0)
     def get_market(self):
         for i in ['BTCEUR', 'BTCUSD', 'ETHEUR', 'ETHUSD', 'USDEUR']:
             for y in ['10', '60', 'D', 'W', 'M']:

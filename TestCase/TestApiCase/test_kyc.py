@@ -120,17 +120,17 @@ class TestKycApi:
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
         with allure.step("创建Kyc case"):
             r = session.request('POST', url='{}/api/v1/cases'.format(self.kyc_url), data=json.dumps(data), headers=kyc_headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
-            caseSystemId = r.json()['caseSystemId']
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
+                caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook()
@@ -140,7 +140,7 @@ class TestKycApi:
                         with allure.step("wehbook验签"):
                             webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
                             assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
-        while sleep_time < 500:
+        while sleep_time < 300:
             sleep_time = sleep_time + 30
             sleep(30)
             webhook_info = AccountFunction.get_webhook()
@@ -185,7 +185,7 @@ class TestKycApi:
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
         sleep_time = 0
-        while sleep_time < 500:
+        while sleep_time < 300:
             sleep_time = sleep_time + 30
             sleep(30)
             with allure.step("获取新的wehbook"):
@@ -284,7 +284,7 @@ class TestKycApi:
     def test_kyc_009(self):
         kyc_headers = self.kyc_headers
         unix_time = int(time.time())
-        caseSystemId = "7829411a-955a-4ed0-b96c-729c63ea5009"
+        caseSystemId = "7829411a-955a-4ed0-b96c-729c63ea3009"
         sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/cases/{}'.format(caseSystemId))
         kyc_headers['ACCESS-SIGN'] = sign
@@ -350,7 +350,7 @@ class TestKycApi:
             caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook()
@@ -394,7 +394,7 @@ class TestKycApi:
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook()
@@ -440,7 +440,7 @@ class TestKycApi:
             caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook()
@@ -508,7 +508,7 @@ class TestKycApi:
             caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook()
@@ -587,7 +587,7 @@ class TestKycApi:
             caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook()
@@ -681,19 +681,6 @@ class TestKycApi:
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert '"code":"001003"' in r.text, "提前发送确认接受结果信息错误，返回值是{}".format(r.text)
-        sleep_time = 0
-        while sleep_time < 300:
-            sleep_time = sleep_time + 30
-            sleep(30)
-            webhook_info = AccountFunction.get_webhook()
-            for i in json.loads(webhook_info)['data']:
-                if i['e']['path'] == '/webhook/screen/case/reviewed':
-                    AccountFunction.delete_old_webhook()
-                    sleep_time = 501
-                    webhook_sign = AccountFunction.make_access_sign(unix_time=i['e']['headers']['access-timestamp'],
-                                                                    method=i['e']['method'], url=i['e']['path'],
-                                                                    body=i['e']['bodyRaw'])
-                    assert webhook_sign == i['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(i['e'])
 
     @allure.testcase('test_kyc_015 创建直接pass 企业 Kyc case后查询cases,最后发送接受结果信息')
     def test_kyc_015(self):
@@ -728,7 +715,7 @@ class TestKycApi:
             caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook()
@@ -772,7 +759,7 @@ class TestKycApi:
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook()
