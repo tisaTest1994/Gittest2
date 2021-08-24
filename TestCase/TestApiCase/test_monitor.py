@@ -51,25 +51,24 @@ class TestMonitorApi:
             caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook(kyc_type='test')
                 for y in json.loads(webhook_info)['data']:
-                    if y['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
+                    if y['e']['path'] == '/webhook/screen/case/pending':
                         sleep_time = 501
                         with allure.step("wehbook验签"):
                             webhook_sign = AccountFunction.make_access_sign(
                                 unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'],
                                 url=y['e']['path'], body=y['e']['bodyRaw'])
                             assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
-        while sleep_time < 500:
+        while sleep_time < 300:
             sleep_time = sleep_time + 30
             sleep(30)
             webhook_info = AccountFunction.get_webhook(kyc_type='test')
             for y in json.loads(webhook_info)['data']:
-                if y['e']['path'] == '/webhook/compliance/operator' and 'SUGGEST_TO_ACCEPT' == y['e']['body'][
-                    'suggestion']:
+                if y['e']['path'] == '/webhook/compliance/operator' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                     sleep_time = 501
                     with allure.step("wehbook验签"):
                         webhook_sign = AccountFunction.make_access_sign(
@@ -206,7 +205,7 @@ class TestMonitorApi:
             caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook(kyc_type='test')
@@ -274,7 +273,7 @@ class TestMonitorApi:
             caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook(kyc_type='test')
@@ -286,7 +285,7 @@ class TestMonitorApi:
                                 unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'],
                                 url=y['e']['path'], body=y['e']['bodyRaw'])
                             assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
-        while sleep_time < 500:
+        while sleep_time < 300:
             sleep_time = sleep_time + 30
             sleep(30)
             webhook_info = AccountFunction.get_webhook(kyc_type='test')
@@ -349,7 +348,7 @@ class TestMonitorApi:
             caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
             sleep_time = 0
-            while sleep_time < 500:
+            while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
                 webhook_info = AccountFunction.get_webhook(kyc_type='test')
@@ -389,7 +388,7 @@ class TestMonitorApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json() == {}, '给出用户决策错误,返回值是{}'.format(r.text)
-        while sleep_time < 500:
+        while sleep_time < 300:
             sleep_time = sleep_time + 30
             sleep(30)
             webhook_info = AccountFunction.get_webhook(kyc_type='test')

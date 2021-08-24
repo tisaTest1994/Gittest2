@@ -176,7 +176,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert 'SEPA' in r.text, "法币提现获得信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_011 预交验法币提现')
+    @allure.testcase('test_payout_011 预校验法币提现')
     def test_payout_011(self):
         with allure.step("法币提现获得信息"):
             with allure.step("获得token"):
@@ -195,5 +195,5 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['fee'] == {"code":"EUR","amount":"0"}, "预交验法币提现错误，返回值是{}".format(r.text)
-
+            assert r.json()['fee']['code'] == 'EUR', "预校验法币提现错误，返回值是{}".format(r.text)
+            assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)

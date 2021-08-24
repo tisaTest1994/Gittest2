@@ -952,7 +952,7 @@ class TestAccountApi:
 
     @allure.testcase('test_account_046 referal注册用户')
     def test_account_046(self):
-        for i in range(100):
+        for i in range(50):
             citizenCountryCode = random.choice(citizenCountryCodeList)
             data = {
                 "emailAddress": generate_email(),
@@ -961,7 +961,7 @@ class TestAccountApi:
                 "password": "Zcdsw123",
                 "metadata": {
                     "referral": {
-                    "code": "6EM7LK"
+                        "code": "6EM7LK"
                     }
                 }
             }
