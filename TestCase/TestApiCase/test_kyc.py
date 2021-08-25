@@ -6,8 +6,8 @@ import allure
 
 # kyc相关cases
 class TestKycApi:
-    kyc_url = get_json()['kyc'][kyc_type]['kycUrl']
-    kyc_headers = get_json()['kyc'][kyc_type]['kycHeaders']
+    kyc_url = get_json()['kyc'][get_json()['env']]['kycUrl']
+    kyc_headers = get_json()['kyc'][get_json()['env']]['kycHeaders']
 
     # 初始化class
     def setup_class(self):
@@ -204,9 +204,9 @@ class TestKycApi:
     @allure.testcase('test_kyc_006 打开特定KYC Case的持续性扫描')
     def test_kyc_006(self):
         kyc_headers = self.kyc_headers
-        if kyc_type == 'test':
+        if kyc_env == 'test':
             caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
-        elif kyc_type == 'pro':
+        elif kyc_env == 'pro':
             caseSystemId = 'b1eb6d06-b86d-4b21-9106-0d47c7d94c19'
         unix_time = int(time.time())
         sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
@@ -226,9 +226,9 @@ class TestKycApi:
     def test_kyc_007(self):
         kyc_headers = self.kyc_headers
         unix_time = int(time.time())
-        if kyc_type == 'test':
+        if kyc_env == 'test':
             caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
-        elif kyc_type == 'pro':
+        elif kyc_env == 'pro':
             caseSystemId = 'b1eb6d06-b86d-4b21-9106-0d47c7d94c19'
         sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='DELETE',
                                                 url='/api/v1/cases/{}/ogs'.format(caseSystemId))
@@ -246,9 +246,9 @@ class TestKycApi:
     @allure.testcase('test_kyc_008 使用已经创建过的externalCaseId创建Kyc case')
     def test_kyc_008(self):
         with allure.step("准备测试数据"):
-            if kyc_type == 'test':
+            if kyc_env == 'test':
                 externalCaseId = 'weoEKFPJPzmhKnXSZTdinkyfJeehLS'
-            elif kyc_type == 'pro':
+            elif kyc_env == 'pro':
                 externalCaseId = 'Y3WZCW0LxN8rDPDb3C1JifwbrA4Sxy'
             kyc_headers = self.kyc_headers
             data = {

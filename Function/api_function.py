@@ -260,7 +260,7 @@ class AccountFunction:
 
     # 验签
     @staticmethod
-    def make_access_sign(unix_time, method, url, body='', key=get_json()['kyc'][kyc_type]['kycSecretKey']):
+    def make_access_sign(unix_time, method, url, body='', key=get_json()['kyc'][get_json()['env']]['kycSecretKey']):
         if body == '':
             data = '{}{}{}'.format(unix_time, method, url)
         else:
@@ -274,9 +274,9 @@ class AccountFunction:
 
     # 获得webhook
     @staticmethod
-    def get_webhook(kyc_type=kyc_type):
+    def get_webhook():
         conn = http.client.HTTPSConnection('api.pipedream.com')
-        webhook = get_json()['kyc'][kyc_type]['webhook']
+        webhook = get_json()['kyc'][get_json()['env']]['webhook']
         conn.request("GET", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer 7759a7e3653dcef8500ffe2c577102e6'})
         res = conn.getresponse()
         data = res.read()
@@ -284,9 +284,9 @@ class AccountFunction:
 
     # 删除webhook
     @staticmethod
-    def delete_old_webhook(kyc_type=kyc_type):
+    def delete_old_webhook():
         conn = http.client.HTTPSConnection('api.pipedream.com')
-        webhook = get_json()['kyc'][kyc_type]['webhook']
+        webhook = get_json()['kyc'][get_json()['env']]['webhook']
         conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer 7759a7e3653dcef8500ffe2c577102e6'})
         res = conn.getresponse()
         data = res.read()

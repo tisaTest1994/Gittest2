@@ -19,7 +19,7 @@ class TestMonitorApi:
             headers['Authorization'] = "Bearer " + accessToken
             headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook(kyc_type='test')
+            AccountFunction.delete_old_webhook('test')
         with allure.step("创建case"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -54,7 +54,7 @@ class TestMonitorApi:
             while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
-                webhook_info = AccountFunction.get_webhook(kyc_type='test')
+                webhook_info = AccountFunction.get_webhook('test')
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/pending':
                         sleep_time = 501
@@ -66,7 +66,7 @@ class TestMonitorApi:
         while sleep_time < 300:
             sleep_time = sleep_time + 30
             sleep(30)
-            webhook_info = AccountFunction.get_webhook(kyc_type='test')
+            webhook_info = AccountFunction.get_webhook('test')
             for y in json.loads(webhook_info)['data']:
                 if y['e']['path'] == '/webhook/compliance/operator' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                     sleep_time = 501
@@ -110,7 +110,7 @@ class TestMonitorApi:
             headers['Authorization'] = "Bearer " + accessToken
             headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook(kyc_type='test')
+            AccountFunction.delete_old_webhook('test')
         with allure.step("创建case"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -175,7 +175,7 @@ class TestMonitorApi:
             headers['Authorization'] = "Bearer " + accessToken
             headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook(kyc_type='test')
+            AccountFunction.delete_old_webhook('test')
         with allure.step("创建case"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -208,7 +208,7 @@ class TestMonitorApi:
             while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
-                webhook_info = AccountFunction.get_webhook(kyc_type='test')
+                webhook_info = AccountFunction.get_webhook('test')
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/pending':
                         sleep_time = 501
@@ -241,7 +241,7 @@ class TestMonitorApi:
             headers['Authorization'] = "Bearer " + accessToken
             headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook(kyc_type='test')
+            AccountFunction.delete_old_webhook('test')
         with allure.step("创建case"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -276,7 +276,7 @@ class TestMonitorApi:
             while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
-                webhook_info = AccountFunction.get_webhook(kyc_type='test')
+                webhook_info = AccountFunction.get_webhook('test')
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                         sleep_time = 501
@@ -288,7 +288,7 @@ class TestMonitorApi:
         while sleep_time < 300:
             sleep_time = sleep_time + 30
             sleep(30)
-            webhook_info = AccountFunction.get_webhook(kyc_type='test')
+            webhook_info = AccountFunction.get_webhook('test')
             for y in json.loads(webhook_info)['data']:
                 if y['e']['path'] == '/webhook/compliance/operator' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                     sleep_time = 501
@@ -316,7 +316,7 @@ class TestMonitorApi:
             headers['Authorization'] = "Bearer " + accessToken
             headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook(kyc_type='test')
+            AccountFunction.delete_old_webhook('test')
         with allure.step("创建case"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -351,7 +351,7 @@ class TestMonitorApi:
             while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
-                webhook_info = AccountFunction.get_webhook(kyc_type='test')
+                webhook_info = AccountFunction.get_webhook('test')
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/pending':
                         sleep_time = 501
@@ -391,7 +391,7 @@ class TestMonitorApi:
         while sleep_time < 300:
             sleep_time = sleep_time + 30
             sleep(30)
-            webhook_info = AccountFunction.get_webhook(kyc_type='test')
+            webhook_info = AccountFunction.get_webhook('test')
             for y in json.loads(webhook_info)['data']:
                 if y['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                     sleep_time = 501

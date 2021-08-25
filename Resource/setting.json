@@ -9,11 +9,9 @@
     "yilei10@163.com",
     "yilei1@163.com"
   ],
-  "app_package_debug": {
-    "package_name": "com.cabital.cabital.debug"
-  },
-  "app_package_pro": {
-    "package_name": "com.cabital.cabital"
+  "app_package": {
+    "test": "com.cabital.cabital.debug",
+    "pro": "com.cabital.cabital"
   },
   "blacklist": {
     "email": "yilei1@cabital.com",
@@ -288,10 +286,6 @@
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
   },
   "env": "test",
-  "env support": [
-    "test",
-    "pro"
-  ],
   "headers": {
     "Content-Encoding": "deflate",
     "Content-Type": "application/json"
