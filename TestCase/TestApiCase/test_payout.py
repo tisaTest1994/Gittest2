@@ -1,9 +1,5 @@
 from Function.api_function import *
 from Function.operate_sql import *
-from run import *
-from Function.log import *
-import allure
-import pyotp
 
 
 class TestPayoutApi:
@@ -13,6 +9,7 @@ class TestPayoutApi:
         AccountFunction.add_headers()
 
     @allure.testcase('test_payout_001 没有Kyc用户添加常用收款地址失败')
+    @pytest.mark.multiprocess
     def test_payout_001(self):
         account = generate_email()
         password = 'Abc112233'
@@ -40,6 +37,7 @@ class TestPayoutApi:
             assert 'ACC_FORBIDDEN' in r.text, "没有Kyc用户添加常用收款地址失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_002 获取存储的常用收款地址list')
+    @pytest.mark.multiprocess
     def test_payout_002(self):
         with allure.step("获取存储的常用收款地址list"):
             r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
@@ -52,6 +50,7 @@ class TestPayoutApi:
             assert r.json()['payeeList'] is not None, "获取存储的常用收款地址list错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_003 获取某个常用收款地址')
+    @pytest.mark.multiprocess
     def test_payout_003(self):
         with allure.step("获取收款地址list"):
             r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
@@ -68,6 +67,7 @@ class TestPayoutApi:
             assert r.json()['payeeList'] is not None, "获取某个常用收款地址错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_004 使用不存在id获取常用收款地址')
+    @pytest.mark.multiprocess
     def test_payout_004(self):
         with allure.step("使用不存在id获取常用收款地址"):
             r = session.request('GET', url='{}/account/myPayee/{}'.format(env_url, '1111300'), headers=headers)
@@ -80,6 +80,7 @@ class TestPayoutApi:
             assert 'This address is not exist, please refresh and retry.' in r.text, "使用不存在id获取常用收款地址错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_005 删除不存在的收款地址')
+    @pytest.mark.multiprocess
     def test_payout_005(self):
         with allure.step("凭借空id号删除地址"):
             r = session.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, '123131300'), headers=headers)
@@ -92,6 +93,7 @@ class TestPayoutApi:
             assert 'This address is not exist, please refresh and retry.' in r.text, "删除收款地址错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_06 获取提现费率和提现限制')
+    @pytest.mark.multiprocess
     def test_payout_006(self):
         with allure.step("获取提现费率和提现限制"):
             data = {
@@ -110,6 +112,7 @@ class TestPayoutApi:
             assert '"code":"ETH"' in r.text, "获取提现费率和提现限制错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_007 MFA认证提现ETH成功')
+    @pytest.mark.multiprocess
     def test_payout_007(self):
         transaction_id = AccountFunction.get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07')
         logger.info('transaction_id是{}'.format(transaction_id))
@@ -127,6 +130,7 @@ class TestPayoutApi:
                 assert i['wallet_id'] is not None, "payout的P/L错误，sql命令是{}".format(sql)
 
     @allure.testcase('test_payout_008 查询提现详情')
+    @pytest.mark.multiprocess
     def test_payout_008(self):
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
@@ -145,6 +149,7 @@ class TestPayoutApi:
             assert 'status' in r.text, "查询提现详情错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_009 使用错误id查询提现详情')
+    @pytest.mark.multiprocess
     def test_payout_009(self):
         with allure.step("查询提现详情"):
             r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, '4684225231310-3fa0-4bd1-9d46-4467dfa9ce52'), headers=headers)
@@ -157,6 +162,7 @@ class TestPayoutApi:
             assert 'no rows in result set' in r.text, "使用错误id查询提现详情错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_010 法币提现获得信息')
+    @pytest.mark.multiprocess
     def test_payout_010(self):
         with allure.step("法币提现获得信息"):
             with allure.step("获得token"):
@@ -177,6 +183,7 @@ class TestPayoutApi:
             assert 'SEPA' in r.text, "法币提现获得信息错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_011 预校验法币提现')
+    @pytest.mark.multiprocess
     def test_payout_011(self):
         with allure.step("法币提现获得信息"):
             with allure.step("获得token"):

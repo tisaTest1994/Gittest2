@@ -1,5 +1,4 @@
 from datetime import *
-
 import requests
 from faker import Faker
 import random

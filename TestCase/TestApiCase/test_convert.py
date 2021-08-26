@@ -1,9 +1,5 @@
 from Function.api_function import *
-from run import *
-from Function.log import *
-import allure
-from decimal import *
-from time import sleep
+from Function.operate_sql import *
 
 
 # convert相关cases
@@ -14,6 +10,8 @@ class TestConvertApi:
         AccountFunction.add_headers()
 
     @allure.testcase('test_convert_001 根据id编号查询单笔交易')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_convert_001(self):
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
@@ -35,6 +33,8 @@ class TestConvertApi:
                 assert 'product_id' in r.text, "根据id编号查询单笔交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_convert_002 查询特定条件的交易')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_convert_002(self):
         data = {
             "pagination_request": {
@@ -56,6 +56,8 @@ class TestConvertApi:
                 assert 'product_id' in r.text, "获取产品列表错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_convert_003 查询换汇交易限制')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_convert_003(self):
         with allure.step("查询换汇交易限制"):
             r = session.request('GET', url='{}/txn/cfx/restriction'.format(env_url), headers=headers)
@@ -68,6 +70,8 @@ class TestConvertApi:
                 assert '"BTC":{"min":"0.0002"' in r.text, "获取产品列表错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_convert_004 换汇存在汇率差（手续费）')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_convert_004(self):
         with allure.step("获取汇率对"):
             cfx_dict = get_json()['cfx_book']
@@ -85,11 +89,13 @@ class TestConvertApi:
                 r1.json()['quote']), "{}汇率对出现了问题".format(i)
 
     @allure.testcase('test_convert_005 换汇交易')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_convert_005(self):
-        with allure.step("换汇交易"):
-            List = ['BTC-ETH', 'BTC-USDT', 'ETH-USDT']
+        with allure.step("获取汇率对"):
+            cfx_dict = get_json()['cfx_book']
             # 获取换汇值
-            for i in List:
+            for i in cfx_dict.values():
                 cryptos = i.split('-')
                 with allure.step("major_ccy 是buy值，正兑换"):
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
@@ -357,6 +363,8 @@ class TestConvertApi:
                         cryptos[0], sell_amount_wallet_balance, sell_amount, sell_amount_wallet_balance_latest)
 
     @allure.testcase('test_convert_006 超时换汇交易')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_convert_006(self):
         quote = AccountFunction.get_quote('BTC-USDT')
         sell_amount = str(float(0.01) * float(quote['quote']))
@@ -375,12 +383,13 @@ class TestConvertApi:
         assert 'Price expired. Please retry your convert' in r.text, '超时换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
 
     @allure.testcase('test_convert_007 小于接受的最小值换汇交易')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_convert_007(self):
-        with allure.step("换汇交易"):
-            List = ['BTC-ETH', 'BTC-USDT', 'BTC-GBP', 'BTC-EUR', 'ETH-USDT', 'ETH-GBP', 'ETH-EUR', 'USDT-GBP',
-                    'USDT-EUR']
+        with allure.step("获取汇率对"):
+            cfx_dict = get_json()['cfx_book']
             # 获取换汇值
-            for i in List:
+            for i in cfx_dict.values():
                 cryptos = i.split('-')
                 with allure.step("major_ccy 是buy值，正兑换"):
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
@@ -552,6 +561,8 @@ class TestConvertApi:
                     assert 'invalid Amount' in r3.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
 
     @allure.testcase('test_convert_008 使用错误金额换汇交易')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_convert_008(self):
         quote = AccountFunction.get_quote('BTC-USDT')
         data = {
@@ -567,6 +578,8 @@ class TestConvertApi:
         assert 'amount calculation error' in r.text, '使用错误金额换汇交易错误,返回值是{}'.format(r.text)
 
     @allure.testcase('test_convert_009 获取换汇汇率对')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_convert_009(self):
         r = session.request('GET', url='{}/txn/cfx/codes'.format(env_url))
         with allure.step("状态码和返回值"):

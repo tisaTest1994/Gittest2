@@ -1,8 +1,5 @@
-from run import *
-from Function.log import *
-from datetime import datetime
 from Function.api_function import *
-import allure
+from Function.operate_sql import *
 
 
 # market相关cases

@@ -1,7 +1,5 @@
 from Function.api_function import *
-from run import *
-from Function.log import *
-import allure
+from Function.operate_sql import *
 
 
 # saving相关cases
@@ -12,6 +10,7 @@ class TestMonitorApi:
         AccountFunction.add_headers()
 
     @allure.testcase('test_monitor_001 创建case 并且查询')
+    @pytest.mark.singleProcess
     def test_monitor_001(self):
         with allure.step("获取token"):
             accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456',
@@ -103,6 +102,7 @@ class TestMonitorApi:
                 assert 'id' in r.text, '查询创建的cases的audit log错误,返回值是{}'.format(r.text)
 
     @allure.testcase('test_monitor_002 开启/关闭 ogs')
+    @pytest.mark.singleProcess
     def test_monitor_002(self):
         with allure.step("获取token"):
             accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456',
@@ -168,6 +168,7 @@ class TestMonitorApi:
                 assert '' in r.text, '关闭ogs错误,返回值是{}'.format(r.text)
 
     @allure.testcase('test_monitor_003 创建case 给出系统建议')
+    @pytest.mark.singleProcess
     def test_monitor_003(self):
         with allure.step("获取token"):
             accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456',
@@ -234,6 +235,7 @@ class TestMonitorApi:
                 assert {} == r.json(), '给出建议错误,返回值是{}'.format(r.text)
 
     @allure.testcase('test_monitor_004 创建case 没给出用户决策就reopen case失败')
+    @pytest.mark.singleProcess
     def test_monitor_004(self):
         with allure.step("获取token"):
             accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456',
@@ -309,6 +311,7 @@ class TestMonitorApi:
                 assert r.json()['code'] == '001003', '没给出用户决策就reopen case失败错误,返回值是{}'.format(r.text)
 
     @allure.testcase('test_monitor_005 创建case 给出用户决策后再reopen case')
+    @pytest.mark.singleProcess
     def test_monitor_005(self):
         with allure.step("获取token"):
             accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456',

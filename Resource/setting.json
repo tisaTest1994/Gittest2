@@ -10,8 +10,8 @@
     "yilei1@163.com"
   ],
   "app_package": {
-    "test": "com.cabital.cabital.debug",
-    "pro": "com.cabital.cabital"
+    "pro": "com.cabital.cabital",
+    "test": "com.cabital.cabital.debug"
   },
   "blacklist": {
     "email": "yilei1@cabital.com",
@@ -315,6 +315,7 @@
     "zh",
     "en"
   ],
+  "monitorUrl": "https://caas.latibac.com/api/v1",
   "mysql": {
     "account": "testuser",
     "host": "rds-cluster-cluster.cluster-cyxbmvlfoqo7.ap-southeast-1.rds.amazonaws.com",
@@ -322,7 +323,6 @@
     "port": 3306
   },
   "operateUrl": "https://opapi.cabital.io/api/v1",
-  "monitorUrl": "https://caas.latibac.com/api/v1",
   "operate_admin_account": {
     "email": "zhangsan@test.com",
     "password": "zhangsan"

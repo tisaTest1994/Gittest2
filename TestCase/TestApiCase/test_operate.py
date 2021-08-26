@@ -1,13 +1,12 @@
 from Function.api_function import *
-from run import *
-from Function.log import *
-import allure
+from Function.operate_sql import *
 
 
 # operate相关cases
 class TestOperateApi:
 
     @allure.testcase('test_operate_001 管理员账户登录')
+    @pytest.mark.multiprocess
     def test_operate_001(self):
         account = get_json()['operate_admin_account']
         data = {
@@ -24,6 +23,7 @@ class TestOperateApi:
             assert 'accessToken' in r.text, "管理员账户登录错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_002 检索用户')
+    @pytest.mark.multiprocess
     def test_operate_002(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -53,6 +53,7 @@ class TestOperateApi:
             assert r.json()['accounts'] is not None, '检索用户失败，返回值是{}'.format(r.text)
 
     @allure.testcase('test_operate_003 管理员查询用户信息')
+    @pytest.mark.multiprocess
     def test_operate_003(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -68,6 +69,7 @@ class TestOperateApi:
             assert 'user' in r.text, "管理员查询用户信息错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_004 管理员刷新token')
+    @pytest.mark.multiprocess
     def test_operate_004(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -83,6 +85,7 @@ class TestOperateApi:
             assert 'user' in r.text, "管理员查询用户信息错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_005 检索cases')
+    @pytest.mark.multiprocess
     def test_operate_005(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -111,6 +114,7 @@ class TestOperateApi:
             assert 'caseList' in r.text, "检索cases错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_006 获取cases详情')
+    @pytest.mark.multiprocess
     def test_operate_006(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -144,6 +148,7 @@ class TestOperateApi:
             assert 'individualInfo' in r.text, "检索cases错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_007 检索payin交易')
+    @pytest.mark.multiprocess
     def test_operate_007(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -169,6 +174,7 @@ class TestOperateApi:
             assert 'pagination_response' in r.text, "检索payin交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_008 检索payin交易明细')
+    @pytest.mark.multiprocess
     def test_operate_008(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -198,6 +204,7 @@ class TestOperateApi:
                 assert 'order_id' in r.text, "检索payin交易明细错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_009 检索cfx交易')
+    @pytest.mark.multiprocess
     def test_operate_009(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -223,6 +230,7 @@ class TestOperateApi:
             assert 'pagination_response' in r.text, "检索cfx交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_010 检索cfx交易明细')
+    @pytest.mark.multiprocess
     def test_operate_010(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -252,6 +260,7 @@ class TestOperateApi:
                 assert 'pair' in r.text, "检索cfx交易明细错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_011 检索payout交易')
+    @pytest.mark.multiprocess
     def test_operate_011(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -277,6 +286,7 @@ class TestOperateApi:
             assert 'pagination_response' in r.text, "检索payout交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_012 检索payout交易明细')
+    @pytest.mark.multiprocess
     def test_operate_012(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -306,6 +316,7 @@ class TestOperateApi:
                 assert 'request_by' in r.text, "检索payout交易明细错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_013 检索earn交易')
+    @pytest.mark.multiprocess
     def test_operate_013(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -331,6 +342,7 @@ class TestOperateApi:
             assert 'record_count' in r.text, "检索earn交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_014 检索earn交易明细')
+    @pytest.mark.multiprocess
     def test_operate_014(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -360,6 +372,7 @@ class TestOperateApi:
                 assert 'order_id' in r.text, "检索earn交易明细错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_015 检索interest交易')
+    @pytest.mark.multiprocess
     def test_operate_015(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -385,6 +398,7 @@ class TestOperateApi:
             assert 'record_count' in r.text, "检索interest交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_016 检索interest交易明细')
+    @pytest.mark.multiprocess
     def test_operate_016(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -414,6 +428,7 @@ class TestOperateApi:
                 assert 'interest_id' in r.text, "检索earn交易明细错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_017 检索yield')
+    @pytest.mark.multiprocess
     def test_operate_017(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -439,6 +454,7 @@ class TestOperateApi:
             assert 'record_count' in r.text, "检索yield交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_018 检索yield交易明细')
+    @pytest.mark.multiprocess
     def test_operate_018(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -468,6 +484,7 @@ class TestOperateApi:
                 assert 'yield_id' in r.text, "检索yield交易明细错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_019 检索payout')
+    @pytest.mark.multiprocess
     def test_operate_019(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -493,6 +510,7 @@ class TestOperateApi:
             assert 'crypto_account' in r.text, "检索payout交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_020 检索payout交易明细')
+    @pytest.mark.multiprocess
     def test_operate_020(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -522,6 +540,7 @@ class TestOperateApi:
                 assert 'transaction_id' in r.text, "检索yield交易明细错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_021 检索payin order')
+    @pytest.mark.multiprocess
     def test_operate_021(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -547,6 +566,7 @@ class TestOperateApi:
             assert 'crypto_account' in r.text, "检索payout交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_022 检索payin order交易明细')
+    @pytest.mark.multiprocess
     def test_operate_022(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -576,6 +596,7 @@ class TestOperateApi:
                 assert 'order_id' in r.text, "检索payin order交易明细错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_023 检索活期产品')
+    @pytest.mark.multiprocess
     def test_operate_023(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -594,6 +615,7 @@ class TestOperateApi:
             assert 'product_uuid' in r.text, "检索活期产品错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_024 检索定期产品')
+    @pytest.mark.multiprocess
     def test_operate_024(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -612,6 +634,7 @@ class TestOperateApi:
             assert 'product_uuid' in r.text, "检索定期产品错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_025 检索所有产品')
+    @pytest.mark.multiprocess
     def test_operate_025(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -629,6 +652,7 @@ class TestOperateApi:
             assert 'product_uuid' in r.text, "检索所有产品错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_026 获得wallet')
+    @pytest.mark.multiprocess
     def test_operate_026(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -647,6 +671,7 @@ class TestOperateApi:
             assert r.json()['Wallets'] is not None, "获得wallet错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_027 wallet调整余额内部户转到客户账户失败')
+    @pytest.mark.multiprocess
     def test_operate_027(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -668,6 +693,7 @@ class TestOperateApi:
             assert r.json()['is_succeed'] is False, "wallet调整余额内部户转到客户账户失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_028 wallet调整余额客户转到内部户账户失败')
+    @pytest.mark.multiprocess
     def test_operate_028(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -689,6 +715,7 @@ class TestOperateApi:
             assert r.json()['is_succeed'] is False, "wallet调整余额客户转到内部户账户失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_029 wallet调整余额内部户账户到内部户账户')
+    @pytest.mark.multiprocess
     def test_operate_029(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -721,6 +748,7 @@ class TestOperateApi:
         assert float(payin_amount_old) + float(data['amount']) == float(payin_amount_new), 'wallet调整余额内部户账户到内部户账户错误，payin_amount_old{}, payin_amount_new{}'.format(payin_amount_old, payin_amount_new)
 
     @allure.testcase('test_operate_030 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id失败')
+    @pytest.mark.multiprocess
     def test_operate_030(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -742,6 +770,7 @@ class TestOperateApi:
             assert r.json()['is_succeed'] is False, "wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_031 wallet调整余额内部户eth转btc失败')
+    @pytest.mark.multiprocess
     def test_operate_031(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
@@ -763,6 +792,7 @@ class TestOperateApi:
             assert r.json()['is_succeed'] is False, "wallet调整余额内部户eth转btc失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_032 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id')
+    @pytest.mark.multiprocess
     def test_operate_032(self):
         with allure.step("获得token"):
             accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')

@@ -1,7 +1,5 @@
 from Function.api_function import *
-from run import *
-from Function.log import *
-import allure
+from Function.operate_sql import *
 
 
 # kyc相关cases

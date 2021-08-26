@@ -1,7 +1,5 @@
 from Function.api_function import *
-import allure
-import datetime
-from decimal import *
+from Function.operate_sql import *
 
 
 # convert order相关cases
@@ -12,6 +10,7 @@ class TestConvertOrderApi:
         AccountFunction.add_headers()
 
     @allure.testcase('test_convert_order_001 根据id编号查询单笔交易')
+    @pytest.mark.multiprocess
     def test_convert_order_001(self):
         # 获得 cfx_book
         cfx_book = get_json()['cfx_book']

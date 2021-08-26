@@ -1,6 +1,18 @@
 import pytest
+import hmac
+import base64
+import http.client
+import time
+import allure
+import pyotp
 from Function.slack import *
-from Function.operate_sql import *
+from Function.log import *
+from decimal import *
+from urllib.parse import urlencode
+from time import sleep
+from hashlib import sha256
+
+
 
 # 初始化参数
 
@@ -44,7 +56,8 @@ session = sessions()
 if __name__ == '__main__':
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
-    pytest.main(['./TestCase/TestApiCase', '-v', '--alluredir', './Reports'])
+    pytest.main(['./TestCase/TestApiCase', '-m', 'multiprocess', '-n', '8', '-v', '--alluredir', './Reports'])
+    pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess',  '-v', '--alluredir', './Reports'])
     # pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports'])
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     slack_report()
