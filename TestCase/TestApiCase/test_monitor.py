@@ -5,20 +5,15 @@ from Function.operate_sql import *
 # saving相关cases
 class TestMonitorApi:
 
-    # 初始化class
-    def setup_class(self):
-        AccountFunction.add_headers()
-
     @allure.testcase('test_monitor_001 创建case 并且查询')
     @pytest.mark.singleProcess
     def test_monitor_001(self):
         with allure.step("获取token"):
-            accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456',
-                                                            type='monitor')
+            accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456', type='monitor')
             headers['Authorization'] = "Bearer " + accessToken
             headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook('test')
+            AccountFunction.delete_old_webhook()
         with allure.step("创建case"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -53,7 +48,7 @@ class TestMonitorApi:
             while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
-                webhook_info = AccountFunction.get_webhook('test')
+                webhook_info = AccountFunction.get_webhook()
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/pending':
                         sleep_time = 501
@@ -65,7 +60,7 @@ class TestMonitorApi:
         while sleep_time < 300:
             sleep_time = sleep_time + 30
             sleep(30)
-            webhook_info = AccountFunction.get_webhook('test')
+            webhook_info = AccountFunction.get_webhook()
             for y in json.loads(webhook_info)['data']:
                 if y['e']['path'] == '/webhook/compliance/operator' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                     sleep_time = 501
@@ -110,7 +105,7 @@ class TestMonitorApi:
             headers['Authorization'] = "Bearer " + accessToken
             headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook('test')
+            AccountFunction.delete_old_webhook()
         with allure.step("创建case"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -176,7 +171,7 @@ class TestMonitorApi:
             headers['Authorization'] = "Bearer " + accessToken
             headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook('test')
+            AccountFunction.delete_old_webhook()
         with allure.step("创建case"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -209,7 +204,7 @@ class TestMonitorApi:
             while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
-                webhook_info = AccountFunction.get_webhook('test')
+                webhook_info = AccountFunction.get_webhook()
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/pending':
                         sleep_time = 501
@@ -238,12 +233,11 @@ class TestMonitorApi:
     @pytest.mark.singleProcess
     def test_monitor_004(self):
         with allure.step("获取token"):
-            accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456',
-                                                            type='monitor')
+            accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456', type='monitor')
             headers['Authorization'] = "Bearer " + accessToken
             headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook('test')
+            AccountFunction.delete_old_webhook()
         with allure.step("创建case"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -278,7 +272,7 @@ class TestMonitorApi:
             while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
-                webhook_info = AccountFunction.get_webhook('test')
+                webhook_info = AccountFunction.get_webhook()
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                         sleep_time = 501
@@ -290,7 +284,7 @@ class TestMonitorApi:
         while sleep_time < 300:
             sleep_time = sleep_time + 30
             sleep(30)
-            webhook_info = AccountFunction.get_webhook('test')
+            webhook_info = AccountFunction.get_webhook()
             for y in json.loads(webhook_info)['data']:
                 if y['e']['path'] == '/webhook/compliance/operator' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                     sleep_time = 501
@@ -319,7 +313,7 @@ class TestMonitorApi:
             headers['Authorization'] = "Bearer " + accessToken
             headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook('test')
+            AccountFunction.delete_old_webhook()
         with allure.step("创建case"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -338,8 +332,7 @@ class TestMonitorApi:
                 },
                 "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
             }
-            r = session.request('POST', url='{}/operator/cases'.format(monitorUrl), data=json.dumps(data),
-                                headers=headers)
+            r = session.request('POST', url='{}/operator/cases'.format(monitorUrl), data=json.dumps(data), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -354,7 +347,7 @@ class TestMonitorApi:
             while sleep_time < 300:
                 sleep_time = sleep_time + 30
                 sleep(30)
-                webhook_info = AccountFunction.get_webhook('test')
+                webhook_info = AccountFunction.get_webhook()
                 for y in json.loads(webhook_info)['data']:
                     if y['e']['path'] == '/webhook/screen/case/pending':
                         sleep_time = 501
@@ -394,7 +387,7 @@ class TestMonitorApi:
         while sleep_time < 300:
             sleep_time = sleep_time + 30
             sleep(30)
-            webhook_info = AccountFunction.get_webhook('test')
+            webhook_info = AccountFunction.get_webhook()
             for y in json.loads(webhook_info)['data']:
                 if y['e']['path'] == '/webhook/screen/case/reviewed' and 'SUGGEST_TO_ACCEPT' == y['e']['body']['suggestion']:
                     sleep_time = 501
