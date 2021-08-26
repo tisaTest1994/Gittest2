@@ -1,12 +1,12 @@
-import run
 from run import *
+import run
 
 
 class AccountFunction:
 
     # 获取用户token
     @staticmethod
-    def get_account_token(account=email['email'], password=email['password'], type='cabital'):
+    def get_account_token(account=get_json()['email']['email'], password=get_json()['email']['password'], type='cabital'):
         data = {
             "username": account,
             "password": password
@@ -40,7 +40,7 @@ class AccountFunction:
 
     # 注册
     @staticmethod
-    def sign_up(account='', password='Zcdsw123'):
+    def sign_up(account='', password=run.get_json()['email']):
         data = {
             "emailAddress": account,
             "verificationCode": "666666",

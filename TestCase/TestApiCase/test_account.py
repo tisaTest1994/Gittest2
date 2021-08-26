@@ -19,7 +19,7 @@ class TestAccountApi:
                 "emailAddress": generate_email(),
                 "verificationCode": "666666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Zcdsw123"
+                "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
@@ -44,7 +44,7 @@ class TestAccountApi:
                 "emailAddress": account,
                 "verificationCode": "666666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Zcdsw123"
+                "password": get_json()['email']['password']
             }
             r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -67,7 +67,7 @@ class TestAccountApi:
                 "emailAddress": generate_email(),
                 "verificationCode": "166666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Zcdsw123"
+                "password": get_json()['email']['password']
             }
             r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -148,7 +148,7 @@ class TestAccountApi:
         with allure.step("登录已经注册账号"):
             data = {
                 "username": account,
-                "password": "Zcdsw123"
+                "password": get_json()['email']['password']
             }
             r = requests.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
@@ -224,10 +224,9 @@ class TestAccountApi:
         with allure.step("获取refreshToken"):
             data = {
                 "username": '314627197@qq.com',
-                "password": email['password']
+                "password": get_json()['email']['password']
             }
-            r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-                                headers=headers)
+            r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
             refreshToken = r.json()['refreshToken']
         with allure.step("刷新tokne"):
             data = {
@@ -286,8 +285,8 @@ class TestAccountApi:
             headers['Authorization'] = "Bearer " + "accessToken1234"
         with allure.step("修改密码使用错误token"):
             data = {
-                "original": "Zcdsw123",
-                "password": "Zcdsw123"
+                "original": get_json()['email']['password'],
+                "password": get_json()['email']['password']
             }
             r = requests.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -301,7 +300,7 @@ class TestAccountApi:
     @pytest.mark.multiprocess
     def test_account_016(self):
         account = '314627197@qq.com'
-        password = 'Zcdsw123'
+        password = get_json()['email']['password']
         with allure.step("获取token"):
             accessToken = AccountFunction.get_account_token(account=account, password=password)
         with allure.step("把token写入headers"):
@@ -363,13 +362,13 @@ class TestAccountApi:
     def test_account_019(self):
         with allure.step("忘记密码"):
             account = generate_email()
-            password = 'Zcdsw123'
+            password = get_json()['email']['password']
             with allure.step("提前先注册好"):
                 AccountFunction.sign_up(account, password)
             data = {
                 "code": "666666",
                 "email": account,
-                "password": "Zcdsw123"
+                "password": get_json()['email']['password']
             }
             r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
                                  data=json.dumps(data), headers=headers)
@@ -388,7 +387,7 @@ class TestAccountApi:
             data = {
                 "code": "666666",
                 "email": generate_email(),
-                "password": "Zcdsw123"
+                "password": get_json()['email']['password']
             }
             r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
                                  data=json.dumps(data), headers=headers)
@@ -406,14 +405,14 @@ class TestAccountApi:
     def test_account_021(self):
         with allure.step("用户忘记密码验证码错误"):
             account = '314627197@qq.com'
-            password = 'Zcdsw123'
+            password = get_json()['email']['password']
             with allure.step("提前先注册好"):
                 AccountFunction.sign_up(account, password)
         with allure.step("用户忘记密码验证码错误"):
             data = {
                 "code": "166666",
                 "email": account,
-                "password": "Zcdsw123"
+                "password": get_json()['email']['password']
             }
             r = requests.request('POST', url='{}/account/user/forgetPassword'.format(env_url),
                                  data=json.dumps(data), headers=headers)
@@ -445,7 +444,7 @@ class TestAccountApi:
     def test_account_023(self):
         with allure.step("修改个人信息"):
             account = generate_email()
-            password = 'Zcdsw123'
+            password = get_json()['email']['password']
             with allure.step("提前先注册好"):
                 AccountFunction.sign_up(account, password)
         with allure.step("获取token"):
@@ -459,8 +458,7 @@ class TestAccountApi:
                 "dateOfBirth": "1997-12-12",
                 "gender": "MALE"
             }
-            r = requests.request('POST', url='{}/account/info/personal'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
+            r = requests.request('POST', url='{}/account/info/personal'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -473,7 +471,7 @@ class TestAccountApi:
     def test_account_024(self):
         with allure.step("修改个人爱好"):
             account = generate_email()
-            password = 'Zcdsw123'
+            password = get_json()['email']['password']
             with allure.step("提前先注册好"):
                 AccountFunction.sign_up(account, password)
         with allure.step("获取token"):
@@ -547,7 +545,7 @@ class TestAccountApi:
                 "emailAddress": generate_email(),
                 "verificationCode": "16666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Zcdsw123"
+                "password": get_json()['email']['password']
             }
             r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -569,7 +567,7 @@ class TestAccountApi:
                 "emailAddress": generate_email(),
                 "verificationCode": "dqwdqwd",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Zcdsw123"
+                "password": get_json()['email']['password']
             }
             r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -586,7 +584,7 @@ class TestAccountApi:
     @pytest.mark.pro
     def test_account_030(self):
         account = "314627197@qq.com"
-        password = 'Zcdsw123'
+        password = get_json()['email']['password']
         with allure.step("获取token"):
             accessToken = AccountFunction.get_account_token(account=account, password=password)
         with allure.step("把token写入headers"):
@@ -641,8 +639,7 @@ class TestAccountApi:
     @allure.testcase('test_account_033 获取opt二维码')
     @pytest.mark.multiprocess
     def test_account_033(self):
-        run.accountToken = AccountFunction.get_account_token(account='yilei1@163.com')
-        headers['Authorization'] = "Bearer " + run.accountToken
+        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account='yilei1@163.com')
         r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
         AccountFunction.add_headers()
         with allure.step("状态码和返回值"):
@@ -656,8 +653,7 @@ class TestAccountApi:
     @allure.testcase('test_account_034 创建opt验证，并且删除。')
     @pytest.mark.multiprocess
     def test_account_034(self):
-        run.accountToken = AccountFunction.get_account_token(account='yilei3@163.com')
-        headers['Authorization'] = "Bearer " + run.accountToken
+        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account='yilei3@163.com')
         # 获得opt secretKey
         r = requests.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
         if 'ACC_SECURITY_MFA_000001' in r.text:
@@ -712,8 +708,7 @@ class TestAccountApi:
     @pytest.mark.multiprocess
     def test_account_035(self):
         # 验证opt code
-        run.accountToken = AccountFunction.get_account_token(account='external.qa@cabital.com')
-        headers['Authorization'] = "Bearer " + run.accountToken
+        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account='external.qa@cabital.com')
         secretKey = get_json()['secretKey']
         totp = pyotp.TOTP(secretKey)
         mfaVerificationCode = totp.now()
@@ -783,9 +778,6 @@ class TestAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert '' in r.text, "修改投资目的不对，目前返回值是{}".format(r.text)
-            # useId = get_json()['email']['userId']
-            # sql = "SELECT purposes FROM user_registry_purpose where user_id = '{}';".format(useId)
-            # purposes = sqlFunction.connect_mysql('account', sql)
 
     @allure.testcase('test_account_039 注册时，多输入几位验证码导致注册失败')
     @pytest.mark.multiprocess
@@ -797,7 +789,7 @@ class TestAccountApi:
                 "emailAddress": generate_email(),
                 "verificationCode": "1366666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Zcdsw123"
+                "password": get_json()['email']['password']
             }
             r = requests.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -847,7 +839,7 @@ class TestAccountApi:
                 "emailAddress": generate_email(),
                 "verificationCode": "666666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Zcdsw123",
+                "password": get_json()['email']['password'],
                 "metadata": {
                     "referral": {
                     "code": "6EM7LK"
@@ -911,8 +903,7 @@ class TestAccountApi:
     @pytest.mark.multiprocess
     def test_account_045(self):
         account = get_json()['email']['payout_email']
-        run.accountToken = AccountFunction.get_account_token(account=account)
-        headers['Authorization'] = "Bearer " + run.accountToken
+        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
         with allure.step("发忘记密码邮件"):
             code = AccountFunction.get_verification_code('FORGET_PASSWORD', account)
         with allure.step("验证忘记密码邮件"):
@@ -923,8 +914,7 @@ class TestAccountApi:
     @pytest.mark.multiprocess
     def test_account_045(self):
         account = get_json()['email']['payout_email']
-        run.accountToken = AccountFunction.get_account_token(account=account)
-        headers['Authorization'] = "Bearer " + run.accountToken
+        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
         with allure.step("发忘记密码邮件"):
             code = AccountFunction.get_verification_code('ENABLE_MFA', account)
         with allure.step("验证忘记密码邮件"):
@@ -935,8 +925,7 @@ class TestAccountApi:
     @pytest.mark.multiprocess
     def test_account_045(self):
         account = get_json()['email']['payout_email']
-        run.accountToken = AccountFunction.get_account_token(account=account)
-        headers['Authorization'] = "Bearer " + run.accountToken
+        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
         with allure.step("发忘记密码邮件"):
             code = AccountFunction.get_verification_code('DISABLE_MFA', account)
         with allure.step("验证忘记密码邮件"):
@@ -947,8 +936,7 @@ class TestAccountApi:
     @pytest.mark.multiprocess
     def test_account_045(self):
         account = get_json()['email']['payout_email']
-        run.accountToken = AccountFunction.get_account_token(account=account)
-        headers['Authorization'] = "Bearer " + run.accountToken
+        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
         with allure.step("发忘记密码邮件"):
             code = AccountFunction.get_verification_code('MFA_EMAIL', account)
         with allure.step("验证忘记密码邮件"):
@@ -964,7 +952,7 @@ class TestAccountApi:
                 "emailAddress": generate_email(),
                 "verificationCode": "666666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "Zcdsw123",
+                "password": get_json()['email']['password'],
                 "metadata": {
                     "referral": {
                         "code": "6EM7LK"

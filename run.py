@@ -24,16 +24,13 @@ env_url = get_json()[get_json()['env']]
 global operateUrl
 operateUrl = get_json()['operateUrl']
 
-# 提供给monitor
+# monitor 环境
 global monitorUrl
 monitorUrl = get_json()['monitorUrl']
 
 # headers
 global headers
 headers = get_json()['headers']
-
-global email
-email = get_json()['email']
 
 global citizenCountryCodeList
 citizenCountryCodeList = get_json()['citizenCountryCodeList']
@@ -56,8 +53,8 @@ session = sessions()
 if __name__ == '__main__':
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
-    pytest.main(['./TestCase/TestApiCase', '-m', 'multiprocess', '-n', '8', '-v', '--alluredir', './Reports'])
-    pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess',  '-v', '--alluredir', './Reports'])
+    pytest.main(['./TestCase/TestApiCase', '-m', 'multiprocess', '-n', '8', '--alluredir', './Reports'])
+    pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess', '--alluredir', './Reports'])
     # pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports'])
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     slack_report()
