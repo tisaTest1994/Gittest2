@@ -12,6 +12,8 @@ class TestKycApi:
         AccountFunction.add_headers()
 
     @allure.testcase('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_001(self):
         with allure.step("随机获得国家代码"):
             citizenCountryCode = random.choice(citizenCountryCodeList)
@@ -29,6 +31,8 @@ class TestKycApi:
             assert 'Exist pass case.' in r.text, "通过kyc的用户，获取kyc上传token失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_002 未通过kyc的用户，获取kyc上传token')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_002(self):
         account = generate_email()
         password = 'Abc112233'
@@ -55,6 +59,8 @@ class TestKycApi:
             assert 'Cabital_LT_KYC_Mobile_Basic' in r.text, "通过kyc的用户，获取kyc上传token错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_003 未申请kyc获取kyc-case信息失败')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_003(self):
         account = generate_email()
         password = 'Abc112233'
@@ -74,6 +80,8 @@ class TestKycApi:
             assert 'informations' in r.text, "未申请kyc获取kyc-case信息失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_004 获取kyc-case信息')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_004(self):
         with allure.step("获取kyc-case信息"):
             data = {
@@ -90,6 +98,8 @@ class TestKycApi:
 # 以下是提供给bybit的kyc接口
 
     @allure.testcase('test_kyc_005 创建直接pass 个人 Kyc case后查询cases,最后发送接受结果信息')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_005(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -200,11 +210,13 @@ class TestKycApi:
                     assert webhook_sign == i['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(i['e'])
 
     @allure.testcase('test_kyc_006 打开特定KYC Case的持续性扫描')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_006(self):
         kyc_headers = self.kyc_headers
-        if kyc_env == 'test':
+        if get_json()['env'] == 'test':
             caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
-        elif kyc_env == 'pro':
+        elif get_json()['env'] == 'pro':
             caseSystemId = 'b1eb6d06-b86d-4b21-9106-0d47c7d94c19'
         unix_time = int(time.time())
         sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
@@ -221,12 +233,14 @@ class TestKycApi:
             assert '' in r.text, "打开特定KYC Case的持续性扫描错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_007 关闭特定KYC Case的持续性扫描')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_007(self):
         kyc_headers = self.kyc_headers
         unix_time = int(time.time())
-        if kyc_env == 'test':
+        if get_json()['env'] == 'test':
             caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
-        elif kyc_env == 'pro':
+        elif get_json()['env'] == 'pro':
             caseSystemId = 'b1eb6d06-b86d-4b21-9106-0d47c7d94c19'
         sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='DELETE',
                                                 url='/api/v1/cases/{}/ogs'.format(caseSystemId))
@@ -242,11 +256,13 @@ class TestKycApi:
             assert '' in r.text, "关闭特定KYC Case的持续性扫描错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_008 使用已经创建过的externalCaseId创建Kyc case')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_008(self):
         with allure.step("准备测试数据"):
-            if kyc_env == 'test':
+            if get_json()['env'] == 'test':
                 externalCaseId = 'weoEKFPJPzmhKnXSZTdinkyfJeehLS'
-            elif kyc_env == 'pro':
+            elif get_json()['env'] == 'pro':
                 externalCaseId = 'Y3WZCW0LxN8rDPDb3C1JifwbrA4Sxy'
             kyc_headers = self.kyc_headers
             data = {
@@ -279,6 +295,8 @@ class TestKycApi:
             assert '"code":"001004"' in r.text, "使用已经创建过的externalCaseId创建Kyc case错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_009 使用不存在的caseSystemId寻找Kyc case')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_009(self):
         kyc_headers = self.kyc_headers
         unix_time = int(time.time())
@@ -310,6 +328,8 @@ class TestKycApi:
                     assert webhook_sign == i['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(i['e'])
 
     @allure.testcase('test_kyc_010 创建直接pass 个人 Kyc case后查询cases,最后发送不接受结果信息')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_010(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -408,6 +428,8 @@ class TestKycApi:
                         assert webhook_sign == i['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(i['e'])
 
     @allure.testcase('test_kyc_011 创建直接pending cases Kyc case后查询cases')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_011(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -468,6 +490,8 @@ class TestKycApi:
                 assert 'PENDING' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_012 创建直接pass 个人 Kyc case后查询cases。然后开启ogs扫描错误')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_012(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -547,6 +571,8 @@ class TestKycApi:
                 assert '{}' in r.text, "打开pending中的KYC Case的持续性扫描错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_013 创建直接pass 个人 Kyc case后查询cases。然后关闭ogs扫描错误')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_013(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -626,6 +652,8 @@ class TestKycApi:
                 assert '{}' in r.text, "打开pending中的KYC Case的持续性扫描错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_014 创建直接pass 个人 Kyc case后提前发送结果。')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_014(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -681,6 +709,8 @@ class TestKycApi:
                 assert '"code":"001003"' in r.text, "提前发送确认接受结果信息错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_015 创建直接pass 企业 Kyc case后查询cases,最后发送接受结果信息')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
     def test_kyc_015(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
