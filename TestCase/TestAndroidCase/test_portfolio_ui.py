@@ -10,7 +10,7 @@ class TestPortfolioUi:
         # 打开 app
         start_app(package_name)
         # 登录 app
-        UiFunction.login(account=email['email'], password=email['password'])
+        UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
 
     # 每个cases结束后
     def teardown(self):
