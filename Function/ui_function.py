@@ -99,12 +99,19 @@ class UiFunction:
 
     @staticmethod
     def choose_display_currency(type='USD'):
-        data = {
-            "language": "EN",
-            "currency": type,
-            "timeZone": "Asia/Hong_Kong"
-        }
-        requests.request('POST', url='{}/account/setting/preference'.format(env_url), data=json.dumps(data), headers=headers)
+        # 点击 Account
+        click('CB008')
+        # 点击 My Preference
+        click('CB179')
+        # 获得当前哦那个户数据
+        r = requests.request('GET', url='{}/account/info'.format(env_url), headers=headers)
+        display_currency = r.json()['user']['userPreferenceSettings']['currency']
+        if type != display_currency:
+            # 点击Display Currency
+            click(get_ui_text('CB090') + '\n' + display_currency)
+            click(type)
+            #回退页面
+        keyevent('KEYCODE_BACK')
         # 下拉刷新
         click('CB214')
         slide('down')

@@ -139,14 +139,14 @@ class TestPortfolioUi:
             check('CB180')
             check('CB181')
 
-    @allure.testcase('test_pl_ui_009 检查首页p/l数据')
-    def test_portfolio_ui_009(self):
-        with allure.step("获取p/l数据"):
-            with allure.step("进入首页"):
-                click('CB214')
-                sleep(2)
-            r = session.request('GET', url='{}/assetstatapi/asset_pl_detail'.format(env_url), headers=headers)
-            holding_percent = r.json()['profit_loss_overview']['profit_loss_holding']['percent']
-            today_percent = r.json()['profit_loss_overview']['profit_loss_today']['percent']
-        with allure.step("检查首页数据"):
-            poco(holding_percent).click()
+    # @allure.testcase('test_pl_ui_009 检查首页p/l数据')
+    # def test_portfolio_ui_009(self):
+    #     with allure.step("获取p/l数据"):
+    #         with allure.step("进入首页"):
+    #             click('CB214')
+    #             sleep(2)
+    #         r = session.request('GET', url='{}/assetstatapi/asset_pl_detail'.format(env_url), headers=headers)
+    #         holding_percent = r.json()['profit_loss_overview']['profit_loss_holding']['percent']
+    #         today_percent = r.json()['profit_loss_overview']['profit_loss_today']['percent']
+    #     with allure.step("检查首页数据"):
+    #         poco(holding_percent).click()

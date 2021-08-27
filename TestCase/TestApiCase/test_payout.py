@@ -26,7 +26,8 @@ class TestPayoutApi:
                 "method": "ERC20",
                 "address": "0xf4af4d6dfcba0844d78bf091070d33c0e378cc88"
             }
-            r = session.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data), headers=headers)
+            r = session.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
+                                headers=headers)
         AccountFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -77,7 +78,8 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'This address is not exist, please refresh and retry.' in r.text, "使用不存在id获取常用收款地址错误，返回值是{}".format(r.text)
+            assert 'This address is not exist, please refresh and retry.' in r.text, "使用不存在id获取常用收款地址错误，返回值是{}".format(
+                r.text)
 
     @allure.testcase('test_payout_005 删除不存在的收款地址')
     @pytest.mark.multiprocess
@@ -102,7 +104,8 @@ class TestPayoutApi:
                 "address": "0x623089BFb1dc2d3023Ba4bd0f42F61d66826994eu",
                 "method": "ERC20"
             }
-            r = session.request('POST', url='{}/pay/withdraw/verification'.format(env_url), data=json.dumps(data), headers=headers)
+            r = session.request('POST', url='{}/pay/withdraw/verification'.format(env_url), data=json.dumps(data),
+                                headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -114,7 +117,8 @@ class TestPayoutApi:
     @allure.testcase('test_payout_007 MFA认证提现ETH成功')
     @pytest.mark.multiprocess
     def test_payout_007(self):
-        transaction_id = AccountFunction.get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07')
+        transaction_id = AccountFunction.get_payout_transaction_id(amount='0.03',
+                                                                   address='0x428DA40C585514022b2eB537950d5AB5C7365a07')
         logger.info('transaction_id是{}'.format(transaction_id))
         with allure.step("p/l验证"):
             sleep(5)
@@ -138,7 +142,8 @@ class TestPayoutApi:
             run.accountToken = AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
             headers['Authorization'] = "Bearer " + run.accountToken
         with allure.step("查询提现详情"):
-            r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id), headers=headers)
+            r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id),
+                                headers=headers)
             AccountFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -152,7 +157,9 @@ class TestPayoutApi:
     @pytest.mark.multiprocess
     def test_payout_009(self):
         with allure.step("查询提现详情"):
-            r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, '4684225231310-3fa0-4bd1-9d46-4467dfa9ce52'), headers=headers)
+            r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url,
+                                                                                    '4684225231310-3fa0-4bd1-9d46-4467dfa9ce52'),
+                                headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -194,7 +201,8 @@ class TestPayoutApi:
                 "code": "EUR",
                 "amount": "5000"
             }
-            r = session.request('POST', url='{}/pay/withdraw/fiat/verification'.format(env_url), data=json.dumps(data), headers=headers)
+            r = session.request('POST', url='{}/pay/withdraw/fiat/verification'.format(env_url), data=json.dumps(data),
+                                headers=headers)
             AccountFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -204,3 +212,87 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert r.json()['fee']['code'] == 'EUR', "预校验法币提现错误，返回值是{}".format(r.text)
             assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_012 获得法币提现币种')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_payout_012(self):
+        with allure.step("提现币种"):
+            r = session.request('GET', url='{}/pay/withdraw/ccy/{}'.format(env_url, 'fiat'), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'fiat' in r.text, "获得法币提现币种错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_013 获得数字货币提现币种')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_payout_013(self):
+        with allure.step("提现币种"):
+            r = session.request('GET', url='{}/pay/withdraw/ccy/{}'.format(env_url, 'crypto'), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'crypto' in r.text, "获得数字货币提现币种错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_014 获得全部提现币种')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_payout_014(self):
+        with allure.step("提现币种"):
+            r = session.request('GET', url='{}/pay/withdraw/ccy/{}'.format(env_url, ''), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'fiat' in r.text, "获得全部提现币种错误，返回值是{}".format(r.text)
+                assert 'crypto' in r.text, "获得全部提现币种错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_015 开启法币提现画面')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_payout_015(self):
+        with allure.step("开启法币提现画面"):
+            params = {
+                'code': 'EUR'
+            }
+            r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'SEPA' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_016 法币提现')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_payout_016(self):
+        with allure.step("法币提现"):
+            params = {
+                "code": "EUR",
+                "amount": "2",
+                "payment_method": "SEPA",
+                "last_name": "James",
+                "first_name": "Li",
+                "account_name": "James Lee",
+                "iban": "XX12345678912345678912",
+                "bic": "CLJUGB88"
+            }
+            r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'SEPA' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
