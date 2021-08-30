@@ -968,3 +968,67 @@ class TestAccountApi:
                 relation = sqlFunction.connect_mysql('referral', sql)
                 assert relation[0]['relation'] == 1, '数据库查询值是{}'.format(relation)
 
+    @allure.testcase('test_account_047 获取用户偏好信息')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_account_047(self):
+        with allure.step("获取用户偏好信息"):
+            r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'language' in r.text, "获取用户偏好信息失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_048 修改用户偏好信息')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_account_048(self):
+        with allure.step("获取用户偏好信息"):
+            r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
+            data = r.json()
+        with allure.step("修改用户偏好信息"):
+            data1 = {
+                "language": "zh_CN",
+                "currency": "EUR",
+                "timeZone": "Asia/shanghai"
+            }
+            r = session.request('PUT', url='{}/preference/account/setting'.format(env_url), data=json.dumps(data1), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert {} == r.json(), "获取用户偏好信息失败，返回值是{}".format(r.text)
+        with allure.step("恢复之前的用户偏好信息"):
+            session.request('PUT', url='{}/preference/account/setting'.format(env_url), data=json.dumps(data), headers=headers)
+
+    @allure.testcase('test_account_049 上传push相关token信息')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_account_049(self):
+        with allure.step("上传push相关token信息更新headers"):
+            headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
+            headers['X-Device'] = 'iOS'
+            headers['X-locale'] = 'en_US'
+            headers['Accept-Language'] = 'en_US'
+            headers['X-Browser-Key'] = str(uuid.uuid4())
+            headers['X-TimeZone'] = 'Asia/Shanghai'
+        with allure.step("上传push相关token信息"):
+            data = {
+                "tokenType": 1,
+                "token": "test_tokem2"
+            }
+            r = session.request('PUT', url='{}/preference/push/token'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert {} == r.json(), "获取用户偏好信息失败，返回值是{}".format(r.text)
+
+

@@ -5,13 +5,13 @@ import http.client
 import time
 import allure
 import pyotp
+import uuid
 from Function.slack import *
 from Function.log import *
 from decimal import *
 from urllib.parse import urlencode
 from time import sleep
 from hashlib import sha256
-
 
 
 # 初始化参数
