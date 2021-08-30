@@ -510,26 +510,26 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert 'Invalid verification code' in r.text, "注册用户验证码输入字符错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_account_026 使用相同的密码修改密码')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
-    def test_account_026(self):
-        password = get_json()['email']['password']
-        with allure.step("修改密码"):
-            data = {
-                "original": password,
-                "password": password
-            }
-            r = session.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json() == {}, "使用相同的密码修改密码错误，返回值是{}".format(r.text)
-        with allure.step("用新密码重新登录"):
-            AccountFunction.get_account_token(account=get_json()['email']['email'], password=password)
+    # @allure.testcase('test_account_026 使用相同的密码修改密码')
+    # @pytest.mark.multiprocess
+    # @pytest.mark.pro
+    # def test_account_026(self):
+    #     password = get_json()['email']['password']
+    #     with allure.step("修改密码"):
+    #         data = {
+    #             "original": password,
+    #             "password": password
+    #         }
+    #         r = session.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data), headers=headers)
+    #     with allure.step("状态码和返回值"):
+    #         logger.info('状态码是{}'.format(str(r.status_code)))
+    #         logger.info('返回值是{}'.format(str(r.text)))
+    #     with allure.step("校验状态码"):
+    #         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+    #     with allure.step("校验返回值"):
+    #         assert r.json() == {}, "使用相同的密码修改密码错误，返回值是{}".format(r.text)
+    #     with allure.step("用新密码重新登录"):
+    #         AccountFunction.get_account_token(account=get_json()['email']['email'], password=password)
 
     @allure.testcase('test_account_027 获取mfa邮箱验证码')
     @pytest.mark.multiprocess
@@ -863,7 +863,7 @@ class TestAccountApi:
                 "password": get_json()['email']['password'],
                 "metadata": {
                     "referral": {
-                        "code": "6EM7LK"
+                        "code": "CLC4BS"
                     }
                 }
             }
