@@ -280,15 +280,12 @@ class TestPayoutApi:
         with allure.step("法币提现"):
             params = {
                 "code": "EUR",
-                "amount": "2",
+                "amount": "2.5",
                 "payment_method": "SEPA",
-                "last_name": "James",
-                "first_name": "Li",
                 "account_name": "James Lee",
-                "iban": "XX12345678912345678912",
-                "bic": "CLJUGB88"
+                "iban": "BE09967206444557"
             }
-            r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
+            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
