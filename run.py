@@ -6,6 +6,7 @@ import time
 import allure
 import pyotp
 import uuid
+import sys
 from Function.slack import *
 from Function.log import *
 from decimal import *
@@ -32,12 +33,6 @@ monitorUrl = get_json()['monitorUrl']
 global headers
 headers = get_json()['headers']
 
-global citizenCountryCodeList
-citizenCountryCodeList = get_json()['citizenCountryCodeList']
-
-global accountToken
-accountToken = ''
-
 global package_name
 package_name = get_json()['app_package'][get_json()['env']]
 
@@ -53,8 +48,15 @@ session = sessions()
 if __name__ == '__main__':
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
-    pytest.main(['./TestCase/TestApiCase', '-m', 'multiprocess', '-n', '8', '--alluredir', './Reports'])
-    pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess', '--alluredir', './Reports'])
-    # pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports'])
+    if sys.argv[1] == 'test':
+        pytest.main(['./TestCase/TestApiCase', '-m', 'multiprocess', '-n', '8', '--alluredir', './Reports'])
+        pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess', '--alluredir', './Reports'])
+    elif sys.argv[1] == 'pro':
+        pytest.main(['./TestCase/TestApiCase', '-m', 'pro', '--alluredir', './Reports'])
+    elif sys.argv[1] == "ui":
+        pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports'])
+    else:
+        pytest.main(['./TestCase/TestApiCase', '-m', 'multiprocess', '-n', '8', '--alluredir', './Reports'])
+        pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess', '--alluredir', './Reports'])
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     slack_report()

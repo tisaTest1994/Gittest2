@@ -17,7 +17,7 @@ apiTest:
   tags:
     - python
   script:
-    - python run.py
+    - python run.py test
   artifacts:
     paths:
       - Reports

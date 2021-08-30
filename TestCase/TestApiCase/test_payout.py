@@ -139,8 +139,7 @@ class TestPayoutApi:
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
             logger.info('transaction_id是{}'.format(transaction_id))
-            run.accountToken = AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
-            headers['Authorization'] = "Bearer " + run.accountToken
+            headers['Authorization'] = "Bearer " + AccountFunction.get_account_token()
         with allure.step("查询提现详情"):
             r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id),
                                 headers=headers)

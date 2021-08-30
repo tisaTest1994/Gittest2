@@ -16,8 +16,7 @@ class TestConvertApi:
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
             logger.info('transaction_id 是{}'.format(transaction_id))
-            run.accountToken = AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
-            headers['Authorization'] = "Bearer " + run.accountToken
+            headers['Authorization'] = "Bearer " + AccountFunction.get_account_token()
         with allure.step("查询单笔交易"):
             params = {
                 "txn_sub_type": 6

@@ -178,8 +178,6 @@ class TestCoreApi:
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_core_011(self):
-        run.accountToken = AccountFunction.get_account_token(account='314627197@qq.com')
-        headers['Authorization'] = "Bearer " + run.accountToken
         with allure.step("查询客户状态"):
             r = session.request('GET', url='{}/core/beginnerguide'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
