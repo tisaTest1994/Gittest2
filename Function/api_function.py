@@ -51,7 +51,7 @@ class AccountFunction:
     # 提现ETH获取交易id
     @staticmethod
     def get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07'):
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token()
+        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
         code = AccountFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
         secretKey = get_json()['secretKey']
         totp = pyotp.TOTP(secretKey)
@@ -346,8 +346,8 @@ class AccountFunction:
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json() == {}, "收取验证码失败，返回值是{}".format(r.text)
         sleep_time = 0
-        sleep(20)
-        while sleep_time < 80:
+        sleep(30)
+        while sleep_time < 50:
             sleep_time = sleep_time + 5
             sleep(5)
             email_info = get_email()

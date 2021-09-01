@@ -276,15 +276,31 @@ class TestPayoutApi:
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_payout_016(self):
-        with allure.step("法币提现"):
+        with allure.step("开启法币提现画面"):
+            headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
             params = {
+                'code': 'EUR'
+            }
+            r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
+            account_name = r.json()['name_list']
+            print(account_name[0])
+        with allure.step("法币提现"):
+            code = AccountFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+            secretKey = get_json()['secretKey']
+            totp = pyotp.TOTP(secretKey)
+            mfaVerificationCode = totp.now()
+            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+            data = {
                 "code": "EUR",
-                "amount": "2.5",
+                "amount": "2.6",
                 "payment_method": "SEPA",
-                "account_name": "James Lee",
+                "account_name": account_name[0],
                 "iban": "BE09967206444557"
             }
-            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
+            print(data)
+            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data), headers=headers)
+            AccountFunction.add_headers()
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))

@@ -164,7 +164,7 @@ class TestAccountApi:
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_account_008(self):
-        account = get_json()['email']['email']
+        account = '314627197@qq.com'
         with allure.step("登录已经注册账号使用错误密码"):
             data = {
                 "username": account,
@@ -823,9 +823,9 @@ class TestAccountApi:
     def test_account_041(self):
         account = get_json()['email']['payout_email']
         headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
-        with allure.step("发忘记密码邮件"):
+        with allure.step("开启MFA且验证code"):
             code = AccountFunction.get_verification_code('ENABLE_MFA', account)
-        with allure.step("验证忘记密码邮件"):
+        with allure.step("开启MFA且验证code"):
             AccountFunction.verify_verification_code('ENABLE_MFA', account, code)
         AccountFunction.add_headers()
 
@@ -834,9 +834,9 @@ class TestAccountApi:
     def test_account_042(self):
         account = get_json()['email']['payout_email']
         headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
-        with allure.step("发忘记密码邮件"):
+        with allure.step("关闭MFA且验证code"):
             code = AccountFunction.get_verification_code('DISABLE_MFA', account)
-        with allure.step("验证忘记密码邮件"):
+        with allure.step("关闭MFA且验证code"):
             AccountFunction.verify_verification_code('DISABLE_MFA', account, code)
         AccountFunction.add_headers()
 
@@ -845,9 +845,9 @@ class TestAccountApi:
     def test_account_043(self):
         account = get_json()['email']['payout_email']
         headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
-        with allure.step("发忘记密码邮件"):
+        with allure.step("MFA且验证code"):
             code = AccountFunction.get_verification_code('MFA_EMAIL', account)
-        with allure.step("验证忘记密码邮件"):
+        with allure.step("MFA且验证code"):
             AccountFunction.verify_verification_code('MFA_EMAIL', account, code)
         AccountFunction.add_headers()
 
