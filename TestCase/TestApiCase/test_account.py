@@ -6,7 +6,7 @@ from Function.operate_sql import *
 class TestAccountApi:
 
     # 初始化class
-    def setup_function(self):
+    def setup_method(self):
         AccountFunction.add_headers()
 
     @allure.testcase('test_account_001 成功注册新用户')

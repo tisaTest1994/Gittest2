@@ -6,7 +6,7 @@ from Function.operate_sql import *
 class TestMarketApi:
 
     # 初始化class
-    def setup_function(self):
+    def setup_method(self):
         AccountFunction.add_headers()
 
     @allure.testcase('test_market_001 获得价格曲线')
