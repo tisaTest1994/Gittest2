@@ -809,7 +809,7 @@ class TestAccountApi:
                 assert '"version":' in r.text, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_040 忘记密码并且验证code')
-    @pytest.mark.multiprocess
+    @pytest.mark.singleProcess
     def test_account_040(self):
         account = get_json()['email']['payout_email']
         headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
@@ -820,7 +820,7 @@ class TestAccountApi:
         AccountFunction.add_headers()
 
     @allure.testcase('test_account_041 开启MFA且验证code')
-    @pytest.mark.multiprocess
+    @pytest.mark.singleProcess
     def test_account_041(self):
         account = get_json()['email']['payout_email']
         headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
@@ -831,7 +831,7 @@ class TestAccountApi:
         AccountFunction.add_headers()
 
     @allure.testcase('test_account_042 关闭MFA且验证code')
-    @pytest.mark.multiprocess
+    @pytest.mark.singleProcess
     def test_account_042(self):
         account = get_json()['email']['payout_email']
         headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
@@ -842,7 +842,7 @@ class TestAccountApi:
         AccountFunction.add_headers()
 
     @allure.testcase('test_account_043 MFA且验证code')
-    @pytest.mark.multiprocess
+    @pytest.mark.singleProcess
     def test_account_043(self):
         account = get_json()['email']['payout_email']
         headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)

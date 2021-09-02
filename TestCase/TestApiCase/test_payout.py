@@ -5,7 +5,7 @@ from Function.operate_sql import *
 class TestPayoutApi:
 
     # 初始化class
-    def setup_class(self):
+    def setup_function(self):
         AccountFunction.add_headers()
 
     @allure.testcase('test_payout_001 没有Kyc用户添加常用收款地址失败')

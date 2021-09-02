@@ -222,7 +222,7 @@ class TestFixedApi:
                     assert False, "币种不对，购买定期产品失败。"
 
     @allure.testcase('test_fixed_005 购买定期产品最小额度')
-    @pytest.mark.multiprocess
+    @pytest.mark.singleProcess
     def test_fixed_005(self):
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)

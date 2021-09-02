@@ -826,22 +826,22 @@ class TestOperateApi:
         assert float(payout_amount_old) - float(data['amount']) == float(payout_amount_new), 'wallet调整余额内部户账户到内部户账户错误，payout_amount_old是{}, payout_amount_new是{}'.format(payout_amount_old, payout_amount_new)
         assert float(payin_amount_old) + float(data['amount']) == float(payin_amount_new), 'wallet调整余额内部户账户到内部户账户错误，payin_amount_old{}, payin_amount_new{}'.format(payin_amount_old, payin_amount_new)
 
-    @allure.testcase('test_operate_033 让同名校验分数不够的通过')
-    @pytest.mark.multiprocess
-    def test_operate_033(self):
-        with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-        order_id = 'a55961f3-0338-4dcc-962f-f78ab3c5e5f1'
-        data = {
-            "result": True
-        }
-        r = session.request('POST', url='{}/operatorapi/orders/payin/namechecking/{}'.format(operateUrl, order_id), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json() == {}, "让同名校验分数不够的通过错误，返回值是{}".format(r.text)
+    # @allure.testcase('test_operate_033 让同名校验分数不够的通过')
+    # @pytest.mark.multiprocess
+    # def test_operate_033(self):
+    #     with allure.step("获得token"):
+    #         accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
+    #     with allure.step("把token写入headers"):
+    #         headers['Authorization'] = "Bearer " + accessToken
+    #     order_id = 'a55961f3-0338-4dcc-962f-f78ab3c5e5f1'
+    #     data = {
+    #         "result": True
+    #     }
+    #     r = session.request('POST', url='{}/operatorapi/orders/payin/namechecking/{}'.format(operateUrl, order_id), data=json.dumps(data), headers=headers)
+    #     with allure.step("状态码和返回值"):
+    #         logger.info('状态码是{}'.format(str(r.status_code)))
+    #         logger.info('返回值是{}'.format(str(r.text)))
+    #     with allure.step("校验状态码"):
+    #         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+    #     with allure.step("校验返回值"):
+    #         assert r.json() == {}, "让同名校验分数不够的通过错误，返回值是{}".format(r.text)

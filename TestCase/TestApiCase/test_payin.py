@@ -6,7 +6,7 @@ from Function.operate_sql import *
 class TestPayInApi:
 
     # 初始化class
-    def setup_class(self):
+    def setup_function(self):
         AccountFunction.add_headers()
 
     @allure.testcase('test_pay_in_001 查询转入地址记录（不指定链）')

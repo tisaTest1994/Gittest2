@@ -6,7 +6,7 @@ from Function.operate_sql import *
 class TestCoreApi:
 
     # 初始化class
-    def setup_class(self):
+    def setup_function(self):
         AccountFunction.add_headers()
 
     @allure.testcase('test_core_001 查询钱包所有币种详细金额以及报价，以美元价格返回')
