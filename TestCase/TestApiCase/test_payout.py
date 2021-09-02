@@ -12,7 +12,7 @@ class TestPayoutApi:
     @pytest.mark.multiprocess
     def test_payout_001(self):
         account = generate_email()
-        password = 'Abc112233'
+        password = get_json()['email']['password']
         with allure.step("提前先注册好"):
             AccountFunction.sign_up(account, password)
         with allure.step("获得token"):

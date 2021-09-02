@@ -872,7 +872,7 @@ class TestAccountApi:
             logger.info('邮箱是{}'.format(data['emailAddress']))
             sleep(2)
             with allure.step("数据库检查"):
-                sql = "select relation from relation where referer_id='96f29441-feb4-495a-a531-96c833e8261a' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(
+                sql = "select relation from relation where referer_id='daf99d80-fcf4-4f10-8bb8-ab88dcf23cb8' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(
                     data['emailAddress'])
                 relation = sqlFunction.connect_mysql('referral', sql)
                 assert relation[0]['relation'] == 1, '数据库查询值是{}'.format(relation)

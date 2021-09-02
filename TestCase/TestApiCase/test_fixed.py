@@ -69,7 +69,7 @@ class TestFixedApi:
                             assert z['date'] is not None, "获取定期产品利息列表失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_fixed_004 购买定期产品')
-    @pytest.mark.multiprocess
+    @pytest.mark.singleProcess
     def test_fixed_004(self):
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
