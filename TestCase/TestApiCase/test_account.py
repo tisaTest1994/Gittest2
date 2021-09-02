@@ -6,7 +6,7 @@ from Function.operate_sql import *
 class TestAccountApi:
 
     # 初始化class
-    def setup_class(self):
+    def setup_function(self):
         AccountFunction.add_headers()
 
     @allure.testcase('test_account_001 成功注册新用户')
@@ -419,6 +419,7 @@ class TestAccountApi:
     @pytest.mark.pro
     def test_account_021(self):
         with allure.step("查询用户信息"):
+            headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
             r = session.request('GET', url='{}/account/info'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))

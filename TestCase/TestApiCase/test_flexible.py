@@ -602,7 +602,7 @@ class TestFlexibleApi:
         with allure.step("赎回BTC投资项目成功"):
             data = {
                 "tx_type": 2,
-                "amount": "0.001",
+                "amount": "1111111.001",
                 "code": BTC_item['code']
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
@@ -645,7 +645,7 @@ class TestFlexibleApi:
         with allure.step("赎回BTC投资项目成功"):
             data = {
                 "tx_type": 2,
-                "amount": "0.02",
+                "amount": "1111110.02",
                 "code": BTC_item['code']
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
@@ -690,7 +690,7 @@ class TestFlexibleApi:
         with allure.step("赎回USDT投资项目成功"):
             data = {
                 "tx_type": 2,
-                "amount": "10",
+                "amount": "1111110",
                 "code": BTC_item['code']
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),

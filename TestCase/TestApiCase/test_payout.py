@@ -283,7 +283,6 @@ class TestPayoutApi:
             }
             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
             account_name = r.json()['name_list']
-            print(account_name[0])
         with allure.step("法币提现"):
             code = AccountFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
             secretKey = get_json()['secretKey']
@@ -293,12 +292,11 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "EUR",
-                "amount": "2.6",
+                "amount": "2.61",
                 "payment_method": "SEPA",
                 "account_name": account_name[0],
                 "iban": "BE09967206444557"
             }
-            print(data)
             r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data), headers=headers)
             AccountFunction.add_headers()
             with allure.step("状态码和返回值"):
@@ -307,4 +305,4 @@ class TestPayoutApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'SEPA' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
+                assert 'txn_id' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
