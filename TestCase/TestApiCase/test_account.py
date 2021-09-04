@@ -875,7 +875,7 @@ class TestAccountApi:
                 sql = "select relation from relation where referer_id='daf99d80-fcf4-4f10-8bb8-ab88dcf23cb8' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(
                     data['emailAddress'])
                 relation = sqlFunction.connect_mysql('referral', sql)
-                assert relation[0]['relation'] == 1, '数据库查询值是{}'.format(relation)
+                assert relation[0]['relation'] == 2, '数据库查询值是{}'.format(relation)
 
     @allure.testcase('test_account_045 获取用户偏好信息')
     @pytest.mark.multiprocess
@@ -940,4 +940,71 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert {} == r.json(), "获取用户偏好信息失败，返回值是{}".format(r.text)
 
+    @allure.testcase('test_account_048 登录后记录手机版本')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_account_048(self):
+        with allure.step("上传登录信息更新headers"):
+            headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
+            headers['X-Browser-Key'] = 'yilei_test'
+        account = get_json()['email']['email']
+        with allure.step("登录已经注册账号"):
+            data = {
+                "username": account,
+                "password": get_json()['email']['password']
+            }
+            r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "登录已经注册账号错误，返回值是{}".format(r.text)
 
+    @allure.testcase('test_account_049 登出后refreshToken无法刷新')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_account_049(self):
+        with allure.step("上传登录信息更新headers"):
+            headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
+            headers['X-Browser-Key'] = 'yilei_test'
+        account = get_json()['email']['email']
+        with allure.step("登录已经注册账号"):
+            data = {
+                "username": account,
+                "password": get_json()['email']['password']
+            }
+            r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "登录已经注册账号错误，返回值是{}".format(r.text)
+            refreshToken = r.json()['refreshToken']
+        with allure.step("登出"):
+            headers['Authorization'] = 'Bearer {}'.format(r.json()['accessToken'])
+            data = {}
+            r = session.request('POST', url='{}/account/user/logout'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "登录已经注册账号错误，返回值是{}".format(r.text)
+        with allure.step("刷新refreshToken"):
+            data = {
+                "refreshToken": refreshToken
+            }
+            r = session.request('POST', url='{}/account/user/refreshToken'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 401, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'Refresh token error' in r.text, "用空的token刷新token错误，返回值是{}".format(r.text)

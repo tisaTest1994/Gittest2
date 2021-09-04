@@ -26,6 +26,8 @@ class AccountFunction:
             r = session.request('POST', url='https://authserver.latibac.com/auth/realms/digitrade-operator/protocol/openid-connect/token', data=urlencode(data), headers=headers)
             return r.json()['access_token']
         else:
+            headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
+            headers['X-Browser-Key'] = 'yilei_test'
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
         if r.text is None:
             return "登录获得token错误，返回值是{}".format(r.text)
@@ -389,5 +391,3 @@ class AccountFunction:
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json() == {}, "校验验证码失败，返回值是{}".format(r.text)
 
-
-AccountFunction.add_headers()
