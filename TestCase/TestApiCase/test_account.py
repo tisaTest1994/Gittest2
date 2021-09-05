@@ -46,9 +46,7 @@ class TestAccountApi:
                 "citizenCountryCode": citizenCountryCode,
                 "password": get_json()['email']['password']
             }
-            print(data)
-            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -70,8 +68,7 @@ class TestAccountApi:
                 "citizenCountryCode": citizenCountryCode,
                 "password": get_json()['email']['password']
             }
-            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
