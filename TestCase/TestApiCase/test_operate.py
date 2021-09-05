@@ -838,6 +838,8 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             for i in r.json():
                 if i['whitelisted_name'] == name:
-                    logger.info('')
+                    logger.info('白名单中名字是 {}'.format(i['whitelisted_name']))
                     assert True
+                    return
+            assert False
 
