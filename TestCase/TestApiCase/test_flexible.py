@@ -157,7 +157,7 @@ class TestFlexibleApi:
                     "有足够BTC的用户发起购买BTC投资项目,剩余可用资金错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_006 有足够ETH的用户发起购买ETH投资项目成功')
-    @pytest.mark.multiprocess
+    @pytest.mark.singleProcess
     @pytest.mark.pro
     def test_flexible_006(self):
         with allure.step("获取产品product_id"):

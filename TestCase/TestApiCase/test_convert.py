@@ -88,7 +88,7 @@ class TestConvertApi:
                 r1.json()['quote']), "{}汇率对出现了问题".format(i)
 
     @allure.testcase('test_convert_005 换汇交易')
-    @pytest.mark.multiprocess
+    @pytest.mark.singleProcess
     @pytest.mark.pro
     def test_convert_005(self):
         with allure.step("获取汇率对"):
