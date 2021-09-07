@@ -135,7 +135,8 @@ def get_email():
 
 # 查询语言map
 def get_language_map():
-    r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(get_json()['language']), timeout=20)
+    r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(
+        get_json()['language']), timeout=20)
     path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages.json'
     with open(path, "w+", encoding='utf8') as f:
         json.dump(r.json()['data'], f, sort_keys=True, indent=2, ensure_ascii=False)
@@ -175,4 +176,21 @@ def crypto_len(number, type):
     else:
         end_number = number
     return str(end_number)
+
+
+def is_number(uchar):
+    """判断一个unicode是否是数字"""
+    if u'\u0030' <= uchar <= u'\u0039':
+        return True
+    else:
+        return False
+
+
+def is_alphabet(uchar):
+    """判断一个unicode是否是英文字母"""
+    if (uchar < u'\u0041' or uchar > u'\u005a') and (uchar < u'\u0061' or uchar > u'\u007a'):
+        return False
+    else:
+        return True
+
 

@@ -782,9 +782,9 @@ class TestOperateApi:
     @allure.testcase('test_operate_033 让同名校验分数不够的通过')
     @pytest.mark.multiprocess
     def test_operate_033(self):
-        order_id = 'a55961f3-0338-4dcc-962f-f78ab3c5e5f1'
+        order_id = '17e858d6-ff8b-42c6-900d-edc54aa6a46f'
         data = {
-            "result": True
+            "result": False
         }
         r = session.request('POST', url='{}/operatorapi/orders/payin/namechecking/{}'.format(operateUrl, order_id),
                             data=json.dumps(data), headers=headers)

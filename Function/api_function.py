@@ -1,6 +1,5 @@
 from run import *
 from Function.operate_sql import *
-import run
 
 
 class AccountFunction:
@@ -15,21 +14,18 @@ class AccountFunction:
         if type == 'operate':
             r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data), headers=headers)
         elif type == 'monitor':
-            data = {
-                'username': account,
-                'password': password,
-                'grant_type': 'password',
-                'client_id': 'screen-service'
-            }
+            data['grant_type'] = 'password'
+            data['client_id'] = 'screen-service'
             headers['Authorization'] = 'Basic c2NyZWVuLXNlcnZpY2U6MzJlMjhkZGUtN2QzNy00ODlkLWFhNmEtMzE5NzY5YTQyNjFh'
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
             r = session.request('POST', url='https://authserver.latibac.com/auth/realms/digitrade-operator/protocol/openid-connect/token', data=urlencode(data), headers=headers)
-            return r.json()['access_token']
         else:
             headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
             headers['X-Browser-Key'] = 'yilei_test'
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
         if r.text is None:
+            return "登录获得token错误，返回值是{}".format(r.text)
+        elif 'accessToken' not in r.text:
             return "登录获得token错误，返回值是{}".format(r.text)
         else:
             return r.json()['accessToken']
@@ -37,19 +33,23 @@ class AccountFunction:
     # 加headers，只能默认账户,使用usd
     @staticmethod
     def add_headers(currency='USD'):
+        headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
+        headers['X-Browser-Key'] = 'yilei_test'
         headers['Authorization'] = "Bearer " + AccountFunction.get_account_token()
         headers['X-Currency'] = currency
 
     # 注册
     @staticmethod
-    def sign_up(account='', password=get_json()['email']['password']):
+    def sign_up(account=get_json()['email']['email'], password=get_json()['email']['password']):
         data = {
             "emailAddress": account,
+            "password": password,
             "verificationCode": "666666",
-            "citizenCountryCode": random.choice(get_json()['citizenCountryCodeList']),
-            "password": password
+            "citizenCountryCode": random.choice(get_json()['citizenCountryCodeList'])
         }
-        session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
+        r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
+        assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        assert 'accessToken' in r.text, "注册用户错误，返回值是{}".format(r.text)
 
     # 提现ETH获取交易id
     @staticmethod
@@ -61,6 +61,7 @@ class AccountFunction:
         mfaVerificationCode = totp.now()
         headers['X-Mfa-Otp'] = str(mfaVerificationCode)
         headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+        logger.info('交易的订单headers是{}'.format(headers))
         data = {
             "amount": amount,
             "code": "ETH",

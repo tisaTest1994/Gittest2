@@ -14,7 +14,7 @@ class TestAccountApi:
     def test_account_001(self):
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
-        with allure.step("注册"):
+        with allure.step("注册新用户"):
             data = {
                 "emailAddress": generate_email(),
                 "verificationCode": "666666",

@@ -306,3 +306,87 @@ class TestPayoutApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert 'txn_id' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_017 测试iban号')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_payout_017(self):
+        iban = 'SAGB34'
+        assert iban is not None, 'iban账号不能为空'
+        if iban[:2] in ['GB', 'GG', 'JE', 'IM', 'RS']:
+            assert len(iban) == 22, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] == 'NO':
+            assert len(iban) == 15, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] == 'BE':
+            assert len(iban) == 16, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['DK', 'FI', 'NL', 'FO', 'GL']:
+            assert len(iban) == 18, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['MK', 'SI']:
+            assert len(iban) == 19, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['AT', 'BA', 'EE', 'KZ', 'LT', 'LU', 'XK']:
+            assert len(iban) == 20, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['CH', 'HR', 'LI', 'LV', 'CR']:
+            assert len(iban) == 21, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['BG', 'BH', 'DE', 'GE', 'IE', 'ME', 'RS']:
+            assert len(iban) == 22, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['CZ', 'ES', 'MD', 'PK', 'RO', 'SE', 'SK', 'TN', 'SA', 'VG', 'AD']:
+            assert len(iban) == 24, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['GI', 'IL', 'AE']:
+            assert len(iban) == 23, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['PT']:
+            assert len(iban) == 25, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['IS, TR']:
+            assert len(iban) == 26, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['FR', 'GR', 'IT', 'MC', 'MQ', 'PM', 'SM', 'TF', 'YT', 'MR']:
+            assert len(iban) == 27, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['AZ', 'CY', 'DO', 'GT', 'HU', 'LB', 'PL', 'AL']:
+            assert len(iban) == 28, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['QA', 'BR', 'PS']:
+            assert len(iban) == 29, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['JO', 'KW', 'MU']:
+            assert len(iban) == 30, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+        elif iban[:2] in ['MT', 'SC']:
+            assert len(iban) == 31, '长度不对'
+            for i in iban:
+                assert is_number(i) == True or is_alphabet(i) == True, '不是英文或者数字'
+
+    @allure.testcase('test_payout_018 测试accountName号')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_payout_018(self):
+        pass
+
+
+
