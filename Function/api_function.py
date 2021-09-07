@@ -340,6 +340,7 @@ class AccountFunction:
     # 收取验证码
     @staticmethod
     def get_verification_code(type, account):
+        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
         data = {
             "email": account,
             "type": type
@@ -350,10 +351,7 @@ class AccountFunction:
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json() == {}, "收取验证码失败，返回值是{}".format(r.text)
         sleep_time = 0
-        sleep(30)
-        while sleep_time < 50:
-            sleep_time = sleep_time + 5
-            sleep(5)
+        while sleep_time < 60:
             email_info = get_email()
             if type == 'REGISTRY':
                 if '[Cabital] Verify Your Email' in email_info['title']:
@@ -375,12 +373,15 @@ class AccountFunction:
                 if 'Withdrawal Request' in email_info['title']:
                     break
                     sleep_time == 81
+            sleep_time = sleep_time + 5
+            sleep(5)
         code = str(email_info['body']).split('"code":')[1].split('"')[1]
         return code
 
     # 校验验证码
     @staticmethod
     def verify_verification_code(type, email, code):
+        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=email)
         data = {
             "email": email,
             "type": type,

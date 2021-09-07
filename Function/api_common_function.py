@@ -14,7 +14,7 @@ import logger
 
 # 获取当前时间
 def get_now_time():
-    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 
 # 生成随机人名
@@ -119,18 +119,26 @@ def get_email():
     client = imaplib.IMAP4_SSL(host=host, port=port)
     client.login(account, security_code)
     # 选择收件夹
-    client.select('INBOX')
-    type, data = client.search(None, 'ALL')
-    num = str(len(str(data[0], 'utf-8').split(' ')))
-    typ, data = client.fetch(num.encode(), '(RFC822)')
-    if data[0] is not None:
-        encoding = chardet.detect(data[0][1])
-        msg = email.message_from_string(data[0][1].decode(encoding['encoding']))
-        text, enc = email.header.decode_header(msg['subject'])[0]
-        title = text.decode(enc) if enc else text
-        return {"title": title, "body": data[0][1].decode(encoding['encoding'])}
-    else:
-        return {'title': 'error, data is None.'}
+    sleep_time = 0
+    while sleep_time < 60:
+        client.select('INBOX')
+        type, data = client.search(None, 'ALL')
+        num = str(len(str(data[0], 'utf-8').split(' ')))
+        typ, data = client.fetch(num.encode(), '(RFC822)')
+        if data[0] is not None:
+            encoding = chardet.detect(data[0][1])
+            msg = email.message_from_string(data[0][1].decode(encoding['encoding']))
+            text, enc = email.header.decode_header(msg['subject'])[0]
+            title = text.decode(enc) if enc else text
+            if '(UTC)' in title:
+                email_time = time.mktime(time.strptime(title.split(' - ')[1].split(' (UTC)')[0], "%Y-%m-%d %H:%M:%S"))
+                utc_now_time = time.mktime(time.strptime(datetime.now(tz=pytz.timezone('UTC')).strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S"))
+                if int(email_time) + int(30) >= int(utc_now_time):
+                    break
+        sleep_time = sleep_time + 10
+        time.sleep(10)
+    assert data[0] is not None, 'email原始数据获取为空'
+    return {"title": title, "body": data[0][1].decode(encoding['encoding'])}
 
 
 # 查询语言map

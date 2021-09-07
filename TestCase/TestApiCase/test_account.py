@@ -809,7 +809,6 @@ class TestAccountApi:
     @pytest.mark.singleProcess
     def test_account_040(self):
         account = get_json()['email']['payout_email']
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
         with allure.step("发忘记密码邮件"):
             code = AccountFunction.get_verification_code('FORGET_PASSWORD', account)
         with allure.step("验证忘记密码邮件"):
@@ -820,7 +819,6 @@ class TestAccountApi:
     @pytest.mark.singleProcess
     def test_account_041(self):
         account = get_json()['email']['payout_email']
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
         with allure.step("开启MFA且验证code"):
             code = AccountFunction.get_verification_code('ENABLE_MFA', account)
         with allure.step("开启MFA且验证code"):
@@ -831,7 +829,6 @@ class TestAccountApi:
     @pytest.mark.singleProcess
     def test_account_042(self):
         account = get_json()['email']['payout_email']
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
         with allure.step("关闭MFA且验证code"):
             code = AccountFunction.get_verification_code('DISABLE_MFA', account)
         with allure.step("关闭MFA且验证code"):
