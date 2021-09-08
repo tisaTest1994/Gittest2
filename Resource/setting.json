@@ -298,7 +298,8 @@
       },
       "kycSecretKey": "YmM0ZDZkZGExMmUyNDhiNDk5MTA2YjJjYzRmNmY1OTc=",
       "kycUrl": "https://sandbox-caas.cabital.com",
-      "webhook": "dc_0duNQ21"
+      "webhook": "dc_pJuMAA1",
+      "api_key": "d960538c93a7007f79eab16b248817a6"
     },
     "test": {
       "kycHeaders": {
@@ -307,7 +308,8 @@
       },
       "kycSecretKey": "Mjk0MjE0Y2VlYjUzNDNmOTgwYmJhYzJkZTRjNzQ0NGI=",
       "kycUrl": "https://caas.latibac.com",
-      "webhook": "dc_yLujK7K"
+      "webhook": "dc_dAua6Jl",
+      "api_key": "0c5ed00809980ccab3a03bd76a3b0406"
     }
   },
   "language": "en",

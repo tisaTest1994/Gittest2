@@ -270,7 +270,7 @@ class AccountFunction:
     def get_webhook():
         conn = http.client.HTTPSConnection('api.pipedream.com')
         webhook = get_json()['kyc'][get_json()['env']]['webhook']
-        conn.request("GET", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer 7759a7e3653dcef8500ffe2c577102e6'})
+        conn.request("GET", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer {}'.format(get_json()['kyc'][get_json()['env']]['api_key'])})
         res = conn.getresponse()
         data = res.read()
         return data.decode("utf-8")
@@ -280,11 +280,33 @@ class AccountFunction:
     def delete_old_webhook():
         conn = http.client.HTTPSConnection('api.pipedream.com')
         webhook = get_json()['kyc'][get_json()['env']]['webhook']
-        conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer 7759a7e3653dcef8500ffe2c577102e6'})
-        res = conn.getresponse()
-        data = res.read()
+        conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer {}'.format(get_json()['kyc'][get_json()['env']]['api_key'])})
         sleep(1)
 
+    # 验证webhook需要的信息
+    @staticmethod
+    def check_webhook_info(path, caseSystemId, action='', suggestion='', decision=''):
+        sleep_time = 0
+        while sleep_time < 300:
+            webhook_info = AccountFunction.get_webhook()
+            for y in json.loads(webhook_info)['data']:
+                if y['e']['path'] == path:
+                    if 'operator' in path and y['e']['body']['message']['action'] == action and y['e']['body']['message']['caseSystemId'] == caseSystemId:
+                        sleep_time = 300
+                    elif 'case' in path and y['e']['body']['caseSystemId'] == caseSystemId:
+                        webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
+                        assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
+                        sleep_time = 300
+                    elif 'case/reviewed' in path and y['e']['body']['caseSystemId'] == caseSystemId and y['e']['body']['suggestion'] == suggestion:
+                        webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
+                        assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
+                        sleep_time = 300
+                    elif 'case/completed' in path and y['e']['body']['caseSystemId'] == caseSystemId and y['e']['body']['decision'] == decision:
+                        webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
+                        assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
+                        sleep_time = 300
+            sleep(10)
+            sleep_time = sleep_time + 10
     # 活期申购
     @staticmethod
     def subscribe():

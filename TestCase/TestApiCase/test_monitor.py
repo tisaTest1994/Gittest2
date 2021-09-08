@@ -5,13 +5,13 @@ from Function.operate_sql import *
 # saving相关cases
 class TestMonitorApi:
 
-    @allure.testcase('test_monitor_001 创建case 并且查询')
+    # 初始化
+    def setup_method(self):
+        AccountFunction.add_headers(account='kimi.gong@cabital.com', password='123456', type='monitor')
+
+    @allure.testcase('test_monitor_001 创建直接pass 个人 Kyc case后查询cases,最后发送接受结果信息')
     @pytest.mark.singleProcess
     def test_monitor_001(self):
-        with allure.step("获取token"):
-            accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456', type='monitor')
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
         with allure.step("创建case"):
@@ -99,11 +99,6 @@ class TestMonitorApi:
     @allure.testcase('test_monitor_002 开启/关闭 ogs')
     @pytest.mark.singleProcess
     def test_monitor_002(self):
-        with allure.step("获取token"):
-            accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456',
-                                                            type='monitor')
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
         with allure.step("创建case"):
@@ -165,11 +160,6 @@ class TestMonitorApi:
     @allure.testcase('test_monitor_003 创建case 给出系统建议')
     @pytest.mark.singleProcess
     def test_monitor_003(self):
-        with allure.step("获取token"):
-            accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456',
-                                                            type='monitor')
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
         with allure.step("创建case"):
@@ -232,10 +222,6 @@ class TestMonitorApi:
     @allure.testcase('test_monitor_004 创建case 没给出用户决策就reopen case失败')
     @pytest.mark.singleProcess
     def test_monitor_004(self):
-        with allure.step("获取token"):
-            accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456', type='monitor')
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
         with allure.step("创建case"):
@@ -307,11 +293,6 @@ class TestMonitorApi:
     @allure.testcase('test_monitor_005 创建case 给出用户决策后再reopen case')
     @pytest.mark.singleProcess
     def test_monitor_005(self):
-        with allure.step("获取token"):
-            accessToken = AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456',
-                                                            type='monitor')
-            headers['Authorization'] = "Bearer " + accessToken
-            headers['Content-Type'] = 'application/json'
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
         with allure.step("创建case"):

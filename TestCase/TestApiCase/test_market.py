@@ -5,7 +5,7 @@ from Function.operate_sql import *
 # market相关cases
 class TestMarketApi:
 
-    # 初始化class
+    # 初始化
     def setup_method(self):
         AccountFunction.add_headers()
 
