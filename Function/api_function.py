@@ -19,6 +19,7 @@ class AccountFunction:
             headers['Authorization'] = 'Basic c2NyZWVuLXNlcnZpY2U6MzJlMjhkZGUtN2QzNy00ODlkLWFhNmEtMzE5NzY5YTQyNjFh'
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
             r = session.request('POST', url='https://authserver.latibac.com/auth/realms/digitrade-operator/protocol/openid-connect/token', data=urlencode(data), headers=headers)
+            return r.json()['access_token']
         else:
             headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
             headers['X-Browser-Key'] = 'yilei_test'

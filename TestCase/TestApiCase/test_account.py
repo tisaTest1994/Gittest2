@@ -846,7 +846,7 @@ class TestAccountApi:
             AccountFunction.verify_verification_code('MFA_EMAIL', account, code)
         AccountFunction.add_headers()
 
-    @allure.testcase('test_account_044 referal注册用户')
+    @allure.testcase('test_account_044 多次referal注册用户')
     @pytest.mark.multiprocess
     def test_account_044(self):
         for i in range(50):
@@ -1002,3 +1002,46 @@ class TestAccountApi:
             assert r.status_code == 401, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'Refresh token error' in r.text, "用空的token刷新token错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_050 修改nickname')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_account_050(self):
+        with allure.step("修改nickname"):
+            data = {
+                "nickname": "ad!@d😄我940!2342"
+            }
+            r = session.request('PUT', url='{}/preference/account/setting'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "修改nickname错误，返回值是{}".format(r.text)
+        with allure.step("获取用户偏好信息"):
+            r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['nickname'] == "ad!@d😄我940!2342", "获取nickname失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_051 修改nickname长度超过20')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_account_051(self):
+        with allure.step("修改nickname"):
+            data = {
+                "nickname": "ads157!934！#！@*#**#！2940我2342"
+            }
+            r = session.request('PUT', url='{}/preference/account/setting'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['message'] == 'invalid nickname', "修改nickname错误，返回值是{}".format(r.text)

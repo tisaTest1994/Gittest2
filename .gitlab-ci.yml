@@ -12,6 +12,7 @@ before_script:
     - ln -s /opt/allure-2.13.9/bin/allure /usr/bin/allure
     - pip install --upgrade pip
     - pip install -r requirements.txt
+    - pip install "requests[security]"
 
 apiTest:
   tags:

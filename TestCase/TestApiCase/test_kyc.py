@@ -111,6 +111,7 @@ class TestKycApi:
                 "externalCaseId": externalCaseId,
                 "screenType": "INDIVIDUAL",
                 "fullName": "John Doe",
+                "memo": "L++",
                 "individualInfo": {
                     "gender": "MALE",
                     "dob": "2002-02-02",
