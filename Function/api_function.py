@@ -15,10 +15,10 @@ class AccountFunction:
             r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data), headers=headers)
         elif type == 'monitor':
             data['grant_type'] = 'password'
-            data['client_id'] = 'screen-service'
+            data['client_id'] = get_json()['kyc'][get_json()['env']]['client_id']
             headers['Authorization'] = 'Basic c2NyZWVuLXNlcnZpY2U6MzJlMjhkZGUtN2QzNy00ODlkLWFhNmEtMzE5NzY5YTQyNjFh'
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
-            r = session.request('POST', url='https://authserver.latibac.com/auth/realms/digitrade-operator/protocol/openid-connect/token', data=urlencode(data), headers=headers)
+            r = session.request('POST', url='{}/auth/realms/{}/protocol/openid-connect/token'.format(get_json()['kyc'][get_json()['env']]['authServer'], get_json()['kyc'][get_json()['env']]['realm']), data=urlencode(data), headers=headers)
             return r.json()['access_token']
         else:
             headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'

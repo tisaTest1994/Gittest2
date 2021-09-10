@@ -12,7 +12,7 @@ class TestMonitorApi:
 
     # 初始化
     def setup_method(self):
-        self.kyc_headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account='kimi.gong@cabital.com', password='123456', type='monitor')
+        self.kyc_headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account='kimi.gong@cabital.com', password=get_json()['kyc'][get_json()['env']]['password'], type='monitor')
 
     @allure.testcase('test_monitor_001 创建直接pass 个人 Kyc case后查询cases,最后发送接受结果信息')
     @pytest.mark.singleProcess
@@ -38,8 +38,7 @@ class TestMonitorApi:
                 },
                 "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
             }
-            print(self.kyc_headers)
-            r = session.request('POST', url='{}/operator/cases'.format(monitorUrl), data=json.dumps(data),
+            r = session.request('POST', url='{}/operator/cases'.format(get_json()['kyc'][get_json()['env']]['monitorUrl']), data=json.dumps(data),
                                 headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -66,7 +65,7 @@ class TestMonitorApi:
             params = {
                 'caseSystemId': caseSystemId
             }
-            r = session.request('GET', url='{}/operator/cases/{}'.format(monitorUrl, r.json()['caseSystemId']),
+            r = session.request('GET', url='{}/operator/cases/{}'.format(get_json()['kyc'][get_json()['env']]['monitorUrl'], r.json()['caseSystemId']),
                                 params=params, headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -126,7 +125,7 @@ class TestMonitorApi:
                 "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
             }
             print(self.kyc_headers)
-            r = session.request('POST', url='{}/operator/cases'.format(monitorUrl), data=json.dumps(data),
+            r = session.request('POST', url='{}/operator/cases'.format(get_json()['kyc'][get_json()['env']]['monitorUrl']), data=json.dumps(data),
                                 headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -153,7 +152,7 @@ class TestMonitorApi:
             params = {
                 'caseSystemId': caseSystemId
             }
-            r = session.request('GET', url='{}/operator/cases/{}'.format(monitorUrl, r.json()['caseSystemId']),
+            r = session.request('GET', url='{}/operator/cases/{}'.format(get_json()['kyc'][get_json()['env']]['monitorUrl'], r.json()['caseSystemId']),
                                 params=params, headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -212,7 +211,7 @@ class TestMonitorApi:
                 },
                 "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
             }
-            r = session.request('POST', url='{}/operator/cases'.format(monitorUrl), data=json.dumps(data),
+            r = session.request('POST', url='{}/operator/cases'.format(get_json()['kyc'][get_json()['env']]['monitorUrl']), data=json.dumps(data),
                                 headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -227,7 +226,7 @@ class TestMonitorApi:
             data = {
                 'caseSystemId': caseSystemId
             }
-            r = session.request('POST', url='{}/operator/cases/{}/ogs'.format(monitorUrl, caseSystemId),
+            r = session.request('POST', url='{}/operator/cases/{}/ogs'.format(get_json()['kyc'][get_json()['env']]['monitorUrl'], caseSystemId),
                                 params=json.dumps(data), headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -240,7 +239,7 @@ class TestMonitorApi:
             data = {
                 'caseSystemId': caseSystemId
             }
-            r = session.request('DELETE', url='{}/operator/cases/{}/ogs'.format(monitorUrl, caseSystemId),
+            r = session.request('DELETE', url='{}/operator/cases/{}/ogs'.format(get_json()['kyc'][get_json()['env']]['monitorUrl'], caseSystemId),
                                 params=json.dumps(data), headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -274,7 +273,7 @@ class TestMonitorApi:
                 "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
             }
             print(self.kyc_headers)
-            r = session.request('POST', url='{}/operator/cases'.format(monitorUrl), data=json.dumps(data),
+            r = session.request('POST', url='{}/operator/cases'.format(get_json()['kyc'][get_json()['env']]['monitorUrl']), data=json.dumps(data),
                                 headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -301,7 +300,7 @@ class TestMonitorApi:
             params = {
                 'caseSystemId': caseSystemId
             }
-            r = session.request('GET', url='{}/operator/cases/{}'.format(monitorUrl, r.json()['caseSystemId']),
+            r = session.request('GET', url='{}/operator/cases/{}'.format(get_json()['kyc'][get_json()['env']]['monitorUrl'], r.json()['caseSystemId']),
                                 params=params, headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -337,7 +336,7 @@ class TestMonitorApi:
             AccountFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='REJECT',
                                                caseSystemId=caseSystemId)
         with allure.step("重启case"):
-            r = session.request('POST', url='{}/operator/cases/{}/reopen'.format(monitorUrl, caseSystemId),
+            r = session.request('POST', url='{}/operator/cases/{}/reopen'.format(get_json()['kyc'][get_json()['env']]['monitorUrl'], caseSystemId),
                                 headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -371,7 +370,7 @@ class TestMonitorApi:
                 },
                 "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
             }
-            r = session.request('POST', url='{}/operator/cases'.format(monitorUrl), data=json.dumps(data),
+            r = session.request('POST', url='{}/operator/cases'.format(get_json()['kyc'][get_json()['env']]['monitorUrl']), data=json.dumps(data),
                                 headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -398,7 +397,7 @@ class TestMonitorApi:
             data = {
                 '': ''
             }
-            r = session.request('PUT', url='{}/operator/cases/{}/screen/manually-complete'.format(monitorUrl, caseSystemId), data=json.dumps(data), headers=self.kyc_headers)
+            r = session.request('PUT', url='{}/operator/cases/{}/screen/manually-complete'.format(get_json()['kyc'][get_json()['env']]['monitorUrl'], caseSystemId), data=json.dumps(data), headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -408,7 +407,7 @@ class TestMonitorApi:
             params = {
                 'caseSystemId': caseSystemId
             }
-            r = session.request('GET', url='{}/operator/cases/{}'.format(monitorUrl, caseSystemId),
+            r = session.request('GET', url='{}/operator/cases/{}'.format(get_json()['kyc'][get_json()['env']]['monitorUrl'], caseSystemId),
                                 params=params, headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))

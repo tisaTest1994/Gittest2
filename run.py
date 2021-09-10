@@ -25,10 +25,6 @@ env_url = get_json()[get_json()['env']]
 global operateUrl
 operateUrl = get_json()['operateUrl']
 
-# monitor 环境
-global monitorUrl
-monitorUrl = get_json()['monitorUrl']
-
 # headers
 global headers
 headers = get_json()['headers']

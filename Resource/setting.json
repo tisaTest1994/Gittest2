@@ -299,7 +299,12 @@
       "kycSecretKey": "YmM0ZDZkZGExMmUyNDhiNDk5MTA2YjJjYzRmNmY1OTc=",
       "kycUrl": "https://sandbox-caas.cabital.com",
       "webhook": "dc_pJuMAA1",
-      "api_key": "d960538c93a7007f79eab16b248817a6"
+      "api_key": "d960538c93a7007f79eab16b248817a6",
+      "monitorUrl": "https://sandbox-caas.cabital.com/api/v1",
+      "password": "Opt2021!",
+      "authServer": "https://authserver.cabital.com",
+      "realm": "DGT_LITHUANIA_OPERATOR",
+      "client_id": "sandbox-screen-service"
     },
     "test": {
       "kycHeaders": {
@@ -309,7 +314,12 @@
       "kycSecretKey": "Mjk0MjE0Y2VlYjUzNDNmOTgwYmJhYzJkZTRjNzQ0NGI=",
       "kycUrl": "https://caas.latibac.com",
       "webhook": "dc_dAua6Jl",
-      "api_key": "0c5ed00809980ccab3a03bd76a3b0406"
+      "api_key": "0c5ed00809980ccab3a03bd76a3b0406",
+      "monitorUrl": "https://caas.latibac.com/api/v1",
+      "password": "123456",
+      "authServer": "https://authserver.latibac.com",
+      "realm": "digitrade-operator",
+      "client_id": "screen-service"
     }
   },
   "language": "en",
@@ -317,7 +327,6 @@
     "zh",
     "en"
   ],
-  "monitorUrl": "https://caas.latibac.com/api/v1",
   "mysql": {
     "account": "testuser",
     "host": "rds-cluster-cluster.cluster-cyxbmvlfoqo7.ap-southeast-1.rds.amazonaws.com",
