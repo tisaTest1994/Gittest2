@@ -89,7 +89,6 @@ class TestMonitorApi:
 
             r = session.request('POST', url='{}/operator/cases/{}/decision'.format(self.kyc_url, caseSystemId),
                                 data=json.dumps(data), headers=self.kyc_headers)
-            print(r.url)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
