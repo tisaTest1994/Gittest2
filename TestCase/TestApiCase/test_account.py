@@ -1045,3 +1045,22 @@ class TestAccountApi:
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['message'] == 'invalid nickname', "修改nickname错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_052 打开/关闭notification推送')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_account_052(self):
+        with allure.step("打开notification推送"):
+            data = {
+                "notification_setting": {
+                    "push_switch": 1
+                }
+            }
+            r = session.request('PUT', url='{}/preference/account/setting'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "修改nickname错误，返回值是{}".format(r.text)
