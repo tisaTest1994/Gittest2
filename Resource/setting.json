@@ -285,7 +285,7 @@
     "security_code": "enjizpmktzashqwp",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
   },
-  "env": "pro",
+  "env": "test",
   "headers": {
     "Content-Encoding": "deflate",
     "Content-Type": "application/json"
@@ -297,7 +297,7 @@
         "Content-Type": "application/json"
       },
       "kycSecretKey": "YmM0ZDZkZGExMmUyNDhiNDk5MTA2YjJjYzRmNmY1OTc=",
-      "kycUrl": "https://sandbox-caas.cabital.com",
+      "kycUrl": "https://sandbox-caas.cabital.com/api/v1",
       "webhook": "dc_pJuMAA1",
       "api_key": "d960538c93a7007f79eab16b248817a6",
       "monitorUrl": "https://sandbox-caas.cabital.com/api/v1",
@@ -314,7 +314,7 @@
         "Content-Type": "application/json"
       },
       "kycSecretKey": "Mjk0MjE0Y2VlYjUzNDNmOTgwYmJhYzJkZTRjNzQ0NGI=",
-      "kycUrl": "https://caas.latibac.com",
+      "kycUrl": "https://caas.latibac.com/api/v1",
       "webhook": "dc_dAua6Jl",
       "api_key": "0c5ed00809980ccab3a03bd76a3b0406",
       "monitorUrl": "https://caas.latibac.com/api/v1",
