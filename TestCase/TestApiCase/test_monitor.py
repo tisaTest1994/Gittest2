@@ -1,5 +1,3 @@
-import json
-
 from Function.api_function import *
 from Function.operate_sql import *
 
@@ -66,7 +64,6 @@ class TestMonitorApi:
                 'caseSystemId': caseSystemId
             }
             r = session.request('GET', url='{}/operator/cases/{}'.format(get_json()['kyc'][get_json()['env']]['monitorUrl'], r.json()['caseSystemId']), params=params, headers=self.kyc_headers)
-            print(r.url)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -272,7 +269,6 @@ class TestMonitorApi:
                 },
                 "partnerId": get_json()['kyc'][get_json()['env']]['partnerId']
             }
-            print(self.kyc_headers)
             r = session.request('POST', url='{}/operator/cases'.format(get_json()['kyc'][get_json()['env']]['monitorUrl']), data=json.dumps(data),
                                 headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
@@ -357,13 +353,9 @@ class TestMonitorApi:
             data = {
                 "externalCaseId": externalCaseId,
                 "screenType": "INDIVIDUAL",
-                "fullName": "yuke zhang",
+                "fullName": "James",
                 "memo": "L++",
                 "individualInfo": {
-                    "gender": "MALE",
-                    "dob": "1984-01-20",
-                    "nationality": "USA",
-                    "residentialCountry": "USA"
                 },
                 "organizationInfo": {
                     "registeredCountry": "USA"
@@ -387,12 +379,6 @@ class TestMonitorApi:
             AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
             AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
-                                               caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
-                                               caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
-                                               suggestion='SUGGEST_TO_ACCEPT')
         with allure.step("人工改变case status=completed manually"):
             data = {
                 '': ''
@@ -403,6 +389,9 @@ class TestMonitorApi:
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("获取新的wehbook"):
+            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
+                                               caseSystemId=caseSystemId)
         with allure.step("查询创建的cases"):
             params = {
                 'caseSystemId': caseSystemId
@@ -416,4 +405,5 @@ class TestMonitorApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json()['externalCaseId'] is not None, '查询kyc-case信息错误,返回值是{}'.format(r.text)
-                assert 'WAITING_APPROVAL' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
+                assert 'PENDING' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
+                assert 'MANUALLY_COMPLETE' == r.json()['records'][0]['screenStatus'], "获取case信息错误，返回值是{}".format(r.text)

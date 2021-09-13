@@ -318,7 +318,7 @@ class TestPayoutApi:
                 "code": "EUR",
                 "amount": "2.51",
                 "payment_method": "SEPA",
-                "account_name": "yilei Wan",
+                "account_name": "Wan yilei",
                 "iban": "XX12345678912345678912"
             }
             r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
