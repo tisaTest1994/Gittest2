@@ -1063,4 +1063,4 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json() == {}, "修改nickname错误，返回值是{}".format(r.text)
+            assert r.json() == {}, "打开/关闭notification推送错误，返回值是{}".format(r.text)
