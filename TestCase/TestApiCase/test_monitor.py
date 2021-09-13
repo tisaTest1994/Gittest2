@@ -36,7 +36,7 @@ class TestMonitorApi:
                 "organizationInfo": {
                     "registeredCountry": "USA"
                 },
-                "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
+                "partnerId": get_json()['kyc'][get_json()['env']]['partnerId']
             }
             r = session.request('POST', url='{}/operator/cases'.format(get_json()['kyc'][get_json()['env']]['monitorUrl']), data=json.dumps(data),
                                 headers=self.kyc_headers)
@@ -65,8 +65,8 @@ class TestMonitorApi:
             params = {
                 'caseSystemId': caseSystemId
             }
-            r = session.request('GET', url='{}/operator/cases/{}'.format(get_json()['kyc'][get_json()['env']]['monitorUrl'], r.json()['caseSystemId']),
-                                params=params, headers=self.kyc_headers)
+            r = session.request('GET', url='{}/operator/cases/{}'.format(get_json()['kyc'][get_json()['env']]['monitorUrl'], r.json()['caseSystemId']), params=params, headers=self.kyc_headers)
+            print(r.url)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -82,12 +82,13 @@ class TestMonitorApi:
                 "comment": "决策备注"
             }
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                    url='/api/v1/cases/{}/decision'.format(caseSystemId),
+                                                    url='/operator/cases/{}/decision'.format(caseSystemId),
                                                     body=json.dumps(data))
             self.kyc_headers['ACCESS-SIGN'] = sign
             self.kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('POST', url='{}/api/v1/cases/{}/decision'.format(self.kyc_url, caseSystemId),
+            r = session.request('POST', url='{}/operator/cases/{}/decision'.format(self.kyc_url, caseSystemId),
                                 data=json.dumps(data), headers=self.kyc_headers)
+            print(r.url)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -122,9 +123,8 @@ class TestMonitorApi:
                 "organizationInfo": {
                     "registeredCountry": "USA"
                 },
-                "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
+                "partnerId": get_json()['kyc'][get_json()['env']]['partnerId']
             }
-            print(self.kyc_headers)
             r = session.request('POST', url='{}/operator/cases'.format(get_json()['kyc'][get_json()['env']]['monitorUrl']), data=json.dumps(data),
                                 headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
@@ -169,11 +169,11 @@ class TestMonitorApi:
                 "comment": "决策备注"
             }
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                    url='/api/v1/cases/{}/decision'.format(caseSystemId),
+                                                    url='/operator/cases/{}/decision'.format(caseSystemId),
                                                     body=json.dumps(data))
             self.kyc_headers['ACCESS-SIGN'] = sign
             self.kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('POST', url='{}/api/v1/cases/{}/decision'.format(self.kyc_url, caseSystemId),
+            r = session.request('POST', url='{}/operator/cases/{}/decision'.format(self.kyc_url, caseSystemId),
                                 data=json.dumps(data), headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -209,7 +209,7 @@ class TestMonitorApi:
                 "organizationInfo": {
                     "registeredCountry": "USA"
                 },
-                "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
+                "partnerId": get_json()['kyc'][get_json()['env']]['partnerId']
             }
             r = session.request('POST', url='{}/operator/cases'.format(get_json()['kyc'][get_json()['env']]['monitorUrl']), data=json.dumps(data),
                                 headers=self.kyc_headers)
@@ -270,7 +270,7 @@ class TestMonitorApi:
                 "organizationInfo": {
                     "registeredCountry": "USA"
                 },
-                "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
+                "partnerId": get_json()['kyc'][get_json()['env']]['partnerId']
             }
             print(self.kyc_headers)
             r = session.request('POST', url='{}/operator/cases'.format(get_json()['kyc'][get_json()['env']]['monitorUrl']), data=json.dumps(data),
@@ -317,11 +317,11 @@ class TestMonitorApi:
                 "comment": "决策备注"
             }
             sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                    url='/api/v1/cases/{}/decision'.format(caseSystemId),
+                                                    url='/operator/cases/{}/decision'.format(caseSystemId),
                                                     body=json.dumps(data))
             self.kyc_headers['ACCESS-SIGN'] = sign
             self.kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            r = session.request('POST', url='{}/api/v1/cases/{}/decision'.format(self.kyc_url, caseSystemId),
+            r = session.request('POST', url='{}/operator/cases/{}/decision'.format(self.kyc_url, caseSystemId),
                                 data=json.dumps(data), headers=self.kyc_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -368,7 +368,7 @@ class TestMonitorApi:
                 "organizationInfo": {
                     "registeredCountry": "USA"
                 },
-                "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
+                "partnerId": get_json()['kyc'][get_json()['env']]['partnerId']
             }
             r = session.request('POST', url='{}/operator/cases'.format(get_json()['kyc'][get_json()['env']]['monitorUrl']), data=json.dumps(data),
                                 headers=self.kyc_headers)

@@ -285,7 +285,7 @@
     "security_code": "enjizpmktzashqwp",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
   },
-  "env": "test",
+  "env": "pro",
   "headers": {
     "Content-Encoding": "deflate",
     "Content-Type": "application/json"
@@ -304,7 +304,9 @@
       "password": "Opt2021!",
       "authServer": "https://authserver.cabital.com",
       "realm": "DGT_LITHUANIA_OPERATOR",
-      "client_id": "sandbox-screen-service"
+      "client_id": "sandbox-screen-service",
+      "Authorization": "Basic c2FuZGJveC1zY3JlZW4tc2VydmljZTo1ZTk5ZDgwYS1lYzU4LTRiNmUtODg4Zi1kZDM3ZGU5MmQ4YzY=",
+      "partnerId": "1bd6f142-06c8-46f2-abcd-5a615eb53116"
     },
     "test": {
       "kycHeaders": {
@@ -319,7 +321,9 @@
       "password": "123456",
       "authServer": "https://authserver.latibac.com",
       "realm": "digitrade-operator",
-      "client_id": "screen-service"
+      "client_id": "screen-service",
+      "Authorization": "Basic c2NyZWVuLXNlcnZpY2U6MzJlMjhkZGUtN2QzNy00ODlkLWFhNmEtMzE5NzY5YTQyNjFh",
+      "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4"
     }
   },
   "language": "en",

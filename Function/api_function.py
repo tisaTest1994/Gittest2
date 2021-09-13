@@ -16,7 +16,7 @@ class AccountFunction:
         elif type == 'monitor':
             data['grant_type'] = 'password'
             data['client_id'] = get_json()['kyc'][get_json()['env']]['client_id']
-            headers['Authorization'] = 'Basic c2NyZWVuLXNlcnZpY2U6MzJlMjhkZGUtN2QzNy00ODlkLWFhNmEtMzE5NzY5YTQyNjFh'
+            headers['Authorization'] = get_json()['kyc'][get_json()['env']]['Authorization']
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
             r = session.request('POST', url='{}/auth/realms/{}/protocol/openid-connect/token'.format(get_json()['kyc'][get_json()['env']]['authServer'], get_json()['kyc'][get_json()['env']]['realm']), data=urlencode(data), headers=headers)
             return r.json()['access_token']
@@ -261,7 +261,6 @@ class AccountFunction:
             data = '{}{}{}{}'.format(unix_time, method, url, body)
         key = key.encode('utf-8')
         message = data.encode('utf-8')
-        print(message)
         sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
         sign = str(sign, 'utf-8')
         return sign
