@@ -318,15 +318,15 @@ class TestPayoutApi:
                 "code": "EUR",
                 "amount": "2.51",
                 "payment_method": "SEPA",
-                "account_name": "Wan yilei",
-                "iban": "XX12345678912345678912"
+                "account_name": "yilei",
+                "iban": "GB11111111111111111111"
             }
             r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
                                 headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
-            # with allure.step("校验状态码"):
-            #     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'SEPA' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
+                assert r.json() == {} , "开启法币提现画面错误，返回值是{}".format(r.text)

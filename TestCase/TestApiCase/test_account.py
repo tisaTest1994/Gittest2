@@ -157,26 +157,6 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert 'accessToken' in r.text, "登录已经注册账号错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_account_008 登录已经注册账号输入错误密码')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
-    def test_account_008(self):
-        account = '314627197@qq.com'
-        with allure.step("登录已经注册账号使用错误密码"):
-            data = {
-                "username": account,
-                "password": "A!2123123"
-            }
-            r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 404, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert 'Incorrect account or password.' in r.text, "登录已经注册账号输入错误密码错误，返回值是{}".format(r.text)
-
     @allure.testcase('test_account_009 登录未注册账号')
     @pytest.mark.multiprocess
     @pytest.mark.pro
@@ -186,8 +166,7 @@ class TestAccountApi:
                 "username": generate_email(),
                 "password": "A!2123123"
             }
-            r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
+            r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -392,7 +371,7 @@ class TestAccountApi:
     @pytest.mark.pro
     def test_account_020(self):
         with allure.step("用户忘记密码验证码错误"):
-            account = get_json()['email']['email']
+            account = generate_email()
             password = get_json()['email']['password']
             with allure.step("提前先注册好"):
                 AccountFunction.sign_up(account, password)
