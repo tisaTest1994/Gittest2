@@ -178,7 +178,7 @@ def crypto_len(number, type):
                 end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1])
         else:
             if len(str(number).split('.')[1]) > 2:
-                end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1][:2])
+                end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1])
             else:
                 end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1])
     else:
@@ -202,3 +202,40 @@ def is_alphabet(uchar):
         return True
 
 
+# 获取iban账号
+def get_iban(iban):
+        if iban in ['GB', 'GG', 'JE', 'IM', 'RS']:
+            iban = '{}{}{}'.format(iban, generate_number(2),generate_string(18))
+        elif iban == 'NO':
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(11))
+        elif iban == 'BE':
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(12))
+        elif iban in ['DK', 'FI', 'NL', 'FO', 'GL']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(14))
+        elif iban in ['MK', 'SI']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(15))
+        elif iban in ['AT', 'BA', 'EE', 'KZ', 'LT', 'LU', 'XK']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(16))
+        elif iban in ['CH', 'HR', 'LI', 'LV', 'CR']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(17))
+        elif iban in ['BG', 'BH', 'DE', 'GE', 'IE', 'ME', 'RS']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(18))
+        elif iban in ['CZ', 'ES', 'MD', 'PK', 'RO', 'SE', 'SK', 'TN', 'SA', 'VG', 'AD']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(20))
+        elif iban in ['GI', 'IL', 'AE']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(19))
+        elif iban in ['PT']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(21))
+        elif iban in ['IS, TR']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(22))
+        elif iban in ['FR', 'GR', 'IT', 'MC', 'MQ', 'PM', 'SM', 'TF', 'YT', 'MR']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(23))
+        elif iban in ['AZ', 'CY', 'DO', 'GT', 'HU', 'LB', 'PL', 'AL']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(24))
+        elif iban in ['QA', 'BR', 'PS']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(25))
+        elif iban in ['JO', 'KW', 'MU']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(26))
+        elif iban in ['MT', 'SC']:
+            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(27))
+        return iban

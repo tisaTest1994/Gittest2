@@ -814,7 +814,7 @@ class TestOperateApi:
             name = generate_string(16)
             data = {
                     "account_id": get_json()['email']['accountId'],
-                    "whitelisted_name": name,
+                    "whitelisted_name": "😊sad🆚",
                     "account_name": "yilei20",
                     "order_id": "",
                     "bank_account_number": "",

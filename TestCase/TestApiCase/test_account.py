@@ -197,6 +197,7 @@ class TestAccountApi:
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_account_011(self):
+        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token()
         with allure.step("获取refreshToken"):
             data = {
                 "username": get_json()['email']['email'],
