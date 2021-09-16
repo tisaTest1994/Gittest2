@@ -119,8 +119,8 @@ class TestPayoutApi:
     @allure.testcase('test_payout_007 MFA认证提现ETH成功')
     @pytest.mark.multiprocess
     def test_payout_007(self):
-        transaction_id = AccountFunction.get_payout_transaction_id(amount='0.03',
-                                                                   address='0x428DA40C585514022b2eB537950d5AB5C7365a07')
+        transaction_id = AccountFunction.get_payout_transaction_id(amount='0.03123452345',
+                                                                   address='0x38c838b19BEEa501Cf051b094Bc53f9E23ae1560')
         logger.info('transaction_id是{}'.format(transaction_id))
         with allure.step("p/l验证"):
             sleep(5)
@@ -178,7 +178,8 @@ class TestPayoutApi:
             with allure.step("把token写入headers"):
                 headers['Authorization'] = "Bearer " + accessToken
             data = {
-                'code': 'EUR'
+                'code': 'EUR',
+                'payment_method': 'SEPA'
             }
             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=data, headers=headers)
             AccountFunction.add_headers()
@@ -188,7 +189,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'SEPA' in r.text, "法币提现获得信息错误，返回值是{}".format(r.text)
+            assert r.json()['name_map']['yi lei'] == 1, "法币提现获得信息错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_011 预校验法币提现')
     @pytest.mark.multiprocess

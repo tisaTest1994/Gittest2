@@ -118,3 +118,20 @@ class TestPayInApi:
             with allure.step("校验返回值"):
                 assert 'crypto' in r.text, "获得全部货币充值币种错误，返回值是{}".format(r.text)
                 assert 'fiat' in r.text, "获得全部货币充值币种错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_pay_in_008 法币充值账户')
+    @pytest.mark.multiprocess
+    @pytest.mark.pro
+    def test_pay_in_008(self):
+        with allure.step("充值币种"):
+            params = {
+                'code': 'EUR'
+            }
+            r = session.request('GET', url='{}/pay/deposit/fiat'.format(env_url), params=params, headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'Lithuania' in r.text, "法币充值账户错误，返回值是{}".format(r.text)
