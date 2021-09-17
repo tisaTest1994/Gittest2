@@ -68,6 +68,3 @@ def get_job_id(type):
             if i['name'] == 'UiTest':
                 id_list.append(i['id'])
     return id_list[0]
-
-
-get_job_id('api')
