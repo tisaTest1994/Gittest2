@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     if sys.argv[1] == 'api':
         pytest.main(['./TestCase/TestApiCase', '-m', 'multiprocess', '-n', '8', '--alluredir', './Reports'])
-        #pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess', '--alluredir', './Reports'])
+        pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess', '--alluredir', './Reports'])
     elif sys.argv[1] == 'kyc':
         pytest.main(['./TestCase/TestApiCase', '-m', 'complianceService', '--alluredir', './Reports'])
     elif sys.argv[1] == "ui":

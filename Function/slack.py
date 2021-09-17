@@ -55,16 +55,19 @@ def get_job_id(type):
         "PRIVATE-TOKEN": get_json()['PRIVATE-TOKEN']
     }
     r = requests.request('GET', url='https://gitlab.com/api/v4/projects/25201898/jobs', headers=headers)
-    job_id = {}
     id_list = []
     for i in r.json():
+        print(i)
         if type == 'api':
-            if i['name'] == 'ApiTest' and i['status'] == 'success':
+            if i['name'] == 'ApiTest':
                 id_list.append(i['id'])
         elif type == 'kyc':
-            if i['name'] == 'KycTest' and i['status'] == 'success':
+            if i['name'] == 'KycTest':
                 id_list.append(i['id'])
         elif type == 'ui':
-            if i['name'] == 'UiTest' and i['status'] == 'success':
+            if i['name'] == 'UiTest':
                 id_list.append(i['id'])
     return id_list[0]
+
+
+get_job_id('api')
