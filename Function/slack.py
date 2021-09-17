@@ -25,7 +25,7 @@ def slack_report(type):
     slackUrl = get_json()['slackUrl']
     slack = slackweb.Slack(url=slackUrl)
     result = get_test_result()
-    id = get_job_id()
+    id = get_job_id(type)
     if type == 'api':
         title = "Api Test Report"
     elif type == 'kyc':
@@ -50,14 +50,21 @@ def slack_report(type):
 
 
 # 获得build id
-def get_job_id():
+def get_job_id(type):
     headers = {
         "PRIVATE-TOKEN": get_json()['PRIVATE-TOKEN']
     }
     r = requests.request('GET', url='https://gitlab.com/api/v4/projects/25201898/jobs', headers=headers)
     job_id = {}
+    id_list = []
     for i in r.json():
-        timestamp = int(time.mktime(time.strptime(str(i['created_at']).split('.')[0], "%Y-%m-%dT%H:%M:%S")))
-        job_id[timestamp] = i['id']
-    return job_id[max(job_id.keys())]
-
+        if type == 'api':
+            if i['name'] == 'ApiTest' and i['status'] == 'success':
+                id_list.append(i['id'])
+        elif type == 'kyc':
+            if i['name'] == 'KycTest' and i['status'] == 'success':
+                id_list.append(i['id'])
+        elif type == 'ui':
+            if i['name'] == 'UiTest' and i['status'] == 'success':
+                id_list.append(i['id'])
+    return id_list[0]

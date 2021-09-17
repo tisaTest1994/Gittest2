@@ -16,13 +16,13 @@ class TestConvertApi:
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
             logger.info('transaction_id 是{}'.format(transaction_id))
-            headers['Authorization'] = "Bearer " + AccountFunction.get_account_token()
         with allure.step("查询单笔交易"):
+            headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
             params = {
                 "txn_sub_type": 6
             }
             r = session.request('GET', url='{}/txn/{}'.format(env_url, transaction_id), params=params, headers=headers)
-            AccountFunction.add_headers()
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
