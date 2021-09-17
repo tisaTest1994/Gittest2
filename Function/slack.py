@@ -20,15 +20,23 @@ def get_test_result():
 
 
 # 和slack交互
-def slack_report():
+def slack_report(type):
     sleep(2)
     slackUrl = get_json()['slackUrl']
     slack = slackweb.Slack(url=slackUrl)
     result = get_test_result()
     id = get_job_id()
+    if type == 'api':
+        title = "Api Test Report"
+    elif type == 'kyc':
+        title = "Compliance Service Test Report"
+    elif type == 'ui':
+        title = "Ui Test Report"
+    else:
+        title = "Test Report"
     attachment = [
         {
-            "title": "Api Test Report",
+            "title": title,
             "text": "ToTal Test Cases number: _{}_,"
                     "\n Pass Test Cases number: _{}_,"
                     "\n Failed Test Cases number: _{}_,"

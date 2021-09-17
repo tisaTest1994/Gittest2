@@ -44,15 +44,15 @@ session = sessions()
 if __name__ == '__main__':
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
-    if sys.argv[1] == 'test':
-        pytest.main(['./TestCase/TestApiCase', '-m', 'multiprocess', '-n', '8', '--alluredir', './Reports'])
-        pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess', '--alluredir', './Reports'])
-    elif sys.argv[1] == 'pro':
-        pytest.main(['./TestCase/TestApiCase', '-m', 'pro', '--alluredir', './Reports'])
+
+    if sys.argv[1] == 'api':
+        pytest.main(['./TestCase/TestApiCase', '-v', '-m', 'multiprocess', '-n', '8', '--alluredir', './Reports'])
+        pytest.main(['./TestCase/TestApiCase', '-v', '-m', 'singleProcess', '--alluredir', './Reports'])
+    elif sys.argv[1] == 'kyc':
+        pytest.main(['./TestCase/TestApiCase', '-v', '-m', 'complianceService', '--alluredir', './Reports'])
     elif sys.argv[1] == "ui":
         pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports'])
     else:
-        pytest.main(['./TestCase/TestApiCase', '-m', 'multiprocess', '-n', '8', '--alluredir', './Reports'])
-        pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess', '--alluredir', './Reports'])
+        print('error 需要传入正确的参数')
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
-    slack_report()
+    slack_report(type=sys.argv[1])

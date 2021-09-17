@@ -346,7 +346,7 @@
   "secretKey": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
   "secretKeyForTest": " ",
   "slackTestUrl": "https://hooks.slack.com/services/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",
-  "slackUrl": "https://hooks.slack.com/services/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",
+  "slackUrl": "https://hooks.slack.com/services/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",
   "test": "https://api.latibac.com/api/v1",
   "iban_list": ["GB", "GG", "JE", "IM", "RS", "NO", "BE","DK", "FI", "NL", "FO", "GL","MK", "SI","AT", "BA", "EE", "KZ", "LT", "LU", "XK", "CH", "HR", "LI", "LV", "CR", "BG", "BH", "DE", "GE", "IE", "ME", "RS", "CZ", "ES", "MD", "PK", "RO", "SE", "SK", "TN", "SA", "VG", "AD", "GI", "IL", "AE", "PT", "IS, TR", "FR", "GR", "IT", "MC", "MQ", "PM", "SM", "TF", "YT", "MR", "AZ", "CY", "DO", "GT", "HU", "LB", "PL", "AL", "QA", "BR", "PS", "JO", "KW", "MU", "MT", "SC"]
 }

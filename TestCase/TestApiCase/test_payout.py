@@ -173,10 +173,6 @@ class TestPayoutApi:
     @pytest.mark.multiprocess
     def test_payout_010(self):
         with allure.step("法币提现获得信息"):
-            with allure.step("获得token"):
-                accessToken = AccountFunction.get_account_token(account='yilei6@cabital.com')
-            with allure.step("把token写入headers"):
-                headers['Authorization'] = "Bearer " + accessToken
             data = {
                 'code': 'EUR',
                 'payment_method': 'SEPA'
@@ -189,7 +185,11 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['name_map']['yi lei'] == 1, "法币提现获得信息错误，返回值是{}".format(r.text)
+            account_names = r.json()['account_names']
+            name_list = account_names.keys()
+            for i in len(name_list):
+                if account_names[name_list[i]] == 0:
+                    print(i)
 
     @allure.testcase('test_payout_011 预校验法币提现')
     @pytest.mark.multiprocess

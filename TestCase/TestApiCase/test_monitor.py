@@ -13,7 +13,7 @@ class TestMonitorApi:
         self.kyc_headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account='kimi.gong@cabital.com', password=get_json()['kyc'][get_json()['env']]['password'], type='monitor')
 
     @allure.testcase('test_monitor_001 创建直接pass 个人 Kyc case后查询cases,最后发送接受结果信息')
-    @pytest.mark.singleProcess
+    @pytest.mark.complianceService
     def test_monitor_001(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -100,7 +100,7 @@ class TestMonitorApi:
                                                caseSystemId=caseSystemId)
 
     @allure.testcase('test_monitor_002 创建直接pass 个人 Kyc case后查询cases,最后发送不接受结果信息')
-    @pytest.mark.singleProcess
+    @pytest.mark.complianceService
     def test_monitor_002(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -186,7 +186,7 @@ class TestMonitorApi:
                                                caseSystemId=caseSystemId)
 
     @allure.testcase('test_monitor_003 开启/关闭 ogs')
-    @pytest.mark.singleProcess
+    @pytest.mark.complianceService
     def test_monitor_003(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -247,7 +247,7 @@ class TestMonitorApi:
                 assert '' in r.text, '关闭ogs错误,返回值是{}'.format(r.text)
 
     @allure.testcase('test_monitor_004 创建直接pass 个人 Kyc case后查询cases,最后发送接受结果信息再reopen case')
-    @pytest.mark.singleProcess
+    @pytest.mark.complianceService
     def test_monitor_004(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -343,7 +343,7 @@ class TestMonitorApi:
                 assert r.json() == {}, 'reopen case错误,返回值是{}'.format(r.text)
 
     @allure.testcase('test_monitor_006 completed manually')
-    @pytest.mark.singleProcess
+    @pytest.mark.complianceService
     def test_monitor_006(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -409,7 +409,7 @@ class TestMonitorApi:
                 assert 'MANUALLY_COMPLETE' == r.json()['records'][0]['screenStatus'], "获取case信息错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_monitor_007 创建直接pass TNS_STREET case后查询cases,最后发送接受结果信息')
-    @pytest.mark.singleProcess
+    @pytest.mark.complianceService
     def test_monitor_007(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -488,7 +488,7 @@ class TestMonitorApi:
                                                caseSystemId=caseSystemId)
 
     @allure.testcase('test_monitor_008 创建直接pass TNS_TRADER case后查询cases,最后发送接受结果信息')
-    @pytest.mark.singleProcess
+    @pytest.mark.complianceService
     def test_monitor_008(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -567,7 +567,7 @@ class TestMonitorApi:
                                                caseSystemId=caseSystemId)
 
     @allure.testcase('test_monitor_009 创建直接pass TNS_BANK_ACCOUNT_NAME case后查询cases,最后发送接受结果信息')
-    @pytest.mark.singleProcess
+    @pytest.mark.complianceService
     def test_monitor_009(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
@@ -646,7 +646,7 @@ class TestMonitorApi:
                                                caseSystemId=caseSystemId)
 
     @allure.testcase('test_monitor_010 创建直接pass TNS_BANK_NAME case后查询cases,最后发送接受结果信息')
-    @pytest.mark.singleProcess
+    @pytest.mark.complianceService
     def test_monitor_010(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
