@@ -8,8 +8,8 @@ class TestKycApi:
     kyc_headers = get_json()['kyc'][get_json()['env']]['kycHeaders']
 
     # 初始化class
-    def setup_method(self):
-        AccountFunction.add_headers()
+    # def setup_method(self):
+    #     AccountFunction.add_headers()
 
     @allure.testcase('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
     @pytest.mark.multiprocess
