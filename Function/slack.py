@@ -31,6 +31,8 @@ def slack_report(type):
         title = "Compliance Service Test Report"
     elif type == 'ui':
         title = "Ui Test Report"
+    elif type == 'cabinet':
+        title = "Cabinet Test Report"
     else:
         title = "Test Report"
     attachment = [
@@ -64,6 +66,9 @@ def get_job_id(type):
                 id_list.append(i['id'])
         elif type == 'ui':
             if i['name'] == 'UiTest':
+                id_list.append(i['id'])
+        elif type == 'cabinet':
+            if i['name'] == 'CabinetTest':
                 id_list.append(i['id'])
     return id_list[0]
 

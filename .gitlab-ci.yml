@@ -32,3 +32,13 @@ KycTest:
     paths:
       - Reports
     expire_in: 1 week
+
+CabinetTest:
+  tags:
+    - python
+  script:
+    - python run.py cabinet test
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
