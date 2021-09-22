@@ -1,6 +1,11 @@
 default:
   image: python:3.9.1
 
+stages:
+    - test1
+    - test2
+    - test3
+
 before_script:
     - apt-get update
     - apt-get install software-properties-common -y
@@ -13,6 +18,7 @@ before_script:
     - pip install -r requirements.txt
 
 ApiTest:
+  stage: test1
   tags:
     - python
   script:
@@ -23,6 +29,7 @@ ApiTest:
     expire_in: 1 week
 
 KycTest:
+  stage: test2
   tags:
     - python
   script:
@@ -33,6 +40,7 @@ KycTest:
     expire_in: 1 week
 
 CabinetTest:
+  stage: test3
   tags:
     - python
   script:
