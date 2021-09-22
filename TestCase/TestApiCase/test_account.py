@@ -837,7 +837,7 @@ class TestAccountApi:
                 "password": get_json()['email']['password'],
                 "metadata": {
                     "referral": {
-                        "code": "ABC123"
+                        "code": "clc4bs"
                     }
                 }
             }
