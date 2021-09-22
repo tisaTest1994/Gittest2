@@ -13,7 +13,7 @@ before_script:
     - pip install --upgrade pip
     - pip install -r requirements.txt
 
-apiTest:
+ApiTest:
   tags:
     - python
   script:
@@ -23,12 +23,12 @@ apiTest:
       - Reports
     expire_in: 1 week
 
-# KycTest:
-#   tags:
-#     - python
-#   script:
-#     - python run.py kyc test
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
+KycTest:
+  tags:
+    - python
+  script:
+    - python run.py kyc test
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
