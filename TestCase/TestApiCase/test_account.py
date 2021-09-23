@@ -837,18 +837,18 @@ class TestAccountApi:
                 "password": get_json()['email']['password'],
                 "metadata": {
                     "referral": {
-                        "code": "clc4bs"
+                        "code": "CLC4BS"
                     }
                 }
             }
             session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
             logger.info('邮箱是{}'.format(data['emailAddress']))
             sleep(2)
-            # with allure.step("数据库检查"):
-            #     sql = "select relation from relation where referer_id='daf99d80-fcf4-4f10-8bb8-ab88dcf23cb8' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(
-            #         data['emailAddress'])
-            #     relation = sqlFunction.connect_mysql('referral', sql)
-            #     assert relation[0]['relation'] == 2, '数据库查询值是{}'.format(relation)
+            with allure.step("数据库检查"):
+                sql = "select relation from relation where referer_id='daf99d80-fcf4-4f10-8bb8-ab88dcf23cb8' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(
+                    data['emailAddress'])
+                relation = sqlFunction.connect_mysql('referral', sql)
+                assert relation[0]['relation'] == 2, '数据库查询值是{}'.format(relation)
 
     @allure.testcase('test_account_045 获取用户偏好信息')
     @pytest.mark.multiprocess
