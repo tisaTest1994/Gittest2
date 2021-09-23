@@ -13,6 +13,8 @@ from decimal import *
 from urllib.parse import urlencode
 from time import sleep
 from hashlib import sha256
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 
 # 初始化参数
