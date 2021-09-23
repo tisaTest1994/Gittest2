@@ -50,13 +50,12 @@ if __name__ == '__main__':
         pytest.main(['./TestCase/TestApiCase', '-m', 'multiprocess', '-n', '8', '--alluredir', './Reports'])
         pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess', '--alluredir', './Reports'])
     elif sys.argv[1] == 'kyc':
-        pytest.main(['./TestCase/TestComplianceServiceCase', '--alluredir', './Reports'])
+        pytest.main(['./TestCase/TestComplianceServiceCase', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "ui":
-        pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports'])
+        pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "cabinet":
-        pytest.main(['./TestCase/TestCabinetCase', '-v', '--alluredir', './Reports'])
+        pytest.main(['./TestCase/TestCabinetCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     else:
         assert False, 'error 需要传入正确的参数'
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     slack_report(type=sys.argv[1])
-    os.system('rm -rf Reports')
