@@ -12,3 +12,4 @@ Faker~=6.6.1
 locust~=1.4.4
 allure-pytest~=2.8.36
 pytest-xdist==2.2.1
+pytest-timeout==1.4.2

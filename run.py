@@ -50,7 +50,7 @@ if __name__ == '__main__':
         pytest.main(['./TestCase/TestApiCase', '-m', 'multiprocess', '-n', '8', '--alluredir', './Reports'])
         pytest.main(['./TestCase/TestApiCase', '-m', 'singleProcess', '--alluredir', './Reports'])
     elif sys.argv[1] == 'kyc':
-        pytest.main(['./TestCase/TestComplianceServiceCase', '--alluredir', './Reports', '--clean-alluredir'])
+        pytest.main(['./TestCase/TestComplianceServiceCase', '--alluredir', './Reports', '--clean-alluredir', '--timeout=600'])
     elif sys.argv[1] == "ui":
         pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "cabinet":
