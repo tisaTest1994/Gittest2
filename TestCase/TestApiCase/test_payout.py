@@ -117,7 +117,7 @@ class TestPayoutApi:
             assert '"code":"ETH"' in r.text, "获取提现费率和提现限制错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_007 MFA认证提现ETH成功')
-    @pytest.mark.multiprocess
+    @pytest.mark.singleProcess
     def test_payout_007(self):
         transaction_id = AccountFunction.get_payout_transaction_id(amount='0.03123452345',
                                                                    address='0x38c838b19BEEa501Cf051b094Bc53f9E23ae1560')
@@ -169,7 +169,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert 'no rows in result set' in r.text, "使用错误id查询提现详情错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_010 法币提现获得信息')
+    @allure.testcase('test_payout_010 法币提现获得信息，白名单排序')
     @pytest.mark.multiprocess
     def test_payout_010(self):
         with allure.step("法币提现获得信息"):
@@ -191,7 +191,6 @@ class TestPayoutApi:
                         a = 0
                 elif a == 0:
                     assert i['status'] == 0, '白名单排序问题，没1在前0在后。'
-
 
     @allure.testcase('test_payout_011 预校验法币提现')
     @pytest.mark.multiprocess
@@ -333,3 +332,19 @@ class TestPayoutApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json() == {} , "开启法币提现画面错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_payout_018 法币提现获得信息，不传code')
+    @pytest.mark.multiprocess
+    def test_payout_018(self):
+        with allure.step("法币提现获得信息，不传code"):
+            data = {
+                'code': '',
+                'payment_method': ''
+            }
+            r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=data, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.json()['code'] == '100000', "法币提现获得信息，不传code错误，返回值是{}".format(r.text)

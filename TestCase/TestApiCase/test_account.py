@@ -937,7 +937,7 @@ class TestAccountApi:
             assert 'accessToken' in r.text, "登录已经注册账号错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_049 登出后refreshToken无法刷新')
-    @pytest.mark.multiprocess
+    @pytest.mark.singleProcess
     @pytest.mark.pro
     def test_account_049(self):
         with allure.step("上传登录信息更新headers"):

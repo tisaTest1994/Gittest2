@@ -10,8 +10,7 @@ class TestConvertApi:
         AccountFunction.add_headers()
 
     @allure.testcase('test_convert_001 根据id编号查询单笔交易')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
+    @pytest.mark.singleProcess
     def test_convert_001(self):
         with allure.step("获得交易transaction_id"):
             transaction_id = AccountFunction.get_payout_transaction_id()
