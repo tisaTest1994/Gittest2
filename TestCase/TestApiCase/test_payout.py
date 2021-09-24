@@ -178,18 +178,20 @@ class TestPayoutApi:
                 'payment_method': 'SEPA'
             }
             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=data, headers=headers)
-            AccountFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            account_names = r.json()['account_names']
-            name_list = account_names.keys()
-            for i in len(name_list):
-                if account_names[name_list[i]] == 0:
-                    print(i)
+        a = 1
+        with allure.step("确保1在前，0在后"):
+            for i in r.json()['account_names']:
+                if a == 1:
+                    if i['status'] == 0:
+                        a = 0
+                elif a == 0:
+                    assert i['status'] == 0, '白名单排序问题，没1在前0在后。'
+
 
     @allure.testcase('test_payout_011 预校验法币提现')
     @pytest.mark.multiprocess

@@ -205,6 +205,7 @@ class TestAccountApi:
             }
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
             refreshToken = r.json()['refreshToken']
+            print(headers['Authorization'])
         with allure.step("刷新tokne"):
             data = {
                 "refreshToken": refreshToken
@@ -433,7 +434,7 @@ class TestAccountApi:
                 "emailAddress": '%$#{}@dsadda.com'.format(generate_number(8)),
                 "verificationCode": "666666",
                 "citizenCountryCode": citizenCountryCode,
-                "password": "123456"
+                "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
                                  headers=headers)
@@ -1043,3 +1044,5 @@ class TestAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json() == {}, "打开/关闭notification推送错误，返回值是{}".format(r.text)
+
+

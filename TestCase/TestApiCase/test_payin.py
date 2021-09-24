@@ -30,17 +30,17 @@ class TestPayInApi:
     @pytest.mark.multiprocess
     def test_pay_in_002(self):
         with allure.step("查询不到转入记录"):
-            data = {
+            params = {
                 'code': 'US345'
             }
-            r = session.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data, headers=headers)
+            r = session.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=params, headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'method is not support' in r.text, "查询不到转入地址记录（使用错误币种）错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == '103003', "查询不到转入地址记录（使用错误币种）错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_pay_in_003 查询转入地址记录（指定链）')
     @pytest.mark.multiprocess
@@ -74,7 +74,7 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'method is not support' in r.text, "查询不到转入地址记录（使用错误链查询）错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == '103003', "查询不到转入地址记录（使用错误链查询）错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_pay_in_005 获得法币充值币种')
     @pytest.mark.multiprocess
