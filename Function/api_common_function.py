@@ -149,7 +149,6 @@ def get_language_map():
     with open(path, "w+", encoding='utf8') as f:
         json.dump(r.json()['data'], f, sort_keys=True, indent=2, ensure_ascii=False)
 
-
 # 删除小数点后多余的0
 def delete_extra_zero(n):
     if isinstance(n, int):

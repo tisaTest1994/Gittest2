@@ -54,7 +54,7 @@ class AccountFunction:
 
     # 提现ETH获取交易id
     @staticmethod
-    def get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07'):
+    def get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07', code_type='ETH'):
         headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
         code = AccountFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
         secretKey = get_json()['secretKey']
@@ -65,7 +65,7 @@ class AccountFunction:
         logger.info('交易的订单headers是{}'.format(headers))
         data = {
             "amount": amount,
-            "code": "ETH",
+            "code": code_type,
             "address": address,
             "method": "ERC20"
         }
