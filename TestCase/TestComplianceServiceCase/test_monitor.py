@@ -447,7 +447,7 @@ class TestMonitorApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json()['externalCaseId'] is not None, '查询kyc-case信息错误,返回值是{}'.format(r.text)
-                assert 'WAITING_APPROVAL' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
+                assert 'PENDING' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_monitor_008 创建直接pass TNS_TRADER case后查询cases,最后发送接受结果信息')
     def test_monitor_008(self):
@@ -649,9 +649,10 @@ class TestMonitorApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json()['externalCaseId'] is not None, '查询kyc-case信息错误,返回值是{}'.format(r.text)
-                assert 'WAITING_APPROVAL' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
+                assert 'PENDING' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_monitor_001 创建直接pass个人 Kyc case创建直接个人 Kyc case大小写')
+    @pytest.mark.timeout(1200)
     def test_monitor_011(self):
         with allure.step("删除旧的webhook"):
             AccountFunction.delete_old_webhook()
