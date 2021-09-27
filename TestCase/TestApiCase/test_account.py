@@ -194,7 +194,7 @@ class TestAccountApi:
             assert 'accessToken' in r.text, "登录已经注册的黑名单账号错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_011 刷新账户token')
-    @pytest.mark.multiprocess
+    @pytest.mark.singleProcess
     @pytest.mark.pro
     def test_account_011(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token()

@@ -4,7 +4,7 @@ from Function.operate_sql import *
 
 # kyc相关cases
 class TestComplianceServiceApi:
-    kyc_url = get_json()['kyc'][get_json()['                           ']]['kycUrl']
+    kyc_url = get_json()['kyc'][get_json()['env']]['kycUrl']
     kyc_headers = get_json()['kyc'][get_json()['env']]['kycHeaders']
 
     @allure.testcase('test_compliance_service_001 创建直接pass 个人 Kyc case后查询cases,最后发送接受结果信息')

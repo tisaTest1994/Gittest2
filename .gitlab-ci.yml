@@ -28,23 +28,23 @@ ApiTest:
       - Reports
     expire_in: 1 week
 
-KycTest:
+CabinetTest:
   stage: test2
   tags:
     - python
   script:
-    - python run.py kyc test
+    - python run.py cabinet test
   artifacts:
-    paths:
+    paths:                                                                                                                                                                       n
       - Reports
     expire_in: 1 week
 
-CabinetTest:
+KycTest:
   stage: test3
   tags:
     - python
   script:
-    - python run.py cabinet test
+    - python run.py kyc test
   artifacts:
     paths:
       - Reports
