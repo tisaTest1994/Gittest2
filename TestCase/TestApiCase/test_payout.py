@@ -8,7 +8,7 @@ class TestPayoutApi:
 
     # 初始化class
     def setup_method(self):
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
 
     @allure.testcase('test_payout_001 没有Kyc用户添加常用收款地址失败')
     @pytest.mark.multiprocess
@@ -16,9 +16,9 @@ class TestPayoutApi:
         account = generate_email()
         password = get_json()['email']['password']
         with allure.step("提前先注册好"):
-            AccountFunction.sign_up(account, password)
+            ApiFunction.sign_up(account, password)
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=account, password=password)
+            accessToken = ApiFunction.get_account_token(account=account, password=password)
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("没有Kyc用户添加常用收款地址失败"):
@@ -30,7 +30,7 @@ class TestPayoutApi:
             }
             r = session.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
                                 headers=headers)
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -119,8 +119,7 @@ class TestPayoutApi:
     @allure.testcase('test_payout_007 MFA认证提现ETH成功')
     @pytest.mark.singleProcess
     def test_payout_007(self):
-        transaction_id = AccountFunction.get_payout_transaction_id(amount='12.01',
-                                                                   address='0xC8dB0880790550a67B38525CA57Dbe880eEC70B4', code_type='USDT')
+        transaction_id = ApiFunction.get_payout_transaction_id(amount='0.022', address='0xC8dB0880790550a67B38525CA57Dbe880eEC70B4', code_type='ETH')
         logger.info('transaction_id是{}'.format(transaction_id))
         with allure.step("p/l验证"):
             sleep(5)
@@ -139,13 +138,13 @@ class TestPayoutApi:
     @pytest.mark.multiprocess
     def test_payout_008(self):
         with allure.step("获得交易transaction_id"):
-            transaction_id = AccountFunction.get_payout_transaction_id()
+            transaction_id = ApiFunction.get_payout_transaction_id()
             logger.info('transaction_id是{}'.format(transaction_id))
-            headers['Authorization'] = "Bearer " + AccountFunction.get_account_token()
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token()
         with allure.step("查询提现详情"):
             r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id),
                                 headers=headers)
-            AccountFunction.add_headers()
+            ApiFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -197,7 +196,7 @@ class TestPayoutApi:
     def test_payout_011(self):
         with allure.step("法币提现获得信息"):
             with allure.step("获得token"):
-                accessToken = AccountFunction.get_account_token(account='yilei6@cabital.com')
+                accessToken = ApiFunction.get_account_token(account='yilei6@cabital.com')
             with allure.step("把token写入headers"):
                 headers['Authorization'] = "Bearer " + accessToken
             data = {
@@ -206,7 +205,7 @@ class TestPayoutApi:
             }
             r = session.request('POST', url='{}/pay/withdraw/fiat/verification'.format(env_url), data=json.dumps(data),
                                 headers=headers)
-            AccountFunction.add_headers()
+            ApiFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -281,14 +280,14 @@ class TestPayoutApi:
     # @pytest.mark.pro
     # def test_payout_016(self):
     #     with allure.step("开启法币提现画面"):
-    #         headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
+    #         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
     #         params = {
     #             'code': 'EUR'
     #         }
     #         r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
     #         account_name = r.json()['name_list']
     #     with allure.step("法币提现"):
-    #         code = AccountFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+    #         code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
     #         secretKey = get_json()['secretKey']
     #         totp = pyotp.TOTP(secretKey)
     #         mfaVerificationCode = totp.now()
@@ -302,7 +301,7 @@ class TestPayoutApi:
     #             "iban": "BE09967206444557"
     #         }
     #         r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data), headers=headers)
-    #         AccountFunction.add_headers()
+    #         ApiFunction.add_headers()
     #         with allure.step("状态码和返回值"):
     #             logger.info('状态码是{}'.format(str(r.status_code)))
     #             logger.info('返回值是{}'.format(str(r.text)))

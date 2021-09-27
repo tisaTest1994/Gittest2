@@ -2,7 +2,7 @@ from run import *
 from Function.operate_sql import *
 
 
-class AccountFunction:
+class ApiFunction:
 
     # 获取用户token
     @staticmethod
@@ -36,7 +36,7 @@ class AccountFunction:
     def add_headers(currency='USD'):
         headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
         headers['X-Browser-Key'] = 'yilei_test'
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token()
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token()
         headers['X-Currency'] = currency
 
     # 注册
@@ -55,8 +55,8 @@ class AccountFunction:
     # 提现ETH获取交易id
     @staticmethod
     def get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07', code_type='ETH'):
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=get_json()['email']['payout_email'])
-        code = AccountFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
+        code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
         secretKey = get_json()['secretKey']
         totp = pyotp.TOTP(secretKey)
         mfaVerificationCode = totp.now()
@@ -72,7 +72,7 @@ class AccountFunction:
         r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
                             headers=headers)
         logger.info('获取的交易订单json是{}'.format(r.text))
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
         return r.json()['transaction_id']
 
     # 获取下次清算金额
@@ -126,7 +126,7 @@ class AccountFunction:
     def get_today_increase():
         crypto_list = get_json()['crypto_list']
         # 当前全部货币数量
-        number_dict = AccountFunction.get_all_crypto_number()
+        number_dict = ApiFunction.get_all_crypto_number()
         # 今天utc0点时间
         yesterday_time = datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d")
         today_increase = {}
@@ -162,7 +162,7 @@ class AccountFunction:
             quote = sqlFunction.get_crypto_quote(type=i, day_time=yesterday_time)
             yesterday_amount = (Decimal(number) * Decimal(quote)).quantize(Decimal('0.00'), ROUND_FLOOR)
             # 获得当前价格
-            now_amount = AccountFunction.get_crypto_abs_amount(type=i)
+            now_amount = ApiFunction.get_crypto_abs_amount(type=i)
             today_increase[i] = (Decimal(yesterday_amount) - Decimal(now_amount)).quantize(Decimal('0.00'), ROUND_FLOOR)
         return str(today_increase)
 
@@ -288,21 +288,21 @@ class AccountFunction:
     def check_webhook_info(path, caseSystemId, action='', suggestion='', decision=''):
         sleep_time = 0
         while sleep_time < 200:
-            webhook_info = AccountFunction.get_webhook()
+            webhook_info = ApiFunction.get_webhook()
             for y in json.loads(webhook_info)['data']:
                 if y['e']['path'] == path:
                     if 'operator' in path and y['e']['body']['message']['action'] == action and y['e']['body']['message']['caseSystemId'] == caseSystemId:
                         sleep_time = 300
                     elif 'case' in path and y['e']['body']['caseSystemId'] == caseSystemId:
-                        webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
+                        webhook_sign = ApiFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
                         assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
                         sleep_time = 300
                     elif 'case/reviewed' in path and y['e']['body']['caseSystemId'] == caseSystemId and y['e']['body']['suggestion'] == suggestion:
-                        webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
+                        webhook_sign = ApiFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
                         assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
                         sleep_time = 300
                     elif 'case/completed' in path and y['e']['body']['caseSystemId'] == caseSystemId and y['e']['body']['decision'] == decision:
-                        webhook_sign = AccountFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
+                        webhook_sign = ApiFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
                         assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
                         sleep_time = 300
             sleep(10)
@@ -362,7 +362,7 @@ class AccountFunction:
     # 收取验证码
     @staticmethod
     def get_verification_code(type, account):
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account)
         data = {
             "email": account,
             "type": type
@@ -403,7 +403,7 @@ class AccountFunction:
     # 校验验证码
     @staticmethod
     def verify_verification_code(type, email, code):
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=email)
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=email)
         data = {
             "email": email,
             "type": type,

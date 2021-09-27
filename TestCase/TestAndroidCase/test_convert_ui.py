@@ -27,7 +27,7 @@ class TestConvertUi:
             pairs = r.json()['codes']
             pair = '{}-{}'.format(list(pairs.keys())[0], pairs[list(pairs.keys())[0]][0])
         with allure.step("Api获得币种可用Balance"):
-            number = AccountFunction.get_crypto_number(type=pair.split('-')[0], balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
+            number = ApiFunction.get_crypto_number(type=pair.split('-')[0], balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
         with allure.step("验证页面显示sell币种可用的Balance"):
             check("{} {} {}".format(get_json(file='multiple_languages.json')['CB036'], number, pair.split('-')[0]))
 
@@ -43,7 +43,7 @@ class TestConvertUi:
         with allure.step("换汇页面点击MAX"):
             click("CB177")
         with allure.step("Api获得币种可用Balance"):
-            number = AccountFunction.get_crypto_number(type=pair.split('-')[0], balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
+            number = ApiFunction.get_crypto_number(type=pair.split('-')[0], balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
         with allure.step("验证换汇页面点击MAX"):
             check('{}.*'.format(number), type='textMatches')
 
@@ -59,7 +59,7 @@ class TestConvertUi:
         with allure.step("点击转换sell-buy按钮"):
             click("android.widget.ImageView")
         with allure.step("Api获得币种可用Balance"):
-            number = AccountFunction.get_crypto_number(type=pair.split('-')[1], balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
+            number = ApiFunction.get_crypto_number(type=pair.split('-')[1], balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
         with allure.step("验证页面显示sell币种可用的Balance"):
                 check("{} {} {}".format(get_json(file='multiple_languages.json')['CB036'], number, pair.split('-')[1]))
 
@@ -100,7 +100,7 @@ class TestConvertUi:
             click(pair.split('-')[0])
             check('CB212')
         with allure.step("Api获得币种可用Balance"):
-            number = AccountFunction.get_crypto_number(type=pair.split('-')[1], balance_type='BALANCE_TYPE_AVAILABLE',
+            number = ApiFunction.get_crypto_number(type=pair.split('-')[1], balance_type='BALANCE_TYPE_AVAILABLE',
                                                        wallet_type='BALANCE')
             number = add_comma_number(number)
         with allure.step("检查页面上币种可用Balance和api返回一致"):

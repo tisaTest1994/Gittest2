@@ -7,7 +7,7 @@ class TestFixedApi:
 
     # 初始化class
     def setup_method(self):
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
 
     @allure.testcase('test_fixed_001 获取定期产品列表')
     @pytest.mark.multiprocess
@@ -79,13 +79,13 @@ class TestFixedApi:
                 sleep(5)
                 logger.info('定期产品product_id是{}'.format(y['product_id']))
                 with allure.step("获取购买定期前BTC可用数量"):
-                    balance_amount_old = AccountFunction.get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
+                    balance_amount_old = ApiFunction.get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
                 with allure.step("获取购买定期前BTC购买活期数量"):
-                    saving_amount_old = AccountFunction.get_crypto_number(type='BTC',
+                    saving_amount_old = ApiFunction.get_crypto_number(type='BTC',
                                                                            balance_type='BALANCE_TYPE_AVAILABLE',
                                                                            wallet_type='SAVING')
                 with allure.step("获取购买定期前BTC购买定期数量"):
-                    fix_amount_old = AccountFunction.get_crypto_number(type='BTC',
+                    fix_amount_old = ApiFunction.get_crypto_number(type='BTC',
                                                                        balance_type='BALANCE_TYPE_AVAILABLE',
                                                                        wallet_type='SAVING-FIX')
                 if i['code'] == 'BTC':
@@ -105,35 +105,35 @@ class TestFixedApi:
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                     with allure.step("获取购买定期前BTC可用数量"):
-                        balance_amount_latest = AccountFunction.get_crypto_number(type='BTC',
+                        balance_amount_latest = ApiFunction.get_crypto_number(type='BTC',
                                                                                balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                wallet_type='BALANCE')
                     with allure.step("获取购买定期前BTC购买活期数量"):
-                        saving_amount_latest = AccountFunction.get_crypto_number(type='BTC',
+                        saving_amount_latest = ApiFunction.get_crypto_number(type='BTC',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING')
                     with allure.step("获取购买定期前BTC购买定期数量"):
-                        fix_amount_latest = AccountFunction.get_crypto_number(type='BTC',
+                        fix_amount_latest = ApiFunction.get_crypto_number(type='BTC',
                                                                            balance_type='BALANCE_TYPE_AVAILABLE',
                                                                            wallet_type='SAVING-FIX')
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert AccountFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
+                        assert ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
                         assert Decimal(balance_amount_old) - Decimal(data['subscribe_amount']['amount']) == Decimal(balance_amount_latest), '购买定期产品后钱包余额错误,购买前钱包BTC数量{},购买定期数量{},购买后钱包BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(saving_amount_latest), '购买定期产品后活期金额错误,购买前活期BTC数量{},购买后活期BTC数量{}'.format(saving_amount_old, saving_amount_latest)
                         assert Decimal(fix_amount_old) + Decimal(data['subscribe_amount']['amount']) == Decimal(fix_amount_latest), '购买定期产品后定期金额错误,购买前定期BTC数量{},购买定期数量{},购买后定期BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
                 elif i['code'] == 'ETH':
                     with allure.step("获取购买定期前ETH可用数量"):
-                        balance_amount_old = AccountFunction.get_crypto_number(type='ETH',
+                        balance_amount_old = ApiFunction.get_crypto_number(type='ETH',
                                                                                balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                wallet_type='BALANCE')
                     with allure.step("获取购买定期前ETH购买活期数量"):
-                        saving_amount_old = AccountFunction.get_crypto_number(type='ETH',
+                        saving_amount_old = ApiFunction.get_crypto_number(type='ETH',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING')
                     with allure.step("获取购买定期前ETH购买定期数量"):
-                        fix_amount_old = AccountFunction.get_crypto_number(type='ETH',
+                        fix_amount_old = ApiFunction.get_crypto_number(type='ETH',
                                                                            balance_type='BALANCE_TYPE_AVAILABLE',
                                                                            wallet_type='SAVING-FIX')
                     data = {
@@ -152,35 +152,35 @@ class TestFixedApi:
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                     with allure.step("获取购买定期前ETH可用数量"):
-                        balance_amount_latest = AccountFunction.get_crypto_number(type='ETH',
+                        balance_amount_latest = ApiFunction.get_crypto_number(type='ETH',
                                                                                   balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                   wallet_type='BALANCE')
                     with allure.step("获取购买定期前ETH购买活期数量"):
-                        saving_amount_latest = AccountFunction.get_crypto_number(type='ETH',
+                        saving_amount_latest = ApiFunction.get_crypto_number(type='ETH',
                                                                                  balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                  wallet_type='SAVING')
                     with allure.step("获取购买定期前ETH购买定期数量"):
-                        fix_amount_latest = AccountFunction.get_crypto_number(type='ETH',
+                        fix_amount_latest = ApiFunction.get_crypto_number(type='ETH',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING-FIX')
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert AccountFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
+                        assert ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
                         assert Decimal(balance_amount_old) - Decimal(data['subscribe_amount']['amount']) == Decimal(balance_amount_latest), '购买定期产品后钱包余额错误,购买前钱包BTC数量{},购买定期数量{},购买后钱包BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(saving_amount_latest), '购买定期产品后活期金额错误,购买前活期BTC数量{},购买后活期BTC数量{}'.format(saving_amount_old, saving_amount_latest)
                         assert Decimal(fix_amount_old) + Decimal(data['subscribe_amount']['amount']) == Decimal(fix_amount_latest), '购买定期产品后定期金额错误,购买前定期BTC数量{},购买定期数量{},购买后定期BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
                 elif i['code'] == 'USDT':
                     with allure.step("获取购买定期前ETH可用数量"):
-                        balance_amount_old = AccountFunction.get_crypto_number(type='USDT',
+                        balance_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                                   balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                   wallet_type='BALANCE')
                     with allure.step("获取购买定期前ETH购买活期数量"):
-                        saving_amount_old = AccountFunction.get_crypto_number(type='USDT',
+                        saving_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                                  balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                  wallet_type='SAVING')
                     with allure.step("获取购买定期前ETH购买定期数量"):
-                        fix_amount_old = AccountFunction.get_crypto_number(type='USDT',
+                        fix_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING-FIX')
                     data = {
@@ -199,21 +199,21 @@ class TestFixedApi:
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                     with allure.step("获取购买定期前USDT可用数量"):
-                        balance_amount_latest = AccountFunction.get_crypto_number(type='USDT',
+                        balance_amount_latest = ApiFunction.get_crypto_number(type='USDT',
                                                                                   balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                   wallet_type='BALANCE')
                     with allure.step("获取购买定期前USDT购买活期数量"):
-                        saving_amount_latest = AccountFunction.get_crypto_number(type='USDT',
+                        saving_amount_latest = ApiFunction.get_crypto_number(type='USDT',
                                                                                  balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                  wallet_type='SAVING')
                     with allure.step("获取购买定期前USDT购买定期数量"):
-                        fix_amount_latest = AccountFunction.get_crypto_number(type='USDT',
+                        fix_amount_latest = ApiFunction.get_crypto_number(type='USDT',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING-FIX')
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert AccountFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
+                        assert ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
                         assert Decimal(balance_amount_old) - Decimal(data['subscribe_amount']['amount']) == Decimal(balance_amount_latest), '购买定期产品后钱包余额错误,购买前钱包BTC数量{},购买定期数量{},购买后钱包BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(saving_amount_latest), '购买定期产品后活期金额错误,购买前活期BTC数量{},购买后活期BTC数量{}'.format(saving_amount_old, saving_amount_latest)
                         assert Decimal(fix_amount_old) + Decimal(data['subscribe_amount']['amount']) == Decimal(fix_amount_latest), '购买定期产品后定期金额错误,购买前定期BTC数量{},购买定期数量{},购买后定期BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
@@ -233,15 +233,15 @@ class TestFixedApi:
                 max_input = y['subscribe_attr']['subscribe_min_amount']
                 logger.info('定期产品product_id是{}'.format(y['product_id']))
                 with allure.step("获取购买定期前BTC可用数量"):
-                    balance_amount_old = AccountFunction.get_crypto_number(type='BTC',
+                    balance_amount_old = ApiFunction.get_crypto_number(type='BTC',
                                                                            balance_type='BALANCE_TYPE_AVAILABLE',
                                                                            wallet_type='BALANCE')
                 with allure.step("获取购买定期前BTC购买活期数量"):
-                    saving_amount_old = AccountFunction.get_crypto_number(type='BTC',
+                    saving_amount_old = ApiFunction.get_crypto_number(type='BTC',
                                                                           balance_type='BALANCE_TYPE_AVAILABLE',
                                                                           wallet_type='SAVING')
                 with allure.step("获取购买定期前BTC购买定期数量"):
-                    fix_amount_old = AccountFunction.get_crypto_number(type='BTC',
+                    fix_amount_old = ApiFunction.get_crypto_number(type='BTC',
                                                                        balance_type='BALANCE_TYPE_AVAILABLE',
                                                                        wallet_type='SAVING-FIX')
                 if i['code'] == 'BTC':
@@ -264,15 +264,15 @@ class TestFixedApi:
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                     with allure.step("获取购买定期前BTC可用数量"):
-                        balance_amount_latest = AccountFunction.get_crypto_number(type='BTC',
+                        balance_amount_latest = ApiFunction.get_crypto_number(type='BTC',
                                                                                   balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                   wallet_type='BALANCE')
                     with allure.step("获取购买定期前BTC购买活期数量"):
-                        saving_amount_latest = AccountFunction.get_crypto_number(type='BTC',
+                        saving_amount_latest = ApiFunction.get_crypto_number(type='BTC',
                                                                                  balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                  wallet_type='SAVING')
                     with allure.step("获取购买定期前BTC购买定期数量"):
-                        fix_amount_latest = AccountFunction.get_crypto_number(type='BTC',
+                        fix_amount_latest = ApiFunction.get_crypto_number(type='BTC',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING-FIX')
                     with allure.step("校验状态码"):
@@ -284,15 +284,15 @@ class TestFixedApi:
                         assert Decimal(fix_amount_old) == Decimal(fix_amount_latest), '购买定期产品最小额度错误,购买前定期BTC数量{},购买后定期BTC数量{}'.format(balance_amount_old,  balance_amount_latest)
                 elif i['code'] == 'ETH':
                     with allure.step("获取购买定期前ETH可用数量"):
-                        balance_amount_old = AccountFunction.get_crypto_number(type='ETH',
+                        balance_amount_old = ApiFunction.get_crypto_number(type='ETH',
                                                                                balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                wallet_type='BALANCE')
                     with allure.step("获取购买定期前ETH购买活期数量"):
-                        saving_amount_old = AccountFunction.get_crypto_number(type='ETH',
+                        saving_amount_old = ApiFunction.get_crypto_number(type='ETH',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING')
                     with allure.step("获取购买定期前ETH购买定期数量"):
-                        fix_amount_old = AccountFunction.get_crypto_number(type='ETH',
+                        fix_amount_old = ApiFunction.get_crypto_number(type='ETH',
                                                                            balance_type='BALANCE_TYPE_AVAILABLE',
                                                                            wallet_type='SAVING-FIX')
                     data = {
@@ -314,15 +314,15 @@ class TestFixedApi:
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                     with allure.step("获取购买定期前ETH可用数量"):
-                        balance_amount_latest = AccountFunction.get_crypto_number(type='ETH',
+                        balance_amount_latest = ApiFunction.get_crypto_number(type='ETH',
                                                                                   balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                   wallet_type='BALANCE')
                     with allure.step("获取购买定期前ETH购买活期数量"):
-                        saving_amount_latest = AccountFunction.get_crypto_number(type='ETH',
+                        saving_amount_latest = ApiFunction.get_crypto_number(type='ETH',
                                                                                  balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                  wallet_type='SAVING')
                     with allure.step("获取购买定期前ETH购买定期数量"):
-                        fix_amount_latest = AccountFunction.get_crypto_number(type='ETH',
+                        fix_amount_latest = ApiFunction.get_crypto_number(type='ETH',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING-FIX')
                     with allure.step("校验状态码"):
@@ -334,15 +334,15 @@ class TestFixedApi:
                         assert Decimal(fix_amount_old) == Decimal(fix_amount_latest), '购买定期产品最小额度错误,购买前定期ETH数量{},购买后定期ETH数量{}'.format(balance_amount_old,  balance_amount_latest)
                 elif i['code'] == 'USDT':
                     with allure.step("获取购买定期前ETH可用数量"):
-                        balance_amount_old = AccountFunction.get_crypto_number(type='USDT',
+                        balance_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                                balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                wallet_type='BALANCE')
                     with allure.step("获取购买定期前ETH购买活期数量"):
-                        saving_amount_old = AccountFunction.get_crypto_number(type='USDT',
+                        saving_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING')
                     with allure.step("获取购买定期前ETH购买定期数量"):
-                        fix_amount_old = AccountFunction.get_crypto_number(type='USDT',
+                        fix_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                            balance_type='BALANCE_TYPE_AVAILABLE',
                                                                            wallet_type='SAVING-FIX')
                     data = {
@@ -364,15 +364,15 @@ class TestFixedApi:
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                     with allure.step("获取购买定期前USDT可用数量"):
-                        balance_amount_latest = AccountFunction.get_crypto_number(type='USDT',
+                        balance_amount_latest = ApiFunction.get_crypto_number(type='USDT',
                                                                                   balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                   wallet_type='BALANCE')
                     with allure.step("获取购买定期前USDT购买活期数量"):
-                        saving_amount_latest = AccountFunction.get_crypto_number(type='USDT',
+                        saving_amount_latest = ApiFunction.get_crypto_number(type='USDT',
                                                                                  balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                  wallet_type='SAVING')
                     with allure.step("获取购买定期前USDT购买定期数量"):
-                        fix_amount_latest = AccountFunction.get_crypto_number(type='USDT',
+                        fix_amount_latest = ApiFunction.get_crypto_number(type='USDT',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING-FIX')
                     with allure.step("校验状态码"):
@@ -398,15 +398,15 @@ class TestFixedApi:
                 max_input = y['subscribe_attr']['user_single_subscribe_upper_limit']
                 logger.info('定期产品product_id是{}'.format(y['product_id']))
                 with allure.step("获取购买定期前BTC可用数量"):
-                    balance_amount_old = AccountFunction.get_crypto_number(type='BTC',
+                    balance_amount_old = ApiFunction.get_crypto_number(type='BTC',
                                                                            balance_type='BALANCE_TYPE_AVAILABLE',
                                                                            wallet_type='BALANCE')
                 with allure.step("获取购买定期前BTC购买活期数量"):
-                    saving_amount_old = AccountFunction.get_crypto_number(type='BTC',
+                    saving_amount_old = ApiFunction.get_crypto_number(type='BTC',
                                                                           balance_type='BALANCE_TYPE_AVAILABLE',
                                                                           wallet_type='SAVING')
                 with allure.step("获取购买定期前BTC购买定期数量"):
-                    fix_amount_old = AccountFunction.get_crypto_number(type='BTC',
+                    fix_amount_old = ApiFunction.get_crypto_number(type='BTC',
                                                                        balance_type='BALANCE_TYPE_AVAILABLE',
                                                                        wallet_type='SAVING-FIX')
                 if i['code'] == 'BTC':
@@ -429,15 +429,15 @@ class TestFixedApi:
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                     with allure.step("获取购买定期前BTC可用数量"):
-                        balance_amount_latest = AccountFunction.get_crypto_number(type='BTC',
+                        balance_amount_latest = ApiFunction.get_crypto_number(type='BTC',
                                                                                   balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                   wallet_type='BALANCE')
                     with allure.step("获取购买定期前BTC购买活期数量"):
-                        saving_amount_latest = AccountFunction.get_crypto_number(type='BTC',
+                        saving_amount_latest = ApiFunction.get_crypto_number(type='BTC',
                                                                                  balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                  wallet_type='SAVING')
                     with allure.step("获取购买定期前BTC购买定期数量"):
-                        fix_amount_latest = AccountFunction.get_crypto_number(type='BTC',
+                        fix_amount_latest = ApiFunction.get_crypto_number(type='BTC',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING-FIX')
                     with allure.step("校验状态码"):
@@ -455,15 +455,15 @@ class TestFixedApi:
                                                                                                 balance_amount_latest)
                 elif i['code'] == 'ETH':
                     with allure.step("获取购买定期前ETH可用数量"):
-                        balance_amount_old = AccountFunction.get_crypto_number(type='ETH',
+                        balance_amount_old = ApiFunction.get_crypto_number(type='ETH',
                                                                                balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                wallet_type='BALANCE')
                     with allure.step("获取购买定期前ETH购买活期数量"):
-                        saving_amount_old = AccountFunction.get_crypto_number(type='ETH',
+                        saving_amount_old = ApiFunction.get_crypto_number(type='ETH',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING')
                     with allure.step("获取购买定期前ETH购买定期数量"):
-                        fix_amount_old = AccountFunction.get_crypto_number(type='ETH',
+                        fix_amount_old = ApiFunction.get_crypto_number(type='ETH',
                                                                            balance_type='BALANCE_TYPE_AVAILABLE',
                                                                            wallet_type='SAVING-FIX')
                     data = {
@@ -485,15 +485,15 @@ class TestFixedApi:
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                     with allure.step("获取购买定期前ETH可用数量"):
-                        balance_amount_latest = AccountFunction.get_crypto_number(type='ETH',
+                        balance_amount_latest = ApiFunction.get_crypto_number(type='ETH',
                                                                                   balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                   wallet_type='BALANCE')
                     with allure.step("获取购买定期前ETH购买活期数量"):
-                        saving_amount_latest = AccountFunction.get_crypto_number(type='ETH',
+                        saving_amount_latest = ApiFunction.get_crypto_number(type='ETH',
                                                                                  balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                  wallet_type='SAVING')
                     with allure.step("获取购买定期前ETH购买定期数量"):
-                        fix_amount_latest = AccountFunction.get_crypto_number(type='ETH',
+                        fix_amount_latest = ApiFunction.get_crypto_number(type='ETH',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING-FIX')
                     with allure.step("校验状态码"):
@@ -511,15 +511,15 @@ class TestFixedApi:
                                                                                                 balance_amount_latest)
                 elif i['code'] == 'USDT':
                     with allure.step("获取购买定期前ETH可用数量"):
-                        balance_amount_old = AccountFunction.get_crypto_number(type='USDT',
+                        balance_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                                balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                wallet_type='BALANCE')
                     with allure.step("获取购买定期前ETH购买活期数量"):
-                        saving_amount_old = AccountFunction.get_crypto_number(type='USDT',
+                        saving_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING')
                     with allure.step("获取购买定期前ETH购买定期数量"):
-                        fix_amount_old = AccountFunction.get_crypto_number(type='USDT',
+                        fix_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                            balance_type='BALANCE_TYPE_AVAILABLE',
                                                                            wallet_type='SAVING-FIX')
                     data = {
@@ -541,15 +541,15 @@ class TestFixedApi:
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                     with allure.step("获取购买定期前USDT可用数量"):
-                        balance_amount_latest = AccountFunction.get_crypto_number(type='USDT',
+                        balance_amount_latest = ApiFunction.get_crypto_number(type='USDT',
                                                                                   balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                   wallet_type='BALANCE')
                     with allure.step("获取购买定期前USDT购买活期数量"):
-                        saving_amount_latest = AccountFunction.get_crypto_number(type='USDT',
+                        saving_amount_latest = ApiFunction.get_crypto_number(type='USDT',
                                                                                  balance_type='BALANCE_TYPE_AVAILABLE',
                                                                                  wallet_type='SAVING')
                     with allure.step("获取购买定期前USDT购买定期数量"):
-                        fix_amount_latest = AccountFunction.get_crypto_number(type='USDT',
+                        fix_amount_latest = ApiFunction.get_crypto_number(type='USDT',
                                                                               balance_type='BALANCE_TYPE_AVAILABLE',
                                                                               wallet_type='SAVING-FIX')
                     with allure.step("校验状态码"):
@@ -632,7 +632,7 @@ class TestFixedApi:
     @pytest.mark.pro
     def test_fixed_009(self):
         with allure.step("申购一笔定期"):
-            transaction_info = AccountFunction.subscribe_fix()
+            transaction_info = ApiFunction.subscribe_fix()
         with allure.step("查询申购项目的交易记录详情"):
             r = session.request('GET', url='{}/earn/fix/transactions/{}'.format(env_url, transaction_info['tx_id']), headers=headers)
         with allure.step("状态码和返回值"):
@@ -711,7 +711,7 @@ class TestFixedApi:
     @pytest.mark.pro
     def test_fixed_013(self):
         with allure.step("申购一笔产品，并且获取信息"):
-            product_list = AccountFunction.subscribe_fix()
+            product_list = ApiFunction.subscribe_fix()
         with allure.step("打开这笔申购的自动复投"):
             data = {
                 "auto_renew": True
@@ -730,7 +730,7 @@ class TestFixedApi:
     @pytest.mark.pro
     def test_fixed_014(self):
         with allure.step("申购一笔产品，并且获取信息"):
-            product_list = AccountFunction.subscribe_fix()
+            product_list = ApiFunction.subscribe_fix()
         with allure.step("打开这笔申购的自动复投"):
             data = {
                 "auto_renew": True
@@ -770,14 +770,14 @@ class TestFixedApi:
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_fixed_016(self):
-        transaction_info = AccountFunction.subscribe_fix(auto_renew=True)
+        transaction_info = ApiFunction.subscribe_fix(auto_renew=True)
         logger.info("交易信息是{}".format(transaction_info))
 
     @allure.testcase('test_fixed_017 申购定期时，直接关闭复投开关')
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_fixed_017(self):
-        transaction_info = AccountFunction.subscribe_fix()
+        transaction_info = ApiFunction.subscribe_fix()
         logger.info("交易信息是{}".format(transaction_info))
 
     @allure.testcase('test_fixed_018 查询包含复投的交易记录')

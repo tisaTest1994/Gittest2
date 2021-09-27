@@ -6,7 +6,7 @@ from Function.operate_sql import *
 class TestKycApi:
     # 初始化class
     def setup_method(self):
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
 
     @allure.testcase('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
     @pytest.mark.multiprocess
@@ -32,9 +32,9 @@ class TestKycApi:
         account = generate_email()
         password = 'Abc112233'
         with allure.step("提前先注册好"):
-            AccountFunction.sign_up(account, password)
+            ApiFunction.sign_up(account, password)
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=account, password=password)
+            accessToken = ApiFunction.get_account_token(account=account, password=password)
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取随机国家代码"):
@@ -44,7 +44,7 @@ class TestKycApi:
                 "citizenCountryCode": citizenCountryCode
             }
             r = session.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
-        AccountFunction.get_account_token()
+        ApiFunction.get_account_token()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -59,7 +59,7 @@ class TestKycApi:
         account = generate_email()
         password = 'Abc112233'
         with allure.step("提前先注册好"):
-            AccountFunction.sign_up(account, password)
+            ApiFunction.sign_up(account, password)
         allure.dynamic.description("调用kyc")
         with allure.step("未申请kyc获取kyc-case失败"):
             data = {

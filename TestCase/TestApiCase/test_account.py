@@ -7,7 +7,7 @@ class TestAccountApi:
 
     # 初始化class
     def setup_method(self):
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
 
     @allure.testcase('test_account_001 成功注册新用户')
     @pytest.mark.multiprocess
@@ -36,7 +36,7 @@ class TestAccountApi:
     def test_account_002(self):
         account = generate_email()
         with allure.step("提前先注册好"):
-            AccountFunction.sign_up(account)
+            ApiFunction.sign_up(account)
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
         with allure.step("注册"):
@@ -197,7 +197,7 @@ class TestAccountApi:
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_account_011(self):
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token()
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token()
         with allure.step("获取refreshToken"):
             data = {
                 "username": get_json()['email']['email'],
@@ -276,7 +276,7 @@ class TestAccountApi:
         account = get_json()['email']['email']
         password = get_json()['email']['password']
         with allure.step("获取token"):
-            accessToken = AccountFunction.get_account_token(account=account, password=password)
+            accessToken = ApiFunction.get_account_token(account=account, password=password)
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("使用错误原始密码修改密码"):
@@ -335,7 +335,7 @@ class TestAccountApi:
             account = generate_email()
             password = get_json()['email']['password']
             with allure.step("提前先注册好"):
-                AccountFunction.sign_up(account, password)
+                ApiFunction.sign_up(account, password)
             data = {
                 "code": "666666",
                 "email": account,
@@ -376,7 +376,7 @@ class TestAccountApi:
             account = generate_email()
             password = get_json()['email']['password']
             with allure.step("提前先注册好"):
-                AccountFunction.sign_up(account, password)
+                ApiFunction.sign_up(account, password)
         with allure.step("用户忘记密码验证码错误"):
             data = {
                 "code": "166666",
@@ -507,7 +507,7 @@ class TestAccountApi:
     #     with allure.step("校验返回值"):
     #         assert r.json() == {}, "使用相同的密码修改密码错误，返回值是{}".format(r.text)
     #     with allure.step("用新密码重新登录"):
-    #         AccountFunction.get_account_token(account=get_json()['email']['email'], password=password)
+    #         ApiFunction.get_account_token(account=get_json()['email']['email'], password=password)
 
     @allure.testcase('test_account_027 获取mfa邮箱验证码')
     @pytest.mark.multiprocess
@@ -525,9 +525,9 @@ class TestAccountApi:
     @allure.testcase('test_account_028 获取opt二维码')
     @pytest.mark.multiprocess
     def test_account_028(self):
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account='yilei1@163.com')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei1@163.com')
         r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -539,7 +539,7 @@ class TestAccountApi:
     @allure.testcase('test_account_029 创建opt验证，并且删除。')
     @pytest.mark.multiprocess
     def test_account_029(self):
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account='yilei3@163.com')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei3@163.com')
         # 获得opt secretKey
         r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
         if 'ACC_SECURITY_MFA_000001' in r.text:
@@ -588,13 +588,13 @@ class TestAccountApi:
         session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data),
                          headers=headers)
         write_json('secretKeyForTest', ' ')
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
 
     @allure.testcase('test_account_030 验证opt code')
     @pytest.mark.multiprocess
     def test_account_030(self):
         # 验证opt code
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account='external.qa@cabital.com')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
         secretKey = get_json()['secretKey']
         totp = pyotp.TOTP(secretKey)
         mfaVerificationCode = totp.now()
@@ -602,7 +602,7 @@ class TestAccountApi:
             "totp": str(mfaVerificationCode)
         }
         r = session.request('POST', url='{}/account/security/mfa/otp/verify'.format(env_url), data=json.dumps(data), headers=headers)
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -790,41 +790,41 @@ class TestAccountApi:
     def test_account_040(self):
         account = get_json()['email']['payout_email']
         with allure.step("发忘记密码邮件"):
-            code = AccountFunction.get_verification_code('FORGET_PASSWORD', account)
+            code = ApiFunction.get_verification_code('FORGET_PASSWORD', account)
         with allure.step("验证忘记密码邮件"):
-            AccountFunction.verify_verification_code('FORGET_PASSWORD', account, code)
-        AccountFunction.add_headers()
+            ApiFunction.verify_verification_code('FORGET_PASSWORD', account, code)
+        ApiFunction.add_headers()
 
     @allure.testcase('test_account_041 开启MFA且验证code')
     @pytest.mark.singleProcess
     def test_account_041(self):
         account = get_json()['email']['payout_email']
         with allure.step("开启MFA且验证code"):
-            code = AccountFunction.get_verification_code('ENABLE_MFA', account)
+            code = ApiFunction.get_verification_code('ENABLE_MFA', account)
         with allure.step("开启MFA且验证code"):
-            AccountFunction.verify_verification_code('ENABLE_MFA', account, code)
-        AccountFunction.add_headers()
+            ApiFunction.verify_verification_code('ENABLE_MFA', account, code)
+        ApiFunction.add_headers()
 
     @allure.testcase('test_account_042 关闭MFA且验证code')
     @pytest.mark.singleProcess
     def test_account_042(self):
         account = get_json()['email']['payout_email']
         with allure.step("关闭MFA且验证code"):
-            code = AccountFunction.get_verification_code('DISABLE_MFA', account)
+            code = ApiFunction.get_verification_code('DISABLE_MFA', account)
         with allure.step("关闭MFA且验证code"):
-            AccountFunction.verify_verification_code('DISABLE_MFA', account, code)
-        AccountFunction.add_headers()
+            ApiFunction.verify_verification_code('DISABLE_MFA', account, code)
+        ApiFunction.add_headers()
 
     @allure.testcase('test_account_043 MFA且验证code')
     @pytest.mark.singleProcess
     def test_account_043(self):
         account = get_json()['email']['payout_email']
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(account=account)
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account)
         with allure.step("MFA且验证code"):
-            code = AccountFunction.get_verification_code('MFA_EMAIL', account)
+            code = ApiFunction.get_verification_code('MFA_EMAIL', account)
         with allure.step("MFA且验证code"):
-            AccountFunction.verify_verification_code('MFA_EMAIL', account, code)
-        AccountFunction.add_headers()
+            ApiFunction.verify_verification_code('MFA_EMAIL', account, code)
+        ApiFunction.add_headers()
 
     @allure.testcase('test_account_044 多次referal注册用户')
     @pytest.mark.multiprocess

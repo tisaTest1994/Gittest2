@@ -7,7 +7,7 @@ class TestMarketApi:
 
     # 初始化
     def setup_method(self):
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
 
     @allure.testcase('test_market_001 获得价格曲线')
     @pytest.mark.multiprocess

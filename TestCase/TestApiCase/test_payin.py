@@ -7,7 +7,7 @@ class TestPayInApi:
 
     # 初始化class
     def setup_method(self):
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
 
     @allure.testcase('test_pay_in_001 查询转入地址记录（不指定链）')
     @pytest.mark.multiprocess

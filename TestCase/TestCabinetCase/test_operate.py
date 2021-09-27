@@ -7,7 +7,7 @@ class TestOperateApi:
 
     # 初始化class
     def setup_method(self):
-        headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
             account=get_json()['operate_admin_account']['email'],
             password=get_json()['operate_admin_account']['password'], type='operate')
 
@@ -281,7 +281,7 @@ class TestOperateApi:
     @pytest.mark.multiprocess
     def test_operate_012(self):
         with allure.step("获得token"):
-            accessToken = AccountFunction.get_account_token(account=get_json()['operate_admin_account']['email'],
+            accessToken = ApiFunction.get_account_token(account=get_json()['operate_admin_account']['email'],
                                                             password=get_json()['operate_admin_account']['password'],
                                                             type='operate')
         with allure.step("把token写入headers"):

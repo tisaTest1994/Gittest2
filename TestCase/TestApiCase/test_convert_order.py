@@ -7,7 +7,7 @@ class TestConvertOrderApi:
 
     # 初始化class
     def setup_method(self):
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
 
     @allure.testcase('test_convert_order_001 根据id编号查询单笔交易')
     @pytest.mark.multiprocess
@@ -15,7 +15,7 @@ class TestConvertOrderApi:
         # 获得 cfx_book
         cfx_book = get_json()['cfx_book']
         # 从数据库拿到某日数据
-        cfx_info = AccountFunction.get_cfx_info(day_time='2021-05-31')
+        cfx_info = ApiFunction.get_cfx_info(day_time='2021-05-31')
         # 拆分每一天
         time_info = []
         for i in cfx_info:

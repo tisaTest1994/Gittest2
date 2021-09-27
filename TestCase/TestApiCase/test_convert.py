@@ -7,16 +7,16 @@ class TestConvertApi:
 
     # 初始化class
     def setup_method(self):
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
 
     @allure.testcase('test_convert_001 根据id编号查询单笔交易')
     @pytest.mark.singleProcess
     def test_convert_001(self):
         with allure.step("获得交易transaction_id"):
-            transaction_id = AccountFunction.get_payout_transaction_id()
+            transaction_id = ApiFunction.get_payout_transaction_id()
             logger.info('transaction_id 是{}'.format(transaction_id))
         with allure.step("查询单笔交易"):
-            headers['Authorization'] = "Bearer " + AccountFunction.get_account_token(
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
             params = {
                 "txn_sub_type": 6
@@ -97,9 +97,9 @@ class TestConvertApi:
                 cryptos = i.split('-')
                 with allure.step("major_ccy 是buy值，正兑换"):
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[0])
+                        buy_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[0])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[1])
+                        sell_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[1])
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         buy_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -115,7 +115,7 @@ class TestConvertApi:
                         if len(str(buy_amount).split('.')[1]) >= 2:
                             buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
                                                         str(buy_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
                     sell_amount = str(float(buy_amount) * float(quote['quote']))
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         if len(str(sell_amount).split('.')[1]) >= 8:
@@ -144,9 +144,9 @@ class TestConvertApi:
                     logger.info('换汇返回值{}'.format(r.text))
                     assert r.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[0])
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[0])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[1])
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[1])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[0],
                                                                                   buy_amount_wallet_balance,
                                                                                   buy_amount,
@@ -163,9 +163,9 @@ class TestConvertApi:
                         cryptos[1], sell_amount_wallet_balance, sell_amount, sell_amount_wallet_balance_latest)
                 with allure.step("major_ccy 是buy值，逆兑换 "):
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[1])
+                        buy_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[1])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[0])
+                        sell_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[0])
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         buy_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -181,7 +181,7 @@ class TestConvertApi:
                         if len(str(buy_amount).split('.')[1]) >= 2:
                             buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
                                                         str(buy_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
                     sell_amount = str(float(buy_amount) * float(quote['quote']))
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         if len(str(sell_amount).split('.')[1]) >= 8:
@@ -210,9 +210,9 @@ class TestConvertApi:
                     logger.info('换汇返回值{}'.format(r1.text))
                     assert r1.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r1.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[1])
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[1])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[0])
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[0])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[1],
                                                                                   buy_amount_wallet_balance,
                                                                                   buy_amount,
@@ -229,9 +229,9 @@ class TestConvertApi:
                         cryptos[0], sell_amount_wallet_balance, sell_amount, sell_amount_wallet_balance_latest)
                 with allure.step("major_ccy 是sell值，正兑换 "):
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[0])
+                        buy_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[0])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[1])
+                        sell_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[1])
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         sell_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -247,7 +247,7 @@ class TestConvertApi:
                         if len(str(sell_amount).split('.')[1]) >= 2:
                             sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
                                                          str(sell_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
                     buy_amount = str(float(sell_amount) / float(quote['quote']))
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -276,9 +276,9 @@ class TestConvertApi:
                     logger.info('换汇返回值{}'.format(r2.text))
                     assert r2.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r2.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[0])
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[0])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[1])
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[1])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[0],
                                                                                   buy_amount_wallet_balance,
                                                                                   buy_amount,
@@ -295,9 +295,9 @@ class TestConvertApi:
                         cryptos[1], sell_amount_wallet_balance, sell_amount, sell_amount_wallet_balance_latest)
                 with allure.step("major_ccy 是sell值，逆兑换"):
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[1])
+                        buy_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[1])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[0])
+                        sell_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[0])
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         sell_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -313,7 +313,7 @@ class TestConvertApi:
                         if len(str(sell_amount).split('.')[1]) >= 2:
                             sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
                                                          str(sell_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
                     buy_amount = str(float(sell_amount) / float(quote['quote']))
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -342,9 +342,9 @@ class TestConvertApi:
                     logger.info('换汇返回值{}'.format(r3.text))
                     assert r3.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[1])
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[1])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[0])
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[0])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[1],
                                                                                   buy_amount_wallet_balance,
                                                                                   buy_amount,
@@ -364,7 +364,7 @@ class TestConvertApi:
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_convert_006(self):
-        quote = AccountFunction.get_quote('BTC-USDT')
+        quote = ApiFunction.get_quote('BTC-USDT')
         sell_amount = str(float(0.01) * float(quote['quote']))
         sleep(30)
         data = {
@@ -405,7 +405,7 @@ class TestConvertApi:
                         if len(str(buy_amount).split('.')[1]) >= 2:
                             buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
                                                         str(buy_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
                     sell_amount = str(float(buy_amount) * float(quote['quote']))
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         if len(str(sell_amount).split('.')[1]) >= 8:
@@ -447,7 +447,7 @@ class TestConvertApi:
                         if len(str(buy_amount).split('.')[1]) >= 2:
                             buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
                                                         str(buy_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
                     sell_amount = str(float(buy_amount) * float(quote['quote']))
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         if len(str(sell_amount).split('.')[1]) >= 8:
@@ -489,7 +489,7 @@ class TestConvertApi:
                         if len(str(sell_amount).split('.')[1]) >= 2:
                             sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
                                                          str(sell_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
                     buy_amount = str(float(sell_amount) / float(quote['quote']))
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -531,7 +531,7 @@ class TestConvertApi:
                         if len(str(sell_amount).split('.')[1]) >= 2:
                             sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
                                                          str(sell_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
                     buy_amount = str(float(sell_amount) / float(quote['quote']))
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         if len(str(sell_amount).split('.')[1]) >= 8:
@@ -562,7 +562,7 @@ class TestConvertApi:
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_convert_008(self):
-        quote = AccountFunction.get_quote('BTC-USDT')
+        quote = ApiFunction.get_quote('BTC-USDT')
         data = {
             "quote_id": quote['quote_id'],
             "quote": quote['quote'],

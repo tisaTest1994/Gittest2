@@ -7,7 +7,7 @@ class TestFlexibleApi:
 
     # 初始化class
     def setup_method(self):
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
 
     @allure.testcase('test_flexible_001 获取产品列表')
     @pytest.mark.multiprocess
@@ -755,7 +755,7 @@ class TestFlexibleApi:
             # 随机获取一个id
             id = product['product_id']
             logger.info('项目id是{}'.format(id))
-            interest = AccountFunction.get_interest(id)
+            interest = ApiFunction.get_interest(id)
             logger.info('通过接口得到明日的利息是{}'.format(interest))
         sleep(2)
         with allure.step("自己计算明天计息情况"):

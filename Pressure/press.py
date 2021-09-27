@@ -10,7 +10,7 @@ class MyUser(HttpUser):
 
     @task(2)
     def core(self):
-        accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
+        accessToken = ApiFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken
         headers['X-Currency'] = 'USD'
         r = self.client.get(url="/core/account", headers=headers)
@@ -21,7 +21,7 @@ class MyUser(HttpUser):
 
     @task(0)
     def cfx(self):
-        accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
+        accessToken = ApiFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken
         headers['X-Currency'] = 'USD'
         with allure.step("换汇交易"):
@@ -31,9 +31,9 @@ class MyUser(HttpUser):
                 cryptos = i.split('-')
                 with allure.step("major_ccy 是buy值，正兑换"):
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[0])
+                        buy_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[0])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[1])
+                        sell_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[1])
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         buy_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -49,7 +49,7 @@ class MyUser(HttpUser):
                         if len(str(buy_amount).split('.')[1]) >= 2:
                             buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
                                                         str(buy_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
                     sell_amount = str(float(buy_amount) * float(quote['quote']))
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         if len(str(sell_amount).split('.')[1]) >= 8:
@@ -78,9 +78,9 @@ class MyUser(HttpUser):
                     logger.info('换汇返回值{}'.format(r.text))
                     assert r.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[0])
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[0])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[1])
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[1])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[0],
                                                                                   buy_amount_wallet_balance,
                                                                                   buy_amount,
@@ -91,9 +91,9 @@ class MyUser(HttpUser):
                                                                                     sell_amount_wallet_balance_latest))
                 with allure.step("major_ccy 是buy值，逆兑换 "):
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[1])
+                        buy_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[1])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[0])
+                        sell_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[0])
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         buy_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -109,7 +109,7 @@ class MyUser(HttpUser):
                         if len(str(buy_amount).split('.')[1]) >= 2:
                             buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
                                                         str(buy_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
                     sell_amount = str(float(buy_amount) * float(quote['quote']))
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         if len(str(sell_amount).split('.')[1]) >= 8:
@@ -138,9 +138,9 @@ class MyUser(HttpUser):
                     logger.info('换汇返回值{}'.format(r1.text))
                     assert r1.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r1.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[1])
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[1])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[0])
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[0])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[1],
                                                                                   buy_amount_wallet_balance,
                                                                                   buy_amount,
@@ -151,9 +151,9 @@ class MyUser(HttpUser):
                                                                                     sell_amount_wallet_balance_latest))
                 with allure.step("major_ccy 是sell值，正兑换 "):
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[0])
+                        buy_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[0])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[1])
+                        sell_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[1])
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         sell_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -169,7 +169,7 @@ class MyUser(HttpUser):
                         if len(str(sell_amount).split('.')[1]) >= 2:
                             sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
                                                          str(sell_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
                     buy_amount = str(float(sell_amount) / float(quote['quote']))
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -198,9 +198,9 @@ class MyUser(HttpUser):
                     logger.info('换汇返回值{}'.format(r2.text))
                     assert r2.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r2.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[0])
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[0])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[1])
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[1])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[0],
                                                                                   buy_amount_wallet_balance,
                                                                                   buy_amount,
@@ -211,9 +211,9 @@ class MyUser(HttpUser):
                                                                                     sell_amount_wallet_balance_latest))
                 with allure.step("major_ccy 是sell值，逆兑换"):
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[1])
+                        buy_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[1])
                     with allure.step('获取没换汇前buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance = AccountFunction.get_crypto_number(type=cryptos[0])
+                        sell_amount_wallet_balance = ApiFunction.get_crypto_number(type=cryptos[0])
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
                         sell_amount = random.uniform(0.01, 0.19)
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -229,7 +229,7 @@ class MyUser(HttpUser):
                         if len(str(sell_amount).split('.')[1]) >= 2:
                             sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
                                                          str(sell_amount).split('.')[1][:2])
-                    quote = AccountFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
+                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
                     buy_amount = str(float(sell_amount) / float(quote['quote']))
                     if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
                         if len(str(buy_amount).split('.')[1]) >= 8:
@@ -258,9 +258,9 @@ class MyUser(HttpUser):
                     logger.info('换汇返回值{}'.format(r3.text))
                     assert r3.json()['transaction']['status'] == 2, '换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        buy_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[1])
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[1])
                     with allure.step('获取没换汇后buy货币钱包中可用数量'):
-                        sell_amount_wallet_balance_latest = AccountFunction.get_crypto_number(type=cryptos[0])
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cryptos[0])
                     logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cryptos[1],
                                                                                   buy_amount_wallet_balance,
                                                                                   buy_amount,
@@ -272,7 +272,7 @@ class MyUser(HttpUser):
 
     @task(0)
     def earn_current(self):
-        accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
+        accessToken = ApiFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken
         headers['X-Currency'] = 'USD'
         data = {
@@ -288,7 +288,7 @@ class MyUser(HttpUser):
 
     @task(0)
     def redeem_current(self):
-        accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
+        accessToken = ApiFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken
         headers['X-Currency'] = 'USD'
         data = {
@@ -304,7 +304,7 @@ class MyUser(HttpUser):
 
     @task(0)
     def fixed(self):
-        accessToken = AccountFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
+        accessToken = ApiFunction.get_account_token(account=random.choice(MyUser.account_list), password='Zcdsw123')
         headers['Authorization'] = "Bearer " + accessToken
         headers['X-Currency'] = 'USD'
         with allure.step("获取定期产品列表"):

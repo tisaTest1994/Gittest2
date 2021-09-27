@@ -6,7 +6,7 @@ class TestAssetApi:
 
     # 初始化class
     def setup_method(self):
-        AccountFunction.add_headers()
+        ApiFunction.add_headers()
 
     @allure.testcase('test_asset_001 查询每个币种当前资产市值')
     @pytest.mark.multiprocess
@@ -23,7 +23,7 @@ class TestAssetApi:
             for i in crypto_list:
                 for y in r.json()['overview']:
                     if i == y['code']:
-                        assert AccountFunction.get_crypto_abs_amount(i) == y['value'], '{}币种当前资产市值是{},接口返回值是{}.查询每个币种当前资产市值错误'.format(i, AccountFunction.get_crypto_abs_amount(i), y['value'])
+                        assert ApiFunction.get_crypto_abs_amount(i) == y['value'], '{}币种当前资产市值是{},接口返回值是{}.查询每个币种当前资产市值错误'.format(i, ApiFunction.get_crypto_abs_amount(i), y['value'])
 
     @allure.testcase('test_asset_002 获取账户资金状态')
     @pytest.mark.multiprocess

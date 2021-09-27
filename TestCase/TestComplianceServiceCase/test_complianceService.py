@@ -10,7 +10,7 @@ class TestComplianceServiceApi:
     @allure.testcase('test_compliance_service_001 创建直接pass 个人 Kyc case后查询cases,最后发送接受结果信息')
     def test_compliance_service_001(self):
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook()
+            ApiFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -31,7 +31,7 @@ class TestComplianceServiceApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -48,20 +48,20 @@ class TestComplianceServiceApi:
                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
                 caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
                                                suggestion='SUGGEST_TO_ACCEPT')
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -80,7 +80,7 @@ class TestComplianceServiceApi:
                 "decision": "ACCEPT",
                 "comment": "决策备注"
             }
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
                                                     url='/api/v1/cases/{}/decision'.format(caseSystemId),
                                                     body=json.dumps(data))
             kyc_headers['ACCESS-SIGN'] = sign
@@ -95,15 +95,15 @@ class TestComplianceServiceApi:
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
                                                caseSystemId=caseSystemId)
 
     @allure.testcase('test_compliance_service_002 创建直接pass 个人 Kyc case后查询cases,最后发送不接受结果信息')
     def test_compliance_service_002(self):
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook()
+            ApiFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -123,7 +123,7 @@ class TestComplianceServiceApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -140,20 +140,20 @@ class TestComplianceServiceApi:
                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
                 caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
                                                suggestion='SUGGEST_TO_ACCEPT')
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -172,7 +172,7 @@ class TestComplianceServiceApi:
                 "decision": "REJECT",
                 "comment": "决策备注"
             }
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
                                                     url='/api/v1/cases/{}/decision'.format(caseSystemId),
                                                     body=json.dumps(data))
             kyc_headers['ACCESS-SIGN'] = sign
@@ -187,9 +187,9 @@ class TestComplianceServiceApi:
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='REJECT',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='REJECT',
                                                caseSystemId=caseSystemId)
 
     @allure.testcase('test_compliance_service_003 打开特定KYC Case的持续性扫描')
@@ -200,7 +200,7 @@ class TestComplianceServiceApi:
         elif get_json()['env'] == 'pro':
             caseSystemId = 'b1eb6d06-b86d-4b21-9106-0d47c7d94c19'
         unix_time = int(time.time())
-        sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+        sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
                                                 url='/api/v1/cases/{}/ogs'.format(caseSystemId))
         kyc_headers['ACCESS-SIGN'] = sign
         kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -222,7 +222,7 @@ class TestComplianceServiceApi:
             caseSystemId = '509ec7ae-e9e1-4c8e-899b-9c861c6bf64b'
         elif get_json()['env'] == 'pro':
             caseSystemId = 'b1eb6d06-b86d-4b21-9106-0d47c7d94c19'
-        sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='DELETE',
+        sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='DELETE',
                                                 url='/api/v1/cases/{}/ogs'.format(caseSystemId))
         kyc_headers['ACCESS-SIGN'] = sign
         kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -259,7 +259,7 @@ class TestComplianceServiceApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -280,7 +280,7 @@ class TestComplianceServiceApi:
         kyc_headers = self.kyc_headers
         unix_time = int(time.time())
         caseSystemId = "7829411a-955a-4ed0-b96c-729c63ea3009"
-        sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+        sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/cases/{}'.format(caseSystemId))
         kyc_headers['ACCESS-SIGN'] = sign
         kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -296,7 +296,7 @@ class TestComplianceServiceApi:
     @allure.testcase('test_compliance_service_007 创建直接pending cases Kyc case后查询cases')
     def test_compliance_service_007(self):
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook()
+            ApiFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -308,7 +308,7 @@ class TestComplianceServiceApi:
                 "individualInfo": {"gender": "MALE"}
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -325,14 +325,14 @@ class TestComplianceServiceApi:
             assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
             caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -349,7 +349,7 @@ class TestComplianceServiceApi:
     @allure.testcase('test_compliance_service_008 创建直接pass 企业 Kyc case后查询cases,最后发送接受结果信息')
     def test_compliance_service_008(self):
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook()
+            ApiFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
             kyc_headers = self.kyc_headers
             externalCaseId = generate_string(30)
@@ -363,7 +363,7 @@ class TestComplianceServiceApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -380,20 +380,20 @@ class TestComplianceServiceApi:
                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
                 caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
                                                suggestion='SUGGEST_TO_ACCEPT')
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -412,7 +412,7 @@ class TestComplianceServiceApi:
                 "decision": "ACCEPT",
                 "comment": "决策备注"
             }
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
                                                     url='/api/v1/cases/{}/decision'.format(caseSystemId),
                                                     body=json.dumps(data))
             kyc_headers['ACCESS-SIGN'] = sign
@@ -427,15 +427,15 @@ class TestComplianceServiceApi:
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
                                                caseSystemId=caseSystemId)
 
     @allure.testcase('test_compliance_service_009 创建直接pass 企业 Kyc case后查询cases,最后发送不接受结果信息')
     def test_compliance_service_009(self):
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook()
+            ApiFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
             kyc_headers = self.kyc_headers
             externalCaseId = generate_string(30)
@@ -449,7 +449,7 @@ class TestComplianceServiceApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -466,20 +466,20 @@ class TestComplianceServiceApi:
                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
                 caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
                                                suggestion='SUGGEST_TO_ACCEPT')
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -498,7 +498,7 @@ class TestComplianceServiceApi:
                 "decision": "REJECT",
                 "comment": "决策备注"
             }
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
                                                     url='/api/v1/cases/{}/decision'.format(caseSystemId),
                                                     body=json.dumps(data))
             kyc_headers['ACCESS-SIGN'] = sign
@@ -513,15 +513,15 @@ class TestComplianceServiceApi:
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='REJECT',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='REJECT',
                                                caseSystemId=caseSystemId)
 
     @allure.testcase('test_compliance_service_010 创建直接pass TNS_STREET case后查询cases,最后发送接受结果信息')
     def test_compliance_service_010(self):
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook()
+            ApiFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -534,7 +534,7 @@ class TestComplianceServiceApi:
                 "businessCode": "TNS_TRADER"
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -551,14 +551,14 @@ class TestComplianceServiceApi:
                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
                 caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -575,7 +575,7 @@ class TestComplianceServiceApi:
     @allure.testcase('test_compliance_service_011 创建直接pass TNS_TRADER case后查询cases,最后发送接受结果信息')
     def test_compliance_service_011(self):
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook()
+            ApiFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -588,7 +588,7 @@ class TestComplianceServiceApi:
                 "businessCode": "TNS_STREET"
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -605,14 +605,14 @@ class TestComplianceServiceApi:
                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
                 caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -629,7 +629,7 @@ class TestComplianceServiceApi:
     @allure.testcase('test_compliance_service_012 创建直接pass TNS_BANK_ACCOUNT_NAME case后查询cases,最后发送接受结果信息')
     def test_compliance_service_012(self):
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook()
+            ApiFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -642,7 +642,7 @@ class TestComplianceServiceApi:
                 "businessCode": "TNS_BANK_NAME"
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -659,14 +659,14 @@ class TestComplianceServiceApi:
                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
                 caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -683,7 +683,7 @@ class TestComplianceServiceApi:
     @allure.testcase('test_compliance_service_013 创建直接pass TNS_BANK_NAME case后查询cases,最后发送接受结果信息')
     def test_compliance_service_013(self):
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook()
+            ApiFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId))
@@ -696,7 +696,7 @@ class TestComplianceServiceApi:
                 "businessCode": "TNS_BANK_ACCOUNT_NAME"
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -713,14 +713,14 @@ class TestComplianceServiceApi:
                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
                 caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -738,7 +738,7 @@ class TestComplianceServiceApi:
     @pytest.mark.timeout(1200)
     def test_compliance_service_014(self):
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook()
+            ApiFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
             externalCaseId = generate_string(30)
             logger.info('externalCaseId是{}'.format(externalCaseId.lower()))
@@ -759,7 +759,7 @@ class TestComplianceServiceApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -776,20 +776,20 @@ class TestComplianceServiceApi:
                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
                 caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
                                                suggestion='SUGGEST_TO_ACCEPT')
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -808,7 +808,7 @@ class TestComplianceServiceApi:
                 "decision": "ACCEPT",
                 "comment": "决策备注"
             }
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
                                                     url='/api/v1/cases/{}/decision'.format(caseSystemId),
                                                     body=json.dumps(data))
             kyc_headers['ACCESS-SIGN'] = sign
@@ -823,14 +823,14 @@ class TestComplianceServiceApi:
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
                                                caseSystemId=caseSystemId)
         with allure.step("第二次"):
             pass
         with allure.step("删除旧的webhook"):
-            AccountFunction.delete_old_webhook()
+            ApiFunction.delete_old_webhook()
         with allure.step("准备测试数据"):
             logger.info('externalCaseId是{}'.format(externalCaseId.upper()))
             kyc_headers = self.kyc_headers
@@ -850,7 +850,7 @@ class TestComplianceServiceApi:
                 }
             }
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
                                                     body=json.dumps(data))
         with allure.step("把数据写入headers"):
             kyc_headers['ACCESS-SIGN'] = sign
@@ -867,20 +867,20 @@ class TestComplianceServiceApi:
                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
                 caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
                                                suggestion='SUGGEST_TO_ACCEPT')
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -899,7 +899,7 @@ class TestComplianceServiceApi:
                 "decision": "ACCEPT",
                 "comment": "决策备注"
             }
-            sign = AccountFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
                                                     url='/api/v1/cases/{}/decision'.format(caseSystemId),
                                                     body=json.dumps(data))
             kyc_headers['ACCESS-SIGN'] = sign
@@ -914,7 +914,7 @@ class TestComplianceServiceApi:
             with allure.step("校验返回值"):
                 assert '' in r.text, "发送确认接受结果信息错误，返回值是{}".format(r.text)
         with allure.step("获取新的wehbook"):
-            AccountFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='DecisionUpdated',
                                                caseSystemId=caseSystemId)
-            AccountFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
                                                caseSystemId=caseSystemId)
