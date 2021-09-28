@@ -17,6 +17,13 @@
     "email": "yilei1@cabital.com",
     "password": "Zcdsw123"
   },
+  "caas": {
+    "test": {
+      "account": "data.admin@cabital.com.uat",
+      "password": "9653EBF5AB191F638223E041954F124BB74CB94049D7919826BA3AFB42F5872E",
+      "url": "https://test.salesforce.com"
+    }
+  },
   "cfx_book": {
     "1": "BTC-USDT",
     "2": "BTC-ETH",
@@ -285,7 +292,7 @@
     "security_code": "enjizpmktzashqwp",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
   },
-  "env": "pro",
+  "env": "test",
   "headers": {
     "Content-Encoding": "deflate",
     "Content-Type": "application/json"
@@ -423,12 +430,5 @@
   "secretKey": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
   "secretKeyForTest": " ",
   "slackUrl": "https://hooks.slack.com/services/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",
-  "test": "https://api.latibac.com/api/v1",
-  "caas": {
-    "test": {
-      "url": "https://test.salesforce.com",
-      "account": "data.admin@cabital.com.uat",
-      "password": "9653EBF5AB191F638223E041954F124BB74CB94049D7919826BA3AFB42F5872E"
-    }
-  }
+  "test": "https://api.latibac.com/api/v1"
 }

@@ -6,7 +6,7 @@ from Function.operate_sql import *
 class TestAccountApi:
 
     # 初始化class
-    def setup_method(self):
+    def setup_function(self):
         ApiFunction.add_headers()
 
     @allure.testcase('test_account_001 成功注册新用户')
@@ -838,7 +838,7 @@ class TestAccountApi:
                 "password": get_json()['email']['password'],
                 "metadata": {
                     "referral": {
-                        "code": "TU8KPQ"
+                        "code": "CLC4BS  "
                     }
                 }
             }

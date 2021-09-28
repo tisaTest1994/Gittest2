@@ -610,6 +610,10 @@ class TestComplianceServiceApi:
             ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
                                                caseSystemId=caseSystemId)
             ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
+                                               caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
+                                               suggestion='SUGGEST_TO_ACCEPT')
         with allure.step("查询case结果"):
             unix_time = int(time.time())
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
@@ -624,7 +628,7 @@ class TestComplianceServiceApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert externalCaseId == r.json()['externalCaseId'], "获取case信息错误，返回值是{}".format(r.text)
-                assert 'PENDING' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
+                assert 'WAITING_APPROVAL' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_compliance_service_012 创建直接pass TNS_BANK_ACCOUNT_NAME case后查询cases,最后发送接受结果信息')
     def test_compliance_service_012(self):
