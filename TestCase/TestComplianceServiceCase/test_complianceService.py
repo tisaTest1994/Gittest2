@@ -48,10 +48,8 @@ class TestComplianceServiceApi:
                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
                 caseSystemId = r.json()['caseSystemId']
         with allure.step("获取新的wehbook"):
-            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted',
-                                               caseSystemId=caseSystemId)
-            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created',
-                                               caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created', caseSystemId=caseSystemId)
             ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
             ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
                                                caseSystemId=caseSystemId)
