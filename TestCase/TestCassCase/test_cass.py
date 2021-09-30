@@ -5,7 +5,7 @@ from Function.api_function import *
 class TestCassApi:
 
     # 初始化
-    def setup_method(self):
+    def setup_function(self):
         driver = webFunction.launch_web(get_json()['caas'][get_json()['env']]['url'])
 
     @allure.testcase('test_cass_001 ')

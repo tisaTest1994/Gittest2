@@ -6,7 +6,7 @@ from Function.operate_sql import *
 class TestConvertApi:
 
     # 初始化class
-    def setup_method(self):
+    def setup_function(self):
         ApiFunction.add_headers()
 
     @allure.testcase('test_convert_001 根据id编号查询单笔交易')

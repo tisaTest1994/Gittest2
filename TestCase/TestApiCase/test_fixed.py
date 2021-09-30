@@ -6,7 +6,7 @@ from Function.operate_sql import *
 class TestFixedApi:
 
     # 初始化class
-    def setup_method(self):
+    def setup_function(self):
         ApiFunction.add_headers()
 
     @allure.testcase('test_fixed_001 获取定期产品列表')
