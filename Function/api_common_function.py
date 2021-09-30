@@ -111,13 +111,8 @@ def get_zero_time(day_time='2021-05-17'):
 
 # 查询邮件
 def get_email():
-    email_info = get_json()['email']
-    account = email_info['email']
-    security_code = email_info['security_code']
-    host = email_info['host']
-    port = email_info['port']
-    client = imaplib.IMAP4_SSL(host=host, port=port)
-    client.login(account, security_code)
+    client = imaplib.IMAP4_SSL(host=get_json()['email']['host'], port=get_json()['email']['port'])
+    client.login(get_json()['email']['email'], get_json()['email']['security_code'])
     # 选择收件夹
     sleep_time = 0
     while sleep_time < 60:
