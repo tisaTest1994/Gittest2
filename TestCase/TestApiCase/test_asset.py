@@ -5,7 +5,7 @@ from Function.operate_sql import *
 class TestAssetApi:
 
     # 初始化class
-    def setup_function(self):
+    def setup_method(self):
         ApiFunction.add_headers()
 
     @allure.testcase('test_asset_001 查询每个币种当前资产市值')

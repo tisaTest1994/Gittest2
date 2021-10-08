@@ -6,7 +6,7 @@ from Function.operate_sql import *
 class TestAccountApi:
 
     # 初始化class
-    def setup_function(self):
+    def setup_method(self):
         ApiFunction.add_headers()
 
     @allure.testcase('test_account_001 成功注册新用户')
@@ -829,7 +829,7 @@ class TestAccountApi:
     @allure.testcase('test_account_044 多次referal注册用户')
     @pytest.mark.multiprocess
     def test_account_044(self):
-        for i in range(10):
+        for i in range(5):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
             data = {
                 "emailAddress": generate_email(),
@@ -844,7 +844,7 @@ class TestAccountApi:
             }
             session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
             logger.info('邮箱是{}'.format(data['emailAddress']))
-            sleep(2)
+            sleep(3)
             with allure.step("数据库检查"):
                 sql = "select relation from relation where referer_id='daf99d80-fcf4-4f10-8bb8-ab88dcf23cb8' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(
                     data['emailAddress'])

@@ -5,7 +5,7 @@ from Function.operate_sql import *
 # kyc相关cases
 class TestKycApi:
     # 初始化class
-    def setup_function(self):
+    def setup_method(self):
         ApiFunction.add_headers()
 
     @allure.testcase('test_kyc_001 通过kyc的用户，获取kyc上传token失败')

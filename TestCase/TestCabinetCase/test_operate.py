@@ -6,7 +6,7 @@ from Function.operate_sql import *
 class TestOperateApi:
 
     # 初始化class
-    def setup_function(self):
+    def setup_method(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
             account=get_json()['operate_admin_account']['email'],
             password=get_json()['operate_admin_account']['password'], type='operate')

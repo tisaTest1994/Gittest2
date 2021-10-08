@@ -9,7 +9,7 @@ class TestMonitorApi:
     kyc_headers = get_json()['kyc'][get_json()['env']]['kycHeaders']
 
     # 初始化
-    def setup_function(self):
+    def setup_method(self):
         self.kyc_headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='kimi.gong@cabital.com', password=get_json()['kyc'][get_json()['env']]['password'], type='monitor')
 
     @allure.testcase('test_monitor_001 创建直接pass 个人 Kyc case后查询cases,最后发送接受结果信息')
