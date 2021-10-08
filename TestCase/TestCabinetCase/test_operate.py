@@ -635,6 +635,7 @@ class TestOperateApi:
             "credit_wallet_id": "bd6608b9-81be-4260-ae8a-6726f8eabddd",
             "amount": "100",
             "txn_type": "adjustment",
+            "txn_subtype": "yilei_test001"
         }
         r = session.request('POST', url='{}/operatorapi/wallets/balance/adjust'.format(operateUrl),
                             data=json.dumps(data), headers=headers)
@@ -654,6 +655,7 @@ class TestOperateApi:
             "credit_wallet_id": "e37e7c9e-95f6-11eb-84c0-067d526cf950",
             "amount": "100",
             "txn_type": "adjustment",
+            "txn_subtype": "yilei_test001"
         }
         r = session.request('POST', url='{}/operatorapi/wallets/balance/adjust'.format(operateUrl),
                             data=json.dumps(data), headers=headers)
@@ -673,6 +675,7 @@ class TestOperateApi:
             "credit_wallet_id": "e37e7c9e-95f6-11eb-84c0-067d526cf950",
             "amount": "0.5",
             "txn_type": "adjustment",
+            "txn_subtype": "yilei_test001"
         }
         with allure.step("从数据库获得转账前的balance"):
             sql_payout = "select amount from balance where type='1' and wallet_id=(select id from wallet.wallet where wallet_id='{}');".format(
@@ -749,7 +752,8 @@ class TestOperateApi:
             "amount": "0.5",
             "txn_type": "adjustment",
             "value_date": "2021/08/05 19:21:59",
-            "counterparty_txn_id": "7698c69e-a8bc-4429-ae07-a08312264118fd"
+            "counterparty_txn_id": "7698c69e-a8bc-4429-ae07-a08312264118fd",
+            "txn_subtype": "yilei_test001"
         }
         with allure.step("从数据库获得转账前的balance"):
             sql_payout = "select amount from balance where type='1' and wallet_id=(select id from wallet.wallet where wallet_id='{}');".format(
