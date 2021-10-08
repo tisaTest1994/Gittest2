@@ -76,7 +76,7 @@ class TestFixedApi:
         for i in r.json():
             logger.info('定期产品详情。 {}'.format(i))
             for y in i['products']:
-                sleep(5)
+                sleep(1)
                 logger.info('定期产品product_id是{}'.format(y['product_id']))
                 with allure.step("获取购买定期前BTC可用数量"):
                     balance_amount_old = ApiFunction.get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
@@ -101,6 +101,7 @@ class TestFixedApi:
                     }
                     data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * (Decimal(y['apy']) / 100 ) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
                     r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, y['product_id']), data=json.dumps(data), headers=headers)
+                    sleep(3)
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
@@ -119,7 +120,8 @@ class TestFixedApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
+                        assert r.json()['status'] == 1, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
+                        assert ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2 or ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 1, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
                         assert Decimal(balance_amount_old) - Decimal(data['subscribe_amount']['amount']) == Decimal(balance_amount_latest), '购买定期产品后钱包余额错误,购买前钱包BTC数量{},购买定期数量{},购买后钱包BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(saving_amount_latest), '购买定期产品后活期金额错误,购买前活期BTC数量{},购买后活期BTC数量{}'.format(saving_amount_old, saving_amount_latest)
                         assert Decimal(fix_amount_old) + Decimal(data['subscribe_amount']['amount']) == Decimal(fix_amount_latest), '购买定期产品后定期金额错误,购买前定期BTC数量{},购买定期数量{},购买后定期BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
@@ -148,6 +150,7 @@ class TestFixedApi:
                     }
                     data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * (Decimal(y['apy']) / 100 ) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
                     r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, y['product_id']), data=json.dumps(data), headers=headers)
+                    sleep(3)
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
@@ -166,7 +169,8 @@ class TestFixedApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
+                        assert r.json()['status'] == 1, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
+                        assert ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2 or ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 1, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
                         assert Decimal(balance_amount_old) - Decimal(data['subscribe_amount']['amount']) == Decimal(balance_amount_latest), '购买定期产品后钱包余额错误,购买前钱包BTC数量{},购买定期数量{},购买后钱包BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(saving_amount_latest), '购买定期产品后活期金额错误,购买前活期BTC数量{},购买后活期BTC数量{}'.format(saving_amount_old, saving_amount_latest)
                         assert Decimal(fix_amount_old) + Decimal(data['subscribe_amount']['amount']) == Decimal(fix_amount_latest), '购买定期产品后定期金额错误,购买前定期BTC数量{},购买定期数量{},购买后定期BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
@@ -195,6 +199,7 @@ class TestFixedApi:
                     }
                     data['maturity_interest']['amount'] = str(((Decimal(data['subscribe_amount']['amount']) * (Decimal(y['apy']) / 100 ) / Decimal(365)).quantize(Decimal('0.000000'), ROUND_FLOOR)) * Decimal(y['tenor']))
                     r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, y['product_id']), data=json.dumps(data), headers=headers)
+                    sleep(3)
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
@@ -213,7 +218,8 @@ class TestFixedApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
+                        assert r.json()['status'] == 1, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
+                        assert ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 1 or ApiFunction.get_transaction_status(transaction_id=r.json()['tx_id'], type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(y['product_id'], r.text)
                         assert Decimal(balance_amount_old) - Decimal(data['subscribe_amount']['amount']) == Decimal(balance_amount_latest), '购买定期产品后钱包余额错误,购买前钱包BTC数量{},购买定期数量{},购买后钱包BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(saving_amount_latest), '购买定期产品后活期金额错误,购买前活期BTC数量{},购买后活期BTC数量{}'.format(saving_amount_old, saving_amount_latest)
                         assert Decimal(fix_amount_old) + Decimal(data['subscribe_amount']['amount']) == Decimal(fix_amount_latest), '购买定期产品后定期金额错误,购买前定期BTC数量{},购买定期数量{},购买后定期BTC数量{}'.format(balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
