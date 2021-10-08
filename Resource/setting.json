@@ -292,7 +292,7 @@
     "security_code": "epdhvoehaqjiyksz",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
   },
-  "env": "pro",
+  "env": "test",
   "headers": {
     "Content-Encoding": "deflate",
     "Content-Type": "application/json"

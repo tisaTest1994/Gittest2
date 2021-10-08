@@ -3,7 +3,7 @@ from Function.api_function import *
 
 
 class TestCassApi:
-
+    driver = webFunction.launch_web(get_json()['caas'][get_json()['env']]['url'])
     # 初始化
     def setup_function(self):
         driver = webFunction.launch_web(get_json()['caas'][get_json()['env']]['url'])
