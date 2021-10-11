@@ -17,10 +17,8 @@ class TestPayoutApi:
         password = get_json()['email']['password']
         with allure.step("提前先注册好"):
             ApiFunction.sign_up(account, password)
-        with allure.step("获得token"):
-            accessToken = ApiFunction.get_account_token(account=account, password=password)
         with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account, password=password)
         with allure.step("没有Kyc用户添加常用收款地址失败"):
             data = {
                 "nickName": "alan EUR ERC20",

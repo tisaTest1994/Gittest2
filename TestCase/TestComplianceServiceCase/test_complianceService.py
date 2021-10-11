@@ -920,3 +920,34 @@ class TestComplianceServiceApi:
                                                caseSystemId=caseSystemId)
             ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
                                                caseSystemId=caseSystemId)
+
+    # @allure.testcase('test_compliance_service_015 创建直接1000个pending cases')
+    # def test_compliance_service_013(self):
+    #     for i in range(1000):
+    #         with allure.step("准备测试数据"):
+    #             externalCaseId = generate_string(30)
+    #             logger.info('externalCaseId是{}'.format(externalCaseId))
+    #             kyc_headers = self.kyc_headers
+    #             data = {
+    #                 "externalCaseId": externalCaseId,
+    #                 "screenType": "INDIVIDUAL",
+    #                 "fullName": "James"
+    #             }
+    #             unix_time = int(time.time())
+    #             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+    #                                                 body=json.dumps(data))
+    #         with allure.step("把数据写入headers"):
+    #             kyc_headers['ACCESS-SIGN'] = sign
+    #             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+    #         with allure.step("创建Kyc case"):
+    #             r = session.request('POST', url='{}/api/v1/cases'.format(self.kyc_url), data=json.dumps(data),
+    #                                 headers=kyc_headers)
+    #             with allure.step("状态码和返回值"):
+    #                 logger.info('状态码是{}'.format(str(r.status_code)))
+    #                 logger.info('返回值是{}'.format(str(r.text)))
+    #             with allure.step("校验状态码"):
+    #                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+    #             with allure.step("校验返回值"):
+    #                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
+    #                 caseSystemId = r.json()['caseSystemId']
+    #                 print(caseSystemId)
