@@ -119,18 +119,18 @@ class TestPayoutApi:
     def test_payout_007(self):
         transaction_id = ApiFunction.get_payout_transaction_id(amount='0.022', address='0xC8dB0880790550a67B38525CA57Dbe880eEC70B4', code_type='ETH')
         logger.info('transaction_id是{}'.format(transaction_id))
-        with allure.step("p/l验证"):
-            sleep(5)
-            sql = "select * from transaction_history where transaction_id='{}';".format(transaction_id)
-            logger.info(sql)
-            sql_info = sqlFunction.connect_mysql(db='assetstat', sql=sql)
-            assert sql_info[0] is not None, "payout的P/L错误，sql命令是{}".format(sql)
-        with allure.step("wallet internal_balance验证"):
-            sleep(5)
-            sql = "select wallet_id from internal_balance where transaction_id='{}';".format(transaction_id)
-            sql_info = sqlFunction.connect_mysql(db='wallet', sql=sql)
-            for i in sql_info:
-                assert i['wallet_id'] is not None, "payout的P/L错误，sql命令是{}".format(sql)
+        # with allure.step("p/l验证"):
+        #     sleep(5)
+        #     sql = "select * from transaction_history where transaction_id='{}';".format(transaction_id)
+        #     logger.info(sql)
+        #     sql_info = sqlFunction.connect_mysql(db='assetstat', sql=sql)
+        #     assert sql_info[0] is not None, "payout的P/L错误，sql命令是{}".format(sql)
+        # with allure.step("wallet internal_balance验证"):
+        #     sleep(5)
+        #     sql = "select wallet_id from internal_balance where transaction_id='{}';".format(transaction_id)
+        #     sql_info = sqlFunction.connect_mysql(db='wallet', sql=sql)
+        #     for i in sql_info:
+        #         assert i['wallet_id'] is not None, "payout的P/L错误，sql命令是{}".format(sql)
 
     @allure.testcase('test_payout_008 查询提现详情')
     @pytest.mark.multiprocess
