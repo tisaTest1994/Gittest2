@@ -428,7 +428,7 @@
   },
   "pro": "https://api.cabital.com/api/v1",
   "secretKey": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
-  "secretKeyForTest": " ",
+  "secretKeyForTest": "",
   "slackUrl": "https://hooks.slack.com/services/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",
   "test": "https://api.latibac.com/api/v1"
 }

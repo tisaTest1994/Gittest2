@@ -12,7 +12,7 @@ class TestCassApi:
 
     # 结尾清理
     def teardown_method(self):
-        driver.quit()
+        pass
 
     @allure.testcase('test_cass_001 ')
     def test_cass_001(self):
@@ -20,7 +20,8 @@ class TestCassApi:
         driver.switch_to_new_tab()
         with allure.step("登录网站"):
             webFunction.login_salesforce(driver=driver)
-        driver.find_element_by_id('107:0;p').send_keys('231')
+        driver.find_element_by_css_selector('search-button').send_keys('231')
+
         sleep(200)
 
 
