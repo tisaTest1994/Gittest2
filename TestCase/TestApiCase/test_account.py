@@ -972,8 +972,6 @@ class TestAccountApi:
             assert r.json()['nickname'] == "ad!@d😄我940!2342", "获取nickname失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_051 修改nickname长度超过20')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_051(self):
         with allure.step("修改nickname"):
             data = {
@@ -989,8 +987,6 @@ class TestAccountApi:
             assert r.json()['message'] == 'invalid nickname', "修改nickname错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_052 打开/关闭notification推送')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_052(self):
         with allure.step("打开notification推送"):
             data = {
