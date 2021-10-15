@@ -305,7 +305,7 @@ class TestPayoutApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json() == {} , "开启法币提现画面错误，返回值是{}".format(r.text)
+                assert r.json() == {}, "开启法币提现画面错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_018 法币提现获得信息，不传code')
     def test_payout_018(self):
@@ -324,7 +324,7 @@ class TestPayoutApi:
 
     @allure.testcase('test_payout_019 法币提现英镑获得信息，白名单排序')
     def test_payout_019(self):
-        with allure.step("法币提现获得信息"):
+        with allure.step("法币提现英镑获得信息，白名单排序"):
             data = {
                 'code': 'GBP',
                 'payment_method': 'Faster Payments'
@@ -335,6 +335,7 @@ class TestPayoutApi:
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        assert "Faster Payments" in r.text, "法币提现英镑获得信息，白名单排序错误，返回值是{}".format(r.text)
         a = 1
         with allure.step("确保1在前，0在后"):
             for i in r.json()['account_names']:
@@ -344,7 +345,7 @@ class TestPayoutApi:
                 elif a == 0:
                     assert i['status'] == 0, '白名单排序问题，没1在前0在后。'
 
-    @allure.testcase('test_payout_020 预校验英镑法币提现')
+    @allure.testcase('test_payout_020 预校验英镑提现')
     def test_payout_020(self):
         with allure.step("法币提现获得信息"):
             with allure.step("获得token"):
@@ -364,8 +365,8 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['fee']['code'] == 'GBP', "预校验英镑法币提现错误，返回值是{}".format(r.text)
-            assert r.json()['fee']['amount'] == '0', "预校验英镑法币提现错误，返回值是{}".format(r.text)
+            assert r.json()['fee']['code'] == 'GBP', "预校验英镑提现错误，返回值是{}".format(r.text)
+            assert r.json()['fee']['amount'] == '2.5', "预校验英镑提现错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_021 开启英镑法币提现画面')
     def test_payout_021(self):
