@@ -20,8 +20,7 @@ class TestCassApi:
         driver.switch_to_new_tab()
         with allure.step("登录网站"):
             webFunction.login_salesforce(driver=driver)
-        driver.find_element_by_css_selector('search-button').send_keys('231')
-
+        driver.find_element_by_tag_name('Search').send_keys('231')
         sleep(200)
 
 

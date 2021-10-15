@@ -10,14 +10,12 @@ class TestConvertApi:
         ApiFunction.add_headers()
 
     @allure.testcase('test_convert_001 根据id编号查询单笔交易')
-    @pytest.mark.singleProcess
     def test_convert_001(self):
         with allure.step("获得交易transaction_id"):
             transaction_id = ApiFunction.get_payout_transaction_id()
             logger.info('transaction_id 是{}'.format(transaction_id))
         with allure.step("查询单笔交易"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
             params = {
                 "txn_sub_type": 6
             }

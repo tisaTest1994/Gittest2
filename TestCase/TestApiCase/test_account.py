@@ -510,8 +510,6 @@ class TestAccountApi:
     #         ApiFunction.get_account_token(account=get_json()['email']['email'], password=password)
 
     @allure.testcase('test_account_027 获取mfa邮箱验证码')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_027(self):
         r = session.request('GET', url='{}/account/security/mfa/email/sendVerificationCode'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
@@ -523,7 +521,6 @@ class TestAccountApi:
             assert {} == r.json(), "获取mfa邮箱验证码不对，目前返回值是{}".format(r.text)
 
     @allure.testcase('test_account_028 获取opt二维码')
-    @pytest.mark.multiprocess
     def test_account_028(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei1@163.com')
         r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
@@ -591,7 +588,6 @@ class TestAccountApi:
         ApiFunction.add_headers()
 
     @allure.testcase('test_account_030 验证opt code')
-    @pytest.mark.multiprocess
     def test_account_030(self):
         # 验证opt code
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
@@ -602,7 +598,6 @@ class TestAccountApi:
             "totp": str(mfaVerificationCode)
         }
         r = session.request('POST', url='{}/account/security/mfa/otp/verify'.format(env_url), data=json.dumps(data), headers=headers)
-        ApiFunction.add_headers()
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -612,8 +607,6 @@ class TestAccountApi:
             assert {} == r.json(), " 验证opt code不对，目前返回值是{}".format(r.text)
 
     @allure.testcase('test_account_031 接受隐私政策版本')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_031(self):
         data = {
             "privacyPolicyVersion": 20210528,
@@ -626,8 +619,6 @@ class TestAccountApi:
             assert {} == r.json(), "接受隐私政策版本不对，目前返回值是{}".format(r.text)
 
     @allure.testcase('test_account_032 查询最新隐私政策版本')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_032(self):
         r = session.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
         data = {
@@ -648,8 +639,6 @@ class TestAccountApi:
             assert r.json()['termOfServiceVersion'] == r1.json()['user']['userPrivacyPolicy']['termOfServiceVersion'], 'termOfServiceVersion最新版本和个人接受版本不匹配'
 
     @allure.testcase('test_account_033 修改投资目的')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_033(self):
         data = {
             "purposes": [
@@ -666,7 +655,6 @@ class TestAccountApi:
             assert '' in r.text, "修改投资目的不对，目前返回值是{}".format(r.text)
 
     @allure.testcase('test_account_034 注册时，多输入几位验证码导致注册失败')
-    @pytest.mark.multiprocess
     def test_account_034(self):
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
@@ -688,8 +676,6 @@ class TestAccountApi:
             assert 'Invalid verification code' in r.text, "注册时，输入错误验证码导致注册失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_035 获得邀请人数和奖励')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_035(self):
         with allure.step("获得邀请人数和奖励"):
             r = session.request('GET', url='{}/recruit/referal/referees'.format(env_url), headers=headers)
@@ -702,8 +688,6 @@ class TestAccountApi:
             assert 'count' in r.json().keys(), "获得邀请人数和奖励失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_036 获得邀请码和链接')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_036(self):
         with allure.step("获得邀请人数和奖励"):
             r = session.request('GET', url='{}/recruit/referal/code'.format(env_url), headers=headers)
@@ -716,7 +700,6 @@ class TestAccountApi:
             assert r.json()['code'] is not None, "获得邀请人数和奖励失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_037 referal注册用户')
-    @pytest.mark.multiprocess
     def test_account_037(self):
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
@@ -748,8 +731,6 @@ class TestAccountApi:
             assert relation[0]['relation'] == 1, '数据库查询值是{}'.format(relation)
 
     @allure.testcase('test_account_038 查询指定版本的隐私政策')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_038(self):
         with allure.step("获取最新隐私版本号"):
             r = session.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
@@ -767,8 +748,6 @@ class TestAccountApi:
                 assert '"version":' in r.text, "查询指定版本的隐私政策失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_039 查询指定版本的服务条款')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_039(self):
         with allure.step("获取最新隐私版本号"):
             r = session.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
@@ -786,7 +765,6 @@ class TestAccountApi:
                 assert '"version":' in r.text, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_040 忘记密码并且验证code')
-    @pytest.mark.singleProcess
     def test_account_040(self):
         account = get_json()['email']['payout_email']
         with allure.step("发忘记密码邮件"):
@@ -796,7 +774,6 @@ class TestAccountApi:
         ApiFunction.add_headers()
 
     @allure.testcase('test_account_041 开启MFA且验证code')
-    @pytest.mark.singleProcess
     def test_account_041(self):
         account = get_json()['email']['payout_email']
         with allure.step("开启MFA且验证code"):
@@ -806,7 +783,6 @@ class TestAccountApi:
         ApiFunction.add_headers()
 
     @allure.testcase('test_account_042 关闭MFA且验证code')
-    @pytest.mark.singleProcess
     def test_account_042(self):
         account = get_json()['email']['payout_email']
         with allure.step("关闭MFA且验证code"):
@@ -816,7 +792,6 @@ class TestAccountApi:
         ApiFunction.add_headers()
 
     @allure.testcase('test_account_043 MFA且验证code')
-    @pytest.mark.singleProcess
     def test_account_043(self):
         account = get_json()['email']['payout_email']
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account)
@@ -827,7 +802,6 @@ class TestAccountApi:
         ApiFunction.add_headers()
 
     @allure.testcase('test_account_044 多次referal注册用户')
-    @pytest.mark.multiprocess
     def test_account_044(self):
         for i in range(5):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
@@ -852,8 +826,6 @@ class TestAccountApi:
                 assert relation[0]['relation'] == 2, '数据库查询值是{}'.format(relation)
 
     @allure.testcase('test_account_045 获取用户偏好信息')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_045(self):
         with allure.step("获取用户偏好信息"):
             r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
@@ -866,8 +838,6 @@ class TestAccountApi:
             assert 'language' in r.text, "获取用户偏好信息失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_046 修改用户偏好信息')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_046(self):
         with allure.step("获取用户偏好信息"):
             r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
@@ -890,8 +860,6 @@ class TestAccountApi:
             session.request('PUT', url='{}/preference/account/setting'.format(env_url), data=json.dumps(data), headers=headers)
 
     @allure.testcase('test_account_047 上传push相关token信息')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_047(self):
         with allure.step("上传push相关token信息更新headers"):
             headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
@@ -915,8 +883,6 @@ class TestAccountApi:
             assert {} == r.json(), "获取用户偏好信息失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_048 登录后记录手机版本')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_048(self):
         with allure.step("上传登录信息更新headers"):
             headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
@@ -937,8 +903,6 @@ class TestAccountApi:
             assert 'accessToken' in r.text, "登录已经注册账号错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_049 登出后refreshToken无法刷新')
-    @pytest.mark.singleProcess
-    @pytest.mark.pro
     def test_account_049(self):
         with allure.step("上传登录信息更新headers"):
             headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
@@ -984,8 +948,6 @@ class TestAccountApi:
             assert 'Refresh token error' in r.text, "用空的token刷新token错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_050 修改nickname')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_050(self):
         with allure.step("修改nickname"):
             data = {
