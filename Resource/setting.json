@@ -30,7 +30,10 @@
     "3": "ETH-USDT",
     "4": "BTC-EUR",
     "5": "ETH-EUR",
-    "6": "USDT-EUR"
+    "6": "USDT-EUR",
+    "7": "GBP-USDT",
+    "8": "BTC-GBP",
+    "9": "ETH-GBP"
   },
   "citizenCountryCodeList": [
     "ABW",

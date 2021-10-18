@@ -23,9 +23,11 @@ class TestConvertOrderApi:
         time_info = list(set(time_info))
         for y in time_info:
             # 基准货币数量
-            book_profit_dict = {'BTC-ETH_number': 0, 'BTC-USDT_number': 0, 'BTC-EUR_number': 0, 'ETH-USDT_number': 0, 'ETH-EUR_number': 0, 'USDT-EUR_number': 0}
-            # 中间数量
-            amount_dict = {'BTC-ETH_amount': 0, 'BTC-USDT_amount': 0, 'BTC-EUR_amount': 0, 'ETH-USDT_amount': 0, 'ETH-EUR_amount': 0, 'USDT-EUR_amount': 0}
+            book_profit_dict = {}
+            amount_dict = {}
+            for x in cfx_book:
+                book_profit_dict[x + '_number'] == 0
+                amount_dict[x + '_number'] == 0
             for z in cfx_info:
                 if y == z['order_time']:
                     for d in cfx_book.values():
