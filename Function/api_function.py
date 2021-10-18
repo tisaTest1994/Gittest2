@@ -404,6 +404,7 @@ class ApiFunction:
                     break
                     sleep_time == 81
             elif type == 'MFA_EMAIL':
+                sleep(20)
                 if 'Withdrawal Request' in email_info['title']:
                     break
                     sleep_time == 81

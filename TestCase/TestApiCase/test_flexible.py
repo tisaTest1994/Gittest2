@@ -10,8 +10,6 @@ class TestFlexibleApi:
         ApiFunction.add_headers()
 
     @allure.testcase('test_flexible_001 获取产品列表')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_001(self):
         with allure.step("获取产品列表"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
