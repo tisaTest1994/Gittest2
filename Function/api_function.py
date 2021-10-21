@@ -435,7 +435,7 @@ class ApiFunction:
         books = sqlFunction().connect_mysql('hedging', sql=sql)
         a = {}
         print(books)
-        for i in books:
+        for i in books[0]['books']:
             a[i['id']] = i['pair']
         print(a)
 
