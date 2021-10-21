@@ -434,7 +434,8 @@ class ApiFunction:
         sql = "select books from split_setting where pair = '{}';".format(pair)
         books = sqlFunction().connect_mysql('hedging', sql=sql, type=1)
         a = {}
-        books = json.dumps(books['books'])
+        books = json.loads(books['books'])
         print(type(books))
+        print(books)
 
 
