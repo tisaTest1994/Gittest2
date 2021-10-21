@@ -431,11 +431,13 @@ class ApiFunction:
     # 换汇
     @staticmethod
     def cfx(pair):
-        with allure.step("状态码和返回值"):
+        with allure.step("获取直盘或者拆盘汇率对"):
             sql = "select books from split_setting where pair = '{}';".format(pair)
             books = sqlFunction().connect_mysql('hedging', sql=sql, type=1)
             pair_list = {}
             books = json.loads(books['books'])
+            print(books)
+            print(type(books[0]))
             for i in books:
                 pair_list[i['id']] = pair_list[i['pair']]
             print(pair_list)
