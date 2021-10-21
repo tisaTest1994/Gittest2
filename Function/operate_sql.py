@@ -6,7 +6,7 @@ from Function.log import *
 class sqlFunction:
 
     @staticmethod
-    def connect_mysql(db, sql):
+    def connect_mysql(db, sql, type=2):
         logger.info('sql命令是{}'.format(sql))
         account = get_json()['mysql']['account']
         password = get_json()['mysql']['password']
@@ -17,7 +17,10 @@ class sqlFunction:
         with connection:
             with connection.cursor() as cursor:
                 cursor.execute(sql)
-                result = cursor.fetchall()
+                if type == 1:
+                    result = cursor.fetchone()
+                else:
+                    result = cursor.fetchall()
                 return result
 
     # 获取quote值
