@@ -438,8 +438,7 @@ class ApiFunction:
             books = json.loads(books['books'])
             print(books['books'])
             for i in books['books']:
-                #i = json.loads(i)
-                pair_list[i['id']] = pair_list[i['pair']]
+                pair_list[i['id']] = i['pair']
             print(pair_list)
 
 
