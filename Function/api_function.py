@@ -433,7 +433,9 @@ class ApiFunction:
     def cfx(pair):
         sql = "select books from split_setting where pair = '{}';".format(pair)
         books = sqlFunction().connect_mysql('hedging', sql=sql)
-        print(type(books))
-        print(books[0]['books'][0]['id'])
-        print(books[0]['books'][0]['pair'])
+        a = {}
+        print(books)
+        for i in books:
+            a[i['id']] = i['pair']
+        print(a)
 
