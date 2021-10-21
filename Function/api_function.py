@@ -435,7 +435,6 @@ class ApiFunction:
         books = sqlFunction().connect_mysql('hedging', sql=sql, type=1)
         a = {}
         print(type(books))
-        books = json.loads(books)
         for i in books['books']:
             a[i['id']] = i['pair']
         print(a)
