@@ -430,15 +430,80 @@ class ApiFunction:
 
     # 换汇
     @staticmethod
-    def cfx(pair):
+    def cfx_hedging_pairs(pair):
         with allure.step("获取直盘或者拆盘汇率对"):
             sql = "select books from split_setting where pair = '{}';".format(pair)
             books = sqlFunction().connect_mysql('hedging', sql=sql, type=1)
             pair_list = {}
             books = json.loads(books['books'])
-            print(books['books'])
             for i in books['books']:
                 pair_list[i['id']] = i['pair']
-            print(pair_list)
+            logger.info('获得直盘拆盘币种对{}'.format(pair_list))
 
+    # 指定换汇币种对和major_ccy币种，随机生成换汇金额。
+    @staticmethod
+    def cfx_random_number(pair, major_ccy):
+        cryptos = pair.split('-')
+        if major_ccy == 'buy':
+            with allure.step("major_ccy 是buy值"):
+                if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
+                    buy_amount = random.uniform(0.01, 1.99)
+                    if len(str(buy_amount).split('.')[1]) >= 8:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:8])
+                elif cryptos[0] == 'USDT':
+                    buy_amount = random.uniform(25, 3000.11)
+                    if len(str(buy_amount).split('.')[1]) >= 6:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:6])
+                else:
+                    buy_amount = random.uniform(25, 3000.11)
+                    if len(str(buy_amount).split('.')[1]) >= 2:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:2])
+                quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
+                sell_amount = str(float(buy_amount) * float(quote['quote']))
+                if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
+                    if len(str(sell_amount).split('.')[1]) >= 8:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:8])
+                elif cryptos[1] == 'USDT':
+                    if len(str(sell_amount).split('.')[1]) >= 6:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:6])
+                else:
+                    if len(str(sell_amount).split('.')[1]) >= 2:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:2])
+        else:
+            if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
+                sell_amount = random.uniform(0.01, 0.19)
+                if len(str(buy_amount).split('.')[1]) >= 8:
+                    sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                 str(sell_amount).split('.')[1][:8])
+            elif cryptos[1] == 'USDT':
+                sell_amount = random.uniform(25, 3000.11)
+                if len(str(sell_amount).split('.')[1]) >= 6:
+                    sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                 str(sell_amount).split('.')[1][:6])
+            else:
+                sell_amount = random.uniform(25, 3000.11)
+                if len(str(sell_amount).split('.')[1]) >= 2:
+                    sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                 str(sell_amount).split('.')[1][:2])
+            quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
+            buy_amount = str(float(sell_amount) / float(quote['quote']))
+            if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
+                if len(str(buy_amount).split('.')[1]) >= 8:
+                    buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                str(buy_amount).split('.')[1][:8])
+            elif cryptos[0] == 'USDT':
+                if len(str(buy_amount).split('.')[1]) >= 6:
+                    buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                str(buy_amount).split('.')[1][:6])
+            else:
+                if len(str(buy_amount).split('.')[1]) >= 2:
+                    buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                str(buy_amount).split('.')[1][:2])
+        return {""}
 
