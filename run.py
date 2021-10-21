@@ -47,7 +47,7 @@ if __name__ == '__main__':
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
     if sys.argv[1] == 'api':
-        pytest.main(['./TestCase/TestApiCase', '--alluredir', './Reports', '--clean-alluredir'])
+        pytest.main(['./TestCase/TestApiCase/test_convert.py::TestConvertApi::test_convert_009', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == 'kyc':
         pytest.main(['./TestCase/TestComplianceServiceCase', '--alluredir', './Reports', '--clean-alluredir', '--timeout=600'])
     elif sys.argv[1] == "ui":
@@ -58,4 +58,3 @@ if __name__ == '__main__':
         assert False, 'error 需要传入正确的参数'
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
     slack_report(type=sys.argv[1])
-

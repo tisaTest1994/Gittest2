@@ -427,3 +427,12 @@ class ApiFunction:
         logger.info('返回值是{}'.format(str(r.text)))
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json() == {}, "校验验证码失败，返回值是{}".format(r.text)
+
+    # 换汇
+    @staticmethod
+    def cfx(pair):
+        sql = "select books from split_setting where pair = '{}';".format(pair)
+        books = sqlFunction().connect_mysql('hedging', sql=sql)
+        print(books)
+
+
