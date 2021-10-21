@@ -431,11 +431,13 @@ class ApiFunction:
     # 换汇
     @staticmethod
     def cfx(pair):
-        sql = "select books from split_setting where pair = '{}';".format(pair)
-        books = sqlFunction().connect_mysql('hedging', sql=sql, type=1)
-        a = {}
-        books = json.loads(books['books'])
-        print(type(books))
-        print(books)
+        with allure.step("状态码和返回值"):
+            sql = "select books from split_setting where pair = '{}';".format(pair)
+            books = sqlFunction().connect_mysql('hedging', sql=sql, type=1)
+            pair_list = {}
+            books = json.loads(books['books'])
+            for i in books:
+                pair_list[i['id']] = pair_list[i['pair']]
+            print(pair_list)
 
 
