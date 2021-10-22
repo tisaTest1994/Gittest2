@@ -303,7 +303,12 @@ class TestConvertApi:
         with allure.step("获取汇率对"):
             cfx_book = get_json()['cfx_book']
             for i in cfx_book.values():
-                ApiFunction.cfx_hedging_pairs(pair=i)
+                pair_list = ApiFunction.cfx_hedging_pairs(pair=i)
+                if len(pair_list) == 1:
+                    print(pair_list)
+
+
+
 
 
             # 获取换汇币种对
