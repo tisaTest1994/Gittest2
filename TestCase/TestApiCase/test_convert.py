@@ -304,8 +304,6 @@ class TestConvertApi:
             cfx_book = get_json()['cfx_book']
             for i in cfx_book.values():
                 pair_list = ApiFunction.cfx_hedging_pairs(pair=i)
-                if len(pair_list) == 1:
-                    print(pair_list)
 
 
 

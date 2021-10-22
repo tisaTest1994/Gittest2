@@ -438,8 +438,12 @@ class ApiFunction:
             books = json.loads(books['books'])
             for i in books['books']:
                 pair_list[i['id']] = i['pair']
-            logger.info('获得直盘拆盘币种对{}'.format(pair_list))
-            return pair_list
+            if len(pair_list) == 1:
+                logger.info('获得直盘币种对{}'.format(pair_list))
+                return pair_list
+            else:
+                logger.info('获得拆盘币种对{}'.format(pair_list))
+                return pair_list
 
     # 指定换汇币种对和major_ccy币种，随机生成换汇金额。
     @staticmethod
