@@ -468,5 +468,5 @@ class ApiFunction:
                 quote = ApiFunction.get_quote('{}-{}'.format(cfx_dict['buy'], cfx_dict['sell']))
                 buy_amount = str(float(sell_amount) / float(quote['quote']))
                 buy_amount = crypto_len(number=buy_amount, type=cfx_dict['buy'])
-        return {"buy": cfx_dict['buy'], "sell": cfx_dict['sell'], "buy_amount": buy_amount, "sell_amount": sell_amount}
+        return {"buy": cfx_dict['buy'], "sell": cfx_dict['sell'], "buy_amount": buy_amount, "sell_amount": sell_amount, "quote": quote, "major_ccy": cfx_dict['major_ccy']}
 

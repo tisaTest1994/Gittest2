@@ -315,7 +315,20 @@ class TestConvertApi:
                                         {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[0]}]
                             for y in cfx_dict:
                                 cfx_amount = ApiFunction.cfx_random_number(y)
-                                print(cfx_amount)
+                                data = {
+                                    "quote_id": cfx_amount['quote']['quote_id'],
+                                    "quote": cfx_amount['quote']['quote'],
+                                    "pair": '{}-{}'.format(cfx_amount['buy'], cfx_amount['sell']),
+                                    "buy_amount": str(cfx_amount['buy_amount']),
+                                    "sell_amount": str(cfx_amount['sell_amount']),
+                                    "major_ccy": cfx_amount['major_ccy']
+                                    }
+                                print(111111)
+                                print(data)
+                                r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
+                                logger.info('申请换汇参数{}'.format(data))
+                                logger.info('换汇返回值{}'.format(r.text))
+                                sleep(20)
 
 
 
