@@ -308,7 +308,7 @@ class TestConvertApi:
                     if len(pair_dict.keys()) == 1:
                         with allure.step("生成货币对"):
                             pair = list(pair_dict.values())
-                            pair_list = pair.split('-')
+                            pair_list = pair[0].split('-')
                             cfx_dict = [{'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]},
                                         {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[1]},
                                         {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[1]},
