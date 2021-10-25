@@ -173,7 +173,7 @@ def crypto_len(number, type):
                 end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1])
         else:
             if len(str(number).split('.')[1]) > 2:
-                end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1])
+                end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1][:2])
             else:
                 end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1])
     else:
