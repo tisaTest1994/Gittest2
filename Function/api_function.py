@@ -438,7 +438,7 @@ class ApiFunction:
             books = json.loads(books['books'])
             for i in books['books']:
                 pair_list[i['id']] = i['pair']
-            if len(pair_list) == 1:
+            if len(pair_list.keys()) == 1:
                 logger.info('获得直盘币种对{}'.format(pair_list))
                 return pair_list
             else:

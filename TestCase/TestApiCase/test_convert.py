@@ -303,17 +303,19 @@ class TestConvertApi:
         with allure.step("获取汇率对"):
             cfx_book = get_json()['cfx_book']
             for i in cfx_book.values():
-                pair_list = ApiFunction.cfx_hedging_pairs(pair=i)
+                pair_dict = ApiFunction.cfx_hedging_pairs(pair=i)
                 with allure.step("判断是否是直盘"):
-                    if len(pair_list.keys()) == 1:
+                    if len(pair_dict.keys()) == 1:
                         with allure.step("生成货币对"):
-                            print(pair_list)
-                            pair = pair_list.values()
-                            print(pair)
-                            print(type(pair))
-            # cfx_dict = {'buy': 'ETH', "sell": "USDT", "major_ccy": "ETH"}
-            # print(ApiFunction.cfx_random_number(cfx_dict))
-            # cfx_amount = ApiFunction.cfx_random_number(cfx_dict)
+                            pair = list(pair_dict.values())
+                            pair_list = pair.split('-')
+                            cfx_dict = [{'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]},
+                                        {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[1]},
+                                        {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[1]},
+                                        {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[0]}]
+                            for y in cfx_dict:
+                                cfx_amount = ApiFunction.cfx_random_number(y)
+                                print(cfx_amount)
 
 
 
