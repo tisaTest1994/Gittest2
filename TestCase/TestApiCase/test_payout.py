@@ -305,7 +305,7 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "GBP",
-                "amount": "2.51",
+                "amount": "3.51",
                 "payment_method": "Faster Payments",
                 "account_name": account_name[0],
                 "account_number": "00003162",

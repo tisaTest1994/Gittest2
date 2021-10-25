@@ -15,7 +15,8 @@ class TestConvertApi:
             transaction_id = ApiFunction.get_payout_transaction_id()
             logger.info('transaction_id 是{}'.format(transaction_id))
         with allure.step("查询单笔交易"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
             params = {
                 "txn_sub_type": 6
             }
@@ -75,8 +76,9 @@ class TestConvertApi:
                                  url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[1], cryptos[0])),
                                  headers=headers)
             logger.info('客户买入{},卖出{},我们给出的汇率是{}'.format(cryptos[1], cryptos[0], r2.json()['quote']))
-            print(float(str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]) , float(r1.json()['quote']))
-            assert float(str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]) <= float(r1.json()['quote']), "{}汇率对出现了问题".format(i)
+            print(float(str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]), float(r1.json()['quote']))
+            assert float(str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]) <= float(
+                r1.json()['quote']), "{}汇率对出现了问题".format(i)
 
     @allure.testcase('test_convert_005 超时换汇交易')
     def test_convert_005(self):
@@ -322,13 +324,14 @@ class TestConvertApi:
                                     "buy_amount": str(cfx_amount['buy_amount']),
                                     "sell_amount": str(cfx_amount['sell_amount']),
                                     "major_ccy": cfx_amount['major_ccy']
-                                    }
-                                print(111111)
-                                print(data)
-                                r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
+                                }
+                                logger.info('发送换汇data是{}'.data)
+                                r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
+                                                    headers=headers)
                                 logger.info('申请换汇参数{}'.format(data))
                                 logger.info('换汇返回值{}'.format(r.text))
                                 sleep(20)
-
-
-
+                                with allure.step("校验状态码"):
+                                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                                with allure.step("校验返回值"):
+                                    assert r.json()['transaction']['transaction_id'] is not None , "获取产品列表错误，返回值是{}".format(r.text)
