@@ -305,10 +305,12 @@ class TestConvertApi:
             for i in cfx_book.values():
                 pair_list = ApiFunction.cfx_hedging_pairs(pair=i)
                 with allure.step("判断是否是直盘"):
-                    if len(pair_list) == 1:
+                    if len(pair_list.keys()) == 1:
                         with allure.step("生成货币对"):
+                            print(pair_list)
                             pair = pair_list.values()
                             print(pair)
+                            print(type(pair))
             # cfx_dict = {'buy': 'ETH', "sell": "USDT", "major_ccy": "ETH"}
             # print(ApiFunction.cfx_random_number(cfx_dict))
             # cfx_amount = ApiFunction.cfx_random_number(cfx_dict)
