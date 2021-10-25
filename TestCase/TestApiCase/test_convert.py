@@ -325,7 +325,7 @@ class TestConvertApi:
                                     "sell_amount": str(cfx_amount['sell_amount']),
                                     "major_ccy": cfx_amount['major_ccy']
                                 }
-                                logger.info('发送换汇data是{}'.data)
+                                logger.info('发送换汇data是{}'.format(data))
                                 r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
                                                     headers=headers)
                                 logger.info('申请换汇参数{}'.format(data))
@@ -334,4 +334,4 @@ class TestConvertApi:
                                 with allure.step("校验状态码"):
                                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                                 with allure.step("校验返回值"):
-                                    assert r.json()['transaction']['transaction_id'] is not None , "获取产品列表错误，返回值是{}".format(r.text)
+                                    assert r.json()['transaction']['transaction_id'] is not None, "获取产品列表错误，返回值是{}".format(r.text)
