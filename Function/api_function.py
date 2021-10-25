@@ -87,7 +87,7 @@ class ApiFunction:
         cryptos = pair.split('-')
         r = session.request('GET', url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[0], cryptos[1])), headers=headers)
         strTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(r.json()['valid_until'])))
-        logger.info('获得报价的服务器时间是{}'.format(strTime))
+        logger.info('获得报价的服务器时间是{},换汇价格是{}'.format(strTime, r.json()))
         return r.json()
 
     # 获取钱包指定币种某个交易状态的数量
@@ -447,68 +447,26 @@ class ApiFunction:
 
     # 指定换汇币种对和major_ccy币种，随机生成换汇金额。
     @staticmethod
-    def cfx_random_number(pair, major_ccy):
-        cryptos = pair.split('-')
-        if major_ccy == 'buy':
-            with allure.step("major_ccy 是buy值"):
-                if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
-                    buy_amount = random.uniform(0.01, 1.99)
-                    if len(str(buy_amount).split('.')[1]) >= 8:
-                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                    str(buy_amount).split('.')[1][:8])
-                elif cryptos[0] == 'USDT':
-                    buy_amount = random.uniform(25, 3000.11)
-                    if len(str(buy_amount).split('.')[1]) >= 6:
-                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                    str(buy_amount).split('.')[1][:6])
+    def cfx_random_number(cfx_dict):
+        with allure.step("major_ccy 是buy值"):
+            if cfx_dict['buy'] == cfx_dict['major_ccy']:
+                if cfx_dict['buy'] == 'BTC' or cfx_dict['buy'] == 'ETH':
+                    buy_amount = random.uniform(0.02, 1.99)
                 else:
                     buy_amount = random.uniform(25, 3000.11)
-                    if len(str(buy_amount).split('.')[1]) >= 2:
-                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                    str(buy_amount).split('.')[1][:2])
-                quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
+                buy_amount = crypto_len(number=buy_amount, type=cfx_dict['buy'])
+                quote = ApiFunction.get_quote('{}-{}'.format(cfx_dict['buy'], cfx_dict['sell']))
                 sell_amount = str(float(buy_amount) * float(quote['quote']))
-                if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
-                    if len(str(sell_amount).split('.')[1]) >= 8:
-                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                     str(sell_amount).split('.')[1][:8])
-                elif cryptos[1] == 'USDT':
-                    if len(str(sell_amount).split('.')[1]) >= 6:
-                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                     str(sell_amount).split('.')[1][:6])
+                sell_amount = crypto_len(number=sell_amount, type=cfx_dict['sell'])
+        with allure.step("major_ccy 是sell值"):
+            if cfx_dict['sell'] == cfx_dict['major_ccy']:
+                if cfx_dict['sell'] == 'BTC' or cfx_dict['sell'] == 'ETH':
+                    sell_amount = random.uniform(0.02, 0.19)
                 else:
-                    if len(str(sell_amount).split('.')[1]) >= 2:
-                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                     str(sell_amount).split('.')[1][:2])
-        else:
-            if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
-                sell_amount = random.uniform(0.01, 0.19)
-                if len(str(buy_amount).split('.')[1]) >= 8:
-                    sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                 str(sell_amount).split('.')[1][:8])
-            elif cryptos[1] == 'USDT':
-                sell_amount = random.uniform(25, 3000.11)
-                if len(str(sell_amount).split('.')[1]) >= 6:
-                    sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                 str(sell_amount).split('.')[1][:6])
-            else:
-                sell_amount = random.uniform(25, 3000.11)
-                if len(str(sell_amount).split('.')[1]) >= 2:
-                    sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                 str(sell_amount).split('.')[1][:2])
-            quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
-            buy_amount = str(float(sell_amount) / float(quote['quote']))
-            if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
-                if len(str(buy_amount).split('.')[1]) >= 8:
-                    buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                str(buy_amount).split('.')[1][:8])
-            elif cryptos[0] == 'USDT':
-                if len(str(buy_amount).split('.')[1]) >= 6:
-                    buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                str(buy_amount).split('.')[1][:6])
-            else:
-                if len(str(buy_amount).split('.')[1]) >= 2:
-                    buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                str(buy_amount).split('.')[1][:2])
-        return {""}
+                    sell_amount = random.uniform(25, 3000.11)
+                sell_amount = crypto_len(number=sell_amount, type=cfx_dict['sell'])
+                quote = ApiFunction.get_quote('{}-{}'.format(cfx_dict['buy'], cfx_dict['sell']))
+                buy_amount = str(float(sell_amount) / float(quote['quote']))
+                buy_amount = crypto_len(number=buy_amount, type=cfx_dict['buy'])
+        return {"buy": cfx_dict['buy'], "sell": cfx_dict['sell'], "buy_amount": buy_amount, "sell_amount": sell_amount}
 

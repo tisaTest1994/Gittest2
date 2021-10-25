@@ -783,22 +783,22 @@ class TestOperateApi:
             payin_amount_new), 'wallet调整余额内部户账户到内部户账户错误，payin_amount_old{}, payin_amount_new{}'.format(payin_amount_old,
                                                                                                        payin_amount_new)
 
-    # @allure.testcase('test_operate_033 让同名校验分数不够的通过')
-    # @pytest.mark.multiprocess
-    # def test_operate_033(self):
-    #     order_id = 'd9924076-aeb9-4c47-84b1-0c76e3c5387b'
-    #     data = {
-    #         "result": False
-    #     }
-    #     r = session.request('POST', url='{}/operatorapi/orders/payin/namechecking/{}'.format(operateUrl, order_id),
-    #                         data=json.dumps(data), headers=headers)
-    #     with allure.step("状态码和返回值"):
-    #         logger.info('状态码是{}'.format(str(r.status_code)))
-    #         logger.info('返回值是{}'.format(str(r.text)))
-    #     with allure.step("校验状态码"):
-    #         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-    #     with allure.step("校验返回值"):
-    #         assert r.json() == {}, "让同名校验分数不够的通过错误，返回值是{}".format(r.text)
+    @allure.testcase('test_operate_033 让同名校验分数不够的通过')
+    @pytest.mark.multiprocess
+    def test_operate_033(self):
+        order_id = '2fb05d2f-9428-437e-be31-48444a4db015'
+        data = {
+            "result": True
+        }
+        r = session.request('POST', url='{}/operatorapi/orders/payin/namechecking/{}'.format(operateUrl, order_id),
+                            data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "让同名校验分数不够的通过错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_034 查询客户白名单')
     @pytest.mark.multiprocess
