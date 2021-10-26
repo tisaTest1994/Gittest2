@@ -407,7 +407,4 @@ class TestConvertApi:
                                     sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
                                     cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
                                     sell_amount_wallet_balance_latest)
-                                sql = "select * from hedging.client_book where deal_no= '{}';".format(pair)
-                                deal_no = sqlFunction().connect_mysql('hedging', sql=sql)
-                                print(len(deal_no))
 
