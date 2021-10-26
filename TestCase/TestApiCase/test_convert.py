@@ -380,6 +380,7 @@ class TestConvertApi:
                                 with allure.step("校验返回值"):
                                     assert r.json()['transaction'][
                                                'transaction_id'] is not None, "获取产品列表错误，返回值是{}".format(r.text)
+                                    transaction_id = r.json()['transaction']['transaction_id']
                                 sleep(5)
                                 with allure.step("获得换汇后buy币种balance金额"):
                                     buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
@@ -406,4 +407,7 @@ class TestConvertApi:
                                     sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
                                     cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
                                     sell_amount_wallet_balance_latest)
+                                sql = "select * from hedging.client_book where deal_no= '{}';".format(pair)
+                                deal_no = sqlFunction().connect_mysql('hedging', sql=sql)
+                                print(len(deal_no))
 
