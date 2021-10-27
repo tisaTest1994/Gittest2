@@ -1,6 +1,5 @@
 from datetime import *
 import requests
-from faker import Faker
 import random
 import json
 import os
@@ -15,12 +14,6 @@ import logger
 # 获取当前时间
 def get_now_time():
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-
-# 生成随机人名
-def generate_name():
-    fake = Faker('zh_CN')
-    return fake.name()
 
 
 # 生成随机数字长度

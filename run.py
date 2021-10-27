@@ -6,7 +6,6 @@ import time
 import allure
 import pyotp
 import uuid
-import faker
 import sys
 from Function.slack import *
 from Function.log import *
