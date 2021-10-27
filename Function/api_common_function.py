@@ -98,7 +98,7 @@ def get_zero_utc_time():
 
 
 # 切分一天时间
-def get_zero_time(day_time='2021-05-17'):
+def get_zero_time(day_time=(datetime.now(tz=pytz.timezone('UTC')) + timedelta(days=-1)).strftime("%Y-%m-%d")):
     dt = datetime(int(day_time.split('-')[0]), int(day_time.split('-')[1]), int(day_time.split('-')[2]))
     timestamp = dt.replace(tzinfo=timezone.utc).timestamp()
     time_list = []

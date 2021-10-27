@@ -202,7 +202,7 @@ class ApiFunction:
 
     # 获取一天cfx数据
     @staticmethod
-    def get_cfx_info(day_time='2021-05-26'):
+    def get_one_day_cfx_info(day_time=(datetime.now(tz=pytz.timezone('UTC')) + timedelta(days=-1)).strftime("%Y-%m-%d")):
         cfx_book = get_json()['cfx_book']
         time_list = get_zero_time(day_time=day_time)
         cfx_info = []
