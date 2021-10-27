@@ -16,43 +16,43 @@ class TestConvertOrderApi:
         # 从数据库拿到某日数据
         cfx_info = ApiFunction.get_one_day_cfx_info()
         print(cfx_info)
-        # # 拆分每一天
-        # time_info = []
-        # for i in cfx_info:
-        #     time_info.append(i['order_time'])
-        # time_info = list(set(time_info))
-        # for y in time_info:
-        #     # 基准货币数量
-        #     book_profit_dict = {}
-        #     amount_dict = {}
-        #     for x in cfx_book.values:
-        #         book_profit_dict[x + '_number'] == 0
-        #         amount_dict[x + '_number'] == 0
-        #     for z in cfx_info:
-        #         if y == z['order_time']:
-        #             for d in cfx_book.values():
-        #                 if z['buy_us'] == str(d).split('-')[0] and z['sell_us'] == str(d).split('-')[1]:
-        #                     book_profit_dict['{}_number'.format(d)] = Decimal(book_profit_dict['{}_number'.format(d)]) - Decimal(z['buy_us_amount'])
-        #                     cost_amount = Decimal(z['buy_us_amount']) * Decimal(z['cost'])
-        #                     if '.' in str(cost_amount):
-        #                         if z['sell_us'] == 'ETH' or z['sell_us'] == 'BTC':
-        #                             cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:8])
-        #                         elif z['sell_us'] == 'USDT':
-        #                             cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:6])
-        #                         else:
-        #                             cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:2])
-        #                     amount_dict['{}_amount'.format(d)] = Decimal(amount_dict['{}_amount'.format(d)]) - Decimal(cost_amount)
-        #                 elif z['buy_us'] == str(d).split('-')[1] and z['sell_us'] == str(d).split('-')[0]:
-        #                     book_profit_dict['{}_number'.format(d)] = Decimal(book_profit_dict['{}_number'.format(d)]) + Decimal(z['sell_us_amount'])
-        #                     cost_amount = Decimal(z['sell_us_amount']) * Decimal(z['cost'])
-        #                     if '.' in str(cost_amount):
-        #                         if z['buy_us'] == 'ETH' or z['buy_us'] == 'BTC':
-        #                             cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:8])
-        #                         elif z['buy_us'] == 'USDT':
-        #                             cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:6])
-        #                         else:
-        #                             cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:2])
-        #                     amount_dict['{}_amount'.format(d)] = Decimal(amount_dict['{}_amount'.format(d)]) + Decimal(cost_amount)
+        # 拆分每一天
+        time_info = []
+        for i in cfx_info:
+            time_info.append(i['order_time'])
+        time_info = list(set(time_info))
+        for y in time_info:
+            # 基准货币数量
+            book_profit_dict = {}
+            amount_dict = {}
+            for x in cfx_book.values:
+                book_profit_dict[x + '_number'] == 0
+                amount_dict[x + '_number'] == 0
+            for z in cfx_info:
+                if y == z['order_time']:
+                    for d in cfx_book.values():
+                        if z['buy_us'] == str(d).split('-')[0] and z['sell_us'] == str(d).split('-')[1]:
+                            book_profit_dict['{}_number'.format(d)] = Decimal(book_profit_dict['{}_number'.format(d)]) - Decimal(z['buy_us_amount'])
+                            cost_amount = Decimal(z['buy_us_amount']) * Decimal(z['cost'])
+                            if '.' in str(cost_amount):
+                                if z['sell_us'] == 'ETH' or z['sell_us'] == 'BTC':
+                                    cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:8])
+                                elif z['sell_us'] == 'USDT':
+                                    cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:6])
+                                else:
+                                    cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:2])
+                            amount_dict['{}_amount'.format(d)] = Decimal(amount_dict['{}_amount'.format(d)]) - Decimal(cost_amount)
+                        elif z['buy_us'] == str(d).split('-')[1] and z['sell_us'] == str(d).split('-')[0]:
+                            book_profit_dict['{}_number'.format(d)] = Decimal(book_profit_dict['{}_number'.format(d)]) + Decimal(z['sell_us_amount'])
+                            cost_amount = Decimal(z['sell_us_amount']) * Decimal(z['cost'])
+                            if '.' in str(cost_amount):
+                                if z['buy_us'] == 'ETH' or z['buy_us'] == 'BTC':
+                                    cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:8])
+                                elif z['buy_us'] == 'USDT':
+                                    cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:6])
+                                else:
+                                    cost_amount = '{}.{}'.format(str(cost_amount).split('.')[0], str(cost_amount).split('.')[1][:2])
+                            amount_dict['{}_amount'.format(d)] = Decimal(amount_dict['{}_amount'.format(d)]) + Decimal(cost_amount)
         #         # 按照货币对算第1层损益
         #     for x in cfx_book.keys():
         #         # 获得数据库中的损益记录
