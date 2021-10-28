@@ -47,11 +47,11 @@ class TestConvertOrderApi:
                 if info is not None:
                     info = info[0]
                     if info['exposure_direction'] == 1:
-                        logger.info('交易对{}在{}时间中要买入{}数量的{}货币'.format(cfx_book[x], time.strftime("%Y--%m--%d %H:%M:%S", time.localtime(y)), book_profit_dict['{}_number'.format(cfx_book[x])],str(cfx_book[x]).split('-')[0]))
-                        assert Decimal(info['trading_amount']) == book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(time.strftime("%Y--%m--%d %H:%M:%S", time.localtime(y)), book_profit_dict['{}_number'.format(cfx_book[x])])
+                        logger.info('交易对{}在{}时间中要买入{}数量的{}货币'.format(cfx_book[x], time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(y)), book_profit_dict['{}_number'.format(cfx_book[x])],str(cfx_book[x]).split('-')[0]))
+                        assert Decimal(info['trading_amount']) == book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(y)), book_profit_dict['{}_number'.format(cfx_book[x])])
                     if info['exposure_direction'] == 2:
-                        logger.info('交易对{}在{}时间中要卖出{}数量的{}货币'.format(cfx_book[x], time.strftime("%Y--%m--%d %H:%M:%S", time.localtime(y)), -book_profit_dict['{}_number'.format(cfx_book[x])], str(cfx_book[x]).split('-')[0]))
-                        assert Decimal(info['trading_amount']) == -book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(time.strftime("%Y--%m--%d %H:%M:%S", time.localtime(y)), book_profit_dict['{}_number'.format(cfx_book[x])])
+                        logger.info('交易对{}在{}时间中要卖出{}数量的{}货币'.format(cfx_book[x], time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(y)), -book_profit_dict['{}_number'.format(cfx_book[x])], str(cfx_book[x]).split('-')[0]))
+                        assert Decimal(info['trading_amount']) == -book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(y)), book_profit_dict['{}_number'.format(cfx_book[x])])
                     # 获得bybit利率
                     cfx_order_info = sqlFunction.get_order_info(aggregation_no=y, book_id=x)
                     bybit_rate = cfx_order_info['rate']

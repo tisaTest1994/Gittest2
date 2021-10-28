@@ -66,8 +66,10 @@ class sqlFunction:
     # 获取bybit利率
     @staticmethod
     def get_order_info(aggregation_no, book_id):
+        print('{}:{}'.format(aggregation_no, book_id))
         sql = "select * from `order` where biz_id='{}';".format('{}:{}'.format(aggregation_no, book_id))
         info = sqlFunction().connect_mysql('cfxorder', sql=sql)
+        print(info)
         if info is not None and '()' not in str(info):
             return info[0]
 
