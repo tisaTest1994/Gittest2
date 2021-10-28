@@ -40,7 +40,7 @@ class TestConvertOrderApi:
                             cost_amount = Decimal(z['sell_us_amount']) * Decimal(z['cost'])
                             cost_amount = crypto_len(number=str(cost_amount), type=z['buy_us'])
                             amount_dict['{}_amount'.format(d)] = Decimal(amount_dict['{}_amount'.format(d)]) + Decimal(cost_amount)
-                # 按照货币对算第1层损益
+            # 按照货币对算第1层损益
             for x in cfx_book.keys():
                 # 获得数据库中的损益记录
                 info = sqlFunction.get_one_floor(aggregation_no=y, book_id=x)
@@ -52,23 +52,23 @@ class TestConvertOrderApi:
                     if info['exposure_direction'] == 2:
                         logger.info('交易对{}在{}时间中要卖出{}数量的{}货币'.format(cfx_book[x], time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(y)), -book_profit_dict['{}_number'.format(cfx_book[x])], str(cfx_book[x]).split('-')[0]))
                         assert Decimal(info['trading_amount']) == -book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(y)), book_profit_dict['{}_number'.format(cfx_book[x])])
-                    # 获得bybit利率
-                    cfx_order_info = sqlFunction.get_order_info(aggregation_no=y, book_id=x)
-                    bybit_rate = cfx_order_info['rate']
-                    quote_amount = cfx_order_info['quote_amount']
-                    # 第2层损益
-                    if str(book_profit_dict['{}_number'.format(cfx_book[x])]) != '0':
-                        amount = Decimal(bybit_rate) * Decimal(book_profit_dict['{}_number'.format(cfx_book[x])])
-                        if '.' in str(amount):
-                            if str(cfx_book[x]).split('-')[1] == 'ETH' or str(cfx_book[x]).split('-')[1] == 'BTC':
-                                amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:8])
-                            elif str(cfx_book[x]).split('-')[1] == 'USDT':
-                                amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:6])
-                            else:
-                                amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:2])
-                        assert Decimal(quote_amount) == - Decimal(amount_dict['{}_amount'.format(cfx_book[x])]), '货币总量数据库反馈是{},计算是{}'.format(quote_amount, Decimal(amount_dict['{}_amount'.format(cfx_book[x])]))
-                        logger.info(
-                            '第2层损益{}'.format(Decimal(amount) - Decimal(amount_dict['{}_amount'.format(cfx_book[x])])))
-                        wallet_info = sqlFunction.get_two_floor('{}:{}'.format(y, x))
-                        print(wallet_info)
+                    # # 获得bybit利率
+                    # cfx_order_info = sqlFunction.get_order_info(aggregation_no=y, book_id=x)
+                    # bybit_rate = cfx_order_info['rate']
+                    # quote_amount = cfx_order_info['quote_amount']
+                    # # 第2层损益
+                    # if str(book_profit_dict['{}_number'.format(cfx_book[x])]) != '0':
+                    #     amount = Decimal(bybit_rate) * Decimal(book_profit_dict['{}_number'.format(cfx_book[x])])
+                    #     if '.' in str(amount):
+                    #         if str(cfx_book[x]).split('-')[1] == 'ETH' or str(cfx_book[x]).split('-')[1] == 'BTC':
+                    #             amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:8])
+                    #         elif str(cfx_book[x]).split('-')[1] == 'USDT':
+                    #             amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:6])
+                    #         else:
+                    #             amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:2])
+                    #     assert Decimal(quote_amount) == - Decimal(amount_dict['{}_amount'.format(cfx_book[x])]), '货币总量数据库反馈是{},计算是{}'.format(quote_amount, Decimal(amount_dict['{}_amount'.format(cfx_book[x])]))
+                    #     logger.info(
+                    #         '第2层损益{}'.format(Decimal(amount) - Decimal(amount_dict['{}_amount'.format(cfx_book[x])])))
+                    #     wallet_info = sqlFunction.get_two_floor('{}:{}'.format(y, x))
+                    #     print(wallet_info)
 
