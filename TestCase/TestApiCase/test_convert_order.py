@@ -26,7 +26,7 @@ class TestConvertOrderApi:
             amount_dict = {}
             for x in cfx_book.values():
                 book_profit_dict[x + '_number'] = 0
-                amount_dict[x + '_number'] = 0
+                amount_dict[x + '_amount'] = 0
             for z in cfx_info:
                 if y == z['order_time']:
                     for d in cfx_book.values():

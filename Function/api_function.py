@@ -155,7 +155,6 @@ class ApiFunction:
                     number = float(number) - float(json.loads(y['details'])['currency']['amount'])
                 elif y['user_txn_sub_type'] == 6:
                     number = float(number) + float(json.loads(y['details'])['currency']['amount'])
-                    print(y)
                 elif y['user_txn_sub_type'] == 7:
                     number = float(number) - float(json.loads(y['details'])['currency']['amount'])
             # 获取昨天UTC23:59的汇率价格
