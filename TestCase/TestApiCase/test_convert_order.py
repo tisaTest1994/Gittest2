@@ -24,7 +24,8 @@ class TestConvertOrderApi:
             # 基准货币数量
             book_profit_dict = {}
             amount_dict = {}
-            for x in cfx_book.values:
+            for x in cfx_book.values():
+                print(x)
                 book_profit_dict[x + '_number'] == 0
                 amount_dict[x + '_number'] == 0
             for z in cfx_info:
