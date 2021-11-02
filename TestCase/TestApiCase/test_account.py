@@ -1090,7 +1090,7 @@ class TestAccountApi:
             assert 'REGISTRY' in str(metadata_type), "注册时metadata随意传入信息数据库校验错误，返回值是{}".format(metadata)
 
     @allure.testcase('test_account_055 注册时传入internal用户类型')
-    def test_account_054(self):
+    def test_account_055(self):
         with allure.step("打开notification推送"):
             account = generate_email()
             password = get_json()['email']['password']
