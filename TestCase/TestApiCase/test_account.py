@@ -1114,5 +1114,4 @@ class TestAccountApi:
         with allure.step("查询数据库的用户类型"):
             sql = "select user_type from account.user where email='{}';".format(account)
             user_type = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
-            print(user_type)
             assert 'INTERNAL' == user_type['user_type'], "注册时metadata随意传入信息数据库校验错误，返回值是{}".format(user_type)
