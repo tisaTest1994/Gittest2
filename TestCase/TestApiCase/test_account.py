@@ -1088,3 +1088,32 @@ class TestAccountApi:
             metadata_type = sqlFunction.connect_mysql(db='account', sql=sql)
             assert 'REFERRAL' not in str(metadata_type), "注册时metadata随意传入信息数据库校验错误，返回值是{}".format(metadata)
             assert 'REGISTRY' in str(metadata_type), "注册时metadata随意传入信息数据库校验错误，返回值是{}".format(metadata)
+
+    @allure.testcase('test_account_055 注册时传入internal用户类型')
+    def test_account_054(self):
+        with allure.step("打开notification推送"):
+            account = generate_email()
+            password = get_json()['email']['password']
+            data = {
+                "emailAddress": account,
+                "password": password,
+                "verificationCode": "666666",
+                "citizenCountryCode": random.choice(get_json()['citizenCountryCodeList']),
+                "metadata": {
+                    "userType": "INTERNAL"
+                }
+            }
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['accessToken'] is not None, "注册时metadata随意传入信息错误，返回值是{}".format(r.text)
+        with allure.step("查询邮箱的account id"):
+            sql = "select account_id from account.user_account_map where user_id=(select user_id from account.user where email='{}');".format(account)
+            account_id = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
+            sql = "select * from account.account_metadata where account_id='{}';".format(account_id['account_id'])
+            metadata = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
+            assert '213' in metadata['metadata'], "注册时metadata随意传入信息数据库校验错误，返回值是{}".format(metadata)
