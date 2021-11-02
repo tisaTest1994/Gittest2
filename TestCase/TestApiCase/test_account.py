@@ -1048,7 +1048,7 @@ class TestAccountApi:
         with allure.step("查询邮箱的account id"):
             sql = "select account_id from account.user_account_map where user_id=(select user_id from account.user where email='{}');".format(account)
             account_id = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
-            sql = "select metadata from account.account_metadata where account_id={};".format(account_id['account_id'])
+            sql = "select metadata from account.account_metadata where account_id='{}';".format(account_id['account_id'])
             metadata = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
             print(metadata)
             print(type(metadata))
