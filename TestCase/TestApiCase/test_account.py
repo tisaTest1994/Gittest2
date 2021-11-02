@@ -1049,6 +1049,6 @@ class TestAccountApi:
             sql = "select account_id from account.user_account_map where user_id=(select user_id from account.user where email='{}');".format(account)
             account_id = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
             print(account_id)
-            print(type)
+            print(type(account_id))
 
 
