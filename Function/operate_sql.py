@@ -7,7 +7,7 @@ class sqlFunction:
 
     @staticmethod
     def connect_mysql(db, sql, type=2):
-        #logger.info('sql命令是{}'.format(sql))
+        logger.info('sql命令是{}'.format(sql))
         account = get_json()['mysql']['account']
         password = get_json()['mysql']['password']
         host = get_json()['mysql']['host']
