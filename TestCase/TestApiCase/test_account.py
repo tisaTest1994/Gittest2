@@ -1111,9 +1111,8 @@ class TestAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['accessToken'] is not None, "注册时metadata随意传入信息错误，返回值是{}".format(r.text)
-        with allure.step("查询邮箱的account id"):
-            sql = "select account_id from account.user_account_map where user_id=(select user_id from account.user where email='{}');".format(account)
-            account_id = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
-            sql = "select * from account.account_metadata where account_id='{}';".format(account_id['account_id'])
-            metadata = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
-            assert '213' in metadata['metadata'], "注册时metadata随意传入信息数据库校验错误，返回值是{}".format(metadata)
+        with allure.step("查询数据库的用户类型"):
+            sql = "select user_type from account.user where email='{}';".format(account)
+            user_type = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
+            print(user_type)
+            assert 'INTERNAL' == user_type, "注册时metadata随意传入信息数据库校验错误，返回值是{}".format(user_type)
