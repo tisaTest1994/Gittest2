@@ -1050,8 +1050,8 @@ class TestAccountApi:
             account_id = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
             sql = "select metadata from account.account_metadata where account_id='{}';".format(account_id['account_id'])
             metadata = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
-            print(type(metadata['metadata']))
-            print(metadata['metadata']['referralCode'])
-            assert metadata['metadata']['referralCode'] == 'metadata_test', "注册时metadata随意传入信息数据库校验错误，返回值是{}".format(metadata)
-
+            assert 'metadata_test' in metadata['metadata'], "注册时metadata随意传入信息数据库校验错误，返回值是{}".format(metadata)
+            sql = "select metadata_type from account.account_metadata where account_id='{}';".format(account_id['account_id'])
+            metadata_type = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
+            print(metadata_type)
 
