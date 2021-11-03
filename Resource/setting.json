@@ -24,6 +24,17 @@
       "url": "https://test.salesforce.com"
     }
   },
+  "faas": {
+    "test": {
+      "url": "https://connect.latibac.com",
+      "secretKey": "YmM0ZDZkZGExMmUyNDhiNDk5MTA2YjJjYzRmNmY1OTc=",
+      "Headers": {
+        "ACCESS-KEY": "test",
+        "Content-Type": "application/json"
+      },
+      "api_key": "0c5ed00809980ccab3a03bd76a3b0406"
+    }
+  },
   "cfx_book": {
     "1": "BTC-USDT",
     "2": "BTC-ETH",

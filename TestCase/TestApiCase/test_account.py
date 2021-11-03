@@ -329,7 +329,6 @@ class TestAccountApi:
             assert r.json() == {}, "用户未注册忘记密码验证码错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_018 忘记密码')
-    @pytest.mark.multiprocess
     def test_account_018(self):
         with allure.step("忘记密码"):
             account = generate_email()

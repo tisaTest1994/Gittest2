@@ -253,11 +253,21 @@ class ApiFunction:
 
     # 验签
     @staticmethod
-    def make_access_sign(unix_time, method, url, body='', key=get_json()['kyc'][get_json()['env']]['kycSecretKey']):
-        if body == '':
-            data = '{}{}{}'.format(unix_time, method, url)
+    def make_access_sign(unix_time, method, url, body='', key='', nonce=''):
+        if nonce == '':
+            if key == '':
+                key = get_json()['kyc'][get_json()['env']]['kycSecretKey']
+            if body == '':
+                data = '{}{}{}'.format(unix_time, method, url)
+            else:
+                data = '{}{}{}{}'.format(unix_time, method, url, body)
         else:
-            data = '{}{}{}{}'.format(unix_time, method, url, body)
+            if key == '':
+                key = get_json()['faas'][get_json()['env']]['secretKey']
+            if body == '':
+                data = '{}{}{}{}'.format(unix_time, method, nonce, url)
+            else:
+                data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
         key = key.encode('utf-8')
         message = data.encode('utf-8')
         sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
@@ -266,21 +276,31 @@ class ApiFunction:
 
     # 获得webhook
     @staticmethod
-    def get_webhook():
+    def get_webhook(type='kyc'):
         conn = http.client.HTTPSConnection('api.pipedream.com')
-        webhook = get_json()['kyc'][get_json()['env']]['webhook']
-        conn.request("GET", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer {}'.format(get_json()['kyc'][get_json()['env']]['api_key'])})
+        if type == 'kyc':
+            webhook = get_json()['kyc'][get_json()['env']]['webhook']
+            conn.request("GET", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer {}'.format(get_json()['kyc'][get_json()['env']]['api_key'])})
+        elif type == 'faas':
+            webhook = get_json()['faas'][get_json()['env']]['webhook']
+            conn.request("GET", '/v1/sources/{}/events'.format(webhook), '',
+                         {'Authorization': 'Bearer {}'.format(get_json()['faas'][get_json()['env']]['api_key'])})
         res = conn.getresponse()
         data = res.read()
         return data.decode("utf-8")
 
     # 删除webhook
     @staticmethod
-    def delete_old_webhook():
+    def delete_old_webhook(type='kyc'):
         conn = http.client.HTTPSConnection('api.pipedream.com')
-        webhook = get_json()['kyc'][get_json()['env']]['webhook']
-        conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer {}'.format(get_json()['kyc'][get_json()['env']]['api_key'])})
-        sleep(1)
+        if type == 'kyc':
+            webhook = get_json()['kyc'][get_json()['env']]['webhook']
+            conn.request("GET", '/v1/sources/{}/events'.format(webhook), '',
+                         {'Authorization': 'Bearer {}'.format(get_json()['kyc'][get_json()['env']]['api_key'])})
+        elif type == 'faas':
+            webhook = get_json()['faas'][get_json()['env']]['webhook']
+            conn.request("GET", '/v1/sources/{}/events'.format(webhook), '',
+                         {'Authorization': 'Bearer {}'.format(get_json()['faas'][get_json()['env']]['api_key'])})
 
     # 验证webhook需要的信息
     @staticmethod
