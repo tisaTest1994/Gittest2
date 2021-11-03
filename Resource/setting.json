@@ -408,7 +408,7 @@
     },
     "test": {
       "Authorization": "Basic c2NyZWVuLXNlcnZpY2U6MzJlMjhkZGUtN2QzNy00ODlkLWFhNmEtMzE5NzY5YTQyNjFh",
-      "api_key": "0c5ed00809980ccab3a03bd76a3b0406",
+      "api_key": "e580364977e0e310205aa89874c64792",
       "authServer": "https://authserver.latibac.com",
       "client_id": "screen-service",
       "kycHeaders": {
@@ -421,7 +421,7 @@
       "partnerId": "800b482d-0a88-480a-aae7-741f77a572f4",
       "password": "123456",
       "realm": "digitrade-operator",
-      "webhook": "dc_dAua6Jl"
+      "webhook": "dc_OLu6Edb"
     }
   },
   "language": "en",
