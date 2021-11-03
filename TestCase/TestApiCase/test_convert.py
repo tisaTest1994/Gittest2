@@ -275,7 +275,7 @@ class TestConvertApi:
                     assert 'invalid Amount' in r3.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
 
     @allure.testcase('test_convert_007 使用错误金额换汇交易')
-    def test_convert_0087(self):
+    def test_convert_007(self):
         quote = ApiFunction.get_quote('BTC-USDT')
         data = {
             "quote_id": quote['quote_id'],
