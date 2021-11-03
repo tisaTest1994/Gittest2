@@ -293,14 +293,9 @@ class ApiFunction:
     @staticmethod
     def delete_old_webhook(type='kyc'):
         conn = http.client.HTTPSConnection('api.pipedream.com')
-        if type == 'kyc':
-            webhook = get_json()['kyc'][get_json()['env']]['webhook']
-            conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '',
-                         {'Authorization': 'Bearer {}'.format(get_json()['kyc'][get_json()['env']]['api_key'])})
-        elif type == 'faas':
-            webhook = get_json()['faas'][get_json()['env']]['webhook']
-            conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '',
-                         {'Authorization': 'Bearer {}'.format(get_json()['faas'][get_json()['env']]['api_key'])})
+        webhook = get_json()['kyc'][get_json()['env']]['webhook']
+        conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer {}'.format(get_json()[type][get_json()['env']]['api_key'])})
+        conn.getresponse()
 
     # 验证webhook需要的信息
     @staticmethod
