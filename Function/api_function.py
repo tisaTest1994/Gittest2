@@ -295,11 +295,11 @@ class ApiFunction:
         conn = http.client.HTTPSConnection('api.pipedream.com')
         if type == 'kyc':
             webhook = get_json()['kyc'][get_json()['env']]['webhook']
-            conn.request("GET", '/v1/sources/{}/events'.format(webhook), '',
+            conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '',
                          {'Authorization': 'Bearer {}'.format(get_json()['kyc'][get_json()['env']]['api_key'])})
         elif type == 'faas':
             webhook = get_json()['faas'][get_json()['env']]['webhook']
-            conn.request("GET", '/v1/sources/{}/events'.format(webhook), '',
+            conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '',
                          {'Authorization': 'Bearer {}'.format(get_json()['faas'][get_json()['env']]['api_key'])})
 
     # 验证webhook需要的信息
