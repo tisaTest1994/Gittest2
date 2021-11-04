@@ -225,6 +225,7 @@ class ApiFunction:
                             str(cfx_book[str(z['book_id'])]).split('-')[1] == 'ETH':
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:8])
                     elif str(cfx_book[str(z['book_id'])]).split('-')[1] == 'USDT':
+                        print(cfx_book[str(z['book_id'])])
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
                     else:
                         profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])

@@ -438,7 +438,7 @@ class TestPayoutApi:
                 "code": "GBP",
                 "amount": "2.81",
                 "payment_method": "Faster Payments",
-                "account_name": account_name[1],
+                "account_name": account_name[2],
                 "account_number": "00003162",
                 "sort_code": "040541"
             }
