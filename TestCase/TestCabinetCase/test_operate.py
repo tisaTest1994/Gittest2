@@ -812,7 +812,6 @@ class TestOperateApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
 
     @allure.testcase('test_operate_035 给客户添加白名单')
-    @pytest.mark.multiprocess
     def test_operate_035(self):
         with allure.step("给客户添加白名单"):
             name = generate_string(16)
