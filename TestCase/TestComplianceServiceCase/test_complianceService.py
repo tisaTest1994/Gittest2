@@ -680,7 +680,7 @@ class TestComplianceServiceApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert externalCaseId == r.json()['externalCaseId'], "获取case信息错误，返回值是{}".format(r.text)
-                assert 'PENDING' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
+                assert 'WAITING_APPROVAL' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_compliance_service_013 创建直接pass TNS_BANK_NAME case后查询cases,最后发送接受结果信息')
     def test_compliance_service_013(self):
@@ -951,3 +951,66 @@ class TestComplianceServiceApi:
     #                 assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
     #                 caseSystemId = r.json()['caseSystemId']
     #                 print(caseSystemId)
+
+    @allure.testcase('test_compliance_service_016 创建个人 Kyc case后查询cases,同步扫描信息')
+    def test_compliance_service_016(self):
+        with allure.step("删除旧的webhook"):
+            ApiFunction.delete_old_webhook()
+        with allure.step("准备测试数据"):
+            externalCaseId = generate_string(30)
+            logger.info('externalCaseId是{}'.format(externalCaseId))
+            kyc_headers = self.kyc_headers
+            data = {
+                "externalCaseId": externalCaseId,
+                "screenType": "INDIVIDUAL",
+                "fullName": "John Doe",
+                "memo": "L++",
+                "individualInfo": {
+                    "gender": "MALE",
+                    "dob": "2002-02-02",
+                    "nationality": "JPN",
+                    "residentialCountry": "HKG"
+                },
+                "organizationInfo": {
+                    "registeredCountry": "HKG"
+                }
+            }
+            unix_time = int(time.time())
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases',
+                                                    body=json.dumps(data))
+        with allure.step("把数据写入headers"):
+            kyc_headers['ACCESS-SIGN'] = sign
+            kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+        with allure.step("创建Kyc case"):
+            r = session.request('POST', url='{}/api/v1/cases'.format(self.kyc_url), data=json.dumps(data),
+                                headers=kyc_headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'PENDING' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)
+                caseSystemId = r.json()['caseSystemId']
+        with allure.step("获取新的wehbook"):
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created', caseSystemId=caseSystemId)
+            # ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
+        with allure.step("sync result"):
+            unix_time = int(time.time())
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                    url='/api/v1//operator/cases/{}/screen/sync-result'.format(caseSystemId),
+                                                    body=json.dumps(data))
+            kyc_headers['ACCESS-SIGN'] = sign
+            kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            r = session.request('POST', url='{}/api/v1/operator/cases/{}/screen/sync-result'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert '' in r.text, "sync result信息错误，返回值是{}".format(r.text)
+        with allure.step("获取新的wehbook"):
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
+                                               caseSystemId=caseSystemId)
