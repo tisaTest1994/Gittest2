@@ -1034,7 +1034,6 @@ class TestAccountApi:
                         "code": "metadata_test"
                     }
                 }
-
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):

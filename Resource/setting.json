@@ -17,6 +17,13 @@
     "email": "yilei1@cabital.com",
     "password": "Zcdsw123"
   },
+  "web": {
+    "test": {
+      "url": "https://www.react.latibac.com/",
+      "account": "richard.wan@cabital.com",
+      "password": "Zcdsw123"
+    }
+  },
   "caas": {
     "test": {
       "account": "data.admin@cabital.com.uat",
