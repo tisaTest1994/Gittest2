@@ -25,5 +25,4 @@ class TestCassApi:
         with allure.step("判断sign in 可被点击并且点击"):
             assert driver.find_element_by_class_name('css-c43lv').is_enabled(), 'sign in 可被点击'
             driver.find_element_by_class_name('css-c43lv').click()
-        sleep(2222)
 
