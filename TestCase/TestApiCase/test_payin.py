@@ -148,3 +148,51 @@ class TestPayInApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert 'Cabital Fintech LT UAB TEST A' in r.text, "充值英镑账户错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_pay_in_010 EUR法币充值方式')
+    def test_pay_in_010(self):
+        with allure.step("EUR法币充值方式"):
+            r = session.request('GET', url='{}/pay/deposit/fiat/{}'.format(env_url, "EUR"), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert '{"payment_methods":[{"image_url":"https://downloads.cabital.com/webassets/icon_sepa.svg","type":"Bank Transfer","name":"SEPA","highlights":["No Deposit Fee","1-2 Working Days"],"key":"SEPA","status":1}]}' in r.text, "EUR法币充值方式错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_pay_in_011 GBP法币充值方式')
+    def test_pay_in_011(self):
+        with allure.step("GBP法币充值方式"):
+            r = session.request('GET', url='{}/pay/deposit/fiat/{}'.format(env_url, "GBP"), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert '{"payment_methods":[{"image_url":"https://downloads.cabital.com/webassets/icon_fasterpayments.svg","type":"Bank Transfer","name":"Faster Payments","highlights":["No Deposit Fee","Instant"],"key":"Faster Payments","status":1}]}' in r.text, "GBP法币充值方式错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_pay_in_012 EUR法币充值账户')
+    def test_pay_in_012(self):
+        with allure.step("EUR法币充值账户"):
+            r = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'EUR', 'SEPA'), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['bank_accounts'] is not None, "EUR法币充值账户错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_pay_in_013 GBP法币充值账户')
+    def test_pay_in_013(self):
+        with allure.step("GBP法币充值账户"):
+            r = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'GBP', 'Faster Payments'), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['bank_accounts'] is not None, "GBP法币充值账户错误，返回值是{}".format(r.text)
