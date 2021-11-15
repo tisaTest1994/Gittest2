@@ -129,7 +129,7 @@ def get_email():
     return {"title": title, "body": data[0][1].decode(encoding['encoding'])}
 
 
-# 查询语言map
+# 获取翻译码
 def get_language_map():
     r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(
         get_json()['language']), timeout=20)
