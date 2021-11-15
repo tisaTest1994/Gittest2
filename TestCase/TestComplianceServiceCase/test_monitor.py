@@ -22,7 +22,7 @@ class TestMonitorApi:
             data = {
                 "externalCaseId": externalCaseId,
                 "screenType": "INDIVIDUAL",
-                "fullName": "yuke zhang",
+                "fullName": "winnie wang",
                 "memo": "L++",
                 "individualInfo": {
                     "gender": "MALE",
@@ -108,7 +108,7 @@ class TestMonitorApi:
             data = {
                 "externalCaseId": externalCaseId,
                 "screenType": "INDIVIDUAL",
-                "fullName": "yuke zhang",
+                "fullName": "winnie wang",
                 "individualInfo": {
                     "gender": "MALE",
                     "dob": "1984-01-20",
@@ -253,7 +253,7 @@ class TestMonitorApi:
             data = {
                 "externalCaseId": externalCaseId,
                 "screenType": "INDIVIDUAL",
-                "fullName": "yuke zhang",
+                "fullName": "winnie wang",
                 "individualInfo": {
                     "gender": "MALE",
                     "dob": "1984-01-20",
@@ -662,7 +662,7 @@ class TestMonitorApi:
             data = {
                 "externalCaseId": externalCaseId.lower(),
                 "screenType": "INDIVIDUAL",
-                "fullName": "yuke zhang",
+                "fullName": "winnie wang",
                 "memo": "L++",
                 "individualInfo": {
                     "gender": "MALE",
@@ -747,7 +747,7 @@ class TestMonitorApi:
             data = {
                 "externalCaseId": externalCaseId.upper(),
                 "screenType": "INDIVIDUAL",
-                "fullName": "yuke zhang",
+                "fullName": "winnie wang",
                 "memo": "L++",
                 "individualInfo": {
                     "gender": "MALE",
