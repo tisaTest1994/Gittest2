@@ -22,7 +22,7 @@ class TestMonitorApi:
             data = {
                 "externalCaseId": externalCaseId,
                 "screenType": "INDIVIDUAL",
-                "fullName": "yuke zhang",
+                "fullName": "winnie wang",
                 "memo": "L++",
                 "individualInfo": {
                     "gender": "MALE",
@@ -108,7 +108,7 @@ class TestMonitorApi:
             data = {
                 "externalCaseId": externalCaseId,
                 "screenType": "INDIVIDUAL",
-                "fullName": "yuke zhang",
+                "fullName": "winnie wang",
                 "individualInfo": {
                     "gender": "MALE",
                     "dob": "1984-01-20",
@@ -253,7 +253,7 @@ class TestMonitorApi:
             data = {
                 "externalCaseId": externalCaseId,
                 "screenType": "INDIVIDUAL",
-                "fullName": "yuke zhang",
+                "fullName": "winnie wang",
                 "individualInfo": {
                     "gender": "MALE",
                     "dob": "1984-01-20",
@@ -651,7 +651,7 @@ class TestMonitorApi:
                 assert r.json()['externalCaseId'] is not None, '查询kyc-case信息错误,返回值是{}'.format(r.text)
                 assert 'PENDING' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_monitor_001 创建直接pass个人 Kyc case创建直接个人 Kyc case大小写')
+    @allure.testcase('test_monitor_011 创建直接pass个人 Kyc case创建直接个人 Kyc case大小写')
     @pytest.mark.timeout(1200)
     def test_monitor_011(self):
         with allure.step("删除旧的webhook"):
@@ -662,7 +662,7 @@ class TestMonitorApi:
             data = {
                 "externalCaseId": externalCaseId.lower(),
                 "screenType": "INDIVIDUAL",
-                "fullName": "yuke zhang",
+                "fullName": "winnie wang",
                 "memo": "L++",
                 "individualInfo": {
                     "gender": "MALE",
@@ -747,7 +747,7 @@ class TestMonitorApi:
             data = {
                 "externalCaseId": externalCaseId.upper(),
                 "screenType": "INDIVIDUAL",
-                "fullName": "yuke zhang",
+                "fullName": "winnie wang",
                 "memo": "L++",
                 "individualInfo": {
                     "gender": "MALE",
