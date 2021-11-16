@@ -9,7 +9,6 @@ class TestKycApi:
         ApiFunction.add_headers()
 
     @allure.testcase('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
-    @pytest.mark.multiprocess
     def test_kyc_001(self):
         with allure.step("随机获得国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
@@ -27,7 +26,6 @@ class TestKycApi:
             assert 'Exist pass case.' in r.text, "通过kyc的用户，获取kyc上传token失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_002 未通过kyc的用户，获取kyc上传token')
-    @pytest.mark.multiprocess
     def test_kyc_002(self):
         account = generate_email()
         password = 'Abc112233'
@@ -54,7 +52,6 @@ class TestKycApi:
             assert 'Cabital_LT_KYC_Mobile_Basic' in r.text, "通过kyc的用户，获取kyc上传token错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_003 未申请kyc获取kyc-case信息失败')
-    @pytest.mark.multiprocess
     def test_kyc_003(self):
         account = generate_email()
         password = 'Abc112233'
@@ -74,7 +71,6 @@ class TestKycApi:
             assert 'informations' in r.text, "未申请kyc获取kyc-case信息失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_kyc_004 获取kyc-case信息')
-    @pytest.mark.multiprocess
     def test_kyc_004(self):
         with allure.step("获取kyc-case信息"):
             data = {

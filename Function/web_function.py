@@ -51,3 +51,16 @@ class webFunction:
         with allure.step("判断sign in 可被点击并且点击"):
             assert driver.find_element_by_class_name('css-c43lv').is_enabled(), 'sign in 可被点击'
             driver.find_element_by_class_name('css-c43lv').click()
+
+    # 登出 web
+    @staticmethod
+    def logout_web(driver):
+        with allure.step("判断在首页"):
+            driver.find_element_by_class_name('css-1geb7my').is_displayed()
+        with allure.step("点击登出"):
+            driver.find_element_by_class_name('css-1rnrzb1').click()
+
+
+
+
+

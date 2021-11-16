@@ -10,7 +10,6 @@ class TestAccountApi:
         ApiFunction.add_headers()
 
     @allure.testcase('test_account_001 成功注册新用户')
-    @pytest.mark.multiprocess
     def test_account_001(self):
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
@@ -32,7 +31,6 @@ class TestAccountApi:
             assert r.json()['refreshExpiresTn'] == 86400, "token过期时间不是24小时，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_002 注册用户时，用户已经存在（正常流程不会存在此问题）')
-    @pytest.mark.multiprocess
     def test_account_002(self):
         account = generate_email()
         with allure.step("提前先注册好"):
@@ -56,8 +54,6 @@ class TestAccountApi:
             assert 'Registration failed. Please contact our customer service if the problem persists.' in r.text, "用户已经存在错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_003 注册时，输入错误验证码导致注册失败')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_003(self):
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
@@ -1113,3 +1109,81 @@ class TestAccountApi:
             sql = "select user_type from account.user where email='{}';".format(account)
             user_type = sqlFunction.connect_mysql(db='account', sql=sql, type=1)
             assert 'INTERNAL' == user_type['user_type'], "注册时metadata随意传入信息数据库校验错误，返回值是{}".format(user_type)
+
+    @allure.testcase('test_account_056 成功注册新用户不传国家地区码')
+    def test_account_056(self):
+        with allure.step("注册新用户"):
+            data = {
+                "emailAddress": generate_email(),
+                "verificationCode": "666666",
+                "password": get_json()['email']['password']
+            }
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "成功注册新用户不传国家地区码失败，返回值是{}".format(r.text)
+            assert r.json()['refreshExpiresTn'] == 86400, "token过期时间不是24小时，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_057 获取用户必填的系统级数据，设置密码')
+    def test_account_057(self):
+        with allure.step("获取用户必填的系统级数据，设置密码"):
+            r = session.request('GET', url='{}/account/info/system/required'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "成功注册新用户不传国家地区码失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_058 获取用户必填的系统级数据，没有设置密码')
+    def test_account_058(self):
+        with allure.step("获取用户必填的系统级数据，设置密码"):
+            r = session.request('GET', url='{}/account/info/system/required'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "成功注册新用户不传国家地区码失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_059 补充用户必填的系统级数据，设置密码成功')
+    def test_account_059(self):
+        with allure.step("补充用户必填的系统级数据，设置密码成功"):
+            r = session.request('POST', url='{}/account/info/system/required'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "补充用户必填的系统级数据，设置密码成功失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_060 获取用户必填的系统级数据，没有设置密码')
+    def test_account_060(self):
+        with allure.step("补充用户必填的系统级数据，设置密码成功"):
+            r = session.request('POST', url='{}/account/info/system/required'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "补充用户必填的系统级数据，设置密码成功失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_061 获取用户必填的kyc数据')
+    def test_account_061(self):
+        with allure.step("补充用户必填的系统级数据，设置密码成功"):
+            r = session.request('POST', url='{}/account/info/system/required'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'accessToken' in r.text, "补充用户必填的系统级数据，设置密码成功失败，返回值是{}".format(r.text)

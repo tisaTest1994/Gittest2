@@ -89,7 +89,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert 'This address is not exist, please refresh and retry.' in r.text, "删除收款地址错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_06 获取提现费率和提现限制')
+    @allure.testcase('test_payout_006 获取提现费率和提现限制')
     def test_payout_006(self):
         with allure.step("获取提现费率和提现限制"):
             data = {
@@ -110,7 +110,7 @@ class TestPayoutApi:
 
     @allure.testcase('test_payout_007 MFA认证提现ETH成功')
     def test_payout_007(self):
-        transaction_id = ApiFunction.get_payout_transaction_id(amount='0.022', address='tb1q38mwu50xludgz4r52n2v0q6jwlysjgz4zkk3kl', code_type='BTC')
+        transaction_id = ApiFunction.get_payout_transaction_id(amount='0.003', address='tb1q38mwu50xludgz4r52n2v0q6jwlysjgz4zkk3kl', code_type='ETH')
         logger.info('transaction_id是{}'.format(transaction_id))
         # with allure.step("p/l验证"):
         #     sleep(5)
@@ -254,7 +254,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'SEPA' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_016 法币提现')
+    @allure.testcase('test_payout_016 EUR法币提现')
     def test_payout_016(self):
         with allure.step("开启法币提现画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
@@ -272,7 +272,7 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "EUR",
-                "amount": "2.51",
+                "amount": "2.71",
                 "payment_method": "SEPA",
                 "account_name": account_name[0],
                 "iban": "BE09967206444557"
@@ -417,7 +417,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'Faster Payments' in r.text, "开启英镑法币提现画面错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_023 GBP法币提现失败')
+    @allure.testcase('test_payout_023 GBP法币用户名字带有中文字符提现失败')
     def test_payout_023(self):
         with allure.step("开启GBP法币提现画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
@@ -426,7 +426,7 @@ class TestPayoutApi:
             }
             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
             account_name = r.json()['name_list']
-            print(account_name)
+            logger.info('提款名字是{}'.format(account_name))
         with allure.step("GBP法币提现"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
             secretKey = get_json()['secretKey']
@@ -438,7 +438,7 @@ class TestPayoutApi:
                 "code": "GBP",
                 "amount": "2.81",
                 "payment_method": "Faster Payments",
-                "account_name": account_name[2],
+                "account_name": account_name[3],
                 "account_number": "00003162",
                 "sort_code": "040541"
             }
@@ -448,9 +448,9 @@ class TestPayoutApi:
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
-                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'txn_id' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == '103015', "GBP法币用户名字带有中文字符提现失败错误，返回值是{}".format(r.text)
 
     # @allure.testcase('test_payout_024 BCB EUR法币提现')
     # def test_payout_024(self):
