@@ -5,6 +5,7 @@ stages:
     - test1
     - test2
     - test3
+    - test4
 
 before_script:
     - apt-get update
@@ -29,7 +30,7 @@ ApiTest:
     expire_in: 1 week
 
 KycTest:
-  stage: test3
+  stage: test4
   tags:
     - python
   script:
@@ -45,6 +46,17 @@ CabinetTest:
     - python
   script:
     - python run.py cabinet test
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+FaasTest:
+  stage: test3
+  tags:
+    - python
+  script:
+    - python run.py faas test
   artifacts:
     paths:
       - Reports

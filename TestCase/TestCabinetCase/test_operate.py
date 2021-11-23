@@ -515,7 +515,6 @@ class TestOperateApi:
                 assert 'transaction_id' in r.text, "检索yield交易明细错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_021 检索payin order')
-    @pytest.mark.multiprocess
     def test_operate_021(self):
         data = {
             "pagination_request": {
@@ -535,7 +534,7 @@ class TestOperateApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'crypto_account' in r.text, "检索payout交易错误，返回值是{}".format(r.text)
+            assert 'order_id' in r.text, "检索payout交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_operate_022 检索payin order交易明细')
     @pytest.mark.multiprocess

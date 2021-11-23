@@ -54,6 +54,8 @@ if __name__ == '__main__':
         pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "cabinet":
         pytest.main(['./TestCase/TestCabinetCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
+    elif sys.argv[1] == "faas":
+        pytest.main(['./TestCase/TestFassCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     else:
         assert False, 'error 需要传入正确的参数'
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
