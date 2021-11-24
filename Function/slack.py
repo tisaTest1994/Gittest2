@@ -33,6 +33,8 @@ def slack_report(type):
         title = "Ui Test Report"
     elif type == 'cabinet':
         title = "Cabinet Test Report"
+    elif type == 'connect':
+        title = "Connect Test Report"
     else:
         title = "Test Report"
     attachment = [
