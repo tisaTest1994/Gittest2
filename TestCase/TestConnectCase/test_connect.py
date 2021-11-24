@@ -2,14 +2,14 @@ from Function.api_function import *
 from Function.operate_sql import *
 
 
-# Faas相关cases
-class TestFaasApi:
+# Connect相关cases
+class TestConnectApi:
 
-    url = get_json()['faas'][get_json()['env']]['url']
-    headers = get_json()['faas'][get_json()['env']]['Headers']
+    url = get_json()['connect'][get_json()['env']]['url']
+    headers = get_json()['connect'][get_json()['env']]['Headers']
 
-    @allure.testcase('test_faas_001 获取报价')
-    def test_faas_001(self):
+    @allure.testcase('test_connect_001 获取报价')
+    def test_connect_001(self):
         headers = self.headers
         for i in get_json()['cfx_book'].values():
             with allure.step("获取正向报价"):
@@ -41,4 +41,17 @@ class TestFaasApi:
                 with allure.step("校验返回值"):
                     assert r.json()['quote'] is not None, "获取报价错误，返回值是{}".format(r.text)
 
+    @allure.testcase('test_connect_002 获取合作方的配置')
+    def test_connect_002(self):
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', nonce=nonce)
+            headers['ACCESS-SIGN'] = sign
+            headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            headers['ACCESS-NONCE'] = nonce
+            print(headers)
+        with allure.step("获取合作方的配置"):
+            r = session.request('GET', url='{}/api/v1/config'.format(self.url), headers=headers)
+            print(r.text)
 

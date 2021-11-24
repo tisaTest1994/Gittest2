@@ -1128,62 +1128,67 @@ class TestAccountApi:
             assert 'accessToken' in r.text, "成功注册新用户不传国家地区码失败，返回值是{}".format(r.text)
             assert r.json()['refreshExpiresTn'] == 86400, "token过期时间不是24小时，返回值是{}".format(r.text)
 
-    # @allure.testcase('test_account_057 获取用户必填的系统级数据，设置密码')
-    # def test_account_057(self):
-    #     with allure.step("获取用户必填的系统级数据，设置密码"):
-    #         r = session.request('GET', url='{}/account/info/system/required'.format(env_url), headers=headers)
-    #     with allure.step("状态码和返回值"):
-    #         logger.info('状态码是{}'.format(str(r.status_code)))
-    #         logger.info('返回值是{}'.format(str(r.text)))
-    #     with allure.step("校验状态码"):
-    #         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-    #     with allure.step("校验返回值"):
-    #         assert 'accessToken' in r.text, "成功注册新用户不传国家地区码失败，返回值是{}".format(r.text)
-    #
-    # @allure.testcase('test_account_058 获取用户必填的系统级数据，没有设置密码')
-    # def test_account_058(self):
-    #     with allure.step("获取用户必填的系统级数据，设置密码"):
-    #         r = session.request('GET', url='{}/account/info/system/required'.format(env_url), headers=headers)
-    #     with allure.step("状态码和返回值"):
-    #         logger.info('状态码是{}'.format(str(r.status_code)))
-    #         logger.info('返回值是{}'.format(str(r.text)))
-    #     with allure.step("校验状态码"):
-    #         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-    #     with allure.step("校验返回值"):
-    #         assert 'accessToken' in r.text, "成功注册新用户不传国家地区码失败，返回值是{}".format(r.text)
-    #
-    # @allure.testcase('test_account_059 补充用户必填的系统级数据，设置密码成功')
-    # def test_account_059(self):
-    #     with allure.step("补充用户必填的系统级数据，设置密码成功"):
-    #         r = session.request('POST', url='{}/account/info/system/required'.format(env_url), headers=headers)
-    #     with allure.step("状态码和返回值"):
-    #         logger.info('状态码是{}'.format(str(r.status_code)))
-    #         logger.info('返回值是{}'.format(str(r.text)))
-    #     with allure.step("校验状态码"):
-    #         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-    #     with allure.step("校验返回值"):
-    #         assert 'accessToken' in r.text, "补充用户必填的系统级数据，设置密码成功失败，返回值是{}".format(r.text)
-    #
-    # @allure.testcase('test_account_060 获取用户必填的系统级数据，没有设置密码')
-    # def test_account_060(self):
-    #     with allure.step("补充用户必填的系统级数据，设置密码成功"):
-    #         r = session.request('POST', url='{}/account/info/system/required'.format(env_url), headers=headers)
-    #     with allure.step("状态码和返回值"):
-    #         logger.info('状态码是{}'.format(str(r.status_code)))
-    #         logger.info('返回值是{}'.format(str(r.text)))
-    #     with allure.step("校验状态码"):
-    #         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-    #     with allure.step("校验返回值"):
-    #         assert 'accessToken' in r.text, "补充用户必填的系统级数据，设置密码成功失败，返回值是{}".format(r.text)
-    #
-    # @allure.testcase('test_account_061 获取用户必填的kyc数据')
-    # def test_account_061(self):
-    #     with allure.step("补充用户必填的系统级数据，设置密码成功"):
-    #         r = session.request('POST', url='{}/account/info/system/required'.format(env_url), headers=headers)
-    #     with allure.step("状态码和返回值"):
-    #         logger.info('状态码是{}'.format(str(r.status_code)))
-    #         logger.info('返回值是{}'.format(str(r.text)))
-    #     with allure.step("校验状态码"):
-    #         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-    #     with allure.step("校验返回值"):
-    #         assert 'accessToken' in r.text, "补充用户必填的系统级数据，设置密码成功失败，返回值是{}".format(r.text)
+    @allure.testcase('test_account_057 获取已经设置密码用户的必填系统级数据')
+    def test_account_057(self):
+        with allure.step("获取已经设置密码用户的必填系统级数据"):
+            r = session.request('GET', url='{}/account/info/system/required'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert '"missing":[]' in r.text, "获取已经设置密码用户的必填系统级数据失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_058 补充用户必填的系统级数据，密码已存在')
+    def test_account_058(self):
+        with allure.step("补充用户必填的系统级数据，密码已存在"):
+            data = {
+                "password": "Zcdsw123"
+            }
+            r = session.request('POST', url='{}/account/info/system/required'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert '001024' in r.text, "补充用户必填的系统级数据，密码已存在失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_059 获取用户必填的KYC数据，获取数据为空')
+    def test_account_059(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei33@163.com')
+        with allure.step("获取用户必填的KYC数据，获取数据为空"):
+            r = session.request('GET', url='{}/account/info/kyc/required'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert '"registryPurpose":null,' in r.text, "获取用户必填的KYC数据，获取数据为空失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_060 获取用户必填的KYC数据，获取全部信息')
+    def test_account_060(self):
+        with allure.step("获取用户必填的KYC数据，获取全部信息"):
+            r = session.request('GET', url='{}/account/info/kyc/required'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert '"missing":[]' in r.text, "获取用户必填的KYC数据，获取全部信息失败，返回值是{}".format(r.text)
+
+    @allure.testcase('test_account_061 补充用户必填的kyc数据')
+    def test_account_061(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei33@163.com')
+        with allure.step("获取用户必填的KYC数据，获取全部信息"):
+            r = session.request('GET', url='{}/account/info/kyc/required'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert '"missing":["REGISTRY_PURPOSE","RESIDENT"]' in r.text, "获取用户必填的KYC数据，获取全部信息失败，返回值是{}".format(r.text)

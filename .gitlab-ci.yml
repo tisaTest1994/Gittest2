@@ -51,12 +51,12 @@ CabinetTest:
       - Reports
     expire_in: 1 week
 
-FaasTest:
+ConnectTest:
   stage: test3
   tags:
     - python
   script:
-    - python run.py faas test
+    - python run.py connect test
   artifacts:
     paths:
       - Reports

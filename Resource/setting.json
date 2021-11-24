@@ -31,12 +31,12 @@
       "url": "https://test.salesforce.com"
     }
   },
-  "faas": {
+  "connect": {
     "test": {
       "url": "https://connect.latibac.com",
-      "secretKey": "YmM0ZDZkZGExMmUyNDhiNDk5MTA2YjJjYzRmNmY1OTc=",
+      "secretKey": "47605b8c-1555-4b80-b72b-b3be60412aa5",
       "Headers": {
-        "ACCESS-KEY": "test",
+        "ACCESS-KEY": "e610f97e-7327-42f8-90dc-6b3067effd3c",
         "Content-Type": "application/json"
       },
       "api_key": "0c5ed00809980ccab3a03bd76a3b0406"
