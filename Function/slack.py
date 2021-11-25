@@ -72,5 +72,8 @@ def get_job_id(type):
         elif type == 'cabinet':
             if i['name'] == 'CabinetTest':
                 id_list.append(i['id'])
+        elif type == 'connect':
+            if i['name'] == 'ConnectTest':
+                id_list.append(i['id'])
     return id_list[0]
 
