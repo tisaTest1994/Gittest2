@@ -285,6 +285,7 @@ class TestConnectWalletApi:
                                     "sell_amount": str(cfx_amount['sell_amount']),
                                     "major_ccy": cfx_amount['major_ccy']
                                 }
+                                print(data)
                                 logger.info('发送换汇data是{}'.format(data))
                                 with allure.step("获得换汇前buy币种balance金额"):
                                     buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=cfx_amount['buy'])
