@@ -270,7 +270,6 @@ class ApiFunction:
                 data = '{}{}{}{}'.format(unix_time, method, nonce, url)
             else:
                 data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
-        print(data)
         key = key.encode('utf-8')
         message = data.encode('utf-8')
         sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
@@ -482,3 +481,9 @@ class ApiFunction:
                 buy_amount = crypto_len(number=buy_amount, type=cfx_dict['buy'])
         return {"buy": cfx_dict['buy'], "sell": cfx_dict['sell'], "buy_amount": buy_amount, "sell_amount": sell_amount, "quote": quote, "major_ccy": cfx_dict['major_ccy']}
 
+    # 获得全部币种的list
+    @staticmethod
+    def balance_list():
+        crypto_list = get_json()['crypto_list']
+        cash_list = get_json()['cash_list']
+        return crypto_list + cash_list

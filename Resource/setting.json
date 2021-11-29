@@ -303,6 +303,10 @@
     "USDT",
     "ETH"
   ],
+  "cash_list": [
+    "GBP",
+    "EUR"
+  ],
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
     "email": "richard.wan@cabital.com",

@@ -6,8 +6,6 @@ from Function.operate_sql import *
 class TestConnectApi:
 
     url = get_json()['connect'][get_json()['env']]['url']
-    global connect_headers
-    connect_headers = get_json()['connect'][get_json()['env']]['Headers']
 
     @allure.testcase('test_connect_001 获取报价')
     def test_connect_001(self):
@@ -50,7 +48,7 @@ class TestConnectApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert '{"currencies":[{"symbol":"ETH","type":2,"deposit_methods":["ERC20"],"withdraw_methods":["ERC20"],"config":{"credit":{"allow":true,"min":"0.02","max":"0"},"debit":{"allow":true,"min":"0","max":"0"}}},{"symbol":"BTC","type":2,"deposit_methods":["ERC20"],"withdraw_methods":["ERC20"],"config":{"credit":{"allow":true,"min":"0.001","max":"0"},"debit":{"allow":true,"min":"0","max":"0"}}},{"symbol":"USDT","type":2,"deposit_methods":["ERC20"],"withdraw_methods":["ERC20"],"config":{"credit":{"allow":true,"min":"40","max":"0"},"debit":{"allow":true,"min":"0","max":"0"}}},{"symbol":"EUR","type":1,"deposit_methods":["SEPA"],"withdraw_methods":["SEPA"],"config":{"credit":{"allow":true,"min":"25","max":"50000"},"debit":{"allow":true,"min":"0","max":"0"}}},{"symbol":"BGP","type":0,"deposit_methods":["FPS"],"withdraw_methods":["FPS"],"config":{"credit":{"allow":true,"min":"20","max":"40000"},"debit":{"allow":true,"min":"0","max":"0"}}}],"conversions":[{"allow":true,"pair":"BTC-EUR","sell_min":"0.0002","sell_max":"5","buy_min":"10","buy_max":"200000"},{"allow":true,"pair":"ETH-EUR","sell_min":"0.002","sell_max":"100","buy_min":"10","buy_max":"200000"},{"allow":true,"pair":"EUR-USDT","sell_min":"10","sell_max":"200000","buy_min":"10","buy_max":"200000"},{"allow":true,"pair":"BTC-BGP","sell_min":"0.0002","sell_max":"5","buy_min":"10","buy_max":"200000"},{"allow":true,"pair":"ETH-BGP","sell_min":"0.002","sell_max":"100","buy_min":"10","buy_max":"200000"},{"allow":true,"pair":"GBP-USDT","sell_min":"10","sell_max":"200000","buy_min":"10","buy_max":"200000"}]}' == r.text, "获取合作方的配置错误，返回值是{}".format(r.text)
+            assert '{"currencies":[{"symbol":"ETH","type":2,"deposit_methods":["ERC20"],"withdraw_methods":["ERC20"],"config":{"credit":{"allow":true,"min":"0.02","max":"0"},"debit":{"allow":true,"min":"0","max":"0"},"conversion":{"allow":true,"min":"0.002","max":"100"}}},{"symbol":"BTC","type":2,"deposit_methods":["ERC20"],"withdraw_methods":["ERC20"],"config":{"credit":{"allow":true,"min":"0.001","max":"0"},"debit":{"allow":true,"min":"0","max":"0"},"conversion":{"allow":true,"min":"0.0002","max":"5"}}},{"symbol":"USDT","type":2,"deposit_methods":["ERC20"],"withdraw_methods":["ERC20"],"config":{"credit":{"allow":true,"min":"40","max":"0"},"debit":{"allow":true,"min":"0","max":"0"},"conversion":{"allow":true,"min":"10","max":"200000"}}},{"symbol":"EUR","type":1,"deposit_methods":["SEPA"],"withdraw_methods":["SEPA"],"config":{"credit":{"allow":true,"min":"25","max":"50000"},"debit":{"allow":true,"min":"0","max":"0"},"conversion":{"allow":true,"min":"10","max":"200000"}}},{"symbol":"BGP","type":0,"deposit_methods":["FPS"],"withdraw_methods":["FPS"],"config":{"credit":{"allow":true,"min":"20","max":"40000"},"debit":{"allow":true,"min":"0","max":"0"},"conversion":{"allow":true,"min":"10","max":"200000"}}}],"pairs":[{"pair":"BTC-EUR"},{"pair":"ETH-EUR"},{"pair":"EUR-USDT"},{"pair":"BTC-GBP"},{"pair":"ETH-GBP"},{"pair":"GBP-USDT"}]}' == r.text, "获取合作方的配置错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_003 获取未关联用户状况')
     def test_connect_003(self):
@@ -262,4 +260,32 @@ class TestConnectApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['account_status'] == 'MISMATCHED', "获取关联用户状况，同名验证拒绝，多种因素错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_connect_012 关联已经关联过的用户')
+    def test_connect_012(self):
+        with allure.step("测试用户的account_id"):
+            account_id = '63254fe2-8a65-457b-b6bd-075ca7160f26'
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            data = {
+                'name': 'winniekyc06 TEST',
+                'id': 'DFKM55645',
+                'id_document': 'PASSPORT',
+                'issued_by': 'HONGKONG',
+                'dob': '19790606'
+            }
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data))
+            connect_headers['ACCESS-SIGN'] = sign
+            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_headers['ACCESS-NONCE'] = nonce
+        with allure.step("获取关联用户状况，同名验证拒绝，多种因素"):
+            r = session.request('PUT', url='{}/api/v1/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['mismatch_fields'] == 'null', "获取关联用户状况，同名验证拒绝，多种因素错误，返回值是{}".format(r.text)
 
