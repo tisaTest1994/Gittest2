@@ -462,9 +462,9 @@ class ApiFunction:
         with allure.step("major_ccy 是buy值"):
             if cfx_dict['buy'] == cfx_dict['major_ccy']:
                 if cfx_dict['buy'] == 'BTC' or cfx_dict['buy'] == 'ETH':
-                    buy_amount = random.uniform(0.02, 1.99)
+                    buy_amount = random.uniform(0.02, 0.199)
                 else:
-                    buy_amount = random.uniform(25, 3000.11)
+                    buy_amount = random.uniform(25, 1000.11)
                 buy_amount = crypto_len(number=buy_amount, type=cfx_dict['buy'])
                 quote = ApiFunction.get_quote('{}-{}'.format(cfx_dict['buy'], cfx_dict['sell']))
                 sell_amount = str(float(buy_amount) * float(quote['quote']))
@@ -472,12 +472,18 @@ class ApiFunction:
         with allure.step("major_ccy 是sell值"):
             if cfx_dict['sell'] == cfx_dict['major_ccy']:
                 if cfx_dict['sell'] == 'BTC' or cfx_dict['sell'] == 'ETH':
-                    sell_amount = random.uniform(0.02, 0.19)
+                    sell_amount = random.uniform(0.02, 0.199)
                 else:
-                    sell_amount = random.uniform(25, 3000.11)
+                    sell_amount = random.uniform(25, 1000.11)
                 sell_amount = crypto_len(number=sell_amount, type=cfx_dict['sell'])
                 quote = ApiFunction.get_quote('{}-{}'.format(cfx_dict['buy'], cfx_dict['sell']))
                 buy_amount = str(float(sell_amount) / float(quote['quote']))
                 buy_amount = crypto_len(number=buy_amount, type=cfx_dict['buy'])
         return {"buy": cfx_dict['buy'], "sell": cfx_dict['sell'], "buy_amount": buy_amount, "sell_amount": sell_amount, "quote": quote, "major_ccy": cfx_dict['major_ccy']}
 
+    # 获得全部币种的list
+    @staticmethod
+    def balance_list():
+        crypto_list = get_json()['crypto_list']
+        cash_list = get_json()['cash_list']
+        return crypto_list + cash_list

@@ -34,6 +34,9 @@ headers = get_json()['headers']
 global package_name
 package_name = get_json()['app_package'][get_json()['env']]
 
+global connect_headers
+connect_headers = get_json()['connect'][get_json()['env']]['Headers']
+
 
 class sessions(requests.Session):
     def request(self, *args, **kwargs):

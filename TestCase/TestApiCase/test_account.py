@@ -1191,4 +1191,4 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert '"missing":["REGISTRY_PURPOSE","RESIDENT"]' in r.text, "获取用户必填的KYC数据，获取全部信息失败，返回值是{}".format(r.text)
+            assert set(r.json()['missing']) == set(["RESIDENT", "REGISTRY_PURPOSE"]), "获取用户必填的KYC数据，获取全部信息失败，返回值是{}".format(r.text)

@@ -159,7 +159,7 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert '{"payment_methods":[{"image_url":"https://downloads.cabital.com/webassets/icon_sepa.png","type":"Bank Transfer","name":"SEPA","highlights":["No Deposit Fee","1-2 Working Days"],"key":"SEPA","status":1}]}' in r.text, "EUR法币充值方式错误，返回值是{}".format(r.text)
+                assert r.json()['payment_methods'] is not None, "EUR法币充值方式错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_pay_in_011 GBP法币充值方式')
     def test_pay_in_011(self):
@@ -171,7 +171,7 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert '{"payment_methods":[{"image_url":"https://downloads.cabital.com/webassets/icon_fasterpayments.png","type":"Bank Transfer","name":"Faster Payments","highlights":["No Deposit Fee","Instant"],"key":"Faster Payments","status":1}]}' in r.text, "GBP法币充值方式错误，返回值是{}".format(r.text)
+                assert r.json()['payment_methods'] is not None, "GBP法币充值方式错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_pay_in_012 EUR法币充值账户')
     def test_pay_in_012(self):

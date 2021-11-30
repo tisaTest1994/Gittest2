@@ -303,6 +303,10 @@
     "USDT",
     "ETH"
   ],
+  "cash_list": [
+    "GBP",
+    "EUR"
+  ],
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
     "email": "richard.wan@cabital.com",
@@ -310,7 +314,7 @@
     "password": "Zcdsw123",
     "payout_email": "external.qa@cabital.com",
     "port": "993",
-    "security_code": "vynsnklkkduozrwr",
+    "security_code": "amtogcicenyvypqq",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
   },
   "env": "test",
