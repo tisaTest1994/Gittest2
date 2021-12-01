@@ -15,7 +15,7 @@ class TestCassApi:
         with allure.step("确定选择最新的tab"):
             driver.switch_to_new_tab()
         with allure.step("确定打开登录页面"):
-            assert driver.find_element_by_class_name('css-cedp0x').is_displayed(), '未打开登录页面'
+            assert driver.find_element_by_id('signinForm').is_displayed(), '未打开登录页面'
         with allure.step("输入账号"):
             driver.find_element_by_id('username').clear()
             driver.find_element_by_id("username").send_keys(get_json()['web'][get_json()['env']]['account'])

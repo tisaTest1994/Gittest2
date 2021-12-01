@@ -196,3 +196,18 @@ class TestPayInApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json()['bank_accounts'] is not None, "GBP法币充值账户错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_pay_in_014 Plaid 转出币种限制')
+    def test_pay_in_014(self):
+        with allure.step("Plaid 转出币种限制"):
+            balance_list = ApiFunction.balance_list()
+            for i in balance_list:
+                r = session.request('GET', url='{}/pay/plaid/limit/{}'.format(env_url, i), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['min'] == '1', "Plaid 转出币种限制最小值错误，返回值是{}".format(r.text)
+                assert r.json()['max'] == '5', "Plaid 转出币种限制最大值错误，返回值是{}".format(r.text)

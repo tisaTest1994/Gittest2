@@ -110,8 +110,8 @@ class TestPayoutApi:
 
     @allure.testcase('test_payout_007 MFA认证提现ETH成功')
     def test_payout_007(self):
-        transaction_id = ApiFunction.get_payout_transaction_id(amount='0.003',
-                                                               address='tb1q38mwu50xludgz4r52n2v0q6jwlysjgz4zkk3kl',
+        transaction_id = ApiFunction.get_payout_transaction_id(amount='0.01',
+                                                               address='0x428DA40C585514022b2eB537950d5AB5C7365a07',
                                                                code_type='ETH')
         logger.info('transaction_id是{}'.format(transaction_id))
         # with allure.step("p/l验证"):
