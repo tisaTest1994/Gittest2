@@ -40,7 +40,7 @@ class TestConnectWalletApi:
                 for y in r.json()['balances']:
                     if y['code'] == i:
                         bybit_balance = y['balances']
-                        assert mobile_balance == bybit_balance, '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
+                        assert float(mobile_balance) == float(bybit_balance), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                             i, mobile_balance, bybit_balance)
 
     @allure.testcase('test_connect_wallet_002 账户可用余额列表(无资金）')
@@ -76,7 +76,7 @@ class TestConnectWalletApi:
                 for y in r.json()['balances']:
                     if y['code'] == i:
                         bybit_balance = y['balances']
-                        assert mobile_balance == bybit_balance, '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
+                        assert float(mobile_balance) == float(bybit_balance), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                             i, mobile_balance, bybit_balance)
 
     @allure.testcase('test_connect_wallet_003 获取账户可用余额单币(有资金）')
@@ -110,8 +110,8 @@ class TestConnectWalletApi:
                     mobile_balance = ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_AVAILABLE',
                                                                    wallet_type='BALANCE')
                 with allure.step("获取的金额和通过mobile接口获取的金额对比"):
-                    assert mobile_balance == r.json()['balance'][
-                        'balances'], '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
+                    assert float(mobile_balance) == float(r.json()['balance'][
+                        'balances']), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                         i, mobile_balance, r.json()['balance']['balances'])
 
     @allure.testcase('test_connect_wallet_004 获取账户可用余额单币(无资金）')
@@ -148,8 +148,8 @@ class TestConnectWalletApi:
                     mobile_balance = ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_AVAILABLE',
                                                                    wallet_type='BALANCE')
                 with allure.step("获取的金额和通过mobile接口获取的金额对比"):
-                    assert mobile_balance == r.json()['balance'][
-                        'balances'], '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
+                    assert float(mobile_balance) == float(r.json()['balance'][
+                        'balances']), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                         i, mobile_balance, r.json()['balance']['balances'])
 
     @allure.testcase('test_connect_wallet_005 获取账户单币入账信息, 入币方式缺失，使用默认')
@@ -177,10 +177,13 @@ class TestConnectWalletApi:
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
-                # with allure.step("校验状态码"):
-                #     assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
-                    assert r.json()['balance'] is not None, "账户可用余额列表错误，返回值是{}".format(r.text)
+                    if i == 'GBP':
+                        assert r.json()['method'] == 'FPS', "账户可用余额列表错误，返回值是{}".format(r.text)
+                    elif i == 'EUR':
+                        assert r.json()['method'] == 'SEPA', "账户可用余额列表错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_wallet_006 获取账户单币入账信息, 入币方式SEPA')
     def test_connect_wallet_006(self):
@@ -437,7 +440,7 @@ class TestConnectWalletApi:
     @allure.testcase('test_convert_009 账户划转列表')
     def test_convert_009(self):
         with allure.step("测试用户的account_id"):
-            account_id = get_json()['email']['accountId']
+            account_id = 'cbb4568f-ee69-4701-83d4-a6975a852c58'
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
@@ -452,7 +455,29 @@ class TestConnectWalletApi:
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
-        # with allure.step("校验状态码"):
-        #     assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['balances'] is not None, "账户划转列表错误，返回值是{}".format(r.text)
+            assert r.json()['pagination_response'] is not None, "账户划转列表错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_convert_010 账户划转详情')
+    def test_convert_010(self):
+        with allure.step("测试用户的account_id"):
+            account_id = get_json()['email']['accountId']
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/accounts/{}/transfers/{}'.format(account_id), nonce=nonce)
+            connect_headers['ACCESS-SIGN'] = sign
+            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_headers['ACCESS-NONCE'] = nonce
+        with allure.step("账户划转列表"):
+            r = session.request('GET', url='{}/api/v1/accounts/{}/transfers'.format(self.url, account_id),
+                                headers=connect_headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['pagination_response'] is not None, "账户划转列表错误，返回值是{}".format(r.text)

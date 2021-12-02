@@ -256,7 +256,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'SEPA' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_016 EUR法币提现')
+    @allure.testcase('test_payout_016 BCB EUR法币提现')
     def test_payout_016(self):
         with allure.step("开启法币提现画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -275,15 +275,14 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "EUR",
-                "amount": "2.71",
+                "amount": "2.61",
                 "payment_method": "SEPA",
                 "account_name": account_name[0],
                 "iban": "BE09967206444557",
-                "bic": "PMFAUS66"
+                "bic": "TRWIBEB1XXX"
             }
             r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                 headers=headers)
-            ApiFunction.add_headers()
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -337,7 +336,7 @@ class TestPayoutApi:
                 "payment_method": "SEPA",
                 "account_name": "yilei",
                 "iban": "GB11111111111111111111",
-                "bic": "PMFAUS66"
+                "bic": "TRWIBEB1XXX"
             }
             r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
                                 headers=headers)
@@ -462,18 +461,18 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert r.json()['code'] == '103015', "GBP法币用户名字带有中文字符提现失败错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_024 BCB EUR法币提现')
+    @allure.testcase('test_payout_024 BCB GBP法币提现')
     def test_payout_024(self):
         with allure.step("开启EUR法币提现画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
             params = {
-                'code': 'EUR'
+                'code': 'GBP'
             }
             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
             account_name = r.json()['name_list']
             logger.info('account_name是{}'.format(account_name))
-        with allure.step("EUR法币提现"):
+        with allure.step("BCB GBP法币提现"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
             secretKey = get_json()['secretKey']
             totp = pyotp.TOTP(secretKey)
@@ -481,8 +480,8 @@ class TestPayoutApi:
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
-                "code": "EUR",
-                "amount": "1112.81",
+                "code": "GBP",
+                "amount": "2.81",
                 "payment_method": "Faster Payments",
                 "account_name": account_name[0],
                 "account_number": "00003162",
@@ -490,14 +489,13 @@ class TestPayoutApi:
             }
             r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                 headers=headers)
-            ApiFunction.add_headers()
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'txn_id' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
+                assert 'txn_id' in r.text, "BCB GBP法币提现错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_payout_025 BTC确认Crypto提现交易')
     def test_payout_025(self):
@@ -521,7 +519,7 @@ class TestPayoutApi:
     def test_payout_026(self):
         with allure.step("ETH确认Crypto提现交易"):
             data = {
-                "amount": "3.8",
+                "amount": "0.018",
                 "code": "ETH",
                 "address": "tb1q38mwu50xludgz4r52n2v0q6jwlysjgz4zkk3kl",
                 "method": "ERC20"

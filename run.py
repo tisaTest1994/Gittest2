@@ -58,7 +58,7 @@ if __name__ == '__main__':
     elif sys.argv[1] == "cabinet":
         pytest.main(['./TestCase/TestCabinetCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "connect":
-        pytest.main(['./TestCase/TestConnectCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
+        pytest.main(['./TestCase/TestConnectCase/test_connectWallet.py::TestConnectWalletApi::test_connect_wallet_008', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     else:
         assert False, 'error 需要传入正确的参数'
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
