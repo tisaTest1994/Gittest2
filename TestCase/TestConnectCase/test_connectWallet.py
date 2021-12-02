@@ -437,7 +437,7 @@ class TestConnectWalletApi:
                                     cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
                                     sell_amount_wallet_balance_latest)
 
-    @allure.testcase('test_convert_009 账户划转列表')
+    @allure.testcase('test_convert_009 账户划转列表（不传默认参数）')
     def test_convert_009(self):
         with allure.step("测试用户的account_id"):
             account_id = 'cbb4568f-ee69-4701-83d4-a6975a852c58'
