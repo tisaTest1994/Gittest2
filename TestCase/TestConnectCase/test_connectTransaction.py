@@ -125,6 +125,8 @@ class TestConnectTransactionApi:
     def test_connect_transaction_006(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
+        with allure.step("获得转移前cabital内币种balance金额"):
+            balance_old = ApiFunction.get_crypto_number(type='BTC')
         with allure.step("获得otp"):
             secretKey = get_json()['secretKey']
             totp = pyotp.TOTP(secretKey)
@@ -153,11 +155,17 @@ class TestConnectTransactionApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['status'] == 'SUCCESS', "把BTC从cabital转移到bybit账户错误，返回值是{}".format(r.text)
+        with allure.step("获得转移后cabital内币种balance金额"):
+            sleep(5)
+            balance_latest = ApiFunction.get_crypto_number(type='BTC')
+        assert Decimal(balance_old) - Decimal(data['amount']) == Decimal(balance_latest), "把BTC从cabital转移到bybit账户错误，转移前balance是{},转移后balance是{}".format(balance_old, balance_latest)
 
     @allure.testcase('test_connect_transaction_007 把ETH从cabital转移到bybit账户')
     def test_connect_transaction_007(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
+        with allure.step("获得转移前cabital内币种balance金额"):
+            balance_old = ApiFunction.get_crypto_number(type='ETH')
         with allure.step("获得otp"):
             secretKey = get_json()['secretKey']
             totp = pyotp.TOTP(secretKey)
@@ -186,11 +194,18 @@ class TestConnectTransactionApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['status'] == 'SUCCESS', "把ETH从cabital转移到bybit账户错误，返回值是{}".format(r.text)
+        with allure.step("获得转移后cabital内币种balance金额"):
+            sleep(5)
+            balance_latest = ApiFunction.get_crypto_number(type='ETH')
+        assert Decimal(balance_old) - Decimal(data['amount']) == Decimal(
+            balance_latest), "把BTC从cabital转移到bybit账户错误，转移前balance是{},转移后balance是{}".format(balance_old, balance_latest)
 
     @allure.testcase('test_connect_transaction_008 把USDT从cabital转移到bybit账户')
     def test_connect_transaction_008(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
+        with allure.step("获得转移前cabital内币种balance金额"):
+            balance_old = ApiFunction.get_crypto_number(type='USDT')
         with allure.step("获得otp"):
             secretKey = get_json()['secretKey']
             totp = pyotp.TOTP(secretKey)
@@ -219,6 +234,11 @@ class TestConnectTransactionApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['status'] == 'SUCCESS', "把USDT从cabital转移到bybit账户错误，返回值是{}".format(r.text)
+        with allure.step("获得转移后cabital内币种balance金额"):
+            sleep(5)
+            balance_latest = ApiFunction.get_crypto_number(type='USDT')
+        assert Decimal(balance_old) - Decimal(data['amount']) == Decimal(
+            balance_latest), "把BTC从cabital转移到bybit账户错误，转移前balance是{},转移后balance是{}".format(balance_old, balance_latest)
 
     @allure.testcase('test_connect_transaction_009 把BTC从cabital转移到bybit账户并且关联C+T交易')
     def test_connect_transaction_009(self):
@@ -284,8 +304,8 @@ class TestConnectTransactionApi:
         with allure.step("校验返回值"):
             assert r.json()['status'] == 'SUCCESS', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_transaction_009 把ETH从cabital转移到bybit账户并且关联C+T交易')
-    def test_connect_transaction_009(self):
+    @allure.testcase('test_connect_transaction_010 把ETH从cabital转移到bybit账户并且关联C+T交易')
+    def test_connect_transaction_010(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("换汇"):
@@ -348,8 +368,8 @@ class TestConnectTransactionApi:
         with allure.step("校验返回值"):
             assert r.json()['status'] == 'SUCCESS', "把ETH从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_transaction_009 把USDT从cabital转移到bybit账户并且关联C+T交易')
-    def test_connect_transaction_009(self):
+    @allure.testcase('test_connect_transaction_011 把USDT从cabital转移到bybit账户并且关联C+T交易')
+    def test_connect_transaction_011(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("换汇"):

@@ -45,8 +45,7 @@ class ApiFunction:
         data = {
             "emailAddress": account,
             "password": password,
-            "verificationCode": "666666",
-            "citizenCountryCode": random.choice(get_json()['citizenCountryCodeList'])
+            "verificationCode": "666666"
         }
         r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
