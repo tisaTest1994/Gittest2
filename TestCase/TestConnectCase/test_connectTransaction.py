@@ -274,7 +274,7 @@ class TestConnectTransactionApi:
             connect_headers['ACCESS-SIGN'] = sign
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
-        with allure.step("把BTC从cabital转移到bybit账户"):
+        with allure.step("把BTC从cabital转移到bybit账户并且关联C+T交易"):
             r = session.request('POST', url='{}/api/v1/accounts/{}/transfers'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -282,12 +282,42 @@ class TestConnectTransactionApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['status'] == 'SUCCESS', "把BTC从cabital转移到bybit账户错误，返回值是{}".format(r.text)
+            assert r.json()['status'] == 'SUCCESS', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_transaction_007 把ETH从cabital转移到bybit账户')
-    def test_connect_transaction_007(self):
+    @allure.testcase('test_connect_transaction_009 把ETH从cabital转移到bybit账户并且关联C+T交易')
+    def test_connect_transaction_009(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
+        with allure.step("换汇"):
+            pair_dict = ApiFunction.cfx_hedging_pairs(pair='ETH-GBP')
+            pair = list(pair_dict.values())
+            pair_list = pair[0].split('-')
+            cfx_dict = {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]}
+            cfx_amount = ApiFunction.cfx_random_number(cfx_dict)
+            data = {
+                "quote_id": cfx_amount['quote']['quote_id'],
+                "quote": cfx_amount['quote']['quote'],
+                "pair": '{}-{}'.format(cfx_amount['buy'], cfx_amount['sell']),
+                "buy_amount": str(cfx_amount['buy_amount']),
+                "sell_amount": str(cfx_amount['sell_amount']),
+                "major_ccy": cfx_amount['major_ccy']
+            }
+            logger.info('发送换汇data是{}'.format(data))
+            with allure.step("验签"):
+                unix_time = int(time.time())
+                nonce = generate_string(30)
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/accounts/{}/conversions'.format(account_id), nonce=nonce, body=json.dumps(data))
+                connect_headers['ACCESS-SIGN'] = sign
+                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                connect_headers['ACCESS-NONCE'] = nonce
+            with allure.step("账户可用余额列表"):
+                r = session.request('POST', url='{}/api/v1/accounts/{}/conversions'.format(self.url,account_id), data=json.dumps(data), headers=connect_headers)
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
+                assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
+                cfx_transaction_id = r.json()['transaction_id']
         with allure.step("获得otp"):
             secretKey = get_json()['secretKey']
             totp = pyotp.TOTP(secretKey)
@@ -298,7 +328,8 @@ class TestConnectTransactionApi:
                 'symbol': 'ETH',
                 'otp': mfaVerificationCode,
                 'direction': 'DEBIT',
-                'external_id': generate_string(15)
+                'external_id': generate_string(15),
+                'conversion_id': cfx_transaction_id
             }
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -307,7 +338,7 @@ class TestConnectTransactionApi:
             connect_headers['ACCESS-SIGN'] = sign
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
-        with allure.step("把ETH从cabital转移到bybit账户"):
+        with allure.step("把ETH从cabital转移到bybit账户并且关联C+T交易"):
             r = session.request('POST', url='{}/api/v1/accounts/{}/transfers'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -315,23 +346,54 @@ class TestConnectTransactionApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['status'] == 'SUCCESS', "把ETH从cabital转移到bybit账户错误，返回值是{}".format(r.text)
+            assert r.json()['status'] == 'SUCCESS', "把ETH从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_transaction_008 把USDT从cabital转移到bybit账户')
-    def test_connect_transaction_008(self):
+    @allure.testcase('test_connect_transaction_009 把USDT从cabital转移到bybit账户并且关联C+T交易')
+    def test_connect_transaction_009(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
+        with allure.step("换汇"):
+            pair_dict = ApiFunction.cfx_hedging_pairs(pair='USDT-EUR')
+            pair = list(pair_dict.values())
+            pair_list = pair[0].split('-')
+            cfx_dict = {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]}
+            cfx_amount = ApiFunction.cfx_random_number(cfx_dict)
+            data = {
+                "quote_id": cfx_amount['quote']['quote_id'],
+                "quote": cfx_amount['quote']['quote'],
+                "pair": '{}-{}'.format(cfx_amount['buy'], cfx_amount['sell']),
+                "buy_amount": str(cfx_amount['buy_amount']),
+                "sell_amount": str(cfx_amount['sell_amount']),
+                "major_ccy": cfx_amount['major_ccy']
+            }
+            logger.info('发送换汇data是{}'.format(data))
+            with allure.step("验签"):
+                unix_time = int(time.time())
+                nonce = generate_string(30)
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/accounts/{}/conversions'.format(account_id), nonce=nonce, body=json.dumps(data))
+                connect_headers['ACCESS-SIGN'] = sign
+                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                connect_headers['ACCESS-NONCE'] = nonce
+            with allure.step("账户可用余额列表"):
+                r = session.request('POST', url='{}/api/v1/accounts/{}/conversions'.format(self.url,account_id), data=json.dumps(data), headers=connect_headers)
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
+                assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
+                cfx_transaction_id = r.json()['transaction_id']
         with allure.step("获得otp"):
             secretKey = get_json()['secretKey']
             totp = pyotp.TOTP(secretKey)
             mfaVerificationCode = totp.now()
         with allure.step("获得data"):
             data = {
-                'amount': '102',
+                'amount': '1110.02',
                 'symbol': 'USDT',
                 'otp': mfaVerificationCode,
                 'direction': 'DEBIT',
-                'external_id': generate_string(15)
+                'external_id': generate_string(15),
+                'conversion_id': cfx_transaction_id
             }
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -340,7 +402,7 @@ class TestConnectTransactionApi:
             connect_headers['ACCESS-SIGN'] = sign
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
-        with allure.step("把USDT从cabital转移到bybit账户"):
+        with allure.step("把USDT从cabital转移到bybit账户并且关联C+T交易"):
             r = session.request('POST', url='{}/api/v1/accounts/{}/transfers'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -348,4 +410,4 @@ class TestConnectTransactionApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['status'] == 'SUCCESS', "把USDT从cabital转移到bybit账户错误，返回值是{}".format(r.text)
+            assert r.json()['status'] == 'SUCCESS', "把USDT从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
