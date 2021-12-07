@@ -56,7 +56,7 @@ class TestMarketApi:
     @pytest.mark.multiprocess
     def test_market_003(self):
         with allure.step("给测试环境注资"):
-            r = session.request('GET', url='https://faucet.ropsten.be/donate/0xaE346B37A0A7ffd5F224Cc2fC2c4C0E1bC541D67')
+            r = session.request('GET', url='https://faucet.ropsten.be/donate/WV98W3a7hYhBRIDPRGk8D/0xaE346B37A0A7ffd5F224Cc2fC2c4C0E1bC541D67')
             print(r.json())
 
     @allure.testcase('test_market_004 首页获得数字货币报价')

@@ -45,8 +45,7 @@ class ApiFunction:
         data = {
             "emailAddress": account,
             "password": password,
-            "verificationCode": "666666",
-            "citizenCountryCode": random.choice(get_json()['citizenCountryCodeList'])
+            "verificationCode": "666666"
         }
         r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
@@ -54,7 +53,7 @@ class ApiFunction:
 
     # 提现ETH获取交易id
     @staticmethod
-    def get_payout_transaction_id(amount='0.03', address='0x428DA40C585514022b2eB537950d5AB5C7365a07', code_type='ETH'):
+    def get_payout_transaction_id(amount='0.012', address='0x428DA40C585514022b2eB537950d5AB5C7365a07', code_type='ETH'):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
         code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
         secretKey = get_json()['secretKey']

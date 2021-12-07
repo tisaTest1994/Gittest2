@@ -9,11 +9,10 @@ class TestTransactionApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.testcase('test_transaction_001 ')
+    @allure.testcase('test_transaction_001 查询钱包所有币种详细金额以及报价，以美元价格返回')
     def test_transaction_001(self):
         with allure.step("查询钱包所有币种详细金额以及报价，以美元价格返回"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
-            print(r.text)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))

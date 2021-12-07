@@ -526,7 +526,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'SUCCESS' == r.json()['result'], "获取opt二维码不对，目前返回值是{}".format(r.text)
+            assert r.json()['totpSecret'] is not None, "获取opt二维码不对，目前返回值是{}".format(r.text)
 
     @allure.testcase('test_account_029 创建opt验证，并且删除。')
     @pytest.mark.multiprocess
