@@ -14,7 +14,7 @@ class TestConnectAccountApi:
     @allure.testcase('test_connect_account_001 获取未关联用户状况')
     def test_connect_account_001(self):
         with allure.step("测试用户的account_id"):
-            account_id = get_json()['email']['accountId']
+            account_id = 'ec47c53f-d7d5-4c66-9c96-b4598c8d2c4a'
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
