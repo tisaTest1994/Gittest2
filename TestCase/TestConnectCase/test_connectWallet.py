@@ -585,7 +585,7 @@ class TestConnectWalletApi:
                             with allure.step("校验状态码"):
                                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
                             with allure.step("校验返回值"):
-                                assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
+                                assert r.json() is None, "换汇错误，返回值是{}".format(r.text)
 
                 else:
                     with allure.step("生成货币对"):
@@ -622,5 +622,4 @@ class TestConnectWalletApi:
                             with allure.step("校验状态码"):
                                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
                             with allure.step("校验返回值"):
-                                assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
-                                assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
+                                assert r.json() is None, "换汇错误，返回值是{}".format(r.text)
