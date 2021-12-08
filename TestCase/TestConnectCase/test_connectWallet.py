@@ -542,7 +542,7 @@ class TestConnectWalletApi:
                                     cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
                                     sell_amount_wallet_balance_latest)
 
-    @allure.testcase('test_connect_wallet_012 账户转换法币EUR-GBP')
+    @allure.testcase('test_connect_wallet_012 账户转换法币EUR-GBP失败')
     def test_connect_wallet_012(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
@@ -585,7 +585,7 @@ class TestConnectWalletApi:
                             with allure.step("校验状态码"):
                                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
                             with allure.step("校验返回值"):
-                                assert r.json() is None, "换汇错误，返回值是{}".format(r.text)
+                                assert r.json()['code'] == 'PA018', "账户转换法币EUR-GBP失败错误，返回值是{}".format(r.text)
 
                 else:
                     with allure.step("生成货币对"):
@@ -622,4 +622,4 @@ class TestConnectWalletApi:
                             with allure.step("校验状态码"):
                                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
                             with allure.step("校验返回值"):
-                                assert r.json() is None, "换汇错误，返回值是{}".format(r.text)
+                                assert r.json()['code'] == 'PA018', "账户转换法币EUR-GBP失败错误，返回值是{}".format(r.text)
