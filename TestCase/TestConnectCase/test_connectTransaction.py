@@ -333,7 +333,7 @@ class TestConnectTransactionApi:
             account_id = get_json()['email']['accountId']
         with allure.step("换汇"):
             pair = 'BTC-EUR'
-            pair_list = pair[0].split('-')
+            pair_list = pair.split('-')
             cfx_dict = {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]}
             cfx_amount = ApiFunction.cfx_random_number(cfx_dict)
             data = {
