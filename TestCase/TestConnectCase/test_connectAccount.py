@@ -225,18 +225,18 @@ class TestConnectAccountApi:
     @allure.testcase('test_connect_account_012 关联已经关联过的用户')
     def test_connect_account_012(self):
         with allure.step("测试用户的account_id"):
-            account_id = '63254fe2-8a65-457b-b6bd-075ca7160f26'
+            account_id = '1771ffd6-d20b-4858-ad34-d596a9ec51d4'
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
             data = {
-                'name': 'winniekyc06 TEST',
-                'id': 'DFKM55645',
-                'id_document': 'PASSPORT',
-                'issued_by': 'HONGKONG',
-                'dob': '19790606'
+                "name": "Richard 010 Wan Testing 010",
+                "id": "454342",
+                "id_document": "ID",
+                "issued_by": "HKG",
+                "dob": "20150606"
             }
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=data)
             connect_headers['ACCESS-SIGN'] = sign
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
