@@ -373,6 +373,7 @@ class TestConnectTransactionApi:
                     assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
                     assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
                     cfx_transaction_id = r.json()['transaction_id']
+                sleep(5)
                 with allure.step("获得换汇后buy币种balance金额"):
                     buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
                         type=cfx_amount['buy'])
