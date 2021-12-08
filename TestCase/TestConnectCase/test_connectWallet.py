@@ -547,7 +547,7 @@ class TestConnectWalletApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("获取汇率对"):
-            pair_dict = ['EUR-GBP']
+            pair_dict = {11: 'EUR-GBP'}
             with allure.step("判断是否是直盘"):
                 if len(pair_dict.keys()) == 1:
                     with allure.step("生成货币对"):
