@@ -40,7 +40,8 @@ class TestConnectWalletApi:
                 for y in r.json()['balances']:
                     if y['code'] == i:
                         bybit_balance = y['balances']
-                        assert float(mobile_balance) == float(bybit_balance), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
+                        assert float(mobile_balance) == float(
+                            bybit_balance), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                             i, mobile_balance, bybit_balance)
 
     @allure.testcase('test_connect_wallet_002 账户可用余额列表(无资金）')
@@ -76,7 +77,8 @@ class TestConnectWalletApi:
                 for y in r.json()['balances']:
                     if y['code'] == i:
                         bybit_balance = y['balances']
-                        assert float(mobile_balance) == float(bybit_balance), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
+                        assert float(mobile_balance) == float(
+                            bybit_balance), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                             i, mobile_balance, bybit_balance)
 
     @allure.testcase('test_connect_wallet_003 获取没有通过kyc的账户的可用余额列表')
@@ -92,7 +94,8 @@ class TestConnectWalletApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("账户可用余额列表"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/balances'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/api/v1/accounts/{}/balances'.format(self.url, account_id),
+                                headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -101,7 +104,8 @@ class TestConnectWalletApi:
         with allure.step("校验返回值"):
             assert r.json()['balances'] is not None, "获取没有通过kyc的账户的可用余额列表错误，返回值是{}".format(r.text)
         with allure.step("判断提供给bybit的和我们自用的值一致"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc05@test.com', password='A!234sdfg')
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc05@test.com',
+                                                                                 password='A!234sdfg')
             balance_list = ApiFunction.balance_list()
             for i in balance_list:
                 mobile_balance = ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_AVAILABLE',
@@ -109,7 +113,8 @@ class TestConnectWalletApi:
                 for y in r.json()['balances']:
                     if y['code'] == i:
                         bybit_balance = y['balances']
-                        assert float(mobile_balance) == float(bybit_balance), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
+                        assert float(mobile_balance) == float(
+                            bybit_balance), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                             i, mobile_balance, bybit_balance)
 
     @allure.testcase('test_connect_wallet_004 获取账户可用余额单币(有资金）')
@@ -144,7 +149,7 @@ class TestConnectWalletApi:
                                                                    wallet_type='BALANCE')
                 with allure.step("获取的金额和通过mobile接口获取的金额对比"):
                     assert float(mobile_balance) == float(r.json()['balance'][
-                        'balances']), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
+                                                              'balances']), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                         i, mobile_balance, r.json()['balance']['balances'])
 
     @allure.testcase('test_connect_wallet_005 获取账户可用余额单币(无资金）')
@@ -182,7 +187,7 @@ class TestConnectWalletApi:
                                                                    wallet_type='BALANCE')
                 with allure.step("获取的金额和通过mobile接口获取的金额对比"):
                     assert float(mobile_balance) == float(r.json()['balance'][
-                        'balances']), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
+                                                              'balances']), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                         i, mobile_balance, r.json()['balance']['balances'])
 
     @allure.testcase('test_connect_wallet_004 获取没有通过kyc的账户的账户可用余额单币')
@@ -219,7 +224,7 @@ class TestConnectWalletApi:
                                                                    wallet_type='BALANCE')
                 with allure.step("获取的金额和通过mobile接口获取的金额对比"):
                     assert float(mobile_balance) == float(r.json()['balance'][
-                        'balances']), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
+                                                              'balances']), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                         i, mobile_balance, r.json()['balance']['balances'])
 
     @allure.testcase('test_connect_wallet_007 获取账户单币入账信息, 入币方式缺失，使用默认')
@@ -542,146 +547,144 @@ class TestConnectWalletApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("获取汇率对"):
-            cfx_book = {"11": "EUR-GBP"}
-            for i in cfx_book.values():
-                pair_dict = ApiFunction.cfx_hedging_pairs(pair=i)
-                with allure.step("判断是否是直盘"):
-                    if len(pair_dict.keys()) == 1:
-                        with allure.step("生成货币对"):
-                            pair = list(pair_dict.values())
-                            pair_list = pair[0].split('-')
-                            cfx_dict = [{'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]},
-                                        {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[1]},
-                                        {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[1]},
-                                        {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[0]}]
-                            for y in cfx_dict:
-                                cfx_amount = ApiFunction.cfx_random_number(y)
-                                data = {
-                                    "quote_id": cfx_amount['quote']['quote_id'],
-                                    "quote": cfx_amount['quote']['quote'],
-                                    "pair": '{}-{}'.format(cfx_amount['buy'], cfx_amount['sell']),
-                                    "buy_amount": str(cfx_amount['buy_amount']),
-                                    "sell_amount": str(cfx_amount['sell_amount']),
-                                    "major_ccy": cfx_amount['major_ccy']
-                                }
-                                logger.info('发送换汇data是{}'.format(data))
-                                with allure.step("获得换汇前buy币种balance金额"):
-                                    buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['buy'])
-                                with allure.step('获得换汇前sell币种balance金额'):
-                                    sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['sell'])
-                                with allure.step("验签"):
-                                    unix_time = int(time.time())
-                                    nonce = generate_string(30)
-                                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                                        url='/api/v1/accounts/{}/conversions'.format(
-                                                                            account_id), nonce=nonce,
-                                                                        body=json.dumps(data))
-                                    connect_headers['ACCESS-SIGN'] = sign
-                                    connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                                    connect_headers['ACCESS-NONCE'] = nonce
-                                with allure.step("账户可用余额列表"):
-                                    r = session.request('POST', url='{}/api/v1/accounts/{}/conversions'.format(self.url,
-                                                                                                               account_id),
-                                                        data=json.dumps(data), headers=connect_headers)
-                                with allure.step("校验状态码"):
-                                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                                with allure.step("校验返回值"):
-                                    assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
-                                    assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
-                                sleep(10)
-                                with allure.step("获得换汇后buy币种balance金额"):
-                                    buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['buy'])
-                                with allure.step("获得换汇后sell币种balance金额"):
-                                    sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['sell'])
-                                logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cfx_amount['buy'],
-                                                                                              buy_amount_wallet_balance_old,
-                                                                                              cfx_amount['buy_amount'],
-                                                                                              buy_amount_wallet_balance_latest))
-                                logger.info('sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(cfx_amount['sell'],
-                                                                                                sell_amount_wallet_balance_old,
-                                                                                                cfx_amount[
-                                                                                                    'sell_amount'],
-                                                                                                sell_amount_wallet_balance_latest))
-                                assert Decimal(buy_amount_wallet_balance_old) + Decimal(
-                                    cfx_amount['buy_amount']) == Decimal(
-                                    buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
-                                    cfx_amount['buy'], buy_amount_wallet_balance_old, cfx_amount['buy_amount'],
-                                    buy_amount_wallet_balance_latest)
-                                assert Decimal(sell_amount_wallet_balance_old) - Decimal(
-                                    cfx_amount['sell_amount']) == Decimal(
-                                    sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
-                                    cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
-                                    sell_amount_wallet_balance_latest)
-                    else:
-                        with allure.step("生成货币对"):
-                            pair_list = i.split('-')
-                            cfx_dict = [{'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]},
-                                        {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[1]},
-                                        {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[1]},
-                                        {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[0]}]
-                            for y in cfx_dict:
-                                cfx_amount = ApiFunction.cfx_random_number(y)
-                                data = {
-                                    "quote_id": cfx_amount['quote']['quote_id'],
-                                    "quote": cfx_amount['quote']['quote'],
-                                    "pair": '{}-{}'.format(cfx_amount['buy'], cfx_amount['sell']),
-                                    "buy_amount": str(cfx_amount['buy_amount']),
-                                    "sell_amount": str(cfx_amount['sell_amount']),
-                                    "major_ccy": cfx_amount['major_ccy']
-                                }
-                                logger.info('发送换汇data是{}'.format(data))
-                                with allure.step("获得换汇前buy币种balance金额"):
-                                    buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['buy'])
-                                with allure.step('获得换汇前sell币种balance金额'):
-                                    sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['sell'])
-                                with allure.step("验签"):
-                                    unix_time = int(time.time())
-                                    nonce = generate_string(30)
-                                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                                        url='/api/v1/accounts/{}/conversions'.format(
-                                                                            account_id), nonce=nonce,
-                                                                        body=json.dumps(data))
-                                    connect_headers['ACCESS-SIGN'] = sign
-                                    connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                                    connect_headers['ACCESS-NONCE'] = nonce
-                                with allure.step("账户可用余额列表"):
-                                    r = session.request('POST', url='{}/api/v1/accounts/{}/conversions'.format(self.url,
-                                                                                                               account_id),
-                                                        data=json.dumps(data), headers=connect_headers)
-                                with allure.step("校验状态码"):
-                                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                                with allure.step("校验返回值"):
-                                    assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
-                                    assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
-                                sleep(10)
-                                with allure.step("获得换汇后buy币种balance金额"):
-                                    buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['buy'])
-                                with allure.step("获得换汇后sell币种balance金额"):
-                                    sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['sell'])
-                                logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cfx_amount['buy'],
-                                                                                              buy_amount_wallet_balance_old,
-                                                                                              cfx_amount['buy_amount'],
-                                                                                              buy_amount_wallet_balance_latest))
-                                logger.info('sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(cfx_amount['sell'],
-                                                                                                sell_amount_wallet_balance_old,
-                                                                                                cfx_amount[
-                                                                                                    'sell_amount'],
-                                                                                                sell_amount_wallet_balance_latest))
-                                assert Decimal(buy_amount_wallet_balance_old) + Decimal(
-                                    cfx_amount['buy_amount']) == Decimal(
-                                    buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
-                                    cfx_amount['buy'], buy_amount_wallet_balance_old, cfx_amount['buy_amount'],
-                                    buy_amount_wallet_balance_latest)
-                                assert Decimal(sell_amount_wallet_balance_old) - Decimal(
-                                    cfx_amount['sell_amount']) == Decimal(
-                                    sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
-                                    cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
-                                    sell_amount_wallet_balance_latest)
+            pair_dict = ['EUR-GBP']
+            with allure.step("判断是否是直盘"):
+                if len(pair_dict.keys()) == 1:
+                    with allure.step("生成货币对"):
+                        pair = list(pair_dict.values())
+                        pair_list = pair[0].split('-')
+                        cfx_dict = [{'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]},
+                                    {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[1]},
+                                    {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[1]},
+                                    {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[0]}]
+                        for y in cfx_dict:
+                            cfx_amount = ApiFunction.cfx_random_number(y)
+                            data = {
+                                "quote_id": cfx_amount['quote']['quote_id'],
+                                "quote": cfx_amount['quote']['quote'],
+                                "pair": '{}-{}'.format(cfx_amount['buy'], cfx_amount['sell']),
+                                "buy_amount": str(cfx_amount['buy_amount']),
+                                "sell_amount": str(cfx_amount['sell_amount']),
+                                "major_ccy": cfx_amount['major_ccy']
+                            }
+                            logger.info('发送换汇data是{}'.format(data))
+                            with allure.step("获得换汇前buy币种balance金额"):
+                                buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(
+                                    type=cfx_amount['buy'])
+                            with allure.step('获得换汇前sell币种balance金额'):
+                                sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(
+                                    type=cfx_amount['sell'])
+                            with allure.step("验签"):
+                                unix_time = int(time.time())
+                                nonce = generate_string(30)
+                                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                                    url='/api/v1/accounts/{}/conversions'.format(
+                                                                        account_id), nonce=nonce,
+                                                                    body=json.dumps(data))
+                                connect_headers['ACCESS-SIGN'] = sign
+                                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                                connect_headers['ACCESS-NONCE'] = nonce
+                            with allure.step("账户可用余额列表"):
+                                r = session.request('POST', url='{}/api/v1/accounts/{}/conversions'.format(self.url,
+                                                                                                           account_id),
+                                                    data=json.dumps(data), headers=connect_headers)
+                            with allure.step("校验状态码"):
+                                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                            with allure.step("校验返回值"):
+                                assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
+                                assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
+                            sleep(10)
+                            with allure.step("获得换汇后buy币种balance金额"):
+                                buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
+                                    type=cfx_amount['buy'])
+                            with allure.step("获得换汇后sell币种balance金额"):
+                                sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
+                                    type=cfx_amount['sell'])
+                            logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cfx_amount['buy'],
+                                                                                          buy_amount_wallet_balance_old,
+                                                                                          cfx_amount['buy_amount'],
+                                                                                          buy_amount_wallet_balance_latest))
+                            logger.info('sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(cfx_amount['sell'],
+                                                                                            sell_amount_wallet_balance_old,
+                                                                                            cfx_amount[
+                                                                                                'sell_amount'],
+                                                                                            sell_amount_wallet_balance_latest))
+                            assert Decimal(buy_amount_wallet_balance_old) + Decimal(
+                                cfx_amount['buy_amount']) == Decimal(
+                                buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
+                                cfx_amount['buy'], buy_amount_wallet_balance_old, cfx_amount['buy_amount'],
+                                buy_amount_wallet_balance_latest)
+                            assert Decimal(sell_amount_wallet_balance_old) - Decimal(
+                                cfx_amount['sell_amount']) == Decimal(
+                                sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
+                                cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
+                                sell_amount_wallet_balance_latest)
+                else:
+                    with allure.step("生成货币对"):
+                        pair_list = 'EUR-GBP'.split('-')
+                        cfx_dict = [{'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]},
+                                    {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[1]},
+                                    {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[1]},
+                                    {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[0]}]
+                        for y in cfx_dict:
+                            cfx_amount = ApiFunction.cfx_random_number(y)
+                            data = {
+                                "quote_id": cfx_amount['quote']['quote_id'],
+                                "quote": cfx_amount['quote']['quote'],
+                                "pair": '{}-{}'.format(cfx_amount['buy'], cfx_amount['sell']),
+                                "buy_amount": str(cfx_amount['buy_amount']),
+                                "sell_amount": str(cfx_amount['sell_amount']),
+                                "major_ccy": cfx_amount['major_ccy']
+                            }
+                            logger.info('发送换汇data是{}'.format(data))
+                            with allure.step("获得换汇前buy币种balance金额"):
+                                buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(
+                                    type=cfx_amount['buy'])
+                            with allure.step('获得换汇前sell币种balance金额'):
+                                sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(
+                                    type=cfx_amount['sell'])
+                            with allure.step("验签"):
+                                unix_time = int(time.time())
+                                nonce = generate_string(30)
+                                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                                    url='/api/v1/accounts/{}/conversions'.format(
+                                                                        account_id), nonce=nonce,
+                                                                    body=json.dumps(data))
+                                connect_headers['ACCESS-SIGN'] = sign
+                                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                                connect_headers['ACCESS-NONCE'] = nonce
+                            with allure.step("账户可用余额列表"):
+                                r = session.request('POST', url='{}/api/v1/accounts/{}/conversions'.format(self.url,
+                                                                                                           account_id),
+                                                    data=json.dumps(data), headers=connect_headers)
+                            with allure.step("校验状态码"):
+                                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                            with allure.step("校验返回值"):
+                                assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
+                                assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
+                            sleep(10)
+                            with allure.step("获得换汇后buy币种balance金额"):
+                                buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
+                                    type=cfx_amount['buy'])
+                            with allure.step("获得换汇后sell币种balance金额"):
+                                sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
+                                    type=cfx_amount['sell'])
+                            logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cfx_amount['buy'],
+                                                                                          buy_amount_wallet_balance_old,
+                                                                                          cfx_amount['buy_amount'],
+                                                                                          buy_amount_wallet_balance_latest))
+                            logger.info('sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(cfx_amount['sell'],
+                                                                                            sell_amount_wallet_balance_old,
+                                                                                            cfx_amount[
+                                                                                                'sell_amount'],
+                                                                                            sell_amount_wallet_balance_latest))
+                            assert Decimal(buy_amount_wallet_balance_old) + Decimal(
+                                cfx_amount['buy_amount']) == Decimal(
+                                buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
+                                cfx_amount['buy'], buy_amount_wallet_balance_old, cfx_amount['buy_amount'],
+                                buy_amount_wallet_balance_latest)
+                            assert Decimal(sell_amount_wallet_balance_old) - Decimal(
+                                cfx_amount['sell_amount']) == Decimal(
+                                sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
+                                cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
+                                sell_amount_wallet_balance_latest)
