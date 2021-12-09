@@ -253,8 +253,6 @@ class TestConnectTransactionApi:
                 r = session.request('GET', url='{}/api/v1/config'.format(self.url), headers=connect_headers)
                 for i in r.json()['currencies']:
                     if i['config']['debit']['allow']:
-                        with allure.step("获得转移前cabital内币种balance金额"):
-                            balance_old = ApiFunction.get_crypto_number(type=i['symbol'])
                         with allure.step("获得otp"):
                             secretKey = get_json()['secretKey']
                             totp = pyotp.TOTP(secretKey)
@@ -267,7 +265,6 @@ class TestConnectTransactionApi:
                                 'direction': 'DEBIT',
                                 'external_id': generate_string(15)
                             }
-                            print(data)
                         with allure.step("验签"):
                             unix_time = int(time.time())
                             nonce = generate_string(30)
@@ -286,14 +283,9 @@ class TestConnectTransactionApi:
                             logger.info('状态码是{}'.format(str(r.status_code)))
                             logger.info('返回值是{}'.format(str(r.text)))
                         with allure.step("校验状态码"):
-                            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                         with allure.step("校验返回值"):
-                            assert r.json()['status'] == 'SUCCESS', "把{}从cabital转移到bybit账户错误，返回值是{}".format(i['symbol'], r.text)
-                        with allure.step("获得转移后cabital内币种balance金额"):
-                            sleep(5)
-                            balance_latest = ApiFunction.get_crypto_number(type=i['symbol'])
-                        assert Decimal(balance_old) - Decimal(data['amount']) == Decimal(
-                            balance_latest), "把{}从cabital转移到bybit账户错误，转移前balance是{},转移后balance是{}".format(i['symbol'], balance_old, balance_latest)
+                            assert r.json()['code'] == 'PA058', "把{}从cabital转移到bybit账户错误，返回值是{}".format(i['symbol'], r.text)
 
     @allure.testcase('test_connect_transaction_010 从cabital转移到bybit账户使用错误otp')
     def test_connect_transaction_010(self):

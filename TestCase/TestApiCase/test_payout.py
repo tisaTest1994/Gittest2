@@ -497,11 +497,11 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'txn_id' in r.text, "BCB GBP法币提现错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_025 BTC确认Crypto提现交易')
+    @allure.testcase('test_payout_025 BTC确认Crypto提现交易超过每日限额')
     def test_payout_025(self):
         with allure.step("BTC确认Crypto提现交易"):
             data = {
-                "amount": "0.8",
+                "amount": "2",
                 "code": "BTC",
                 "address": "tb1q38mwu50xludgz4r52n2v0q6jwlysjgz4zkk3kl",
                 "method": "ERC20"
@@ -513,13 +513,13 @@ class TestPayoutApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['code'] == '103031', "BTC确认Crypto提现交易错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == '103031', "BTC确认Crypto提现交易超过每日限额错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_026 ETH确认Crypto提现交易')
+    @allure.testcase('test_payout_026 ETH确认Crypto提现交易超过每日限额')
     def test_payout_026(self):
         with allure.step("ETH确认Crypto提现交易"):
             data = {
-                "amount": "0.018",
+                "amount": "4.018",
                 "code": "ETH",
                 "address": "tb1q38mwu50xludgz4r52n2v0q6jwlysjgz4zkk3kl",
                 "method": "ERC20"
@@ -531,9 +531,9 @@ class TestPayoutApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['code'] == '103031', "ETH确认Crypto提现交易错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == '103031', "ETH确认Crypto提现交易超过每日限额错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_027 USDT确认Crypto提现交易')
+    @allure.testcase('test_payout_027 USDT确认Crypto提现交易超过每日限额')
     def test_payout_027(self):
         with allure.step("USDT确认Crypto提现交易"):
             data = {
@@ -549,4 +549,4 @@ class TestPayoutApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['code'] == '103031', "USDT确认Crypto提现交易错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == '103031', "USDT确认Crypto提现交易超过每日限额错误，返回值是{}".format(r.text)

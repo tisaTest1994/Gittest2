@@ -17,15 +17,6 @@
     "email": "yilei1@cabital.com",
     "password": "Zcdsw123"
   },
-  "web": {
-    "test": {
-      "url": "https://www.react.latibac.com/",
-      "account": "richard.wan@cabital.com",
-      "password": "Zcdsw123",
-      "newpassword": "ZZcdsw123",
-      "code": "666666"
-    }
-  },
   "caas": {
     "test": {
       "account": "data.admin@cabital.com.uat",
@@ -33,17 +24,10 @@
       "url": "https://test.salesforce.com"
     }
   },
-  "connect": {
-    "test": {
-      "url": "https://connect.latibac.com",
-      "secretKey": "47605b8c-1555-4b80-b72b-b3be60412aa5",
-      "Headers": {
-        "ACCESS-KEY": "e610f97e-7327-42f8-90dc-6b3067effd3c",
-        "Content-Type": "application/json"
-      },
-      "api_key": "0c5ed00809980ccab3a03bd76a3b0406"
-    }
-  },
+  "cash_list": [
+    "GBP",
+    "EUR"
+  ],
   "cfx_book": {
     "1": "BTC-USDT",
     "2": "BTC-ETH",
@@ -300,14 +284,21 @@
     "ZMB",
     "ZWE"
   ],
+  "connect": {
+    "test": {
+      "Headers": {
+        "ACCESS-KEY": "e610f97e-7327-42f8-90dc-6b3067effd3c",
+        "Content-Type": "application/json"
+      },
+      "api_key": "0c5ed00809980ccab3a03bd76a3b0406",
+      "secretKey": "47605b8c-1555-4b80-b72b-b3be60412aa5",
+      "url": "https://connect.latibac.com"
+    }
+  },
   "crypto_list": [
     "BTC",
     "USDT",
     "ETH"
-  ],
-  "cash_list": [
-    "GBP",
-    "EUR"
   ],
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
@@ -457,5 +448,14 @@
   "secretKey": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
   "secretKeyForTest": " ",
   "slackUrl": "https://hooks.slack.com/services/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",
-  "test": "https://api.latibac.com/api/v1"
+  "test": "https://api.latibac.com/api/v1",
+  "web": {
+    "test": {
+      "account": "richard.wan@cabital.com",
+      "code": "666666",
+      "newpassword": "ZZcdsw123",
+      "password": "Zcdsw123",
+      "url": "https://www.react.latibac.com/"
+    }
+  }
 }

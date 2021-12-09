@@ -525,12 +525,12 @@ class TestAccountApi:
             assert r.json()['totpSecret'] is not None, "获取opt二维码不对，目前返回值是{}".format(r.text)
 
     @allure.testcase('test_account_029 创建opt验证，并且删除。')
-    @pytest.mark.multiprocess
     def test_account_029(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei3@163.com')
         # 获得opt secretKey
         r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
-        if 'ACC_SECURITY_MFA_000001' in r.text:
+        print(r.text)
+        if '001018' in r.text:
             # 删除opt
             secretKey = get_json()['secretKeyForTest']
             totp = pyotp.TOTP(secretKey)
@@ -543,7 +543,7 @@ class TestAccountApi:
             write_json('secretKeyForTest', ' ')
         else:
             r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
-        if "SUCCESS" in r.text:
+        if r.status_code == 200:
             secretData = r.json()['totpSecret']
             secretKey = r.json()['uriParams']['secret']
             # 写入secretKey
@@ -565,18 +565,16 @@ class TestAccountApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert {} == r.json(), "创建opt验证不对，目前返回值是{}".format(r.text)
-        # 删除opt
-        secretKey = get_json()['secretKeyForTest']
-        totp = pyotp.TOTP(secretKey)
-        mfaVerificationCode = totp.now()
-        data = {
-            "mfaVerificationCode": str(mfaVerificationCode),
-            "emailVerificationCode": "666666"
-        }
-        session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data),
-                         headers=headers)
-        write_json('secretKeyForTest', ' ')
-        ApiFunction.add_headers()
+        with allure.step("删除opt"):
+            secretKey = get_json()['secretKeyForTest']
+            totp = pyotp.TOTP(secretKey)
+            mfaVerificationCode = totp.now()
+            data = {
+                "mfaVerificationCode": str(mfaVerificationCode),
+                "emailVerificationCode": "666666"
+            }
+            session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data), headers=headers)
+            write_json('secretKeyForTest', ' ')
 
     @allure.testcase('test_account_030 验证opt code')
     def test_account_030(self):
