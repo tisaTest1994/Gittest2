@@ -461,8 +461,6 @@
   "web": {
     "test": {
       "account": "richard.wan@cabital.com",
-      "code": "666666",
-      "newpassword": "ZZcdsw123",
       "password": "Zcdsw123",
       "url": "https://www.react.latibac.com/"
     }
