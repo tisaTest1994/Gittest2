@@ -285,9 +285,17 @@
     "ZWE"
   ],
   "connect": {
+    "Secret": {
+      "SecretKey": "1234567890123456",
+      "ExtKey":"1234567890123456"
+    },
     "test": {
       "Headers": {
         "ACCESS-KEY": "e610f97e-7327-42f8-90dc-6b3067effd3c",
+        "Content-Type": "application/json"
+      },
+      "Headers_google": {
+        "ACCESS-KEY": "75db0a63-51a2-11ec-b90b-ae07b6f1ed79",
         "Content-Type": "application/json"
       },
       "api_key": "0c5ed00809980ccab3a03bd76a3b0406",
@@ -308,7 +316,8 @@
     "payout_email": "external.qa@cabital.com",
     "port": "993",
     "security_code": "amtogcicenyvypqq",
-    "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
+    "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008",
+    "secretKey": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY"
   },
   "env": "test",
   "headers": {
