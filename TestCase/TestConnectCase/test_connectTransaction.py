@@ -285,7 +285,7 @@ class TestConnectTransactionApi:
                         with allure.step("校验状态码"):
                             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                         with allure.step("校验返回值"):
-                            assert r.json()['code'] == 'PA058', "把{}从cabital转移到bybit账户错误，返回值是{}".format(i['symbol'], r.text)
+                            assert r.json()['code'] == 'PA003', "把{}从cabital转移到bybit账户错误，返回值是{}".format(i['symbol'], r.text)
                         sleep(30)
 
     @allure.testcase('test_connect_transaction_010 从cabital转移到bybit账户使用错误otp')
@@ -316,9 +316,9 @@ class TestConnectTransactionApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['status'] == 'SUCCESS', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '100003', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_transaction_011 从cabital转移到bybit账户并且关联C+T交易')
     def test_connect_transaction_011(self):
