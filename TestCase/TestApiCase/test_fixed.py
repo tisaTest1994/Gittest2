@@ -795,7 +795,7 @@ class TestFixedApi:
         with allure.step("校验返回值"):
             for i in r.json()['transactions']:
                 if transaction_id == i['transaction_id']:
-                    assert i['auto_renew'] == True, "查询包含复投的交易记录错误，返回值是{}".format(i)
+                    assert i['auto_renew'] is True, "查询包含复投的交易记录错误，返回值是{}".format(i)
                     assert i['time_line']['renew_subscription_id'] == '', "查询包含复投的交易记录错误，返回值是{}".format(i)
 
     @allure.testcase('test_fixed_019 查询包含复投的交易记录详情信息')

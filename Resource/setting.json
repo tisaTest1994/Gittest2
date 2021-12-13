@@ -287,19 +287,18 @@
   "connect": {
     "Secret": {
       "SecretKey": "1234567890123456",
-      "ExtKey":"1234567890123456"
+      "ExtKey": "1234567890123456"
     },
     "test": {
       "Headers": {
-        "ACCESS-KEY": "e610f97e-7327-42f8-90dc-6b3067effd3c",
+        "ACCESS-KEY": "8dbb1484-fba8-42ad-b177-48a841ecf045",
         "Content-Type": "application/json"
       },
       "Headers_google": {
         "ACCESS-KEY": "75db0a63-51a2-11ec-b90b-ae07b6f1ed79",
         "Content-Type": "application/json"
       },
-      "api_key": "0c5ed00809980ccab3a03bd76a3b0406",
-      "secretKey": "47605b8c-1555-4b80-b72b-b3be60412aa5",
+      "secretKey": "d7277081-3edd-47b6-b016-114f44f19320",
       "url": "https://connect.latibac.com"
     }
   },
