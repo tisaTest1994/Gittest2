@@ -318,7 +318,7 @@ class TestConnectTransactionApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['code'] == '100003', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == 'PA008', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_transaction_011 从cabital转移到bybit账户并且关联C+T交易')
     def test_connect_transaction_011(self):
