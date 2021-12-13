@@ -15,4 +15,4 @@ pytest-timeout~=1.4.2
 airtest-selenium~=1.0.3
 selenium~=3.141.0
 pynput~=1.7.3
-websockets~=10.0
+websockets~=10.1
