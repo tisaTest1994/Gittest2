@@ -785,7 +785,7 @@ class TestOperateApi:
     @allure.testcase('test_operate_033 让同名校验分数不够的通过')
     @pytest.mark.multiprocess
     def test_operate_033(self):
-        order_id = 'bf0e9ec5-ad34-49bc-a16c-40314245d455'
+        order_id = 'a1a31ec7-3f1f-4d04-b63d-49b222e20911'
         data = {
             "result": True
         }
