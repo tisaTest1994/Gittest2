@@ -41,7 +41,7 @@ class ApiFunction:
 
     # 注册
     @staticmethod
-    def sign_up(account=get_json()['email']['email'], password=get_json()['email']['password']):
+    def sign_up(account=generate_email(), password=get_json()['email']['password']):
         data = {
             "emailAddress": account,
             "password": password,
@@ -50,6 +50,7 @@ class ApiFunction:
         r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         assert 'accessToken' in r.text, "注册用户错误，返回值是{}".format(r.text)
+        return r.json()['accessToken']
 
     # 提现ETH获取交易id
     @staticmethod

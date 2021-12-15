@@ -290,8 +290,6 @@ class TestAccountApi:
             assert "Invalid original password." in r.text, "使用错误原始密码修改密码错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_016 忘记密码验证码')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_016(self):
         account = get_json()['email']['email']
         with allure.step("忘记密码验证码"):
@@ -308,8 +306,6 @@ class TestAccountApi:
             assert r.json() == {}, "忘记密码验证码错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_017 用户未注册忘记密码验证码')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_017(self):
         with allure.step("用户未注册忘记密码验证码"):
             data = {
@@ -463,7 +459,6 @@ class TestAccountApi:
             assert 'Invalid verification code' in r.text, "注册用户验证码缺少位数输入错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_025 注册用户验证码输入字符')
-    @pytest.mark.multiprocess
     def test_account_025(self):
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
@@ -483,26 +478,27 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert 'Invalid verification code' in r.text, "注册用户验证码输入字符错误，返回值是{}".format(r.text)
 
-    # @allure.testcase('test_account_026 使用相同的密码修改密码')
-    # @pytest.mark.multiprocess
-    # @pytest.mark.pro
-    # def test_account_026(self):
-    #     password = get_json()['email']['password']
-    #     with allure.step("修改密码"):
-    #         data = {
-    #             "original": password,
-    #             "password": password
-    #         }
-    #         r = session.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data), headers=headers)
-    #     with allure.step("状态码和返回值"):
-    #         logger.info('状态码是{}'.format(str(r.status_code)))
-    #         logger.info('返回值是{}'.format(str(r.text)))
-    #     with allure.step("校验状态码"):
-    #         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-    #     with allure.step("校验返回值"):
-    #         assert r.json() == {}, "使用相同的密码修改密码错误，返回值是{}".format(r.text)
-    #     with allure.step("用新密码重新登录"):
-    #         ApiFunction.get_account_token(account=get_json()['email']['email'], password=password)
+    @allure.testcase('test_account_026 修改用户密码')
+    def test_account_026(self):
+        with allure.step("注册"):
+            account = generate_email()
+            accessToken = ApiFunction.sign_up(account=account)
+            headers['Authorization'] = "Bearer " + accessToken
+        with allure.step("修改密码"):
+            data = {
+                "original": get_json()['email']['password'],
+                "password": "Abc1234!"
+            }
+            r = session.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "使用相同的密码修改密码错误，返回值是{}".format(r.text)
+        with allure.step("用新密码重新登录"):
+            print(ApiFunction.get_account_token(account=account, password=data['password']))
 
     @allure.testcase('test_account_027 获取mfa邮箱验证码')
     def test_account_027(self):
@@ -529,12 +525,12 @@ class TestAccountApi:
             assert r.json()['totpSecret'] is not None, "获取opt二维码不对，目前返回值是{}".format(r.text)
 
     @allure.testcase('test_account_029 创建opt验证，并且删除。')
-    @pytest.mark.multiprocess
     def test_account_029(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei3@163.com')
         # 获得opt secretKey
         r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
-        if 'ACC_SECURITY_MFA_000001' in r.text:
+        print(r.text)
+        if '001018' in r.text:
             # 删除opt
             secretKey = get_json()['secretKeyForTest']
             totp = pyotp.TOTP(secretKey)
@@ -547,7 +543,7 @@ class TestAccountApi:
             write_json('secretKeyForTest', ' ')
         else:
             r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
-        if "SUCCESS" in r.text:
+        if r.status_code == 200:
             secretData = r.json()['totpSecret']
             secretKey = r.json()['uriParams']['secret']
             # 写入secretKey
@@ -569,18 +565,16 @@ class TestAccountApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert {} == r.json(), "创建opt验证不对，目前返回值是{}".format(r.text)
-        # 删除opt
-        secretKey = get_json()['secretKeyForTest']
-        totp = pyotp.TOTP(secretKey)
-        mfaVerificationCode = totp.now()
-        data = {
-            "mfaVerificationCode": str(mfaVerificationCode),
-            "emailVerificationCode": "666666"
-        }
-        session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data),
-                         headers=headers)
-        write_json('secretKeyForTest', ' ')
-        ApiFunction.add_headers()
+        with allure.step("删除opt"):
+            secretKey = get_json()['secretKeyForTest']
+            totp = pyotp.TOTP(secretKey)
+            mfaVerificationCode = totp.now()
+            data = {
+                "mfaVerificationCode": str(mfaVerificationCode),
+                "emailVerificationCode": "666666"
+            }
+            session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data), headers=headers)
+            write_json('secretKeyForTest', ' ')
 
     @allure.testcase('test_account_030 验证opt code')
     def test_account_030(self):

@@ -795,7 +795,7 @@ class TestFixedApi:
         with allure.step("校验返回值"):
             for i in r.json()['transactions']:
                 if transaction_id == i['transaction_id']:
-                    assert i['auto_renew'] == True, "查询包含复投的交易记录错误，返回值是{}".format(i)
+                    assert i['auto_renew'] is True, "查询包含复投的交易记录错误，返回值是{}".format(i)
                     assert i['time_line']['renew_subscription_id'] == '', "查询包含复投的交易记录错误，返回值是{}".format(i)
 
     @allure.testcase('test_fixed_019 查询包含复投的交易记录详情信息')
@@ -876,3 +876,22 @@ class TestFixedApi:
             for i in r.json()['transactions']:
                 if i['transaction_id'] == transaction_id:
                     assert json.loads(i['details'])['subscribe_type'] == 0, "通过分页查询包含复投的交易记录详情信息错误，返回值是{}".format(r.json())
+
+    @allure.testcase('test_fixed_021 查询申购全部项目的交易记录')
+    def test_fixed_021(self):
+        with allure.step("查询申购项目的交易记录"):
+            params = {
+                'tx_type': "1",
+                'cursor': 0,
+                'size': 900,
+                'order': "1",
+                'code': ""
+            }
+            r = session.request('GET', url='{}/earn/fix/transactions'.format(env_url), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() is not None, '查询申购ETH项目的交易记录失败，返回值是{}'.format(r.text)

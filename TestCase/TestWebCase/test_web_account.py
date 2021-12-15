@@ -67,7 +67,7 @@ class TestCassApi:
         driver = webFunction.launch_web(self.web_url)
         with allure.step("launch web"):
             webFunction.login_web(driver)
-
+        # driver.find_element_by_xpath("//*[@class='MuiBox-root css-1doetrx']/button[text()='Change']").click()
 
 
 

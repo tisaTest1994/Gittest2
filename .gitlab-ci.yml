@@ -17,7 +17,7 @@ before_script:
     - tar -zxvf allure-2.13.9.tgz -C /opt/
     - ln -s /opt/allure-2.13.9/bin/allure /usr/bin/allure
     - pip install -r requirements.txt
-#
+
 # ApiTest:
 #   stage: test1
 #   tags:
