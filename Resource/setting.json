@@ -18,7 +18,7 @@
     "email": "yilei1@cabital.com",
     "password": "Zcdsw123"
   },
-<<<<<<< HEAD
+
   "web": {
     "test": {
       "url": "https://www.react.latibac.com/",
@@ -27,8 +27,7 @@
       "code": "666666"
     }
   },
-=======
->>>>>>> a6e1065474d5f4d91ba9f9687140888ca7d6a44c
+
   "caas": {
     "test": {
       "account": "data.admin@cabital.com.uat",
