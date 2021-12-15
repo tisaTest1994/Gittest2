@@ -45,14 +45,15 @@ class TestCassApi:
             assert driver.find_element_by_id('signinForm').is_displayed(), '未打开登录页面'
         with allure.step("点击Forget pwd"):
             driver.find_element_by_id('login_forgotpw').click()
-        with allure.step("通过重置密码text校验"):
-            assert driver.find_element_by_xpath('//*[@id="dialog_forgetpassword"]/h4').is_displayed(), '打开重置密码页面'
+        # with allure.step("通过重置密码text校验"):
+        #     assert driver.find_element_by_xpath('//*[@id="dialog_forgetpassword"]/h4').is_displayed(), '打开重置密码页面'
+        sleep(5)
         with allure.step("清除Account"):
             driver.find_element_by_id('dialog_forgetpassword_email_input').clear()
         with allure.step("输入Account"):
             driver.find_element_by_id('dialog_forgetpassword_email_input').send_keys(get_json()['web'][get_json()['env']]['account'])
         with allure.step("输入验证码"):
-            driver.find_element_by_xpath('//*[@name="mailcode"]').send_keys(get_json()['web'][get_json()['env']]['code'])
+            driver.find_element_by_xpath('//*[@name="mailcode"]').send_keys('666666')
             sleep(3)
         with allure.step("输入密码"):
             driver.find_element_by_id('dialog_forgetpassword_password_input').clear()
