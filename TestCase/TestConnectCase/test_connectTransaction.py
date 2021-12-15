@@ -15,7 +15,7 @@ class TestConnectTransactionApi:
         with allure.step("获取报价"):
             for i in get_json()['cfx_book'].values():
                 with allure.step("获取正向报价"):
-                    r = session.request('GET', url='{}/api/v1/quotes/{}'.format(self.url, i), headers=connect_headers)
+                    r = session.request('GET', url='{}/quotes/{}'.format(self.url, i), headers=connect_headers)
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
@@ -25,7 +25,7 @@ class TestConnectTransactionApi:
                         assert r.json()['quote'] is not None, "获取报价错误，返回值是{}".format(r.text)
                 with allure.step("获取反向报价"):
                     new_pair = '{}{}{}'.format(i.split('-')[1], '-', i.split('-')[0])
-                    r = session.request('GET', url='{}/api/v1/quotes/{}'.format(self.url, new_pair),
+                    r = session.request('GET', url='{}/quotes/{}'.format(self.url, new_pair),
                                         headers=connect_headers)
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
@@ -46,7 +46,7 @@ class TestConnectTransactionApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取合作方的配置"):
-            r = session.request('GET', url='{}/api/v1/config'.format(self.url), headers=connect_headers)
+            r = session.request('GET', url='{}/config'.format(self.url), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -68,7 +68,7 @@ class TestConnectTransactionApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("账户划转列表"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/transfers'.format(self.url, account_id),
+            r = session.request('GET', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                 headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -93,7 +93,7 @@ class TestConnectTransactionApi:
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("账户划转列表"):
             r = session.request('GET',
-                                url='{}/api/v1/accounts/{}/transfers?page_size=30&has_conversion=false&symbol=ETH&direction=DEBIT'.format(
+                                url='{}/accounts/{}/transfers?page_size=30&has_conversion=false&symbol=ETH&direction=DEBIT'.format(
                                     self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -116,7 +116,7 @@ class TestConnectTransactionApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("没有通过kyc的账户划转列表（不传默认参数）失败"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/transfers'.format(self.url, account_id),
+            r = session.request('GET', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                 headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -142,7 +142,7 @@ class TestConnectTransactionApi:
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("账户划转列表"):
             r = session.request('GET',
-                                url='{}/api/v1/accounts/{}/transfers/{}'.format(self.url, account_id, transfer_id),
+                                url='{}/accounts/{}/transfers/{}'.format(self.url, account_id, transfer_id),
                                 headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -168,7 +168,7 @@ class TestConnectTransactionApi:
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("账户划转详情使用错误transfer_id"):
             r = session.request('GET',
-                                url='{}/api/v1/accounts/{}/transfers/{}'.format(self.url, account_id, transfer_id),
+                                url='{}/accounts/{}/transfers/{}'.format(self.url, account_id, transfer_id),
                                 headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -192,7 +192,7 @@ class TestConnectTransactionApi:
                 connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                 connect_headers['ACCESS-NONCE'] = nonce
             with allure.step("获取合作方的配置"):
-                r = session.request('GET', url='{}/api/v1/config'.format(self.url), headers=connect_headers)
+                r = session.request('GET', url='{}/config'.format(self.url), headers=connect_headers)
                 for i in r.json()['currencies']:
                     if i['config']['debit']['allow']:
                         with allure.step("获得转移前cabital内币种balance金额"):
@@ -221,7 +221,7 @@ class TestConnectTransactionApi:
                             connect_headers['ACCESS-NONCE'] = nonce
                         with allure.step("把数字货币从cabital转移到bybit账户"):
                             r = session.request('POST',
-                                                url='{}/api/v1/accounts/{}/transfers'.format(self.url, account_id),
+                                                url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                                 data=json.dumps(data), headers=connect_headers)
                         with allure.step("状态码和返回值"):
                             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -250,7 +250,7 @@ class TestConnectTransactionApi:
                 connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                 connect_headers['ACCESS-NONCE'] = nonce
             with allure.step("获取合作方的配置"):
-                r = session.request('GET', url='{}/api/v1/config'.format(self.url), headers=connect_headers)
+                r = session.request('GET', url='{}/config'.format(self.url), headers=connect_headers)
                 for i in r.json()['currencies']:
                     if i['config']['debit']['allow']:
                         with allure.step("获得otp"):
@@ -277,7 +277,7 @@ class TestConnectTransactionApi:
                             connect_headers['ACCESS-NONCE'] = nonce
                         with allure.step("把数字货币从cabital转移到bybit账户"):
                             r = session.request('POST',
-                                                url='{}/api/v1/accounts/{}/transfers'.format(self.url, account_id),
+                                                url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                                 data=json.dumps(data), headers=connect_headers)
                         with allure.step("状态码和返回值"):
                             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -310,7 +310,7 @@ class TestConnectTransactionApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("把BTC从cabital转移到bybit账户并且关联C+T交易"):
-            r = session.request('POST', url='{}/api/v1/accounts/{}/transfers'.format(self.url, account_id),
+            r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                 data=json.dumps(data), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -358,7 +358,7 @@ class TestConnectTransactionApi:
                     connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                     connect_headers['ACCESS-NONCE'] = nonce
                 with allure.step("账户可用余额列表"):
-                    r = session.request('POST', url='{}/api/v1/accounts/{}/conversions'.format(self.url, account_id),
+                    r = session.request('POST', url='{}/accounts/{}/conversions'.format(self.url, account_id),
                                         data=json.dumps(data), headers=connect_headers)
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
@@ -415,7 +415,7 @@ class TestConnectTransactionApi:
                 connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                 connect_headers['ACCESS-NONCE'] = nonce
             with allure.step("把BTC从cabital转移到bybit账户并且关联C+T交易"):
-                r = session.request('POST', url='{}/api/v1/accounts/{}/transfers'.format(self.url, account_id),
+                r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                     data=json.dumps(data), headers=connect_headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))

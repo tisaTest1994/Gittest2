@@ -23,7 +23,7 @@ class TestConnectWalletApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("账户可用余额列表"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/balances'.format(self.url, account_id),
+            r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
                                 headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -57,7 +57,7 @@ class TestConnectWalletApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("账户可用余额列表"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/balances'.format(self.url, account_id),
+            r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
                                 headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -94,7 +94,7 @@ class TestConnectWalletApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("账户可用余额列表"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/balances'.format(self.url, account_id),
+            r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
                                 headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -135,7 +135,7 @@ class TestConnectWalletApi:
                     connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                     connect_headers['ACCESS-NONCE'] = nonce
                 with allure.step("账户可用余额列表"):
-                    r = session.request('GET', url='{}/api/v1/accounts/{}/balances/{}'.format(self.url, account_id, i),
+                    r = session.request('GET', url='{}/accounts/{}/balances/{}'.format(self.url, account_id, i),
                                         headers=connect_headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
@@ -170,7 +170,7 @@ class TestConnectWalletApi:
                     connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                     connect_headers['ACCESS-NONCE'] = nonce
                 with allure.step("账户可用余额列表"):
-                    r = session.request('GET', url='{}/api/v1/accounts/{}/balances/{}'.format(self.url, account_id, i),
+                    r = session.request('GET', url='{}/accounts/{}/balances/{}'.format(self.url, account_id, i),
                                         headers=connect_headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
@@ -208,7 +208,7 @@ class TestConnectWalletApi:
                     connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                     connect_headers['ACCESS-NONCE'] = nonce
                 with allure.step("账户可用余额列表"):
-                    r = session.request('GET', url='{}/api/v1/accounts/{}/balances/{}'.format(self.url, account_id, i),
+                    r = session.request('GET', url='{}/accounts/{}/balances/{}'.format(self.url, account_id, i),
                                         headers=connect_headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
@@ -246,7 +246,7 @@ class TestConnectWalletApi:
                     connect_headers['ACCESS-NONCE'] = nonce
                 with allure.step("获取账户单币入账信息, 入币方式缺失，使用默认"):
                     r = session.request('GET',
-                                        url='{}/api/v1/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id,
+                                        url='{}/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id,
                                                                                                   i, ''),
                                         headers=connect_headers)
                 with allure.step("状态码和返回值"):
@@ -279,7 +279,7 @@ class TestConnectWalletApi:
                     connect_headers['ACCESS-NONCE'] = nonce
                 with allure.step("获取账户单币入账信息, 入币方式SEPA"):
                     r = session.request('GET',
-                                        url='{}/api/v1/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id,
+                                        url='{}/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id,
                                                                                                   i, 'SEPA'),
                                         headers=connect_headers)
                 with allure.step("状态码和返回值"):
@@ -330,7 +330,7 @@ class TestConnectWalletApi:
                     connect_headers['ACCESS-NONCE'] = nonce
                 with allure.step("获取账户单币入账信息, 入币方式Faster Payments"):
                     r = session.request('GET',
-                                        url='{}/api/v1/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id,
+                                        url='{}/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id,
                                                                                                   i, 'FPS'),
                                         headers=connect_headers)
                 with allure.step("状态码和返回值"):
@@ -382,7 +382,7 @@ class TestConnectWalletApi:
                     connect_headers['ACCESS-NONCE'] = nonce
                 with allure.step("获取账户单币入账信息, 入币方式缺失，使用默认"):
                     r = session.request('GET',
-                                        url='{}/api/v1/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id,
+                                        url='{}/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id,
                                                                                                   i, ''),
                                         headers=connect_headers)
                 with allure.step("状态码和返回值"):
@@ -438,7 +438,7 @@ class TestConnectWalletApi:
                                     connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                                     connect_headers['ACCESS-NONCE'] = nonce
                                 with allure.step("账户可用余额列表"):
-                                    r = session.request('POST', url='{}/api/v1/accounts/{}/conversions'.format(self.url,
+                                    r = session.request('POST', url='{}/accounts/{}/conversions'.format(self.url,
                                                                                                                account_id),
                                                         data=json.dumps(data), headers=connect_headers)
                                 with allure.step("校验状态码"):
@@ -507,7 +507,7 @@ class TestConnectWalletApi:
                                     connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                                     connect_headers['ACCESS-NONCE'] = nonce
                                 with allure.step("账户可用余额列表"):
-                                    r = session.request('POST', url='{}/api/v1/accounts/{}/conversions'.format(self.url,
+                                    r = session.request('POST', url='{}/accounts/{}/conversions'.format(self.url,
                                                                                                                account_id),
                                                         data=json.dumps(data), headers=connect_headers)
                                 with allure.step("校验状态码"):
@@ -579,7 +579,7 @@ class TestConnectWalletApi:
                                 connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                                 connect_headers['ACCESS-NONCE'] = nonce
                             with allure.step("账户可用余额列表"):
-                                r = session.request('POST', url='{}/api/v1/accounts/{}/conversions'.format(self.url,
+                                r = session.request('POST', url='{}/accounts/{}/conversions'.format(self.url,
                                                                                                            account_id),
                                                     data=json.dumps(data), headers=connect_headers)
                             with allure.step("校验状态码"):
@@ -616,7 +616,7 @@ class TestConnectWalletApi:
                                 connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                                 connect_headers['ACCESS-NONCE'] = nonce
                             with allure.step("账户可用余额列表"):
-                                r = session.request('POST', url='{}/api/v1/accounts/{}/conversions'.format(self.url,
+                                r = session.request('POST', url='{}/accounts/{}/conversions'.format(self.url,
                                                                                                            account_id),
                                                     data=json.dumps(data), headers=connect_headers)
                             with allure.step("校验状态码"):

@@ -18,12 +18,12 @@ class TestConnectAccountApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), nonce=nonce)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='{}/accounts/{}/detail'.format(self.url, account_id), nonce=nonce)
             connect_headers['ACCESS-SIGN'] = sign
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取未关联用户状况"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -33,7 +33,7 @@ class TestConnectAccountApi:
             assert '' == r.text, "获取未关联用户状况错误，返回值是{}".format(r.text)
         with allure.step("获取partner信息"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei24@163.com')
-            r = session.request('GET', url='{}/api/v1/connect/account/info'.format(self.url), headers=headers)
+            r = session.request('GET', url='{}/connect/account/info'.format(self.url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -56,7 +56,7 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取关联用户状况，用户成功连接，还未在 Cabital 提交 KYC"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -66,7 +66,7 @@ class TestConnectAccountApi:
             assert r.json()['account_status'] == 'INITIALIZED', "获取关联用户状况，用户成功连接，还未在 Cabital 提交 KYC错误，返回值是{}".format(r.text)
         with allure.step("获取partner信息"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc01@test.com', password='A!234sdfg')
-            r = session.request('GET', url='{}/api/v1/connect/account/info'.format(self.url), headers=headers)
+            r = session.request('GET', url='{}/connect/account/info'.format(self.url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -89,7 +89,7 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取关联用户状况，Cabital处理用户材料中"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -99,7 +99,7 @@ class TestConnectAccountApi:
             assert r.json()['account_status'] == 'PENDING', "获取关联用户状况，Cabital处理用户材料中错误，返回值是{}".format(r.text)
         with allure.step("获取partner信息"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc02@test.com', password='A!234sdfg')
-            r = session.request('GET', url='{}/api/v1/connect/account/info'.format(self.url), headers=headers)
+            r = session.request('GET', url='{}/connect/account/info'.format(self.url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -122,7 +122,7 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取关联用户状况，用户被 Cabital 要求提供正确材料"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -132,7 +132,7 @@ class TestConnectAccountApi:
             assert r.json()['account_status'] == 'TEMPORARY_REJECTED', "获取关联用户状况，Cabital处理用户材料中错误，返回值是{}".format(r.text)
         with allure.step("获取partner信息"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc03@test.com', password='A!234sdfg')
-            r = session.request('GET', url='{}/api/v1/connect/account/info'.format(self.url), headers=headers)
+            r = session.request('GET', url='{}/connect/account/info'.format(self.url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -155,7 +155,7 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取关联用户状况，用户被 Cabital 最终拒绝开户"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -165,7 +165,7 @@ class TestConnectAccountApi:
             assert r.json()['account_status'] == 'FINAL_REJECTED', "获取关联用户状况，用户被 Cabital 最终拒绝开户错误，返回值是{}".format(r.text)
         with allure.step("获取partner信息"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc04@test.com', password='A!234sdfg')
-            r = session.request('GET', url='{}/api/v1/connect/account/info'.format(self.url), headers=headers)
+            r = session.request('GET', url='{}/connect/account/info'.format(self.url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -188,7 +188,7 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取关联用户状况，用户成功 KYC，Cabital 账户开通，等待合作方提交同名验证。"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -198,7 +198,7 @@ class TestConnectAccountApi:
             assert r.json()['account_status'] == 'CREATED', "获取关联用户状况，用户成功 KYC，Cabital 账户开通，等待合作方提交同名验证。错误，返回值是{}".format(r.text)
         with allure.step("获取partner信息"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc05@test.com', password='A!234sdfg')
-            r = session.request('GET', url='{}/api/v1/connect/account/info'.format(self.url), headers=headers)
+            r = session.request('GET', url='{}/connect/account/info'.format(self.url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -221,7 +221,7 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取关联用户状况，合作方已提交，同名验证人工审核中"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -231,7 +231,7 @@ class TestConnectAccountApi:
             assert r.json()['account_status'] == 'MATCHING', "获取关联用户状况，合作方已提交，同名验证人工审核中错误，返回值是{}".format(r.text)
         with allure.step("获取partner信息"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc06@test.com', password='A!234sdfg')
-            r = session.request('GET', url='{}/api/v1/connect/account/info'.format(self.url), headers=headers)
+            r = session.request('GET', url='{}/connect/account/info'.format(self.url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -254,7 +254,7 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取关联用户状况，同名验证通过，完全开通同账户转账"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -264,7 +264,7 @@ class TestConnectAccountApi:
             assert r.json()['account_status'] == 'MATCHED', "获取关联用户状况，同名验证通过，完全开通同账户转账错误，返回值是{}".format(r.text)
         with allure.step("获取partner信息"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc07@test.com', password='A!234sdfg')
-            r = session.request('GET', url='{}/api/v1/connect/account/info'.format(self.url), headers=headers)
+            r = session.request('GET', url='{}/connect/account/info'.format(self.url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -287,7 +287,7 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取关联用户状况，同名验证拒绝，多种因素"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -297,7 +297,7 @@ class TestConnectAccountApi:
             assert r.json()['account_status'] == 'MISMATCHED', "获取关联用户状况，同名验证拒绝，多种因素错误，返回值是{}".format(r.text)
         with allure.step("获取partner信息"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc08@test.com', password='A!234sdfg')
-            r = session.request('GET', url='{}/api/v1/connect/account/info'.format(self.url), headers=headers)
+            r = session.request('GET', url='{}/connect/account/info'.format(self.url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -320,7 +320,7 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取关联用户状况，用户成功连接，还未在 Cabital 提交 KYC"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -341,7 +341,7 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取关联用户状况，用户成功连接，还未在 Cabital 提交 KYC"):
-            r = session.request('GET', url='{}/api/v1/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -370,7 +370,7 @@ class TestConnectAccountApi:
     #         connect_headers['ACCESS-NONCE'] = nonce
     #         connect_headers['ACCESS-KEY'] = "75db0a63-51a2-11ec-b90b-ae07b6f1ed79"
     #     with allure.step("获取关联用户状况，同名验证拒绝，多种因素"):
-    #         r = session.request('PUT', url='{}/api/v1/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
+    #         r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
     #     with allure.step("状态码和返回值"):
     #         logger.info('状态码是{}'.format(str(r.status_code)))
     #         logger.info('返回值是{}'.format(str(r.text)))
