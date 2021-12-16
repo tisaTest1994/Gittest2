@@ -8,7 +8,6 @@ stages:
     - test4
 
 before_script:
-    - rm -rf *
     - apt-get update
     - apt-get install software-properties-common -y
     - apt-get install default-jre -y
