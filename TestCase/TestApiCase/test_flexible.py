@@ -23,8 +23,6 @@ class TestFlexibleApi:
                 assert 'product_id' in r.text, "获取产品列表错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_002 通过产品id获取id产品的详情')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_002(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -45,8 +43,6 @@ class TestFlexibleApi:
                 assert 'product_id' in r.text, "通过产品id获取id产品的详情错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_003 获取今日之后的利息列表')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_003(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -71,8 +67,6 @@ class TestFlexibleApi:
                 assert 'items' in r.text, "获取今日之后的利息列表错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_004 获取交易记录')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_004(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)

@@ -286,8 +286,8 @@
   ],
   "connect": {
     "Secret": {
-      "SecretKey": "1234567890123456",
-      "ExtKey": "1234567890123456"
+      "ExtKey": "1234567890123456",
+      "SecretKey": "1234567890123456"
     },
     "test": {
       "Headers": {
@@ -314,9 +314,9 @@
     "password": "Zcdsw123",
     "payout_email": "external.qa@cabital.com",
     "port": "993",
+    "secretKey": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY",
     "security_code": "amtogcicenyvypqq",
-    "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008",
-    "secretKey": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY"
+    "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
   },
   "env": "test",
   "headers": {

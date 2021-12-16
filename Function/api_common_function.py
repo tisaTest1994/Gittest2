@@ -133,9 +133,10 @@ def get_email():
 def get_language_map(type='app'):
     if type == 'app':
         r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(get_json()['language']), timeout=20)
-        path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages.json'
+        path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages_app.json'
     else:
         r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_web/{}/latest'.format(get_json()['language']), timeout=20)
+        path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages_web.json'
     with open(path, "w+", encoding='utf8') as f:
         json.dump(r.json()['data'], f, sort_keys=True, indent=2, ensure_ascii=False)
 

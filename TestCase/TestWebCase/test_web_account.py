@@ -2,16 +2,9 @@ from Function.web_function import *
 from Function.api_function import *
 
 
-global driver
-global t
-t =time.time()
-
-
-
 class TestCassApi:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']
-
 
     @allure.testcase('test_cass_001 打开登录页面')
     def test_cass_001(self):
@@ -70,7 +63,14 @@ class TestCassApi:
             webFunction.login_web(driver)
         # driver.find_element_by_xpath("//*[@class='MuiBox-root css-1doetrx']/button[text()='Change']").click()
 
-
+    @allure.testcase('test_cass_004 打开登录页面')
+    def test_cass_004(self):
+        with allure.step("launch web"):
+            driver = webFunction.launch_web(self.web_url)
+        with allure.step("确定选择最新的tab"):
+            driver.switch_to_new_tab()
+        with allure.step("确定打开登录页面"):
+            sleep()
 
 
 

@@ -28,7 +28,7 @@ class TestTransactionApi:
                 "cursor": "0",
                 "page_size": 100
             },
-            "user_txn_sub_types": [1, 2, 3, 4, 5, 6],
+            "user_txn_sub_types": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
             "statuses": [1, 2, 3, 4],
             "codes": []
         }
@@ -41,3 +41,39 @@ class TestTransactionApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert 'product_id' in r.text, "获取产品列表错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_transaction_003 查询指定Debit记录')
+    def test_transaction_003(self):
+        data = {
+            "pagination_request": {
+                "cursor": "0",
+                "page_size": 100
+            },
+            "user_txn_sub_types": [8, 9, 10, 11],
+            "statuses": [1, 2, 3, 4],
+            "codes": []
+        }
+        with allure.step("查询特定条件的交易"):
+            r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'product_id' in r.text, "获取产品列表错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_transaction_004 查询指定Debit详情')
+    def test_transaction_004(self):
+        transaction_id = '416e3000-c317-4abe-98b2-48de222bde54'
+        params = {
+            'txn_sub_type': 8
+        }
+        r = session.request('GET', url='{}/txn/{}'.format(env_url, transaction_id), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['transaction']['transaction_id'] == transaction_id, "查询指定Debit详情错误，返回值是{}".format(r.text)
