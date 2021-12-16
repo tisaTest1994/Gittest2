@@ -147,7 +147,7 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'Cabital Fintech LT UAB TEST A' in r.text, "充值英镑账户错误，返回值是{}".format(r.text)
+                assert 'Cabital Fintech (LT) UAB' in r.text, "充值英镑账户错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_pay_in_010 EUR法币充值方式')
     def test_pay_in_010(self):
