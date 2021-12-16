@@ -350,27 +350,27 @@ class TestConnectAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['otp_ready'] is True, "查询用户otp状态，otp已经绑定错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_012 关联已经关联过的用户')
-    def test_connect_account_012(self):
-        with allure.step("测试用户的account_id"):
-            account_id = '097f1d1f-f29a-40a9-bf7f-6fae3ce1657f'
-            data = {
-                'name': 'sadasd',
-                'id': 'S1DC156156',
-                'id_document': 'PASSPORT',
-                'issued_by': 'HKG',
-                'dob': '19910101'
-            }
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data), key=get_json()['connect'][get_json()['env']]['google']['secretKey'])
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
-            connect_headers['ACCESS-KEY'] = '75db0a63-51a2-11ec-b90b-ae07b6f1ed79'
-        with allure.step("获取关联用户状况，同名验证拒绝，多种因素"):
-            r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
+    # @allure.testcase('test_connect_account_012 关联已经关联过的用户')
+    # def test_connect_account_012(self):
+    #     with allure.step("测试用户的account_id"):
+    #         account_id = '097f1d1f-f29a-40a9-bf7f-6fae3ce1657f'
+    #         data = {
+    #             'name': 'sadasd',
+    #             'id': 'S1DC156156',
+    #             'id_document': 'PASSPORT',
+    #             'issued_by': 'HKG',
+    #             'dob': '19910101'
+    #         }
+    #     with allure.step("验签"):
+    #         unix_time = int(time.time())
+    #         nonce = generate_string(30)
+    #         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data), key=get_json()['connect'][get_json()['env']]['google']['secretKey'])
+    #         connect_headers['ACCESS-SIGN'] = sign
+    #         connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+    #         connect_headers['ACCESS-NONCE'] = nonce
+    #         connect_headers['ACCESS-KEY'] = '75db0a63-51a2-11ec-b90b-ae07b6f1ed79'
+    #     with allure.step("获取关联用户状况，同名验证拒绝，多种因素"):
+    #         r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
+    #     with allure.step("状态码和返回值"):
+    #         logger.info('状态码是{}'.format(str(r.status_code)))
+    #         logger.info('返回值是{}'.format(str(r.text)))
