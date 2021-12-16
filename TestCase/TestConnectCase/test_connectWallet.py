@@ -287,9 +287,9 @@ class TestConnectWalletApi:
                     logger.info('返回值是{}'.format(str(r.text)))
                 if i == 'GBP':
                     with allure.step("校验状态码"):
-                        assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+                        assert r.status_code == 500, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert r.json()['code'] == '500', "获取账户单币入账信息, 入币方式SEPA错误，返回值是{}".format(r.text)
+                        assert r.json()['code'] == 'PA999', "获取账户单币入账信息, 入币方式SEPA错误，返回值是{}".format(r.text)
                 elif i == 'EUR':
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
@@ -338,9 +338,9 @@ class TestConnectWalletApi:
                     logger.info('返回值是{}'.format(str(r.text)))
                 if i == 'EUR':
                     with allure.step("校验状态码"):
-                        assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+                        assert r.status_code == 500, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert r.json()['code'] == '500', "获取账户单币入账信息, 入币方式Faster Payments错误，返回值是{}".format(r.text)
+                        assert r.json()['code'] == 'PA999', "获取账户单币入账信息, 入币方式Faster Payments错误，返回值是{}".format(r.text)
                 elif i == 'GBP':
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
