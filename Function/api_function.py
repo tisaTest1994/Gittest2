@@ -265,7 +265,7 @@ class ApiFunction:
                 data = '{}{}{}{}'.format(unix_time, method, url, body)
         else:
             if key == '':
-                key = get_json()['connect'][get_json()['env']]['secretKey']
+                key = get_json()['connect'][get_json()['env']]['bybit']['secretKey']
             if body == '':
                 data = '{}{}{}{}'.format(unix_time, method, nonce, url)
             else:

@@ -41,7 +41,7 @@ class TestConnectAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             for i in r.json()['account_bindings']:
-                if i['partner_id'] == get_json()['connect']['test']['Headers']['ACCESS-KEY']:
+                if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'NONE', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_account_002 获取关联用户状况，用户成功连接，还未在 Cabital 提交 KYC')
@@ -74,7 +74,7 @@ class TestConnectAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             for i in r.json()['account_bindings']:
-                if i['partner_id'] == get_json()['connect']['test']['Headers']['ACCESS-KEY']:
+                if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'INITIALIZED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_account_003 获取关联用户状况，Cabital处理用户材料中')
@@ -107,7 +107,7 @@ class TestConnectAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             for i in r.json()['account_bindings']:
-                if i['partner_id'] == get_json()['connect']['test']['Headers']['ACCESS-KEY']:
+                if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'PENDING', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_account_004 获取关联用户状况，用户被 Cabital 要求提供正确材料')
@@ -140,7 +140,7 @@ class TestConnectAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             for i in r.json()['account_bindings']:
-                if i['partner_id'] == get_json()['connect']['test']['Headers']['ACCESS-KEY']:
+                if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'TEMPORARY_REJECTED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_account_005 获取关联用户状况，用户被 Cabital 最终拒绝开户')
@@ -173,7 +173,7 @@ class TestConnectAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             for i in r.json()['account_bindings']:
-                if i['partner_id'] == get_json()['connect']['test']['Headers']['ACCESS-KEY']:
+                if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'FINAL_REJECTED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_account_006 获取关联用户状况，用户成功 KYC，Cabital 账户开通，等待合作方提交同名验证。')
@@ -206,7 +206,7 @@ class TestConnectAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             for i in r.json()['account_bindings']:
-                if i['partner_id'] == get_json()['connect']['test']['Headers']['ACCESS-KEY']:
+                if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'CREATED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_account_007 获取关联用户状况，合作方已提交，同名验证人工审核中')
@@ -239,7 +239,7 @@ class TestConnectAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             for i in r.json()['account_bindings']:
-                if i['partner_id'] == get_json()['connect']['test']['Headers']['ACCESS-KEY']:
+                if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'MATCHING', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_account_008 获取关联用户状况，同名验证通过，完全开通同账户转账')
@@ -272,7 +272,7 @@ class TestConnectAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             for i in r.json()['account_bindings']:
-                if i['partner_id'] == get_json()['connect']['test']['Headers']['ACCESS-KEY']:
+                if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'MATCHED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_account_009 获取关联用户状况，同名验证拒绝，多种因素')
@@ -305,7 +305,7 @@ class TestConnectAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             for i in r.json()['account_bindings']:
-                if i['partner_id'] == get_json()['connect']['test']['Headers']['ACCESS-KEY']:
+                if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'MISMATCHED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
     @allure.testcase('test_connect_account_010 查询用户otp状态，otp未绑定')
@@ -364,7 +364,7 @@ class TestConnectAccountApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data), key=get_json()['connect'][get_json()['env']]['google']['secretKey'])
             connect_headers['ACCESS-SIGN'] = sign
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce

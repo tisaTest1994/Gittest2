@@ -35,7 +35,7 @@ global package_name
 package_name = get_json()['app_package'][get_json()['env']]
 
 global connect_headers
-connect_headers = get_json()['connect'][get_json()['env']]['Headers']
+connect_headers = get_json()['connect'][get_json()['env']]['bybit']['Headers']
 
 
 class sessions(requests.Session):
