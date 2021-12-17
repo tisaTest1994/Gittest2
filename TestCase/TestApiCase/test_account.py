@@ -793,11 +793,9 @@ class TestAccountApi:
     @allure.testcase('test_account_044 多次referal注册用户')
     def test_account_044(self):
         for i in range(5):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
             data = {
                 "emailAddress": generate_email(),
                 "verificationCode": "666666",
-                "citizenCountryCode": citizenCountryCode,
                 "password": get_json()['email']['password'],
                 "metadata": {
                     "referral": {
@@ -807,11 +805,12 @@ class TestAccountApi:
             }
             session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
             logger.info('邮箱是{}'.format(data['emailAddress']))
-            sleep(3)
+            sleep(5)
             with allure.step("数据库检查"):
-                sql = "select relation from relation where referer_id='daf99d80-fcf4-4f10-8bb8-ab88dcf23cb8' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(
-                    data['emailAddress'])
+                sql = "select relation from relation where referer_id='daf99d80-fcf4-4f10-8bb8-ab88dcf23cb8' and referee_id=(select account_id from account.user_account_map where user_id = (select user_id from account.user where email='{}'));".format(data['emailAddress'])
                 relation = sqlFunction.connect_mysql('referral', sql)
+                print(relation)
+                print(type(relation[0]['relation']))
                 assert relation[0]['relation'] == 2, '数据库查询值是{}'.format(relation)
 
     @allure.testcase('test_account_045 获取用户偏好信息')
@@ -913,7 +912,9 @@ class TestAccountApi:
             refreshToken = r.json()['refreshToken']
         with allure.step("登出"):
             headers['Authorization'] = 'Bearer {}'.format(r.json()['accessToken'])
-            data = {}
+            data = {
+                'refreshToken': refreshToken
+            }
             r = session.request('POST', url='{}/account/user/logout'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
