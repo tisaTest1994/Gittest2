@@ -14,7 +14,7 @@ class TestConnectApi:
     def test_connect_001(self):
         with allure.step("获取合作方配置"):
             r = session.request('GET', url='{}/connect/{}/transfer/limit'.format(self.url, get_json()['connect'][
-                get_json()['env']]['Headers']['ACCESS-KEY']), headers=headers)
+                get_json()['env']]['bybit']['Headers']['ACCESS-KEY']), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -27,7 +27,7 @@ class TestConnectApi:
     def test_connect_002(self):
         with allure.step("获取合作方配置"):
             r = session.request('GET', url='{}/connect/{}/transfer/limit'.format(self.url, get_json()['connect'][
-                get_json()['env']]['Headers']['ACCESS-KEY']), headers=headers)
+                get_json()['env']]['bybit']['Headers']['ACCESS-KEY']), headers=headers)
             for i in r.json()['crypto']:
                 amount = str(float(i['withdraw']['amount_limit']['min']) + float(0.002))
                 data = {
@@ -36,7 +36,7 @@ class TestConnectApi:
                     "direction": "DEBIT"
                 }
                 with allure.step("transfer 预校验"):
-                    r = session.request('POST', url='{}/connect/{}/transfer/confirm'.format(self.url, get_json()['connect'][get_json()['env']]['Headers']['ACCESS-KEY']), data=json.dumps(data), headers=headers)
+                    r = session.request('POST', url='{}/connect/{}/transfer/confirm'.format(self.url, get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']), data=json.dumps(data), headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
@@ -49,7 +49,7 @@ class TestConnectApi:
     def test_connect_003(self):
         with allure.step("获取合作方配置"):
             r = session.request('GET', url='{}/connect/{}/transfer/limit'.format(self.url, get_json()['connect'][
-                get_json()['env']]['Headers']['ACCESS-KEY']), headers=headers)
+                get_json()['env']]['bybit']['Headers']['ACCESS-KEY']), headers=headers)
             for i in r.json()['crypto']:
                 amount = str(float(i['withdraw']['amount_limit']['min']) - float(0.0001))
                 data = {
@@ -58,7 +58,7 @@ class TestConnectApi:
                     "direction": "DEBIT"
                 }
                 with allure.step("transfer 预校验小于最小值"):
-                    r = session.request('POST', url='{}/connect/{}/transfer/confirm'.format(self.url, get_json()['connect'][get_json()['env']]['Headers']['ACCESS-KEY']), data=json.dumps(data), headers=headers)
+                    r = session.request('POST', url='{}/connect/{}/transfer/confirm'.format(self.url, get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']), data=json.dumps(data), headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
@@ -73,7 +73,7 @@ class TestConnectApi:
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
         with allure.step("获取合作方配置"):
             r = session.request('GET', url='{}/connect/{}/transfer/limit'.format(self.url, get_json()['connect'][
-                get_json()['env']]['Headers']['ACCESS-KEY']), headers=headers)
+                get_json()['env']]['bybit']['Headers']['ACCESS-KEY']), headers=headers)
             for i in r.json()['crypto']:
                 with allure.step("获得transfer前金额"):
                     wallet_balance_old = ApiFunction.get_crypto_number(type=i['symbol'])
@@ -92,7 +92,7 @@ class TestConnectApi:
                     mfaVerificationCode = totp.now()
                     headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 with allure.step("transfer 交易"):
-                    r = session.request('POST', url='{}/connect/{}/transfer'.format(self.url, get_json()['connect'][get_json()['env']]['Headers']['ACCESS-KEY']), data=json.dumps(data), headers=headers)
+                    r = session.request('POST', url='{}/connect/{}/transfer'.format(self.url, get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']), data=json.dumps(data), headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
@@ -112,7 +112,7 @@ class TestConnectApi:
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
         with allure.step("获取合作方配置"):
             r = session.request('GET', url='{}/connect/{}/transfer/limit'.format(self.url, get_json()['connect'][
-                get_json()['env']]['Headers']['ACCESS-KEY']), headers=headers)
+                get_json()['env']]['bybit']['Headers']['ACCESS-KEY']), headers=headers)
             for i in r.json()['crypto']:
                 amount = str(float(i['withdraw']['amount_limit']['min']) - float(0.0001))
                 data = {
@@ -129,7 +129,7 @@ class TestConnectApi:
                     mfaVerificationCode = totp.now()
                     headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 with allure.step("transfer 交易"):
-                    r = session.request('POST', url='{}/connect/{}/transfer'.format(self.url, get_json()['connect'][get_json()['env']]['Headers']['ACCESS-KEY']), data=json.dumps(data), headers=headers)
+                    r = session.request('POST', url='{}/connect/{}/transfer'.format(self.url, get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']), data=json.dumps(data), headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
