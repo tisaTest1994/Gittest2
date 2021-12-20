@@ -285,10 +285,6 @@
     "ZWE"
   ],
   "connect": {
-    "Secret": {
-      "ExtKey": "1234567890123456",
-      "SecretKey": "1234567890123456"
-    },
     "test": {
       "bybit": {
         "Headers": {

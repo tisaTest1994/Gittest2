@@ -73,70 +73,7 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert 'The verification code was wrong' in r.text, "注册时，输入错误验证码导致注册失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_account_004 选择的国家代码可以成功申请注册验证码')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
-    def test_account_004(self):
-        with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
-            data = {
-                "emailAddress": "zcdsw159@163.com",
-                "citizenCountryCode": citizenCountryCode
-            }
-            r = session.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
-                                 data=json.dumps(data), headers=headers)
-            with allure.step("状态码和返回值"):
-                logger.info('状态码是{}'.format(str(r.status_code)))
-                logger.info('返回值是{}'.format(str(r.text)))
-                logger.info('国家代码是{}'.format(citizenCountryCode))
-            with allure.step("校验状态码"):
-                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-            with allure.step("校验返回值"):
-                assert r.json() == {}, "选择的国家代码可以成功申请注册验证码失败，返回值是{}".format(r.text)
-
-    @allure.testcase('test_account_005 申请注册验证码的邮箱已注册')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
-    def test_account_005(self):
-        account = get_json()['email']['email']
-        with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
-        data = {
-            "emailAddress": account,
-            "citizenCountryCode": citizenCountryCode
-        }
-        r = session.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
-                             data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert '{}' == r.text, "申请注册验证码的邮箱已注册错误，返回值是{}".format(r.text)
-
-    @allure.testcase('test_account_006 申请注册验证码邮箱在黑名单')
-    @pytest.mark.multiprocess
-    def test_account_006(self):
-        with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
-        with allure.step("用黑名单邮箱申请注册验证码"):
-            data = {
-                "emailAddress": "yilei100@163.com",
-                "citizenCountryCode": citizenCountryCode
-            }
-            r = session.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url),
-                                 data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert '{}' == r.text, "申请注册验证码邮箱在黑名单错误，返回值是{}".format(r.text)
-
     @allure.testcase('test_account_007 登录已经注册账号')
-    @pytest.mark.multiprocess
     def test_account_007(self):
         account = get_json()['email']['email']
         with allure.step("登录已经注册账号"):
@@ -154,8 +91,6 @@ class TestAccountApi:
             assert 'accessToken' in r.text, "登录已经注册账号错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_009 登录未注册账号')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_009(self):
         with allure.step("登录未注册账号"):
             data = {
@@ -172,7 +107,6 @@ class TestAccountApi:
             assert 'Incorrect account or password.' in r.text, "登录已经注册账号输入错误密码错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_010 登录已经注册的黑名单账号')
-    @pytest.mark.multiprocess
     def test_account_010(self):
         with allure.step("登录已经注册的黑名单账号"):
             blacklist = get_json()['blacklist']
@@ -190,8 +124,6 @@ class TestAccountApi:
             assert 'accessToken' in r.text, "登录已经注册的黑名单账号错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_011 刷新账户token')
-    @pytest.mark.singleProcess
-    @pytest.mark.pro
     def test_account_011(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token()
         with allure.step("获取refreshToken"):
@@ -216,8 +148,6 @@ class TestAccountApi:
             assert 'accessToken' in r.text, "刷新账户token错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_012 用错误的token刷新token')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_012(self):
         with allure.step("用错误的token刷新token"):
             data = {
@@ -233,8 +163,6 @@ class TestAccountApi:
             assert 'Refresh token error' in r.text, "用错误的token刷新token错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_013 用空的token刷新token')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_013(self):
         with allure.step("用空的token刷新token"):
             data = {
@@ -250,7 +178,6 @@ class TestAccountApi:
             assert 'Invalid refresh token' in r.text, "用空的token刷新token错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_014 修改密码使用错误token')
-    @pytest.mark.multiprocess
     def test_account_014(self):
         with allure.step("把错误token写入headers"):
             headers['Authorization'] = "Bearer " + "accessToken1234"
@@ -267,7 +194,6 @@ class TestAccountApi:
             assert r.status_code == 401, "http状态码不对，目前状态码是{}".format(r.status_code)
 
     @allure.testcase('test_account_015 使用错误原始密码修改密码')
-    @pytest.mark.multiprocess
     def test_account_015(self):
         account = get_json()['email']['email']
         password = get_json()['email']['password']
@@ -288,37 +214,6 @@ class TestAccountApi:
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert "Invalid original password." in r.text, "使用错误原始密码修改密码错误，返回值是{}".format(r.text)
-
-    @allure.testcase('test_account_016 忘记密码验证码')
-    def test_account_016(self):
-        account = get_json()['email']['email']
-        with allure.step("忘记密码验证码"):
-            data = {
-                "emailAddress": account,
-            }
-            r = session.request('POST', url='{}/account/user/forgetPassword/sendVerificationCode'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json() == {}, "忘记密码验证码错误，返回值是{}".format(r.text)
-
-    @allure.testcase('test_account_017 用户未注册忘记密码验证码')
-    def test_account_017(self):
-        with allure.step("用户未注册忘记密码验证码"):
-            data = {
-                "emailAddress": generate_email()
-            }
-            r = session.request('POST', url='{}/account/user/forgetPassword/sendVerificationCode'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json() == {}, "用户未注册忘记密码验证码错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_018 忘记密码')
     def test_account_018(self):
@@ -342,7 +237,6 @@ class TestAccountApi:
             assert r.json() == {}, "忘记密码错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_019 未注册用户忘记密码失败')
-    @pytest.mark.multiprocess
     def test_account_019(self):
         with allure.step("未注册用户忘记密码失败"):
             data = {
@@ -360,8 +254,6 @@ class TestAccountApi:
             assert "The verification code was wrong." in r.text, "未注册用户忘记密码失败错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_020 用户忘记密码验证码错误')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_020(self):
         with allure.step("用户忘记密码验证码错误"):
             account = generate_email()
@@ -384,8 +276,6 @@ class TestAccountApi:
             assert "The verification code was wrong." in r.text, "用户忘记密码验证码错误错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_021 查询用户信息')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_account_021(self):
         with allure.step("查询用户信息"):
             r = session.request('GET', url='{}/account/info'.format(env_url), headers=headers)
@@ -397,26 +287,7 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['user']['userId'] is not None, "查询用户信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_account_022 申请注册验证码,使用白名单外国家代码被拒绝')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
-    def test_account_022(self):
-        with allure.step("申请注册验证码,使用白名单外国家代码被拒绝"):
-            data = {
-                "emailAddress": generate_email(),
-                "citizenCountryCode": "WYL"
-            }
-            r = session.request('POST', url='{}/account/user/signUp/sendVerificationCode'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert "Sorry, this country is temporarily not supported. Your email will be notified when we launch in your country." in r.text, "申请注册验证码,使用白名单外国家代码被拒绝错误，返回值是{}".format(r.text)
-
     @allure.testcase('test_account_023 用户使用特殊符号注册')
-    @pytest.mark.multiprocess
     def test_account_023(self):
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
