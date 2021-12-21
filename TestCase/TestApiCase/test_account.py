@@ -309,7 +309,6 @@ class TestAccountApi:
             assert 'accessToken' in r.text, "用户使用特殊符号注册错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_account_024 注册用户验证码缺少位数输入')
-    @pytest.mark.multiprocess
     def test_account_024(self):
         with allure.step("获取随机国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])

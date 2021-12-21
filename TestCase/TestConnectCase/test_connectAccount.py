@@ -354,7 +354,6 @@ class TestConnectAccountApi:
     @allure.testcase('test_connect_account_012 使用错误account_id导致解除绑定失败')
     def test_connect_account_012(self):
         with allure.step("测试用户的account_id"):
-
             partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']
         with allure.step("验签"):
             unix_time = int(time.time())
