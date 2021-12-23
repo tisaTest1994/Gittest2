@@ -259,7 +259,6 @@ class TestFlexibleApi:
                     "有足够BTC的用户发起购买USDT投资项目,剩余可用资金错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_008 投资金额小于最小投资BTC数量')
-    @pytest.mark.multiprocess
     def test_flexible_008(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -287,8 +286,6 @@ class TestFlexibleApi:
                 assert 'Minimum: 0.001 BTC' in r.text, "投资金额小于最小投资BTC数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_009 投资金额小于最小投资ETH数量')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_009(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -316,8 +313,6 @@ class TestFlexibleApi:
                 assert 'Minimum: 0.01 ETH' in r.text, "投资金额小于最小投资ETH数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_010 投资金额小于最小投资USDT数量')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_010(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -346,8 +341,6 @@ class TestFlexibleApi:
                 assert 'Minimum: 0.01 USDT' in r.text, "投资金额小于最小投资USDT数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_011 获取产品持有情况')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_011(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -368,8 +361,6 @@ class TestFlexibleApi:
                 assert 'total_holding' in r.text, "获取产品持有情况错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_012 赎回BTC投资项目成功')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_012(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -660,8 +651,6 @@ class TestFlexibleApi:
                 assert r.json()['status'] == 3, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_017 赎回金额超过最大的可赎回USDT数量')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_017(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -705,8 +694,6 @@ class TestFlexibleApi:
                 assert r.json()['status'] == 3, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_018 正在赎回金额等于wallet中冻结金额')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_018(self):
         with allure.step("获取产品product"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -729,8 +716,6 @@ class TestFlexibleApi:
         assert redeeming_amount == frozen_amount, "获得项目当前持有中的赎回冻结金额不等于不wallet中saving冻结金额"
 
     @allure.testcase('test_flexible_019 校验明日计息金额')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_019(self):
         sleep(10)
         with allure.step("获取产品product"):
@@ -762,8 +747,6 @@ class TestFlexibleApi:
         assert interest_my_count == Decimal(interest), '接口获得和自己计算今天计算的利息不对'
 
     @allure.testcase('test_flexible_020 获取今日之前的利息列表')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_020(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -788,8 +771,6 @@ class TestFlexibleApi:
                 assert 'items' in r.text, "获取今日之前的利息列表错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_021 确定利息派发日期是T+1')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_021(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -815,8 +796,6 @@ class TestFlexibleApi:
             assert int(now_time) + 86400 >= int(earning_start_time), '确定利息派发日期是T+1错误'
 
     @allure.testcase('test_flexible_022 确定赎回日期是D+1')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_022(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -841,11 +820,28 @@ class TestFlexibleApi:
             assert int(now_time) <= int(redeem_settle_time), '确定赎回日期是D+1错误'
             assert int(now_time) + 86400*2 >= int(redeem_settle_time), '确定赎回日期是D+1错误'
 
+    @allure.testcase('test_flexible_023 获取所有产品持有情况')
+    def test_flexible_022(self):
+        with allure.step("获取所有产品持有情况"):
+            r = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'total_holding' in r.text, "获取所有产品持有情况错误，返回值是{}".format(r.text)
 
-
-
-
-
-
-
-
+    @allure.testcase('test_flexible_023 获取所有产品持有情况以EUR显示')
+    def test_flexible_023(self):
+        with allure.step("获取所有产品持有情况以EUR显示"):
+            headers['X-Currency'] = 'EUR'
+            r = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'total_holding' in r.text, "获取所有产品持有情况以EUR显示错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == 'EUR', "获取所有产品持有情况以EUR显示错误，返回值是{}".format(r.text)
