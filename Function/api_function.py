@@ -13,6 +13,7 @@ class ApiFunction:
         }
         if type == 'operate':
             r = session.request('POST', url='{}/operator/operator/login'.format(operateUrl), data=json.dumps(data), headers=headers)
+            print(r.json())
         elif type == 'monitor':
             data['grant_type'] = 'password'
             data['client_id'] = get_json()['kyc'][get_json()['env']]['client_id']

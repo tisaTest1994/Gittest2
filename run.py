@@ -47,6 +47,7 @@ class sessions(requests.Session):
 session = sessions()
 
 if __name__ == '__main__':
+    get_language_map()
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
     if sys.argv[1] == 'api':

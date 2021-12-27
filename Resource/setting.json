@@ -451,7 +451,7 @@
   "operateUrl": "https://opapi.cabital.io/api/v1",
   "operate_admin_account": {
     "email": "zhangsan@test.com",
-    "password": "zhangsan"
+    "password": "123456"
   },
   "pro": "https://api.cabital.com/api/v1",
   "secretKey": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
