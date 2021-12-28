@@ -35,6 +35,8 @@ def slack_report(type):
         title = "Cabinet Test Report"
     elif type == 'connect':
         title = "Cabital Connect Test Report"
+    elif type == 'web':
+        title = "Web Test Report"
     else:
         title = "Test Report"
     attachment = [
@@ -74,6 +76,9 @@ def get_job_id(type):
                 id_list.append(i['id'])
         elif type == 'connect':
             if i['name'] == 'ConnectTest':
+                id_list.append(i['id'])
+        elif type == 'web':
+            if i['name'] == 'WebTest':
                 id_list.append(i['id'])
     return id_list[0]
 

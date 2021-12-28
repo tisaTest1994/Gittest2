@@ -6,6 +6,7 @@ stages:
     - test2
     - test3
     - test4
+    - test5
 
 before_script:
     - apt-get update
@@ -30,7 +31,7 @@ ApiTest:
     expire_in: 1 week
 
 KycTest:
-  stage: test4
+  stage: test5
   tags:
     - python
   script:
@@ -57,6 +58,17 @@ ConnectTest:
     - python
   script:
     - python run.py connect test
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+WebTest:
+  stage: test3
+  tags:
+    - python
+  script:
+    - python run.py web test
   artifacts:
     paths:
       - Reports

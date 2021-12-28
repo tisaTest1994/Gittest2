@@ -118,4 +118,4 @@ class TestTransactionApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['pagination_response']['transactions'] == [], "web查询很后面页面交易数据为空错误，返回值是{}".format(r.text)
+                assert r.json()['transactions'] == [], "web查询全部交易记录错误，返回值是{}".format(r.text)
