@@ -22,5 +22,6 @@ class TestCassApi:
         r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
         abs_amount = r.json()['summary']['abs_amount']
         print(abs_amount)
+        
 
 
