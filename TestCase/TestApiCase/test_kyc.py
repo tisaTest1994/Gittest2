@@ -50,36 +50,3 @@ class TestKycApi:
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['code'] == '002012', "通过kyc的用户，获取kyc上传token错误，返回值是{}".format(r.text)
-
-    @allure.testcase('test_kyc_003 未申请kyc获取kyc-case信息失败')
-    def test_kyc_003(self):
-        account = generate_email()
-        password = 'Abc112233'
-        with allure.step("提前先注册好"):
-            ApiFunction.sign_up(account, password)
-        allure.dynamic.description("调用kyc")
-        with allure.step("未申请kyc获取kyc-case失败"):
-            data = {
-            }
-            r = session.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert 'informations' in r.text, "未申请kyc获取kyc-case信息失败错误，返回值是{}".format(r.text)
-
-    @allure.testcase('test_kyc_004 获取kyc-case信息')
-    def test_kyc_004(self):
-        with allure.step("获取kyc-case信息"):
-            data = {
-            }
-            r = session.request('POST', url='{}/kyc/case/get'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert 'id' in r.text, "获取kyc-case信息错误，返回值是{}".format(r.text)

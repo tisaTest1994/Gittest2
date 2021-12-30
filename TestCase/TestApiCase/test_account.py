@@ -177,44 +177,6 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert 'Invalid refresh token' in r.text, "用空的token刷新token错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_account_014 修改密码使用错误token')
-    def test_account_014(self):
-        with allure.step("把错误token写入headers"):
-            headers['Authorization'] = "Bearer " + "accessToken1234"
-        with allure.step("修改密码使用错误token"):
-            data = {
-                "original": get_json()['email']['password'],
-                "password": get_json()['email']['password']
-            }
-            r = session.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 401, "http状态码不对，目前状态码是{}".format(r.status_code)
-
-    @allure.testcase('test_account_015 使用错误原始密码修改密码')
-    def test_account_015(self):
-        account = get_json()['email']['email']
-        password = get_json()['email']['password']
-        with allure.step("获取token"):
-            accessToken = ApiFunction.get_account_token(account=account, password=password)
-        with allure.step("把token写入headers"):
-            headers['Authorization'] = "Bearer " + accessToken
-        with allure.step("使用错误原始密码修改密码"):
-            data = {
-                "original": "11111",
-                "password": password
-            }
-            r = session.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert "Invalid original password." in r.text, "使用错误原始密码修改密码错误，返回值是{}".format(r.text)
-
     @allure.testcase('test_account_018 忘记密码')
     def test_account_018(self):
         with allure.step("忘记密码"):
@@ -348,39 +310,6 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert 'Invalid verification code' in r.text, "注册用户验证码输入字符错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_account_026 修改用户密码')
-    def test_account_026(self):
-        with allure.step("注册"):
-            account = generate_email()
-            accessToken = ApiFunction.sign_up(account=account)
-            headers['Authorization'] = "Bearer " + accessToken
-        with allure.step("修改密码"):
-            data = {
-                "original": get_json()['email']['password'],
-                "password": "Abc1234!"
-            }
-            r = session.request('POST', url='{}/account/user/resetPassword'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json() == {}, "使用相同的密码修改密码错误，返回值是{}".format(r.text)
-        with allure.step("用新密码重新登录"):
-            print(ApiFunction.get_account_token(account=account, password=data['password']))
-
-    @allure.testcase('test_account_027 获取mfa邮箱验证码')
-    def test_account_027(self):
-        r = session.request('GET', url='{}/account/security/mfa/email/sendVerificationCode'.format(env_url), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert {} == r.json(), "获取mfa邮箱验证码不对，目前返回值是{}".format(r.text)
-
     @allure.testcase('test_account_028 获取opt二维码')
     def test_account_028(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei1@163.com')
@@ -496,22 +425,6 @@ class TestAccountApi:
             r1 = session.request('GET', url='{}/account/info'.format(env_url), headers=headers)
             assert r.json()['privacyPolicyVersion'] == r1.json()['user']['userPrivacyPolicy']['privacyPolicyVersion'], 'privacyPolicyVersion最新版本和个人接受版本不匹配'
             assert r.json()['termOfServiceVersion'] == r1.json()['user']['userPrivacyPolicy']['termOfServiceVersion'], 'termOfServiceVersion最新版本和个人接受版本不匹配'
-
-    @allure.testcase('test_account_033 修改投资目的')
-    def test_account_033(self):
-        data = {
-            "purposes": [
-                "SAVING_OR_INVESTMENT"
-            ]
-        }
-        r = session.request('POST', url='{}/account/setting/purpose'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert '' in r.text, "修改投资目的不对，目前返回值是{}".format(r.text)
 
     @allure.testcase('test_account_034 注册时，多输入几位验证码导致注册失败')
     def test_account_034(self):
