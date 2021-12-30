@@ -21,7 +21,7 @@ def check_web(driver, page, text):
     return False
 
 
-# 点击页面元素
+# 操作页面元素
 def operate_element(driver, page, text, type='click', input=''):
     element_type = get_json(file='web_tree.json')[page][text]
     if check_web(driver, page, text):
@@ -39,5 +39,13 @@ def operate_element(driver, page, text, type='click', input=''):
                 driver.find_element_by_xpath('//*[@alt="{}"]'.format(text)).clear()
             elif type == 'input':
                 driver.find_element_by_xpath('//*[@alt="{}"]'.format(text)).send_keys(input)
+
+
+# 获取页面元素的text
+def get_element_text(driver, page, text):
+    element_type = get_json(file='web_tree.json')[page][text]
+    if element_type == 'id':
+        return driver.find_element_by_id(text).text
+
 
 

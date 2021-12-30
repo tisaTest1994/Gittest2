@@ -5,9 +5,17 @@
     "sign_password_input": "id",
     "login_login": "id"
   },
-  "homePage": {
+  "assetPage": {
     "Cabital Logo": "alt",
     "header-btn-hi-nickname": "id",
-    "header-btn-user-signout": "id"
+    "header-btn-user-signout": "id",
+    "assets-overview-amount": "id",
+    "assets-balance-amount": "id",
+    "assets-blance-table-row-0": "id",
+    "assets-blance-table-row-1": "id",
+    "assets-blance-table-row-2": "id",
+    "assets-blance-table-row-3": "id",
+    "assets-blance-table-row-4": "id",
+    "assets-earn-amount": "id"
   }
 }
