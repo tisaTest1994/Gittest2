@@ -18,5 +18,9 @@ class TestCassApi:
 
     @allure.testcase('test_web_asset_001 查询Total Asset Value')
     def test_web_asset_001(self):
-        pass
+        headers['X-Currency'] = 'USD'
+        r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
+        abs_amount = r.json()['summary']['abs_amount']
+        print(abs_amount)
+
 

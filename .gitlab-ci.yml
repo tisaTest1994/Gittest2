@@ -64,7 +64,7 @@ ConnectTest:
     expire_in: 1 week
 
 WebTest:
-  stage: test3
+  stage: test5
   tags:
     - python
   script:

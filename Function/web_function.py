@@ -14,7 +14,7 @@ class webFunction:
         # 指定浏览器的分辨率
         options.add_argument('--window-size=1920,1080')
         # 无界面运行
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         driver = WebChrome(executable_path=path + "/../Resource/chromedriver", chrome_options=options)
         driver.get(url)
         return driver
