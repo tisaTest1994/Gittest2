@@ -427,8 +427,6 @@ class TestFlexibleApi:
                 assert Decimal(redeeming_amount_old) + Decimal(data['amount']) == Decimal(redeeming_amount_latest), "之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"
 
     @allure.testcase('test_flexible_013 赎回ETH投资项目成功')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_013(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -495,8 +493,6 @@ class TestFlexibleApi:
                 assert Decimal(redeeming_amount_old) + Decimal(data['amount']) == Decimal(redeeming_amount_latest), "之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"
 
     @allure.testcase('test_flexible_014 赎回USDT投资项目成功')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_014(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -563,8 +559,6 @@ class TestFlexibleApi:
                 assert Decimal(redeeming_amount_old) + Decimal(data['amount']) == Decimal(redeeming_amount_latest), "之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"
 
     @allure.testcase('test_flexible_015 赎回金额超过最大的可赎回BTC数量')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_015(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -606,8 +600,6 @@ class TestFlexibleApi:
                 assert r.json()['status'] == 3, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
 
     @allure.testcase('test_flexible_016 赎回金额超过最大的可赎回ETH数量')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_flexible_016(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
