@@ -1,6 +1,7 @@
 from airtest_selenium.proxy import WebChrome
 from selenium import webdriver
 from Function.api_function import *
+from airtest.core.api import *
 import os
 
 
@@ -46,6 +47,11 @@ def get_element_text(driver, page, text):
     element_type = get_json(file='web_tree.json')[page][text]
     if element_type == 'id':
         return driver.find_element_by_id(text).text
+
+
+# 图像识别
+def check_web_photo(driver, photo_name):
+    driver.assert_template(Template("{}/{}".format(get_photo(), photo_name)), "验证图片{}是否存在".format(photo_name))
 
 
 

@@ -2,7 +2,7 @@ from Function.web_function import *
 from Function.api_function import *
 
 
-class TestCassApi:
+class TestWebCassApi:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']
 
@@ -105,7 +105,8 @@ class TestCassApi:
                             with allure.step("验证Redeeming"):
                                 assert r.json()['redeeming_amount']['amount'] == flexible_dict[currency_type][5], 'API获得的Redeeming是{},Page获得的Redeeming是{}'.format(r.json()['redeeming_amount']['amount'], flexible_dict[currency_type][5])
 
-
-
-
-
+    @allure.testcase('test_web_asset_006 查询flexible Savings数据')
+    def test_web_asset_006(self):
+        with allure.step("点击Fixed Savings"):
+            operate_element(self.driver, 'assetPage', 'simple-tab-1')
+            print(get_element_text(self.driver, 'assetPage', 'assets-fixed-table'))

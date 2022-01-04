@@ -2,7 +2,7 @@ from Function.web_function import *
 from Function.api_function import *
 
 
-class TestWebAccountApi:
+class TestWebEarnApi:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']
 
@@ -16,15 +16,8 @@ class TestWebAccountApi:
         webFunction.logout_web(self.driver)
         self.driver.close()
 
-    @allure.testcase('test_web_account_001 ')
-    def test_web_account_001(self):
-        pass
-
-
-
-
-
-
-
-
+    @allure.testcase('test_web_earn_001 检查图片')
+    def test_web_earn_001(self):
+        operate_element(self.driver, 'assetPage', 'header-menu-item-WE099')
+        check_web_photo(self.driver, 'Eaenpage_earn.png')
 
