@@ -68,7 +68,7 @@ WebTest:
   tags:
     - python
   variables:
-    DISPLAY: :0.0
+    DISPLAY: :1.0
   script:
     - python run.py web test
   artifacts:
