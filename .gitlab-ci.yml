@@ -67,6 +67,8 @@ WebTest:
   stage: test5
   tags:
     - python
+  variables:
+    DISPLAY: :0.0
   script:
     - python run.py web test
   artifacts:
