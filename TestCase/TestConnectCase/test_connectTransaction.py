@@ -476,3 +476,215 @@ class TestConnectTransactionApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['external_id'] == external_id, "查询转账记录错误，返回值是{}".format(r.text)
+
+    @allure.testcase('test_connect_transaction_013 从cabital转移到bybit账户并且关联C+T交易，Direct Debit的金额大于cfx交易的金额')
+    def test_connect_transaction_013(self):
+        with allure.step("测试用户的account_id"):
+            account_id = get_json()['email']['accountId']
+        with allure.step("换汇"):
+            cfx_book = get_json()['cfx_book']
+            del cfx_book['1']
+            del cfx_book['2']
+            del cfx_book['3']
+            for i in cfx_book.values():
+                pair_list = i.split('-')
+                cfx_dict = {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]}
+                cfx_amount = ApiFunction.cfx_random_number(cfx_dict)
+                data = {
+                    "quote_id": cfx_amount['quote']['quote_id'],
+                    "quote": cfx_amount['quote']['quote'],
+                    "pair": '{}-{}'.format(cfx_amount['buy'], cfx_amount['sell']),
+                    "buy_amount": str(cfx_amount['buy_amount']),
+                    "sell_amount": str(cfx_amount['sell_amount']),
+                    "major_ccy": cfx_amount['major_ccy']
+                }
+                logger.info('发送换汇data是{}'.format(data))
+                with allure.step("获得换汇前buy币种balance金额"):
+                    buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(
+                        type=cfx_amount['buy'])
+                with allure.step('获得换汇前sell币种balance金额'):
+                    sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(
+                        type=cfx_amount['sell'])
+                with allure.step("验签"):
+                    unix_time = int(time.time())
+                    nonce = generate_string(30)
+                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                        url='/api/v1/accounts/{}/conversions'.format(account_id),
+                                                        nonce=nonce, body=json.dumps(data))
+                    connect_headers['ACCESS-SIGN'] = sign
+                    connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                    connect_headers['ACCESS-NONCE'] = nonce
+                with allure.step("账户可用余额列表"):
+                    r = session.request('POST', url='{}/accounts/{}/conversions'.format(self.url, account_id),
+                                        data=json.dumps(data), headers=connect_headers)
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验返回值"):
+                    assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
+                    assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
+                    cfx_transaction_id = r.json()['transaction_id']
+                sleep(5)
+                with allure.step("获得换汇后buy币种balance金额"):
+                    buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
+                        type=cfx_amount['buy'])
+                with allure.step("获得换汇后sell币种balance金额"):
+                    sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
+                        type=cfx_amount['sell'])
+                logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cfx_amount['buy'],
+                                                                              buy_amount_wallet_balance_old,
+                                                                              cfx_amount['buy_amount'],
+                                                                              buy_amount_wallet_balance_latest))
+                logger.info('sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(cfx_amount['sell'],
+                                                                                sell_amount_wallet_balance_old,
+                                                                                cfx_amount[
+                                                                                    'sell_amount'],
+                                                                                sell_amount_wallet_balance_latest))
+                assert Decimal(buy_amount_wallet_balance_old) + Decimal(
+                    cfx_amount['buy_amount']) == Decimal(
+                    buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
+                    cfx_amount['buy'], buy_amount_wallet_balance_old, cfx_amount['buy_amount'],
+                    buy_amount_wallet_balance_latest)
+                assert Decimal(sell_amount_wallet_balance_old) - Decimal(
+                    cfx_amount['sell_amount']) == Decimal(
+                    sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
+                    cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
+                    sell_amount_wallet_balance_latest)
+            with allure.step("获得otp"):
+                secretKey = get_json()['email']['secretKey']
+                totp = pyotp.TOTP(secretKey)
+                mfaVerificationCode = totp.now()
+            with allure.step("获得data"):
+                data = {
+                    'amount': str(Decimal(cfx_amount['buy_amount']) + Decimal('0.001')),
+                    'symbol': pair_list[0],
+                    'otp': str(mfaVerificationCode),
+                    'direction': 'DEBIT',
+                    'external_id': generate_string(15),
+                    'conversion_id': cfx_transaction_id
+                }
+            with allure.step("验签"):
+                unix_time = int(time.time())
+                nonce = generate_string(30)
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                    url='/api/v1/accounts/{}/transfers'.format(account_id), nonce=nonce,
+                                                    body=json.dumps(data))
+                connect_headers['ACCESS-SIGN'] = sign
+                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                connect_headers['ACCESS-NONCE'] = nonce
+            with allure.step("把BTC从cabital转移到bybit账户并且关联C+T交易"):
+                r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
+                                    data=json.dumps(data), headers=connect_headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['code'] == 'PARTNERORDER000020', "Direct Debit的金额大于cfx交易的金额错误，返回值是{}".format(r.text)
+                sleep(30)
+
+    @allure.testcase('test_connect_transaction_014 从cabital转移到bybit账户并且关联C+T交易，Direct Debit的金额 必须小于等于 cfx交易的金额')
+    def test_connect_transaction_014(self):
+        with allure.step("测试用户的account_id"):
+            account_id = get_json()['email']['accountId']
+        with allure.step("换汇"):
+            cfx_book = get_json()['cfx_book']
+            del cfx_book['1']
+            del cfx_book['2']
+            del cfx_book['3']
+            for i in cfx_book.values():
+                pair_list = i.split('-')
+                cfx_dict = {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]}
+                cfx_amount = ApiFunction.cfx_random_number(cfx_dict)
+                data = {
+                    "quote_id": cfx_amount['quote']['quote_id'],
+                    "quote": cfx_amount['quote']['quote'],
+                    "pair": '{}-{}'.format(cfx_amount['buy'], cfx_amount['sell']),
+                    "buy_amount": str(cfx_amount['buy_amount']),
+                    "sell_amount": str(cfx_amount['sell_amount']),
+                    "major_ccy": cfx_amount['major_ccy']
+                }
+                logger.info('发送换汇data是{}'.format(data))
+                with allure.step("获得换汇前buy币种balance金额"):
+                    buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(
+                        type=cfx_amount['buy'])
+                with allure.step('获得换汇前sell币种balance金额'):
+                    sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(
+                        type=cfx_amount['sell'])
+                with allure.step("验签"):
+                    unix_time = int(time.time())
+                    nonce = generate_string(30)
+                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                        url='/api/v1/accounts/{}/conversions'.format(account_id),
+                                                        nonce=nonce, body=json.dumps(data))
+                    connect_headers['ACCESS-SIGN'] = sign
+                    connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                    connect_headers['ACCESS-NONCE'] = nonce
+                with allure.step("账户可用余额列表"):
+                    r = session.request('POST', url='{}/accounts/{}/conversions'.format(self.url, account_id),
+                                        data=json.dumps(data), headers=connect_headers)
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验返回值"):
+                    assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
+                    assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
+                    cfx_transaction_id = r.json()['transaction_id']
+                sleep(5)
+                with allure.step("获得换汇后buy币种balance金额"):
+                    buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
+                        type=cfx_amount['buy'])
+                with allure.step("获得换汇后sell币种balance金额"):
+                    sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
+                        type=cfx_amount['sell'])
+                logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cfx_amount['buy'],
+                                                                              buy_amount_wallet_balance_old,
+                                                                              cfx_amount['buy_amount'],
+                                                                              buy_amount_wallet_balance_latest))
+                logger.info('sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(cfx_amount['sell'],
+                                                                                sell_amount_wallet_balance_old,
+                                                                                cfx_amount[
+                                                                                    'sell_amount'],
+                                                                                sell_amount_wallet_balance_latest))
+                assert Decimal(buy_amount_wallet_balance_old) + Decimal(
+                    cfx_amount['buy_amount']) == Decimal(
+                    buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
+                    cfx_amount['buy'], buy_amount_wallet_balance_old, cfx_amount['buy_amount'],
+                    buy_amount_wallet_balance_latest)
+                assert Decimal(sell_amount_wallet_balance_old) - Decimal(
+                    cfx_amount['sell_amount']) == Decimal(
+                    sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
+                    cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
+                    sell_amount_wallet_balance_latest)
+            with allure.step("获得otp"):
+                secretKey = get_json()['email']['secretKey']
+                totp = pyotp.TOTP(secretKey)
+                mfaVerificationCode = totp.now()
+            with allure.step("获得data"):
+                data = {
+                    'amount': str(Decimal(cfx_amount['buy_amount']) - Decimal('0.001')),
+                    'symbol': pair_list[0],
+                    'otp': str(mfaVerificationCode),
+                    'direction': 'DEBIT',
+                    'external_id': generate_string(15),
+                    'conversion_id': cfx_transaction_id
+                }
+            with allure.step("验签"):
+                unix_time = int(time.time())
+                nonce = generate_string(30)
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                    url='/api/v1/accounts/{}/transfers'.format(account_id), nonce=nonce,
+                                                    body=json.dumps(data))
+                connect_headers['ACCESS-SIGN'] = sign
+                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                connect_headers['ACCESS-NONCE'] = nonce
+            with allure.step("把BTC从cabital转移到bybit账户并且关联C+T交易"):
+                r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
+                                    data=json.dumps(data), headers=connect_headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['status'] == 'SUCCESS', "从cabital转移到bybit账户并且关联C+T交易，Direct Debit的金额 必须小于等于 cfx交易的金额错误，返回值是{}".format(r.text)
+                sleep(30)
