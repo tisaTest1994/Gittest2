@@ -11,6 +11,7 @@ class TestWebEarnApi:
         ApiFunction.add_headers()
         self.driver = webFunction.launch_web(self.web_url)
         webFunction.login_web(self.driver)
+        operate_element(self.driver, 'assetPage', 'header-desktop-menu-item-WE099')
 
     def teardown_method(self):
         webFunction.logout_web(self.driver)
@@ -18,6 +19,5 @@ class TestWebEarnApi:
 
     @allure.testcase('test_web_earn_001 检查图片')
     def test_web_earn_001(self):
-        operate_element(self.driver, 'assetPage', 'header-menu-item-WE099')
         check_web_photo(self.driver, 'Eaenpage_earn.png')
 

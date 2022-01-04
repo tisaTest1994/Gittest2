@@ -79,7 +79,7 @@ class ApiFunction:
     # 获取下次清算金额
     @staticmethod
     def get_interest(productId):
-        r1 = session.request('GET', url='{}/earn/products/{}/next_yield'.format(env_url, productId), headers=headers)
+        r1 = session.request('GET', url=' {}/earn/products/{}/next_yield'.format(env_url, productId), headers=headers)
         return r1.json()['next_yield']
 
     # 获取当前换汇报价

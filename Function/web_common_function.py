@@ -18,6 +18,10 @@ def check_web(driver, page, text):
             if driver.find_element_by_xpath('//*[@alt="{}"]'.format(text)).is_displayed():
                 logger.info('在{}页面上寻找到了{}'.format(page, text))
                 return True
+        elif type == 'name':
+            if driver.find_element_by_name(text).is_displayed():
+                logger.info('在{}页面上寻找到了{}'.format(page, text))
+                return True
         wait_time = wait_time + 1
     return False
 
@@ -40,6 +44,13 @@ def operate_element(driver, page, text, type='click', input=''):
                 driver.find_element_by_xpath('//*[@alt="{}"]'.format(text)).clear()
             elif type == 'input':
                 driver.find_element_by_xpath('//*[@alt="{}"]'.format(text)).send_keys(input)
+        elif element_type == 'name':
+            if type == 'click':
+                driver.find_element_by_name(text).click()
+            elif type == 'clear':
+                driver.find_element_by_name(text).clear()
+            elif type == 'input':
+                driver.find_element_by_name(text).send_keys(input)
 
 
 # 获取页面元素的text

@@ -23,9 +23,23 @@
     "assets-flexiable-table-row-1": "id",
     "assets-flexiable-table-row-2": "id",
     "assets-fixed-table": "id",
-    "header-menu-item-WE096": "id",
-    "header-menu-item-WE099": "id",
-    "header-menu-item-CB284": "id",
-    "header-menu-item-WE031": "id"
+    "header-desktop-menu-item-WE096": "id",
+    "header-desktop-menu-item-WE099": "id",
+    "header-desktop-menu-item-CB284": "id",
+    "header-desktop-menu-item-WE031": "id"
+  },
+  "transactionPage": {
+    "transaction-filter-types": "name",
+    "transaction-filter-currency": "name",
+    "undefined-option-CB403-0": "id",
+    "undefined-option-CB334-1": "id",
+    "undefined-option-item-BTC": "id",
+    "undefined-option-item-ETH": "id",
+    "undefined-option-item-USDT": "id",
+    "undefined-option-item-EUR": "id",
+    "undefined-option-item-GBP": "id",
+    "undefined-option-CB335-2": "id",
+    "transaction-table-row-0-col-6-action": "id",
+    "transaction-table-row-0": "id"
   }
 }
