@@ -67,6 +67,7 @@ before_script:
 #     expire_in: 1 week
 
 WebTest:
+  image: selenium/standalone-chrome
   stage: test5
   tags:
     - python
