@@ -70,7 +70,7 @@ WebTest:
   tags:
     - python
   variables:
-    DISPLAY: :99
+    DISPLAY: :0
   script:
     - python run.py web test
   artifacts:
