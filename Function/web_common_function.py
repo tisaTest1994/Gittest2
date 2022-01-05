@@ -2,6 +2,7 @@ from airtest_selenium.proxy import WebChrome
 from selenium import webdriver
 from Function.api_function import *
 from airtest.core.api import *
+from selenium.webdriver.common.keys import Keys
 import os
 
 
@@ -27,7 +28,7 @@ def check_web(driver, page, text):
 
 
 # 操作页面元素
-def operate_element(driver, page, text, type='click', input=''):
+def operate_element(driver, page, text, type='click', input='', cycle=5):
     element_type = get_json(file='web_tree.json')[page][text]
     if check_web(driver, page, text):
         if element_type == 'id':
@@ -37,6 +38,9 @@ def operate_element(driver, page, text, type='click', input=''):
                 driver.find_element_by_id(text).clear()
             elif type == 'input':
                 driver.find_element_by_id(text).send_keys(input)
+            elif type == 'delete':
+                for i in range(cycle):
+                    driver.find_element_by_id(text).send_keys(Keys.BACKSPACE)
         elif element_type == 'alt':
             if type == 'click':
                 driver.find_element_by_xpath('//*[@alt="{}"]'.format(text)).click()
@@ -44,6 +48,9 @@ def operate_element(driver, page, text, type='click', input=''):
                 driver.find_element_by_xpath('//*[@alt="{}"]'.format(text)).clear()
             elif type == 'input':
                 driver.find_element_by_xpath('//*[@alt="{}"]'.format(text)).send_keys(input)
+            elif type == 'delete':
+                for i in range(cycle):
+                    driver.find_element_by_xpath('//*[@alt="{}"]'.format(text)).send_keys(Keys.BACKSPACE)
         elif element_type == 'name':
             if type == 'click':
                 driver.find_element_by_name(text).click()
@@ -51,6 +58,9 @@ def operate_element(driver, page, text, type='click', input=''):
                 driver.find_element_by_name(text).clear()
             elif type == 'input':
                 driver.find_element_by_name(text).send_keys(input)
+            elif type == 'delete':
+                for i in range(cycle):
+                    driver.find_element_by_name(text).send_keys(Keys.BACKSPACE)
 
 
 # 获取页面元素的text

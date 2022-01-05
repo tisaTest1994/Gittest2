@@ -10,16 +10,16 @@ stages:
     - test5
 
 before_script:
-    - sudo apt-get update
-    - sudo apt-get install software-properties-common -y
-    - sudo apt-get install default-jre -y
-    - sudo apt-get install curl -y
-    - sudo apt-get install gzip -y
-    - sudo apt-get install xvfb -y
+    - apt-get update
+    - apt-get install software-properties-common -y
+    - apt-get install default-jre -y
+    - apt-get install curl -y
+    - apt-get install gzip -y
+    - apt-get install xvfb -y
     - curl -o allure-2.13.9.tgz -Ls https://github.com/allure-framework/allure2/releases/download/2.13.9/allure-2.13.9.tgz
     - tar -zxvf allure-2.13.9.tgz -C /opt/
     - ln -s /opt/allure-2.13.9/bin/allure /usr/bin/allure
-    - sudo pip install -r requirements.txt
+    - pip install -r requirements.txt
     - Xvfb :99 -ac &
 
 # ApiTest:
@@ -67,7 +67,6 @@ before_script:
 #     expire_in: 1 week
 
 WebTest:
-  image: selenium/standalone-chrome
   stage: test5
   tags:
     - python
