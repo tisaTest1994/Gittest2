@@ -7,6 +7,7 @@ class webFunction:
 
     @staticmethod
     def launch_web(url):
+
         # os.path.abspath()获得绝对路径
         path = os.path.abspath(os.path.dirname(__file__))
         options = webdriver.ChromeOptions()
