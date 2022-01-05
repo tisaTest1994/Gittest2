@@ -1,4 +1,5 @@
 from Function.web_common_function import *
+import platform
 import allure
 import os
 
@@ -17,7 +18,11 @@ class webFunction:
         options.add_argument('--window-size=1920,1080')
         # 无界面运行
         options.add_argument('--headless')
-        driver = WebChrome(executable_path=path + "/../Resource/chromedriver", chrome_options=options)
+        # 判断运行环境
+        if 'mac' in str(platform.platform()):
+            driver = WebChrome(executable_path=path + "/../Resource/chromedriver_mac", chrome_options=options)
+        else:
+            driver = WebChrome(executable_path=path + "/../Resource/chromedriver_liunx", chrome_options=options)
         driver.get(url)
         return driver
 

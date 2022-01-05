@@ -64,6 +64,15 @@ before_script:
 #     expire_in: 1 week
 
 WebTest:
+   version: "3.1"
+   services:
+    zalenium:
+    image: dosel / zalenium
+   ports:
+    -"4444:4444"
+   volumes:
+    -/var/run / docker.sock: /var/run / docker.sock -
+    /tmp/videos: /home/seluser / videos
   stage: test5
   tags:
     - python
