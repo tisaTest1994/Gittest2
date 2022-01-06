@@ -580,7 +580,7 @@ class TestConnectTransactionApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['code'] == 'PARTNERORDER000020', "Direct Debit的金额大于cfx交易的金额错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == 'PA034', "Direct Debit的金额大于cfx交易的金额错误，返回值是{}".format(r.text)
                 sleep(30)
 
     @allure.testcase('test_connect_transaction_014 从cabital转移到bybit账户并且关联C+T交易，Direct Debit的金额 必须小于等于 cfx交易的金额')
