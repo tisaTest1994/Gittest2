@@ -184,10 +184,6 @@ class TestPayoutApi:
     @allure.testcase('test_payout_011 预校验法币提现')
     def test_payout_011(self):
         with allure.step("法币提现获得信息"):
-            with allure.step("获得token"):
-                accessToken = ApiFunction.get_account_token(account='yilei6@cabital.com')
-            with allure.step("把token写入headers"):
-                headers['Authorization'] = "Bearer " + accessToken
             data = {
                 "code": "EUR",
                 "amount": "5000"
@@ -389,10 +385,6 @@ class TestPayoutApi:
     @allure.testcase('test_payout_021 预校验英镑提现')
     def test_payout_021(self):
         with allure.step("法币提现获得信息"):
-            with allure.step("获得token"):
-                accessToken = ApiFunction.get_account_token(account='yilei6@cabital.com')
-            with allure.step("把token写入headers"):
-                headers['Authorization'] = "Bearer " + accessToken
             data = {
                 "code": "GBP",
                 "amount": "5000"
