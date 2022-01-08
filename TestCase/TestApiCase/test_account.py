@@ -7,17 +7,15 @@ class TestAccountApi:
 
     # 初始化class
     def setup_method(self):
-        ApiFunction.add_headers()
+        with allure.step("登录客户账户获得后续操作需要的token"):
+            ApiFunction.add_headers()
 
     @allure.testcase('test_account_001 成功注册新用户')
     def test_account_001(self):
-        with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
         with allure.step("注册新用户"):
             data = {
                 "emailAddress": generate_email(),
                 "verificationCode": "666666",
-                "citizenCountryCode": citizenCountryCode,
                 "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
@@ -55,13 +53,10 @@ class TestAccountApi:
 
     @allure.testcase('test_account_003 注册时，输入错误验证码导致注册失败')
     def test_account_003(self):
-        with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
         with allure.step("注册"):
             data = {
                 "emailAddress": generate_email(),
                 "verificationCode": "166666",
-                "citizenCountryCode": citizenCountryCode,
                 "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)

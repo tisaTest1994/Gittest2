@@ -521,7 +521,7 @@ class TestPayoutApi:
             data = {
                 "amount": "4.018",
                 "code": "ETH",
-                "address": "tb1q38mwu50xludgz4r52n2v0q6jwlysjgz4zkk3kl",
+                "address": "0xA7185FBEE96B605709D9659894066dF21cc87f05",
                 "method": "ERC20"
             }
             r = session.request('POST', url='{}/pay/withdraw/crypto/validate'.format(env_url), data=json.dumps(data), headers=headers)
@@ -539,7 +539,7 @@ class TestPayoutApi:
             data = {
                 "amount": "20000",
                 "code": "USDT",
-                "address": "tb1q38mwu50xludgz4r52n2v0q6jwlysjgz4zkk3kl",
+                "address": "0xA7185FBEE96B605709D9659894066dF21cc87f05",
                 "method": "ERC20"
             }
             r = session.request('POST', url='{}/pay/withdraw/crypto/validate'.format(env_url), data=json.dumps(data), headers=headers)

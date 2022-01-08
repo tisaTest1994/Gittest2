@@ -37,7 +37,7 @@ class TestWebTransactionApi:
                     print(transaction_info_api)
             with allure.step("通过页面获得某个币种的交易记录"):
                 with allure.step("清除搜索记录"):
-                    operate_element(self.driver, 'transactionPage', 'transaction-filter-currency', type='delete')
+                    operate_element(self.driver, 'transactionPage', 'transaction-filter-currency', type='clear')
                 with allure.step("搜索特定币种"):
                     operate_element(self.driver, 'transactionPage', 'transaction-filter-currency', type='input', input=i)
                     sleep(1)

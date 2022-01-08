@@ -28,7 +28,7 @@ def check_web(driver, page, text):
 
 
 # 操作页面元素
-def operate_element(driver, page, text, type='click', input='', cycle=5):
+def operate_element(driver, page, text, type='click', input='', cycle=15):
     element_type = get_json(file='web_tree.json')[page][text]
     if check_web(driver, page, text):
         if element_type == 'id':
