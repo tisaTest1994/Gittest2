@@ -17,7 +17,7 @@ class TestPayOutUi:
         # 关闭 app
         stop_app(package_name)
 
-    @allure.testcase('test_payout_001 测试iban账号')
+    @allure.title('test_payout_001 测试iban账号')
     def test_payout_001(self):
         for i in get_json()['iban_list']:
             iban = i

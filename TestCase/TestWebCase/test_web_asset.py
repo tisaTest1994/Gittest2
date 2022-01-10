@@ -16,7 +16,7 @@ class TestWebCassApi:
         webFunction.logout_web(self.driver)
         self.driver.close()
 
-    @allure.testcase('test_web_asset_001 查询Total Asset Value')
+    @allure.title('test_web_asset_001 查询Total Asset Value')
     def test_web_asset_001(self):
         with allure.step("通过api获得Total Asset Value数据"):
             headers['X-Currency'] = 'USD'
@@ -26,7 +26,7 @@ class TestWebCassApi:
             page_abs_amount = get_element_text(self.driver, 'assetPage', 'assets-overview-amount')
         assert '$' + str(abs_amount) == str(page_abs_amount), "Total Asset Value后端接口返回{},页面上显示{}".format(abs_amount, page_abs_amount)
 
-    @allure.testcase('test_web_asset_002 查询Total Balance Value')
+    @allure.title('test_web_asset_002 查询Total Balance Value')
     def test_web_asset_002(self):
         with allure.step("通过api获得Total Balance Value数据"):
             headers['X-Currency'] = 'USD'
@@ -39,7 +39,7 @@ class TestWebCassApi:
             page_abs_amount = get_element_text(self.driver, 'assetPage', 'assets-balance-amount')
         assert '$' + str(abs_amount) == str(page_abs_amount), "Total Balance Value后端接口返回{},页面上显示{}".format(abs_amount, page_abs_amount)
 
-    @allure.testcase('test_web_asset_003 检查每个币种balance的分类金额')
+    @allure.title('test_web_asset_003 检查每个币种balance的分类金额')
     def test_web_asset_003(self):
         with allure.step("通过页面获得Total Balance Value数据"):
             balance_list = ['assets-blance-table-row-0', 'assets-blance-table-row-1', 'assets-blance-table-row-2', 'assets-blance-table-row-3', 'assets-blance-table-row-4']
@@ -62,7 +62,7 @@ class TestWebCassApi:
                     page_total_balance = Decimal(balance_dict[currency_type][1]) + Decimal(balance_dict[currency_type][2])
                     assert str(total_balance) == str(page_total_balance), "API获得Total Balance是{},页面上的Total Balance是{}".format(total_balance, page_total_balance)
 
-    @allure.testcase('test_web_asset_004 查询Total Saving Amount')
+    @allure.title('test_web_asset_004 查询Total Saving Amount')
     def test_web_asset_004(self):
         with allure.step("通过api获得Total Saving Amount数据"):
             headers['X-Currency'] = 'USD'
@@ -78,7 +78,7 @@ class TestWebCassApi:
             page_abs_amount = get_element_text(self.driver, 'assetPage', 'assets-earn-amount')
         assert '$' + str(abs_amount) == str(page_abs_amount), "Total Saving Amount后端接口返回{},页面上显示{}".format(abs_amount, page_abs_amount)
 
-    @allure.testcase('test_web_asset_005 查询flexible Savings数据')
+    @allure.title('test_web_asset_005 查询flexible Savings数据')
     def test_web_asset_005(self):
         with allure.step("通过页面获得flexible Savings数据"):
             flexible_list = ['assets-flexiable-table-row-0', 'assets-flexiable-table-row-1', 'assets-flexiable-table-row-2']
@@ -105,7 +105,7 @@ class TestWebCassApi:
                             with allure.step("验证Redeeming"):
                                 assert r.json()['redeeming_amount']['amount'] == flexible_dict[currency_type][5], 'API获得的Redeeming是{},Page获得的Redeeming是{}'.format(r.json()['redeeming_amount']['amount'], flexible_dict[currency_type][5])
 
-    @allure.testcase('test_web_asset_006 查询flexible Savings数据')
+    @allure.title('test_web_asset_006 查询flexible Savings数据')
     def test_web_asset_006(self):
         with allure.step("点击Fixed Savings"):
             operate_element(self.driver, 'assetPage', 'simple-tab-1')

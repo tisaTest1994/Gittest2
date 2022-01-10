@@ -17,7 +17,7 @@ class TestWebEarnApi:
         webFunction.logout_web(self.driver)
         self.driver.close()
 
-    @allure.testcase('test_web_earn_001 检查图片')
+    @allure.title('test_web_earn_001 检查图片')
     def test_web_earn_001(self):
         check_web_photo(self.driver, 'Eaenpage_earn.png')
 

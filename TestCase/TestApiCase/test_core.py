@@ -9,7 +9,7 @@ class TestCoreApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.testcase('test_core_001 查询钱包所有币种详细金额以及报价，以美元价格返回')
+    @allure.title('test_core_001 查询钱包所有币种详细金额以及报价，以美元价格返回')
     def test_core_001(self):
         with allure.step("查询钱包所有币种详细金额以及报价，以美元价格返回"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
@@ -21,7 +21,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert 'wallets' in r.text, "查询钱包所有币种详细金额以及报价，以美元价格返回错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_core_002 查询钱包所有币种金额')
+    @allure.title('test_core_002 查询钱包所有币种金额')
     def test_core_002(self):
         with allure.step("查询钱包所有币种金额"):
             r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
@@ -33,7 +33,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert 'id' in r.text, "查询钱包所有币种金额错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_core_003 查询钱包某个币种的详细信息')
+    @allure.title('test_core_003 查询钱包某个币种的详细信息')
     def test_core_003(self):
         with allure.step("查询钱包某个币种的详细信息"):
             r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
@@ -48,7 +48,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert r.json()['id'] is not None, "查询钱包某个币种的详细信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_core_004 查询货币兑换比例')
+    @allure.title('test_core_004 查询货币兑换比例')
     def test_core_004(self):
         with allure.step("获取汇率对"):
             cfx_dict = get_json()['cfx_book']
@@ -64,7 +64,7 @@ class TestCoreApi:
                 with allure.step("校验返回值"):
                     assert r.json()['quote'] != {}, " 查询货币兑换比例错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_core_005 查询钱包中的所有币种投资于SAVING中的金额')
+    @allure.title('test_core_005 查询钱包中的所有币种投资于SAVING中的金额')
     def test_core_005(self):
         with allure.step("查询钱包中的所有币种投资于SAVING中的金额"):
             params = {
@@ -79,7 +79,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert 'SAVING' in r.text, "查询钱包中的所有币种投资于SAVING中的金额错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_core_006 查询钱包中的所有币种投资于BALANCE中的金额')
+    @allure.title('test_core_006 查询钱包中的所有币种投资于BALANCE中的金额')
     def test_core_006(self):
         with allure.step("查询钱包中的所有币种投资于BALANCE中的金额"):
             params = {
@@ -94,7 +94,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert 'BALANCE' in r.text, "查询钱包中的所有币种投资于BALANCE中的金额错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_core_007 查询钱包BTC金额')
+    @allure.title('test_core_007 查询钱包BTC金额')
     def test_core_007(self):
         with allure.step("查询钱包BTC金额"):
             params = {
@@ -109,7 +109,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert 'BTC' in r.text, "查询钱包BTC金额错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_core_008 查询钱包ETH金额')
+    @allure.title('test_core_008 查询钱包ETH金额')
     def test_core_008(self):
         with allure.step("查询钱包ETH金额"):
             params = {
@@ -124,7 +124,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert 'ETH' in r.text, "查询钱包ETH金额错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_core_009 查询钱包USDT金额')
+    @allure.title('test_core_009 查询钱包USDT金额')
     def test_core_009(self):
         with allure.step("查询钱包USDT金额"):
             params = {
@@ -139,7 +139,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert 'USDT' in r.text, "查询钱包USDT金额错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_core_010 查询钱包所有币种详细金额以及报价，以欧元价格返回')
+    @allure.title('test_core_010 查询钱包所有币种详细金额以及报价，以欧元价格返回')
     def test_core_010(self):
         headers['X-Currency'] = 'EUR'
         with allure.step("查询钱包所有币种详细金额以及报价，以欧元价格返回"):
@@ -154,7 +154,7 @@ class TestCoreApi:
             assert 'wallets' in r.text, "查询钱包所有币种详细金额以及报价，以欧元价格返回错误，返回值是{}".format(r.text)
             logger.info(r.json())
 
-    @allure.testcase('test_core_011 查询客户状态')
+    @allure.title('test_core_011 查询客户状态')
     def test_core_011(self):
         with allure.step("查询客户状态"):
             r = session.request('GET', url='{}/core/beginnerguide'.format(env_url), headers=headers)
@@ -166,7 +166,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert 'customertags' in r.text, "查询客户状态错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_core_012 获得客户地区，服务器时间')
+    @allure.title('test_core_012 获得客户地区，服务器时间')
     def test_core_012(self):
         with allure.step("获得客户地区，服务器时间"):
             r = session.request('GET', url='{}/core/geo'.format(env_url), headers=headers)

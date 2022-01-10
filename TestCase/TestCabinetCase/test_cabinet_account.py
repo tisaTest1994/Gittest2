@@ -9,7 +9,7 @@ class TestCabinetAccountApi:
     def setup_method(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
 
-    @allure.testcase('test_cabinet_account_001 用户修改邮箱')
+    @allure.title('test_cabinet_account_001 用户修改邮箱')
     def test_cabinet_account_001(self):
         with allure.step("用户修改邮箱"):
             user_id = "a4d5006b-c036-42dc-8f77-b8d7baedd442"
@@ -28,7 +28,7 @@ class TestCabinetAccountApi:
         with allure.step("校验返回值"):
             assert {} == r.json(), "用户修改邮箱错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_cabinet_account_002 用户使用已经注册的邮箱修改邮箱')
+    @allure.title('test_cabinet_account_002 用户使用已经注册的邮箱修改邮箱')
     def test_cabinet_account_002(self):
         with allure.step("用户修改邮箱"):
             user_id = "a4d5006b-c036-42dc-8f77-b8d7baedd442"
@@ -45,7 +45,7 @@ class TestCabinetAccountApi:
         with allure.step("校验返回值"):
             assert '001002' == r.json()['code'], "用户使用已经注册的邮箱修改邮箱错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_cabinet_account_003 用户使用未找到的user_id修改绑定邮箱')
+    @allure.title('test_cabinet_account_003 用户使用未找到的user_id修改绑定邮箱')
     def test_cabinet_account_003(self):
         with allure.step("用户修改邮箱"):
             user_id = "a4d5006b-c036-42dc-8f77-b8d7baedd44212"
@@ -62,7 +62,7 @@ class TestCabinetAccountApi:
         with allure.step("校验返回值"):
             assert '001023' == r.json()['code'], "用户使用未找到的user_id修改绑定邮箱错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_cabinet_account_004 未找到关闭用户otp')
+    @allure.title('test_cabinet_account_004 未找到关闭用户otp')
     def test_cabinet_account_004(self):
         with allure.step("未找到关闭用户otp"):
             user_id = "a4d5006b-c036-42dc-8f77-b8d7baedd44212"
@@ -79,7 +79,7 @@ class TestCabinetAccountApi:
         with allure.step("校验返回值"):
             assert '001021' == r.json()['code'], "未找到关闭用户otp错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_cabinet_account_005 关闭用户otp')
+    @allure.title('test_cabinet_account_005 关闭用户otp')
     def test_cabinet_account_005(self):
         with allure.step("用户修改邮箱"):
             user_id = "a4d5006b-c036-42dc-8f77-b8d7baedd442"

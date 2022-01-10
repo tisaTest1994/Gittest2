@@ -9,7 +9,7 @@ class TestFixedApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.testcase('test_fixed_001 获取定期产品列表')
+    @allure.title('test_fixed_001 获取定期产品列表')
     def test_fixed_001(self):
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
@@ -22,7 +22,7 @@ class TestFixedApi:
                 for i in r.json():
                     assert i['code'] == 'BTC' or i['code'] == 'ETH' or i['code'] == 'USDT', "获取定期产品列表失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_fixed_002 获取定期产品详情')
+    @allure.title('test_fixed_002 获取定期产品详情')
     def test_fixed_002(self):
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
@@ -39,7 +39,7 @@ class TestFixedApi:
                     with allure.step("校验返回值"):
                         assert 'maturity_date' in r.text, '获取定期产品详情失败,返回值是{}'.format(r.json())
 
-    @allure.testcase('test_fixed_003 获取定期产品利息列表')
+    @allure.title('test_fixed_003 获取定期产品利息列表')
     def test_fixed_003(self):
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
@@ -62,7 +62,7 @@ class TestFixedApi:
                             assert z['apy'] is not None, "获取定期产品利息列表失败，返回值是{}".format(r.text)
                             assert z['date'] is not None, "获取定期产品利息列表失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_fixed_004 购买定期产品')
+    @allure.title('test_fixed_004 购买定期产品')
     def test_fixed_004(self):
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
@@ -220,7 +220,7 @@ class TestFixedApi:
                 else:
                     assert False, "币种不对，购买定期产品失败。"
 
-    @allure.testcase('test_fixed_005 购买定期产品最小额度')
+    @allure.title('test_fixed_005 购买定期产品最小额度')
     def test_fixed_005(self):
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
@@ -383,7 +383,7 @@ class TestFixedApi:
                 else:
                     assert False, "币种不对，购买定期产品失败。"
 
-    @allure.testcase('test_fixed_006 购买定期产品最大额度')
+    @allure.title('test_fixed_006 购买定期产品最大额度')
     def test_fixed_006(self):
         sleep(5)
         with allure.step("获取定期产品列表"):
@@ -565,7 +565,7 @@ class TestFixedApi:
                 else:
                     assert False, "币种不对，购买定期产品失败。"
 
-    @allure.testcase('test_fixed_007 项目不传预计派息金额')
+    @allure.title('test_fixed_007 项目不传预计派息金额')
     def test_fixed_007(self):
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
@@ -593,7 +593,7 @@ class TestFixedApi:
             with allure.step("校验返回值"):
                 assert 'field maturity_interest.amount is not set' in r.text, '项目不传预计派息金额错误, 返回值是{}'.format(r.text)
 
-    @allure.testcase('test_fixed_008 项目传入错误预计派息金额')
+    @allure.title('test_fixed_008 项目传入错误预计派息金额')
     def test_fixed_008(self):
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
@@ -620,7 +620,7 @@ class TestFixedApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
 
-    @allure.testcase('test_fixed_009 查询申购项目的交易记录详情')
+    @allure.title('test_fixed_009 查询申购项目的交易记录详情')
     def test_fixed_009(self):
         with allure.step("申购一笔定期"):
             transaction_info = ApiFunction.subscribe_fix()
@@ -634,7 +634,7 @@ class TestFixedApi:
         with allure.step("校验返回值"):
             assert transaction_info['tx_id'] in r.text, '查询申购项目的交易记录详情错误, 返回值是{}'.format(r.text)
 
-    @allure.testcase('test_fixed_010 查询申购BTC项目的交易记录')
+    @allure.title('test_fixed_010 查询申购BTC项目的交易记录')
     def test_fixed_010(self):
         with allure.step("查询申购项目的交易记录"):
             params = {
@@ -653,7 +653,7 @@ class TestFixedApi:
         with allure.step("校验返回值"):
             assert r.json() is not None, '查询申购项目的交易记录失败，返回值是{}'.format(r.text)
 
-    @allure.testcase('test_fixed_011 查询申购ETH项目的交易记录')
+    @allure.title('test_fixed_011 查询申购ETH项目的交易记录')
     def test_fixed_011(self):
         with allure.step("查询申购项目的交易记录"):
             params = {
@@ -672,7 +672,7 @@ class TestFixedApi:
         with allure.step("校验返回值"):
             assert r.json() is not None, '查询申购ETH项目的交易记录失败，返回值是{}'.format(r.text)
 
-    @allure.testcase('test_fixed_012 查询申购USDT项目的交易记录')
+    @allure.title('test_fixed_012 查询申购USDT项目的交易记录')
     def test_fixed_012(self):
         with allure.step("查询申购项目的交易记录"):
             params = {
@@ -691,7 +691,7 @@ class TestFixedApi:
         with allure.step("校验返回值"):
             assert r.json() is not None, '查询申购USDT项目的交易记录失败，返回值是{}'.format(r.text)
 
-    @allure.testcase('test_fixed_013 更新（打开）某笔交易的复投状态')
+    @allure.title('test_fixed_013 更新（打开）某笔交易的复投状态')
     def test_fixed_013(self):
         with allure.step("申购一笔产品，并且获取信息"):
             product_list = ApiFunction.subscribe_fix()
@@ -708,7 +708,7 @@ class TestFixedApi:
             with allure.step("校验返回值"):
                 assert r.json()['update_result'] == True, '更新（打开）某笔交易的复投状态错误, 返回值是{}'.format(r.text)
 
-    @allure.testcase('test_fixed_014 更新（关闭）某笔交易的复投状态')
+    @allure.title('test_fixed_014 更新（关闭）某笔交易的复投状态')
     def test_fixed_014(self):
         with allure.step("申购一笔产品，并且获取信息"):
             product_list = ApiFunction.subscribe_fix()
@@ -730,7 +730,7 @@ class TestFixedApi:
         with allure.step("校验返回值"):
             assert r.json()['update_result'] == True, '更新（关闭）某笔交易的复投状态错误, 返回值是{}'.format(r.text)
 
-    @allure.testcase('test_fixed_015 更新错误交易id的复投状态')
+    @allure.title('test_fixed_015 更新错误交易id的复投状态')
     def test_fixed_015(self):
         with allure.step("打开这笔申购的自动复投"):
             data = {
@@ -745,17 +745,17 @@ class TestFixedApi:
         with allure.step("校验返回值"):
             assert r.json()['code'] == 'EARNINGTXN000036', '更新错误交易id的复投状态错误, 返回值是{}'.format(r.text)
 
-    @allure.testcase('test_fixed_016 申购定期时，直接打开复投开关')
+    @allure.title('test_fixed_016 申购定期时，直接打开复投开关')
     def test_fixed_016(self):
         transaction_info = ApiFunction.subscribe_fix(auto_renew=True)
         logger.info("交易信息是{}".format(transaction_info))
 
-    @allure.testcase('test_fixed_017 申购定期时，直接关闭复投开关')
+    @allure.title('test_fixed_017 申购定期时，直接关闭复投开关')
     def test_fixed_017(self):
         transaction_info = ApiFunction.subscribe_fix()
         logger.info("交易信息是{}".format(transaction_info))
 
-    @allure.testcase('test_fixed_018 查询包含复投的交易记录')
+    @allure.title('test_fixed_018 查询包含复投的交易记录')
     def test_fixed_018(self):
         with allure.step("申购一笔产品，并且获取信息"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
@@ -798,7 +798,7 @@ class TestFixedApi:
                     assert i['auto_renew'] is True, "查询包含复投的交易记录错误，返回值是{}".format(i)
                     assert i['time_line']['renew_subscription_id'] == '', "查询包含复投的交易记录错误，返回值是{}".format(i)
 
-    @allure.testcase('test_fixed_019 查询包含复投的交易记录详情信息')
+    @allure.title('test_fixed_019 查询包含复投的交易记录详情信息')
     def test_fixed_019(self):
         with allure.step("申购一笔产品，并且获取信息"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
@@ -833,7 +833,7 @@ class TestFixedApi:
             assert r.json()['auto_renew'] == True, "查询包含复投的交易记录错误，返回值是{}".format(r.json())
             assert r.json()['time_line']['renew_subscription_id'] == '', "查询包含复投的交易记录详情信息错误，返回值是{}".format(r.json())
 
-    @allure.testcase('test_fixed_020 通过分页查询包含复投的交易记录详情信息')
+    @allure.title('test_fixed_020 通过分页查询包含复投的交易记录详情信息')
     def test_fixed_020(self):
         with allure.step("申购一笔产品，并且获取信息"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
@@ -877,7 +877,7 @@ class TestFixedApi:
                 if i['transaction_id'] == transaction_id:
                     assert json.loads(i['details'])['subscribe_type'] == 0, "通过分页查询包含复投的交易记录详情信息错误，返回值是{}".format(r.json())
 
-    @allure.testcase('test_fixed_021 查询申购全部项目的交易记录')
+    @allure.title('test_fixed_021 查询申购全部项目的交易记录')
     def test_fixed_021(self):
         with allure.step("查询申购项目的交易记录"):
             params = {

@@ -14,7 +14,7 @@ class TestAccountUi:
         stop_app(package_name)
         sleep(2)
 
-    @allure.testcase('test_account_001 使用已经注册账户登录，登录进入主页后退出')
+    @allure.title('test_account_001 使用已经注册账户登录，登录进入主页后退出')
     def test_account_001(self):
         with allure.step("登录"):
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])

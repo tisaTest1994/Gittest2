@@ -17,13 +17,13 @@ class TestTransactionUi:
         # 关闭 app
         stop_app(package_name)
 
-    @allure.testcase('test_transaction_ui_001 查询所有交易信息')
+    @allure.title('test_transaction_ui_001 查询所有交易信息')
     def test_transaction_ui_001(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
             click('CB284')
 
-    @allure.testcase('test_transaction_ui_002 查询BTC交易信息')
+    @allure.title('test_transaction_ui_002 查询BTC交易信息')
     def test_transaction_ui_002(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -40,7 +40,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_003 查询ETH交易信息')
+    @allure.title('test_transaction_ui_003 查询ETH交易信息')
     def test_transaction_ui_003(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -60,7 +60,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_004 查询USDT交易信息')
+    @allure.title('test_transaction_ui_004 查询USDT交易信息')
     def test_transaction_ui_004(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -80,7 +80,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_005 查询Deposit交易信息')
+    @allure.title('test_transaction_ui_005 查询Deposit交易信息')
     def test_transaction_ui_005(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -97,7 +97,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_006 查询Withdraw交易信息')
+    @allure.title('test_transaction_ui_006 查询Withdraw交易信息')
     def test_transaction_ui_006(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -114,7 +114,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_007 查询Convert交易信息')
+    @allure.title('test_transaction_ui_007 查询Convert交易信息')
     def test_transaction_ui_007(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -131,7 +131,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_008 查询Subscribe Flexible交易信息')
+    @allure.title('test_transaction_ui_008 查询Subscribe Flexible交易信息')
     def test_transaction_ui_008(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -148,7 +148,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_009 查询Subscribe Fixed交易信息')
+    @allure.title('test_transaction_ui_009 查询Subscribe Fixed交易信息')
     def test_transaction_ui_009(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -165,7 +165,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_010 查询Interest交易信息')
+    @allure.title('test_transaction_ui_010 查询Interest交易信息')
     def test_transaction_ui_010(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -182,7 +182,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_011 查询Maturity交易信息')
+    @allure.title('test_transaction_ui_011 查询Maturity交易信息')
     def test_transaction_ui_011(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -199,7 +199,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_012 查询Redeem交易信息')
+    @allure.title('test_transaction_ui_012 查询Redeem交易信息')
     def test_transaction_ui_012(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -216,7 +216,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_013 查询Reward交易信息')
+    @allure.title('test_transaction_ui_013 查询Reward交易信息')
     def test_transaction_ui_013(self):
         with allure.step("进入transaction页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -233,7 +233,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_014 通过wallet钱包点击BTC显示交易记录')
+    @allure.title('test_transaction_ui_014 通过wallet钱包点击BTC显示交易记录')
     def test_transaction_ui_014(self):
         with allure.step("进入wallet页面"):
             click('CB301')
@@ -248,7 +248,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_015 通过wallet钱包点击ETH显示交易记录')
+    @allure.title('test_transaction_ui_015 通过wallet钱包点击ETH显示交易记录')
     def test_transaction_ui_015(self):
         with allure.step("进入wallet页面"):
             click('CB301')
@@ -266,7 +266,7 @@ class TestTransactionUi:
         with allure.step("检查页面transaction_id"):
             check(transaction_info['transaction_id'])
 
-    @allure.testcase('test_transaction_ui_016 通过wallet钱包点击USDT显示交易记录')
+    @allure.title('test_transaction_ui_016 通过wallet钱包点击USDT显示交易记录')
     def test_transaction_ui_016(self):
         with allure.step("进入wallet页面"):
             click('CB301')

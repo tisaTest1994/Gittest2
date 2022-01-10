@@ -11,7 +11,7 @@ class TestOperateApi:
             account=get_json()['operate_admin_account']['email'],
             password=get_json()['operate_admin_account']['password'], type='operate')
 
-    @allure.testcase('test_operate_001 使用管理员账户登录')
+    @allure.title('test_operate_001 使用管理员账户登录')
     @pytest.mark.multiprocess
     def test_operate_001(self):
         with allure.step("使用管理员账户登录"):
@@ -30,7 +30,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'accessToken' in r.text, "管理员账户登录错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_002 检索用户')
+    @allure.title('test_operate_002 检索用户')
     @pytest.mark.multiprocess
     def test_operate_002(self):
         with allure.step("检索用户"):
@@ -58,7 +58,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert r.json()['accounts'] is not None, '检索用户失败，返回值是{}'.format(r.text)
 
-    @allure.testcase('test_operate_003 查询用户信息')
+    @allure.title('test_operate_003 查询用户信息')
     @pytest.mark.multiprocess
     def test_operate_003(self):
         with allure.step("管理员查询用户信息"):
@@ -73,7 +73,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'user' in r.text, "查询用户信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_004 管理员刷新token')
+    @allure.title('test_operate_004 管理员刷新token')
     @pytest.mark.multiprocess
     def test_operate_004(self):
         with allure.step("管理员刷新token"):
@@ -88,7 +88,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'user' in r.text, "管理员查询用户信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_005 检索cases')
+    @allure.title('test_operate_005 检索cases')
     @pytest.mark.multiprocess
     def test_operate_005(self):
         with allure.step("检索cases"):
@@ -115,7 +115,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'caseList' in r.text, "检索cases错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_006 获取cases详情')
+    @allure.title('test_operate_006 获取cases详情')
     @pytest.mark.multiprocess
     def test_operate_006(self):
         with allure.step("获得cases id"):
@@ -147,7 +147,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'individualInfo' in r.text, "检索cases错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_007 检索payin交易')
+    @allure.title('test_operate_007 检索payin交易')
     @pytest.mark.multiprocess
     def test_operate_007(self):
         with allure.step("检索payin交易"):
@@ -171,7 +171,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'pagination_response' in r.text, "检索payin交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_008 检索payin交易明细')
+    @allure.title('test_operate_008 检索payin交易明细')
     @pytest.mark.multiprocess
     def test_operate_008(self):
         with allure.step("检索payin交易明细"):
@@ -200,7 +200,7 @@ class TestOperateApi:
             with allure.step("校验返回值"):
                 assert 'order_id' in r.text, "检索payin交易明细错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_009 检索cfx交易')
+    @allure.title('test_operate_009 检索cfx交易')
     @pytest.mark.multiprocess
     def test_operate_009(self):
         with allure.step("检索cfx交易"):
@@ -224,7 +224,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'pagination_response' in r.text, "检索cfx交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_010 检索cfx交易明细')
+    @allure.title('test_operate_010 检索cfx交易明细')
     @pytest.mark.multiprocess
     def test_operate_010(self):
         with allure.step("检索cfx交易明细"):
@@ -253,7 +253,7 @@ class TestOperateApi:
             with allure.step("校验返回值"):
                 assert 'pair' in r.text, "检索cfx交易明细错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_011 检索payout交易')
+    @allure.title('test_operate_011 检索payout交易')
     @pytest.mark.multiprocess
     def test_operate_011(self):
         with allure.step("检索payout交易"):
@@ -277,7 +277,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'pagination_response' in r.text, "检索payout交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_012 检索payout交易明细')
+    @allure.title('test_operate_012 检索payout交易明细')
     @pytest.mark.multiprocess
     def test_operate_012(self):
         with allure.step("获得token"):
@@ -311,7 +311,7 @@ class TestOperateApi:
             with allure.step("校验返回值"):
                 assert 'request_by' in r.text, "检索payout交易明细错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_013 检索earn交易')
+    @allure.title('test_operate_013 检索earn交易')
     @pytest.mark.multiprocess
     def test_operate_013(self):
         data = {
@@ -334,7 +334,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'record_count' in r.text, "检索earn交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_014 检索earn交易明细')
+    @allure.title('test_operate_014 检索earn交易明细')
     @pytest.mark.multiprocess
     def test_operate_014(self):
         data = {
@@ -362,7 +362,7 @@ class TestOperateApi:
             with allure.step("校验返回值"):
                 assert 'order_id' in r.text, "检索earn交易明细错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_015 检索interest交易')
+    @allure.title('test_operate_015 检索interest交易')
     @pytest.mark.multiprocess
     def test_operate_015(self):
         data = {
@@ -385,7 +385,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'record_count' in r.text, "检索interest交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_016 检索interest交易明细')
+    @allure.title('test_operate_016 检索interest交易明细')
     @pytest.mark.multiprocess
     def test_operate_016(self):
         data = {
@@ -413,7 +413,7 @@ class TestOperateApi:
             with allure.step("校验返回值"):
                 assert 'interest_id' in r.text, "检索earn交易明细错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_017 检索yield')
+    @allure.title('test_operate_017 检索yield')
     @pytest.mark.multiprocess
     def test_operate_017(self):
         data = {
@@ -436,7 +436,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'record_count' in r.text, "检索yield交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_018 检索yield交易明细')
+    @allure.title('test_operate_018 检索yield交易明细')
     @pytest.mark.multiprocess
     def test_operate_018(self):
         data = {
@@ -463,7 +463,7 @@ class TestOperateApi:
             with allure.step("校验返回值"):
                 assert 'yield_id' in r.text, "检索yield交易明细错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_019 检索payout')
+    @allure.title('test_operate_019 检索payout')
     @pytest.mark.multiprocess
     def test_operate_019(self):
         data = {
@@ -486,7 +486,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'crypto_account' in r.text, "检索payout交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_020 检索payout交易明细')
+    @allure.title('test_operate_020 检索payout交易明细')
     @pytest.mark.multiprocess
     def test_operate_020(self):
         data = {
@@ -514,7 +514,7 @@ class TestOperateApi:
             with allure.step("校验返回值"):
                 assert 'transaction_id' in r.text, "检索yield交易明细错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_021 检索payin order')
+    @allure.title('test_operate_021 检索payin order')
     def test_operate_021(self):
         data = {
             "pagination_request": {
@@ -536,7 +536,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'order_id' in r.text, "检索payout交易错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_022 检索payin order交易明细')
+    @allure.title('test_operate_022 检索payin order交易明细')
     @pytest.mark.multiprocess
     def test_operate_022(self):
         data = {
@@ -564,7 +564,7 @@ class TestOperateApi:
             with allure.step("校验返回值"):
                 assert 'order_id' in r.text, "检索payin order交易明细错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_023 检索活期产品')
+    @allure.title('test_operate_023 检索活期产品')
     @pytest.mark.multiprocess
     def test_operate_023(self):
         data = {
@@ -580,7 +580,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'product_uuid' in r.text, "检索活期产品错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_024 检索定期产品')
+    @allure.title('test_operate_024 检索定期产品')
     @pytest.mark.multiprocess
     def test_operate_024(self):
         data = {
@@ -596,7 +596,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'product_uuid' in r.text, "检索定期产品错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_025 检索所有产品')
+    @allure.title('test_operate_025 检索所有产品')
     @pytest.mark.multiprocess
     def test_operate_025(self):
         data = {
@@ -611,7 +611,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert 'product_uuid' in r.text, "检索所有产品错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_026 获得wallet')
+    @allure.title('test_operate_026 获得wallet')
     @pytest.mark.multiprocess
     def test_operate_026(self):
         params = {
@@ -626,7 +626,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert r.json()['wallets'] is not None, "获得wallet错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_027 wallet调整余额内部户转到客户账户失败')
+    @allure.title('test_operate_027 wallet调整余额内部户转到客户账户失败')
     @pytest.mark.multiprocess
     def test_operate_027(self):
         data = {
@@ -646,7 +646,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert r.json()['is_succeed'] is False, "wallet调整余额内部户转到客户账户失败错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_028 wallet调整余额客户转到内部户账户失败')
+    @allure.title('test_operate_028 wallet调整余额客户转到内部户账户失败')
     @pytest.mark.multiprocess
     def test_operate_028(self):
         data = {
@@ -666,7 +666,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert r.json()['is_succeed'] is False, "wallet调整余额客户转到内部户账户失败错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_029 wallet调整余额内部户账户到内部户账户')
+    @allure.title('test_operate_029 wallet调整余额内部户账户到内部户账户')
     @pytest.mark.multiprocess
     def test_operate_029(self):
         data = {
@@ -703,7 +703,7 @@ class TestOperateApi:
             payin_amount_new), 'wallet调整余额内部户账户到内部户账户错误，payin_amount_old{}, payin_amount_new{}'.format(payin_amount_old,
                                                                                                        payin_amount_new)
 
-    @allure.testcase('test_operate_030 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id失败')
+    @allure.title('test_operate_030 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id失败')
     @pytest.mark.multiprocess
     def test_operate_030(self):
         data = {
@@ -723,7 +723,7 @@ class TestOperateApi:
             assert r.json()['is_succeed'] is False, "wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id失败错误，返回值是{}".format(
                 r.text)
 
-    @allure.testcase('test_operate_031 wallet调整余额内部户eth转btc失败')
+    @allure.title('test_operate_031 wallet调整余额内部户eth转btc失败')
     @pytest.mark.multiprocess
     def test_operate_031(self):
         data = {
@@ -742,7 +742,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert r.json()['is_succeed'] is False, "wallet调整余额内部户eth转btc失败错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_032 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id')
+    @allure.title('test_operate_032 wallet调整余额内部户CA账户到内部户账户需要传入counterparty_txn_id')
     @pytest.mark.multiprocess
     def test_operate_032(self):
         data = {
@@ -782,7 +782,7 @@ class TestOperateApi:
             payin_amount_new), 'wallet调整余额内部户账户到内部户账户错误，payin_amount_old{}, payin_amount_new{}'.format(payin_amount_old,
                                                                                                        payin_amount_new)
 
-    @allure.testcase('test_operate_033 让同名校验分数不够的通过')
+    @allure.title('test_operate_033 让同名校验分数不够的通过')
     @pytest.mark.multiprocess
     def test_operate_033(self):
         order_id = 'a1a31ec7-3f1f-4d04-b63d-49b222e20911'
@@ -799,7 +799,7 @@ class TestOperateApi:
         with allure.step("校验返回值"):
             assert r.json() == {}, "让同名校验分数不够的通过错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_operate_034 查询客户白名单')
+    @allure.title('test_operate_034 查询客户白名单')
     @pytest.mark.multiprocess
     def test_operate_034(self):
         with allure.step("查询客户白名单"):
@@ -810,7 +810,7 @@ class TestOperateApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
 
-    @allure.testcase('test_operate_035 给客户添加白名单')
+    @allure.title('test_operate_035 给客户添加白名单')
     def test_operate_035(self):
         with allure.step("给客户添加白名单"):
             name = generate_string(16)

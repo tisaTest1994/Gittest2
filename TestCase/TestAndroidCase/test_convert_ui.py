@@ -17,7 +17,7 @@ class TestConvertUi:
         # 关闭 app
         stop_app(package_name)
 
-    @allure.testcase('test_convert_ui_001 换汇页面显示sell币种的可用余额')
+    @allure.title('test_convert_ui_001 换汇页面显示sell币种的可用余额')
     def test_convert_ui_001(self):
         with allure.step("进入换汇页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -31,7 +31,7 @@ class TestConvertUi:
         with allure.step("验证页面显示sell币种可用的Balance"):
             check("{} {} {}".format(get_json(file='multiple_languages.json')['CB036'], number, pair.split('-')[0]))
 
-    @allure.testcase('test_convert_ui_002 换汇页面点击MAX')
+    @allure.title('test_convert_ui_002 换汇页面点击MAX')
     def test_convert_ui_002(self):
         with allure.step("进入换汇页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -47,7 +47,7 @@ class TestConvertUi:
         with allure.step("验证换汇页面点击MAX"):
             check('{}.*'.format(number), type='textMatches')
 
-    @allure.testcase('test_convert_ui_003 换汇页面点击汇率转换按钮')
+    @allure.title('test_convert_ui_003 换汇页面点击汇率转换按钮')
     def test_convert_ui_003(self):
         with allure.step("进入换汇页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -63,7 +63,7 @@ class TestConvertUi:
         with allure.step("验证页面显示sell币种可用的Balance"):
                 check("{} {} {}".format(get_json(file='multiple_languages.json')['CB036'], number, pair.split('-')[1]))
 
-    @allure.testcase('test_convert_ui_004 换汇页面点击汇率查询转换按钮')
+    @allure.title('test_convert_ui_004 换汇页面点击汇率查询转换按钮')
     def test_convert_ui_004(self):
         with allure.step("进入换汇页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -87,7 +87,7 @@ class TestConvertUi:
             logger.info('汇率是1{}{}{}'.format(list(pairs.keys())[0], quote_display, pairs[list(pairs.keys())[0]][0]))
             assert add_comma_number(quote_display) in poco(get_ui_text('CB240')).sibling()[6].attr('name'), '汇率对错误，后端返回的汇率对是{}, 前端显示的是{}'.format(add_comma_number(quote_display), poco('Sell').sibling()[6].attr('name'))
 
-    @allure.testcase('test_convert_ui_005 换汇页面切换sell币种')
+    @allure.title('test_convert_ui_005 换汇页面切换sell币种')
     def test_convert_ui_005(self):
         with allure.step("进入换汇页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()
@@ -109,7 +109,7 @@ class TestConvertUi:
             poco(get_ui_text('CB059')).sibling().child().child().click()
             click('CB059')
 
-    @allure.testcase('test_convert_ui_006 换汇并且检查金额')
+    @allure.title('test_convert_ui_006 换汇并且检查金额')
     def test_convert_ui_006(self):
         with allure.step("进入换汇页面"):
             poco(get_json(file='multiple_languages.json')['CB214']).parent().child("android.view.View")[1].click()

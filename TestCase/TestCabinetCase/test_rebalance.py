@@ -11,7 +11,7 @@ class TestRebalanceApi:
             account=get_json()['operate_admin_account']['email'],
             password=get_json()['operate_admin_account']['password'], type='operate')
 
-    @allure.testcase('test_rebalance_001 创建单边匹配的rebalance order')
+    @allure.title('test_rebalance_001 创建单边匹配的rebalance order')
     def test_rebalance_001(self):
         with allure.step("测试数据"):
             data = {

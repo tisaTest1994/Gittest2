@@ -17,7 +17,7 @@ class TestPortfolioUi:
         # 关闭 app
         stop_app(package_name)
 
-    @allure.testcase('test_pl_ui_001 隐藏页面金额')
+    @allure.title('test_pl_ui_001 隐藏页面金额')
     def test_portfolio_ui_001(self):
         with allure.step("修改以美元为单位显示货币金额"):
             UiFunction.choose_display_currency()
@@ -29,7 +29,7 @@ class TestPortfolioUi:
         with allure.step('检查*号'):
             check('{}\n{}\nGet started\nCrypto'.format(get_ui_text('CB277'), '******'))
 
-    @allure.testcase('test_pl_ui_002 确认首页USD显示报价')
+    @allure.title('test_pl_ui_002 确认首页USD显示报价')
     def test_portfolio_ui_002(self):
         with allure.step("修改以美元为单位显示货币金额"):
             UiFunction.choose_display_currency()
@@ -50,7 +50,7 @@ class TestPortfolioUi:
         with allure.step("检查ETH报价"):
             check('{} {}\n${}'.format('ETH', get_ui_text('CB347'), quote['ETH']), type=1)
 
-    @allure.testcase('test_pl_ui_003 确认首页EUR显示报价')
+    @allure.title('test_pl_ui_003 确认首页EUR显示报价')
     def test_portfolio_ui_003(self):
         with allure.step("修改以欧元为单位显示货币金额"):
             UiFunction.choose_display_currency(type='EUR')
@@ -72,7 +72,7 @@ class TestPortfolioUi:
         with allure.step("检查ETH报价"):
             check('{} {}\n€{}'.format('ETH', get_ui_text('CB347'), quote['ETH']), type=1)
 
-    @allure.testcase('test_pl_ui_004 USD显示下确认total asset value金额')
+    @allure.title('test_pl_ui_004 USD显示下确认total asset value金额')
     def test_portfolio_ui_004(self):
         with allure.step("修改以美元为单位显示货币金额"):
             UiFunction.choose_display_currency()
@@ -83,7 +83,7 @@ class TestPortfolioUi:
         with allure.step("校验"):
             assert add_comma_number(abs_amount) in poco(get_ui_text('CB407')).parent().attr('name'), '总金额是{},页面显示是{}'.format(add_comma_number(abs_amount), poco(get_ui_text('CB407')).parent().attr('name'))
 
-    @allure.testcase('test_pl_ui_005 EUR显示下确认total asset value金额')
+    @allure.title('test_pl_ui_005 EUR显示下确认total asset value金额')
     def test_portfolio_ui_005(self):
         with allure.step("修改以欧元为单位显示货币金额"):
             UiFunction.choose_display_currency(type='EUR')
@@ -95,7 +95,7 @@ class TestPortfolioUi:
         with allure.step("校验"):
             assert add_comma_number(abs_amount) in poco(get_ui_text('CB407')).parent().attr('name'), '总金额是{},页面显示是{}'.format(add_comma_number(abs_amount), poco(get_ui_text('CB407')).parent().attr('name'))
 
-    @allure.testcase('test_pl_ui_006 检查投资分布情况')
+    @allure.title('test_pl_ui_006 检查投资分布情况')
     def test_portfolio_ui_006(self):
         with allure.step("点击View进入asset页面"):
             click('CB407')
@@ -110,7 +110,7 @@ class TestPortfolioUi:
                 check(i['percent'])
                 check(i['code'])
 
-    @allure.testcase('test_pl_ui_007 检查asset value')
+    @allure.title('test_pl_ui_007 检查asset value')
     def test_portfolio_ui_007(self):
         with allure.step("点击View进入asset页面"):
             click('CB407')
@@ -127,7 +127,7 @@ class TestPortfolioUi:
             check('CB180')
             check('CB181')
 
-    # @allure.testcase('test_pl_ui_008 检查首页p/l数据')
+    # @allure.title('test_pl_ui_008 检查首页p/l数据')
     # def test_portfolio_ui_008(self):
     #     with allure.step("获取p/l数据"):
     #         with allure.step("进入首页"):

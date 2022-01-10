@@ -7,7 +7,7 @@ class TestComplianceServiceApi:
     kyc_url = get_json()['kyc'][get_json()['env']]['kycUrl']
     kyc_headers = get_json()['kyc'][get_json()['env']]['kycHeaders']
 
-    @allure.testcase('test_compliance_service_001 创建直接pass 个人 Kyc case后查询cases,最后发送接受结果信息')
+    @allure.title('test_compliance_service_001 创建直接pass 个人 Kyc case后查询cases,最后发送接受结果信息')
     def test_compliance_service_001(self):
         with allure.step("删除旧的webhook"):
             ApiFunction.delete_old_webhook()
@@ -98,7 +98,7 @@ class TestComplianceServiceApi:
             ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
                                                caseSystemId=caseSystemId)
 
-    @allure.testcase('test_compliance_service_002 创建直接pass 个人 Kyc case后查询cases,最后发送不接受结果信息')
+    @allure.title('test_compliance_service_002 创建直接pass 个人 Kyc case后查询cases,最后发送不接受结果信息')
     def test_compliance_service_002(self):
         with allure.step("删除旧的webhook"):
             ApiFunction.delete_old_webhook()
@@ -190,7 +190,7 @@ class TestComplianceServiceApi:
             ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='REJECT',
                                                caseSystemId=caseSystemId)
 
-    @allure.testcase('test_compliance_service_003 打开特定KYC Case的持续性扫描')
+    @allure.title('test_compliance_service_003 打开特定KYC Case的持续性扫描')
     def test_compliance_service_003(self):
         kyc_headers = self.kyc_headers
         if get_json()['env'] == 'test':
@@ -212,7 +212,7 @@ class TestComplianceServiceApi:
         with allure.step("校验返回值"):
             assert '' in r.text, "打开特定KYC Case的持续性扫描错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_compliance_service_004 关闭特定KYC Case的持续性扫描')
+    @allure.title('test_compliance_service_004 关闭特定KYC Case的持续性扫描')
     def test_compliance_service_004(self):
         kyc_headers = self.kyc_headers
         unix_time = int(time.time())
@@ -234,7 +234,7 @@ class TestComplianceServiceApi:
         with allure.step("校验返回值"):
             assert '' in r.text, "关闭特定KYC Case的持续性扫描错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_compliance_service_005 使用已经创建过的externalCaseId创建Kyc case')
+    @allure.title('test_compliance_service_005 使用已经创建过的externalCaseId创建Kyc case')
     def test_compliance_service_005(self):
         with allure.step("准备测试数据"):
             if get_json()['env'] == 'test':
@@ -273,7 +273,7 @@ class TestComplianceServiceApi:
         with allure.step("校验返回值"):
             assert '"code":"001004"' in r.text, "使用已经创建过的externalCaseId创建Kyc case错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_compliance_service_006 使用不存在的caseSystemId寻找Kyc case')
+    @allure.title('test_compliance_service_006 使用不存在的caseSystemId寻找Kyc case')
     def test_compliance_service_006(self):
         kyc_headers = self.kyc_headers
         unix_time = int(time.time())
@@ -291,7 +291,7 @@ class TestComplianceServiceApi:
         with allure.step("校验返回值"):
             assert '"code":"001002"' in r.text, "使用不存在的caseSystemId寻找Kyc case错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_compliance_service_007 创建直接pending cases Kyc case后查询cases')
+    @allure.title('test_compliance_service_007 创建直接pending cases Kyc case后查询cases')
     def test_compliance_service_007(self):
         with allure.step("删除旧的webhook"):
             ApiFunction.delete_old_webhook()
@@ -344,7 +344,7 @@ class TestComplianceServiceApi:
                 assert externalCaseId == r.json()['externalCaseId'], "获取case信息错误，返回值是{}".format(r.text)
                 assert 'PENDING' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_compliance_service_008 创建直接pass 企业 Kyc case后查询cases,最后发送接受结果信息')
+    @allure.title('test_compliance_service_008 创建直接pass 企业 Kyc case后查询cases,最后发送接受结果信息')
     def test_compliance_service_008(self):
         with allure.step("删除旧的webhook"):
             ApiFunction.delete_old_webhook()
@@ -430,7 +430,7 @@ class TestComplianceServiceApi:
             ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
                                                caseSystemId=caseSystemId)
 
-    @allure.testcase('test_compliance_service_009 创建直接pass 企业 Kyc case后查询cases,最后发送不接受结果信息')
+    @allure.title('test_compliance_service_009 创建直接pass 企业 Kyc case后查询cases,最后发送不接受结果信息')
     def test_compliance_service_009(self):
         with allure.step("删除旧的webhook"):
             ApiFunction.delete_old_webhook()
@@ -516,7 +516,7 @@ class TestComplianceServiceApi:
             ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='REJECT',
                                                caseSystemId=caseSystemId)
 
-    @allure.testcase('test_compliance_service_010 创建直接pass TNS_STREET case后查询cases,最后发送接受结果信息')
+    @allure.title('test_compliance_service_010 创建直接pass TNS_STREET case后查询cases,最后发送接受结果信息')
     def test_compliance_service_010(self):
         with allure.step("删除旧的webhook"):
             ApiFunction.delete_old_webhook()
@@ -570,7 +570,7 @@ class TestComplianceServiceApi:
                 assert externalCaseId == r.json()['externalCaseId'], "获取case信息错误，返回值是{}".format(r.text)
                 assert 'PENDING' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_compliance_service_011 创建直接pass TNS_TRADER case后查询cases,最后发送接受结果信息')
+    @allure.title('test_compliance_service_011 创建直接pass TNS_TRADER case后查询cases,最后发送接受结果信息')
     def test_compliance_service_011(self):
         with allure.step("删除旧的webhook"):
             ApiFunction.delete_old_webhook()
@@ -628,7 +628,7 @@ class TestComplianceServiceApi:
                 assert externalCaseId == r.json()['externalCaseId'], "获取case信息错误，返回值是{}".format(r.text)
                 assert 'WAITING_APPROVAL' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_compliance_service_012 创建直接pass TNS_BANK_ACCOUNT_NAME case后查询cases,最后发送接受结果信息')
+    @allure.title('test_compliance_service_012 创建直接pass TNS_BANK_ACCOUNT_NAME case后查询cases,最后发送接受结果信息')
     def test_compliance_service_012(self):
         with allure.step("删除旧的webhook"):
             ApiFunction.delete_old_webhook()
@@ -682,7 +682,7 @@ class TestComplianceServiceApi:
                 assert externalCaseId == r.json()['externalCaseId'], "获取case信息错误，返回值是{}".format(r.text)
                 assert 'WAITING_APPROVAL' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_compliance_service_013 创建直接pass TNS_BANK_NAME case后查询cases,最后发送接受结果信息')
+    @allure.title('test_compliance_service_013 创建直接pass TNS_BANK_NAME case后查询cases,最后发送接受结果信息')
     def test_compliance_service_013(self):
         with allure.step("删除旧的webhook"):
             ApiFunction.delete_old_webhook()
@@ -736,7 +736,7 @@ class TestComplianceServiceApi:
                 assert externalCaseId == r.json()['externalCaseId'], "获取case信息错误，返回值是{}".format(r.text)
                 assert 'PENDING' == r.json()['status'], "获取case信息错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_compliance_service_014 创建直接个人 Kyc case大小写')
+    @allure.title('test_compliance_service_014 创建直接个人 Kyc case大小写')
     @pytest.mark.timeout(1200)
     def test_compliance_service_014(self):
         with allure.step("删除旧的webhook"):
@@ -921,7 +921,7 @@ class TestComplianceServiceApi:
             ApiFunction.check_webhook_info(path='/webhook/screen/case/completed', decision='ACCEPT',
                                                caseSystemId=caseSystemId)
 
-    # @allure.testcase('test_compliance_service_015 创建直接1000个pending cases')
+    # @allure.title('test_compliance_service_015 创建直接1000个pending cases')
     # def test_compliance_service_013(self):
     #     for i in range(1000):
     #         with allure.step("准备测试数据"):
@@ -952,7 +952,7 @@ class TestComplianceServiceApi:
     #                 caseSystemId = r.json()['caseSystemId']
     #                 print(caseSystemId)
 
-    @allure.testcase('test_compliance_service_016 创建个人 Kyc case后查询cases,同步扫描信息')
+    @allure.title('test_compliance_service_016 创建个人 Kyc case后查询cases,同步扫描信息')
     def test_compliance_service_016(self):
         with allure.step("删除旧的webhook"):
             ApiFunction.delete_old_webhook()

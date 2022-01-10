@@ -17,7 +17,7 @@ class TestWebTransactionApi:
         webFunction.logout_web(self.driver)
         self.driver.close()
 
-    @allure.testcase('test_web_transaction_001 查看单独币种的交易记录')
+    @allure.title('test_web_transaction_001 查看单独币种的交易记录')
     def test_web_transaction_001(self):
         for i in ApiFunction.balance_list():
             with allure.step("通过api获得某个币种的交易记录"):
@@ -45,7 +45,7 @@ class TestWebTransactionApi:
                     operate_element(self.driver, 'transactionPage', 'undefined-option-item-{}'.format(i))
                 sleep(10)
 
-    @allure.testcase('test_web_transaction_002 查看某交易类型的交易记录')
+    @allure.title('test_web_transaction_002 查看某交易类型的交易记录')
     def test_web_transaction_002(self):
         for i in get_json()['transaction_type'].keys():
             with allure.step("通过api获得某个币种的交易记录"):

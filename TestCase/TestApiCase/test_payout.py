@@ -10,7 +10,7 @@ class TestPayoutApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.testcase('test_payout_001 没有Kyc用户添加常用收款地址失败')
+    @allure.title('test_payout_001 没有Kyc用户添加常用收款地址失败')
     def test_payout_001(self):
         account = generate_email()
         password = get_json()['email']['password']
@@ -36,7 +36,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert 'ACC_FORBIDDEN' in r.text, "没有Kyc用户添加常用收款地址失败错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_002 获取存储的常用收款地址list')
+    @allure.title('test_payout_002 获取存储的常用收款地址list')
     def test_payout_002(self):
         with allure.step("获取存储的常用收款地址list"):
             r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
@@ -48,7 +48,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert r.json()['payeeList'] is not None, "获取存储的常用收款地址list错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_003 获取某个常用收款地址')
+    @allure.title('test_payout_003 获取某个常用收款地址')
     def test_payout_003(self):
         with allure.step("获取收款地址list"):
             r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
@@ -64,7 +64,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert r.json()['payeeList'] is not None, "获取某个常用收款地址错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_004 使用不存在id获取常用收款地址')
+    @allure.title('test_payout_004 使用不存在id获取常用收款地址')
     def test_payout_004(self):
         with allure.step("使用不存在id获取常用收款地址"):
             r = session.request('GET', url='{}/account/myPayee/{}'.format(env_url, '1111300'), headers=headers)
@@ -77,7 +77,7 @@ class TestPayoutApi:
             assert 'This address is not exist, please refresh and retry.' in r.text, "使用不存在id获取常用收款地址错误，返回值是{}".format(
                 r.text)
 
-    @allure.testcase('test_payout_005 删除不存在的收款地址')
+    @allure.title('test_payout_005 删除不存在的收款地址')
     def test_payout_005(self):
         with allure.step("凭借空id号删除地址"):
             r = session.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, '123131300'), headers=headers)
@@ -89,7 +89,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert 'This address is not exist, please refresh and retry.' in r.text, "删除收款地址错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_006 获取提现费率和提现限制')
+    @allure.title('test_payout_006 获取提现费率和提现限制')
     def test_payout_006(self):
         with allure.step("获取提现费率和提现限制"):
             data = {
@@ -108,7 +108,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert '"code":"ETH"' in r.text, "获取提现费率和提现限制错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_007 MFA认证提现ETH成功')
+    @allure.title('test_payout_007 MFA认证提现ETH成功')
     def test_payout_007(self):
         transaction_id = ApiFunction.get_payout_transaction_id(amount='0.01',
                                                                address='0xA7185FBEE96B605709D9659894066dF21cc87f05',
@@ -127,7 +127,7 @@ class TestPayoutApi:
         #     for i in sql_info:
         #         assert i['wallet_id'] is not None, "payout的P/L错误，sql命令是{}".format(sql)
 
-    @allure.testcase('test_payout_008 查询提现详情')
+    @allure.title('test_payout_008 查询提现详情')
     def test_payout_008(self):
         with allure.step("获得交易transaction_id"):
             transaction_id = ApiFunction.get_payout_transaction_id()
@@ -145,7 +145,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert 'status' in r.text, "查询提现详情错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_009 使用错误id查询提现详情')
+    @allure.title('test_payout_009 使用错误id查询提现详情')
     def test_payout_009(self):
         with allure.step("查询提现详情"):
             r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url,
@@ -159,7 +159,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert 'no rows in result set' in r.text, "使用错误id查询提现详情错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_010 法币提现获得信息，白名单排序')
+    @allure.title('test_payout_010 法币提现获得信息，白名单排序')
     def test_payout_010(self):
         with allure.step("法币提现获得信息"):
             data = {
@@ -181,7 +181,7 @@ class TestPayoutApi:
                 elif a == 0:
                     assert i['status'] == 0, '白名单排序问题，没1在前0在后。'
 
-    @allure.testcase('test_payout_011 预校验法币提现')
+    @allure.title('test_payout_011 预校验法币提现')
     def test_payout_011(self):
         with allure.step("法币提现获得信息"):
             data = {
@@ -200,7 +200,7 @@ class TestPayoutApi:
             assert r.json()['fee']['code'] == 'EUR', "预校验法币提现错误，返回值是{}".format(r.text)
             assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_012 获得法币提现币种')
+    @allure.title('test_payout_012 获得法币提现币种')
     def test_payout_012(self):
         with allure.step("提现币种"):
             r = session.request('GET', url='{}/pay/withdraw/ccy/{}'.format(env_url, 'fiat'), headers=headers)
@@ -212,7 +212,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'fiat' in r.text, "获得法币提现币种错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_013 获得数字货币提现币种')
+    @allure.title('test_payout_013 获得数字货币提现币种')
     def test_payout_013(self):
         with allure.step("提现币种"):
             r = session.request('GET', url='{}/pay/withdraw/ccy/{}'.format(env_url, 'crypto'), headers=headers)
@@ -224,7 +224,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'crypto' in r.text, "获得数字货币提现币种错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_014 获得全部提现币种')
+    @allure.title('test_payout_014 获得全部提现币种')
     def test_payout_014(self):
         with allure.step("提现币种"):
             r = session.request('GET', url='{}/pay/withdraw/ccy/{}'.format(env_url, ''), headers=headers)
@@ -237,7 +237,7 @@ class TestPayoutApi:
                 assert 'fiat' in r.text, "获得全部提现币种错误，返回值是{}".format(r.text)
                 assert 'crypto' in r.text, "获得全部提现币种错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_015 开启法币提现画面')
+    @allure.title('test_payout_015 开启法币提现画面')
     def test_payout_015(self):
         with allure.step("开启法币提现画面"):
             params = {
@@ -252,7 +252,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'SEPA' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_016 BCB EUR法币提现')
+    @allure.title('test_payout_016 BCB EUR法币提现')
     def test_payout_016(self):
         with allure.step("开启法币提现画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -287,7 +287,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'txn_id' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_017 GBP法币提现')
+    @allure.title('test_payout_017 GBP法币提现')
     def test_payout_017(self):
         with allure.step("开启GBP法币提现画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -323,7 +323,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'txn_id' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_018 确认法币提现交易')
+    @allure.title('test_payout_018 确认法币提现交易')
     def test_payout_018(self):
         with allure.step("确认法币提现交易"):
             data = {
@@ -344,7 +344,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert r.json() == {}, "开启法币提现画面错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_019 法币提现获得信息，不传code')
+    @allure.title('test_payout_019 法币提现获得信息，不传code')
     def test_payout_019(self):
         with allure.step("法币提现获得信息，不传code"):
             data = {
@@ -359,7 +359,7 @@ class TestPayoutApi:
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             assert r.json()['code'] == '100000', "法币提现获得信息，不传code错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_020 法币提现英镑获得信息，白名单排序')
+    @allure.title('test_payout_020 法币提现英镑获得信息，白名单排序')
     def test_payout_020(self):
         with allure.step("法币提现英镑获得信息，白名单排序"):
             data = {
@@ -382,7 +382,7 @@ class TestPayoutApi:
                 elif a == 0:
                     assert i['status'] == 0, '白名单排序问题，没1在前0在后。'
 
-    @allure.testcase('test_payout_021 预校验英镑提现')
+    @allure.title('test_payout_021 预校验英镑提现')
     def test_payout_021(self):
         with allure.step("法币提现获得信息"):
             data = {
@@ -401,7 +401,7 @@ class TestPayoutApi:
             assert r.json()['fee']['code'] == 'GBP', "预校验英镑提现错误，返回值是{}".format(r.text)
             assert r.json()['fee']['amount'] == '2.5', "预校验英镑提现错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_022 开启英镑法币提现画面')
+    @allure.title('test_payout_022 开启英镑法币提现画面')
     def test_payout_022(self):
         with allure.step("开启英镑法币提现画面"):
             params = {
@@ -416,7 +416,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'Faster Payments' in r.text, "开启英镑法币提现画面错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_023 GBP法币用户名字带有中文字符提现失败')
+    @allure.title('test_payout_023 GBP法币用户名字带有中文字符提现失败')
     def test_payout_023(self):
         with allure.step("开启GBP法币提现画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -453,7 +453,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert r.json()['code'] == '103015', "GBP法币用户名字带有中文字符提现失败错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_024 BCB GBP法币提现')
+    @allure.title('test_payout_024 BCB GBP法币提现')
     def test_payout_024(self):
         with allure.step("开启EUR法币提现画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -489,7 +489,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'txn_id' in r.text, "BCB GBP法币提现错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_025 BTC确认Crypto提现交易超过每日限额')
+    @allure.title('test_payout_025 BTC确认Crypto提现交易超过每日限额')
     def test_payout_025(self):
         with allure.step("BTC确认Crypto提现交易"):
             data = {
@@ -507,7 +507,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert r.json()['code'] == '103031', "BTC确认Crypto提现交易超过每日限额错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_026 ETH确认Crypto提现交易超过每日限额')
+    @allure.title('test_payout_026 ETH确认Crypto提现交易超过每日限额')
     def test_payout_026(self):
         with allure.step("ETH确认Crypto提现交易"):
             data = {
@@ -525,7 +525,7 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert r.json()['code'] == '103031', "ETH确认Crypto提现交易超过每日限额错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_payout_027 USDT确认Crypto提现交易超过每日限额')
+    @allure.title('test_payout_027 USDT确认Crypto提现交易超过每日限额')
     def test_payout_027(self):
         with allure.step("USDT确认Crypto提现交易"):
             data = {

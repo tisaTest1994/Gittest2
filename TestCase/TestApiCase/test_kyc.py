@@ -8,7 +8,7 @@ class TestKycApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.testcase('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
+    @allure.title('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
     def test_kyc_001(self):
         with allure.step("随机获得国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
@@ -25,7 +25,7 @@ class TestKycApi:
         with allure.step("校验返回值"):
             assert 'Exist pass case.' in r.text, "通过kyc的用户，获取kyc上传token失败错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_kyc_002 未通过kyc的用户，获取kyc上传token')
+    @allure.title('test_kyc_002 未通过kyc的用户，获取kyc上传token')
     def test_kyc_002(self):
         account = generate_email()
         password = 'Abc112233'

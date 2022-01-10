@@ -11,7 +11,7 @@ class TestConnectAccountApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.testcase('test_connect_account_001 获取未关联用户状况及partner信息')
+    @allure.title('test_connect_account_001 获取未关联用户状况及partner信息')
     def test_connect_account_001(self):
         with allure.step("测试用户的account_id"):
             account_id = '5e5a2a0a-a4c3-4ced-8320-118ccbbc1c23'
@@ -44,7 +44,7 @@ class TestConnectAccountApi:
                 if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'NONE', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_002 获取关联用户状况，用户成功连接，还未在 Cabital 提交 KYC')
+    @allure.title('test_connect_account_002 获取关联用户状况，用户成功连接，还未在 Cabital 提交 KYC')
     def test_connect_account_002(self):
         with allure.step("测试用户的account_id"):
             account_id = 'e19a6fa7-1b7d-4396-a8cf-f641467a910b'
@@ -77,7 +77,7 @@ class TestConnectAccountApi:
                 if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'INITIALIZED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_003 获取关联用户状况，Cabital处理用户材料中')
+    @allure.title('test_connect_account_003 获取关联用户状况，Cabital处理用户材料中')
     def test_connect_account_003(self):
         with allure.step("测试用户的account_id"):
             account_id = 'ba524ba1-5887-4920-b1c4-242badfcb2ed'
@@ -110,7 +110,7 @@ class TestConnectAccountApi:
                 if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'PENDING', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_004 获取关联用户状况，用户被 Cabital 要求提供正确材料')
+    @allure.title('test_connect_account_004 获取关联用户状况，用户被 Cabital 要求提供正确材料')
     def test_connect_account_004(self):
         with allure.step("测试用户的account_id"):
             account_id = '54979397-8ee0-4b61-8c78-cac78116e898'
@@ -143,7 +143,7 @@ class TestConnectAccountApi:
                 if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'TEMPORARY_REJECTED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_005 获取关联用户状况，用户被 Cabital 最终拒绝开户')
+    @allure.title('test_connect_account_005 获取关联用户状况，用户被 Cabital 最终拒绝开户')
     def test_connect_account_005(self):
         with allure.step("测试用户的account_id"):
             account_id = 'c7916ad3-36a8-48cd-83d3-fff5a911fcc7'
@@ -176,7 +176,7 @@ class TestConnectAccountApi:
                 if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'FINAL_REJECTED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_006 获取关联用户状况，用户成功 KYC，Cabital 账户开通，等待合作方提交同名验证。')
+    @allure.title('test_connect_account_006 获取关联用户状况，用户成功 KYC，Cabital 账户开通，等待合作方提交同名验证。')
     def test_connect_account_006(self):
         with allure.step("测试用户的account_id"):
             account_id = '90da0a64-4871-4d7e-b4a5-c80bf4ec9d5e'
@@ -209,7 +209,7 @@ class TestConnectAccountApi:
                 if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'CREATED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_007 获取关联用户状况，合作方已提交，同名验证人工审核中')
+    @allure.title('test_connect_account_007 获取关联用户状况，合作方已提交，同名验证人工审核中')
     def test_connect_account_007(self):
         with allure.step("测试用户的account_id"):
             account_id = '63254fe2-8a65-457b-b6bd-075ca7160f26'
@@ -242,7 +242,7 @@ class TestConnectAccountApi:
                 if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'MATCHING', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_008 获取关联用户状况，同名验证通过，完全开通同账户转账')
+    @allure.title('test_connect_account_008 获取关联用户状况，同名验证通过，完全开通同账户转账')
     def test_connect_account_008(self):
         with allure.step("测试用户的account_id"):
             account_id = '3853a783-3a36-4713-b62a-c44960a9ed9d'
@@ -275,7 +275,7 @@ class TestConnectAccountApi:
                 if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'MATCHED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_009 获取关联用户状况，同名验证拒绝，多种因素')
+    @allure.title('test_connect_account_009 获取关联用户状况，同名验证拒绝，多种因素')
     def test_connect_account_009(self):
         with allure.step("测试用户的account_id"):
             account_id = 'eed8b5fe-9242-4fbf-99f1-3bae94b3176c'
@@ -308,7 +308,7 @@ class TestConnectAccountApi:
                 if i['partner_id'] == get_json()['connect']['test']['bybit']['Headers']['ACCESS-KEY']:
                     assert i['status'] == 'MISMATCHED', "获取未关联用户状况及partner信息失败，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_010 查询用户otp状态，otp未绑定')
+    @allure.title('test_connect_account_010 查询用户otp状态，otp未绑定')
     def test_connect_account_010(self):
         with allure.step("测试用户的account_id"):
             account_id = 'e19a6fa7-1b7d-4396-a8cf-f641467a910b'
@@ -329,7 +329,7 @@ class TestConnectAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['otp_ready'] is False, "查询用户otp状态，otp未绑定错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_011 查询用户otp状态，otp已经绑定')
+    @allure.title('test_connect_account_011 查询用户otp状态，otp已经绑定')
     def test_connect_account_011(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
@@ -350,7 +350,7 @@ class TestConnectAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['otp_ready'] is True, "查询用户otp状态，otp已经绑定错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_012 使用错误account_id导致解除绑定失败')
+    @allure.title('test_connect_account_012 使用错误account_id导致解除绑定失败')
     def test_connect_account_012(self):
         with allure.step("测试用户的account_id"):
             partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']
@@ -371,7 +371,7 @@ class TestConnectAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['otp_ready'] is True, "查询用户otp状态，otp已经绑定错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_account_013 成功解绑+name match用户 pass')
+    @allure.title('test_connect_account_013 成功解绑+name match用户 pass')
     def test_connect_account_013(self):
         with allure.step("准备参数"):
             partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']
@@ -412,7 +412,7 @@ class TestConnectAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)
 
-    # @allure.testcase('test_connect_account_014 成功解绑+name match用户mismatch')
+    # @allure.title('test_connect_account_014 成功解绑+name match用户mismatch')
     # def test_connect_account_014(self):
     #     with allure.step("准备参数"):
     #         partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']
@@ -454,7 +454,7 @@ class TestConnectAccountApi:
     #     with allure.step("校验返回值"):
     #         assert r.json()['result'] == 'MISMATCH', "name match pass错误，返回值是{}".format(r.text)
     #
-    # @allure.testcase('test_connect_account_015 成功解绑+name match用户matching')
+    # @allure.title('test_connect_account_015 成功解绑+name match用户matching')
     # def test_connect_account_015(self):
     #     with allure.step("准备参数"):
     #         partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']
@@ -496,7 +496,7 @@ class TestConnectAccountApi:
     #     with allure.step("校验返回值"):
     #         assert r.json()['result'] == 'MISMATCH', "name match pass错误，返回值是{}".format(r.text)
     #
-    # @allure.testcase('test_connect_account_016 成功解绑+name match用户pending')
+    # @allure.title('test_connect_account_016 成功解绑+name match用户pending')
     # def test_connect_account_016(self):
     #     with allure.step("准备参数"):
     #         partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']

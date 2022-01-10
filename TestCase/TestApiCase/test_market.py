@@ -9,7 +9,7 @@ class TestMarketApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.testcase('test_market_001 获得价格曲线')
+    @allure.title('test_market_001 获得价格曲线')
     def test_market_001(self):
         for i in ['BTCEUR', 'BTCUSD', 'ETHEUR', 'ETHUSD', 'USDEUR']:
             for y in ['10', '60', 'D', 'W', 'M']:
@@ -30,7 +30,7 @@ class TestMarketApi:
                 with allure.step("校验返回值"):
                     assert 'items' in r.text, "获得价格曲线错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_market_002 获得行情信息')
+    @allure.title('test_market_002 获得行情信息')
     def test_market_002(self):
         with allure.step("获得行情信息"):
             List = ["BTC", "ETH", "USDT"]
@@ -48,13 +48,13 @@ class TestMarketApi:
                 with allure.step("校验返回值"):
                     assert 'price_24h_pcnt' in r.text, "获得价格曲线错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_market_003 给测试环境注资')
+    @allure.title('test_market_003 给测试环境注资')
     def test_market_003(self):
         with allure.step("给测试环境注资"):
             r = session.request('GET', url='https://faucet.ropsten.be/donate/WV98W3a7hYhBRIDPRGk8D/0xaE346B37A0A7ffd5F224Cc2fC2c4C0E1bC541D67')
             print(r.json())
 
-    @allure.testcase('test_market_004 首页获得数字货币报价')
+    @allure.title('test_market_004 首页获得数字货币报价')
     def test_market_004(self):
         with allure.step("首页获得数字货币报价"):
             params = {

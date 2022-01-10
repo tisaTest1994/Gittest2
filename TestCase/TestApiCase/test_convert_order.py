@@ -9,7 +9,7 @@ class TestConvertOrderApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.testcase('test_convert_order_001 一次损益计算')
+    @allure.title('test_convert_order_001 一次损益计算')
     def test_convert_order_001(self):
         # 获得 cfx_book
         cfx_book = get_json()['cfx_book']

@@ -16,7 +16,7 @@ class TestWebAccountApi:
         webFunction.logout_web(self.driver)
         self.driver.close()
 
-    @allure.testcase('test_web_account_001 ')
+    @allure.title('test_web_account_001 ')
     def test_web_account_001(self):
         pass
 

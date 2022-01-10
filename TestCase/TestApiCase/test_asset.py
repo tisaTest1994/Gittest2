@@ -8,7 +8,7 @@ class TestAssetApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.testcase('test_asset_001 查询每个币种当前资产市值')
+    @allure.title('test_asset_001 查询每个币种当前资产市值')
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_asset_001(self):
@@ -25,7 +25,7 @@ class TestAssetApi:
                     if i == y['code']:
                         assert ApiFunction.get_crypto_abs_amount(i) == y['value'], '{}币种当前资产市值是{},接口返回值是{}.查询每个币种当前资产市值错误'.format(i, ApiFunction.get_crypto_abs_amount(i), y['value'])
 
-    @allure.testcase('test_asset_002 获取账户资金状态')
+    @allure.title('test_asset_002 获取账户资金状态')
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_asset_002(self):
@@ -39,7 +39,7 @@ class TestAssetApi:
         with allure.step("校验返回值"):
             assert 'overview' in r.text, "获取账户资金状态错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_asset_003 获取账户详细损益')
+    @allure.title('test_asset_003 获取账户详细损益')
     @pytest.mark.multiprocess
     @pytest.mark.pro
     def test_asset_003(self):

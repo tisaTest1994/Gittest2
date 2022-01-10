@@ -10,7 +10,7 @@ class TestConnectWalletApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.testcase('test_connect_wallet_001 获取账户可用余额列表(有资金）')
+    @allure.title('test_connect_wallet_001 获取账户可用余额列表(有资金）')
     def test_connect_wallet_001(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
@@ -44,7 +44,7 @@ class TestConnectWalletApi:
                             bybit_balance), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                             i, mobile_balance, bybit_balance)
 
-    @allure.testcase('test_connect_wallet_002 账户可用余额列表(无资金）')
+    @allure.title('test_connect_wallet_002 账户可用余额列表(无资金）')
     def test_connect_wallet_002(self):
         with allure.step("测试用户的account_id"):
             account_id = '3853a783-3a36-4713-b62a-c44960a9ed9d'
@@ -81,7 +81,7 @@ class TestConnectWalletApi:
                             bybit_balance), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                             i, mobile_balance, bybit_balance)
 
-    @allure.testcase('test_connect_wallet_003 获取没有通过kyc的账户的可用余额列表')
+    @allure.title('test_connect_wallet_003 获取没有通过kyc的账户的可用余额列表')
     def test_connect_wallet_003(self):
         with allure.step("测试用户的account_id"):
             account_id = '90da0a64-4871-4d7e-b4a5-c80bf4ec9d5e'
@@ -117,7 +117,7 @@ class TestConnectWalletApi:
                             bybit_balance), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                             i, mobile_balance, bybit_balance)
 
-    @allure.testcase('test_connect_wallet_004 获取账户可用余额单币(有资金）')
+    @allure.title('test_connect_wallet_004 获取账户可用余额单币(有资金）')
     def test_connect_wallet_004(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
@@ -152,7 +152,7 @@ class TestConnectWalletApi:
                                                               'balances']), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                         i, mobile_balance, r.json()['balance']['balances'])
 
-    @allure.testcase('test_connect_wallet_005 获取账户可用余额单币(无资金）')
+    @allure.title('test_connect_wallet_005 获取账户可用余额单币(无资金）')
     def test_connect_wallet_005(self):
         with allure.step("测试用户的account_id"):
             account_id = '3853a783-3a36-4713-b62a-c44960a9ed9d'
@@ -190,7 +190,7 @@ class TestConnectWalletApi:
                                                               'balances']), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                         i, mobile_balance, r.json()['balance']['balances'])
 
-    @allure.testcase('test_connect_wallet_004 获取没有通过kyc的账户的账户可用余额单币')
+    @allure.title('test_connect_wallet_004 获取没有通过kyc的账户的账户可用余额单币')
     def test_connect_wallet_006(self):
         with allure.step("测试用户的account_id"):
             account_id = '90da0a64-4871-4d7e-b4a5-c80bf4ec9d5e'
@@ -227,7 +227,7 @@ class TestConnectWalletApi:
                                                               'balances']), '币种{}判断提供给bybit的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(
                         i, mobile_balance, r.json()['balance']['balances'])
 
-    @allure.testcase('test_connect_wallet_007 获取账户单币入账信息, 入币方式缺失，使用默认')
+    @allure.title('test_connect_wallet_007 获取账户单币入账信息, 入币方式缺失，使用默认')
     def test_connect_wallet_007(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
@@ -260,7 +260,7 @@ class TestConnectWalletApi:
                     elif i == 'EUR':
                         assert r.json()['method'] == 'SEPA', "账户可用余额列表错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_wallet_008 获取账户单币入账信息, 入币方式SEPA')
+    @allure.title('test_connect_wallet_008 获取账户单币入账信息, 入币方式SEPA')
     def test_connect_wallet_008(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
@@ -311,7 +311,7 @@ class TestConnectWalletApi:
                                 del bank_accounts_mobile['header']
                                 assert bank_accounts_mobile == bank_accounts, "moblie接口一致性查询错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_wallet_009 获取账户单币入账信息, 入币方式Faster Payments')
+    @allure.title('test_connect_wallet_009 获取账户单币入账信息, 入币方式Faster Payments')
     def test_connect_wallet_009(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
@@ -363,7 +363,7 @@ class TestConnectWalletApi:
                                 del bank_accounts_mobile['header']
                                 assert bank_accounts_mobile == bank_accounts, "moblie接口一致性查询错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_wallet_010 获取账户单币入账信息, 入币方式缺失，使用默认（使用没有通过kyc的账户）')
+    @allure.title('test_connect_wallet_010 获取账户单币入账信息, 入币方式缺失，使用默认（使用没有通过kyc的账户）')
     def test_connect_wallet_010(self):
         with allure.step("测试用户的account_id"):
             account_id = '90da0a64-4871-4d7e-b4a5-c80bf4ec9d5e'
@@ -393,7 +393,7 @@ class TestConnectWalletApi:
                 with allure.step("校验返回值"):
                     assert r.json()['code'] == 'PA009', "取账户单币入账信息, 入币方式缺失，使用默认（使用没有通过kyc的账户）错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_connect_wallet_011 账户转换货币')
+    @allure.title('test_connect_wallet_011 账户转换货币')
     def test_connect_wallet_011(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
@@ -542,7 +542,7 @@ class TestConnectWalletApi:
                                     cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
                                     sell_amount_wallet_balance_latest)
 
-    @allure.testcase('test_connect_wallet_012 账户转换法币EUR-GBP失败')
+    @allure.title('test_connect_wallet_012 账户转换法币EUR-GBP失败')
     def test_connect_wallet_012(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
