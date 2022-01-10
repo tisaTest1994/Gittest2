@@ -350,67 +350,57 @@ class TestConnectAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['otp_ready'] is True, "查询用户otp状态，otp已经绑定错误，返回值是{}".format(r.text)
 
-    @allure.title('test_connect_account_012 使用错误account_id导致解除绑定失败')
-    def test_connect_account_012(self):
-        with allure.step("测试用户的account_id"):
-            partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/connect/account/{}/unlink'.format(partner_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
-        with allure.step("使用错误account_id导致解除绑定失败"):
-            r = session.request('POST', url='{}/connect/account/{}/unlink'.format(self.url, partner_id), headers=connect_headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 401, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['otp_ready'] is True, "查询用户otp状态，otp已经绑定错误，返回值是{}".format(r.text)
-
-    @allure.title('test_connect_account_013 成功解绑+name match用户 pass')
-    def test_connect_account_013(self):
-        with allure.step("准备参数"):
-            partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='nin0ii@yeah.net')
-            #account_id = 'c3e44bb8-a6fb-425e-9a96-23f70ba15659'
-        with allure.step("unlink the cabital connect"):
-            r = session.request('POST', url='{}/connect/account/{}/unlink'.format(self.url, partner_id), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-            if r.status_code == 200:
-                assert r.json() == {}, "unlink the cabital connect错误，返回值是{}".format(r.text)
-            elif r.status_code == 400:
-                assert r.json()['code'] == '109001', "unlink the cabital connect错误，返回值是{}".format(r.text)
-        with allure.step("name match 数据"):
-            data = {
-                'name': 'alice333 wang222',
-                'id': '14666',
-                'id_document': 'PASSPORT',
-                'issued_by': 'HKG',
-                'dob': '19980202'
-            }
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data))
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
-            print(connect_headers)
-        with allure.step("name match"):
-            r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)
+    # @allure.title('test_connect_account_012 使用错误account_id导致解除绑定失败')
+    # def test_connect_account_012(self):
+    #     with allure.step("测试用户的account_id"):
+    #         partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']
+    #     with allure.step("验签"):
+    #         unix_time = int(time.time())
+    #         nonce = generate_string(30)
+    #         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/connect/account/{}/unlink'.format(partner_id), nonce=nonce)
+    #         connect_headers['ACCESS-SIGN'] = sign
+    #         connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+    #         connect_headers['ACCESS-NONCE'] = nonce
+    #     with allure.step("使用错误account_id导致解除绑定失败"):
+    #         r = session.request('POST', url='{}/connect/account/{}/unlink'.format(self.url, partner_id), headers=connect_headers)
+    #     with allure.step("状态码和返回值"):
+    #         logger.info('状态码是{}'.format(str(r.status_code)))
+    #         logger.info('返回值是{}'.format(str(r.text)))
+    #     with allure.step("校验状态码"):
+    #         assert r.status_code == 401, "http状态码不对，目前状态码是{}".format(r.status_code)
+    #     with allure.step("校验返回值"):
+    #         assert r.json()['otp_ready'] is True, "查询用户otp状态，otp已经绑定错误，返回值是{}".format(r.text)
+    #
+    # @allure.title('test_connect_account_013 成功解绑+name match用户 pass')
+    # def test_connect_account_013(self):
+    #     with allure.step("准备参数"):
+    #         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='richard.wan@cabital.com')
+    #         account_id = '96f29441-feb4-495a-a531-96c833e8261a'
+    #     with allure.step("name match 数据"):
+    #         data = {
+    #             'name': 'Wan yilei',
+    #             'id': 'sw478956',
+    #             'id_document': 'ID',
+    #             'issued_by': 'HKG',
+    #             'dob': '19800202'
+    #         }
+    #     with allure.step("验签"):
+    #         unix_time = int(time.time())
+    #         nonce = generate_string(30)
+    #         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data))
+    #         connect_headers['ACCESS-SIGN'] = sign
+    #         connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+    #         connect_headers['ACCESS-NONCE'] = nonce
+    #         print(connect_headers)
+    #     with allure.step("name match"):
+    #         r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
+    #     with allure.step("状态码和返回值"):
+    #         logger.info('状态码是{}'.format(str(r.status_code)))
+    #         logger.info('返回值是{}'.format(str(r.text)))
+    #     with allure.step("校验状态码"):
+    #         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+    #     with allure.step("校验返回值"):
+    #         assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)
 
     # @allure.title('test_connect_account_014 成功解绑+name match用户mismatch')
     # def test_connect_account_014(self):
