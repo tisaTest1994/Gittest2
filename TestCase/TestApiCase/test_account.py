@@ -13,6 +13,7 @@ class TestAccountApi:
             ApiFunction.add_headers()
 
     @allure.title('test_account_001 成功注册新用户')
+    @allure.severity("p1")
     def test_account_001(self):
         with allure.step("注册新用户"):
             data = {
