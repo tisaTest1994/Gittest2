@@ -12,10 +12,11 @@ class TestAccountApi:
         with allure.step("登录客户账户获得后续操作需要的token"):
             ApiFunction.add_headers()
 
-    @allure.title('test_account_001 成功注册新用户')
-    @allure.severity("p1")
+    @allure.title('test_account_001')
+    @allure.description('注册新用户')
+    @allure.severity("blocker")
     def test_account_001(self):
-        with allure.step("注册新用户"):
+        with allure.step("注册账户"):
             data = {
                 "emailAddress": generate_email(),
                 "verificationCode": "666666",
@@ -31,18 +32,16 @@ class TestAccountApi:
             assert 'accessToken' in r.text, "注册新用户失败，返回值是{}".format(r.text)
             assert r.json()['refreshExpiresTn'] == 86400, "token过期时间不是24小时，返回值是{}".format(r.text)
 
-    @allure.title('test_account_002 注册用户时，用户已经存在（正常流程不会存在此问题）')
+    @allure.title('test_account_002')
+    @allure.description('注册用户时，用户已经存在')
     def test_account_002(self):
         account = generate_email()
-        with allure.step("提前先注册好"):
+        with allure.step("提前注册一个账户"):
             ApiFunction.sign_up(account)
-        with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
-        with allure.step("注册"):
+        with allure.step("使用同一个地址继续注册"):
             data = {
                 "emailAddress": account,
                 "verificationCode": "666666",
-                "citizenCountryCode": citizenCountryCode,
                 "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
@@ -54,12 +53,13 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert 'Registration failed. Please contact our customer service if the problem persists.' in r.text, "用户已经存在错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_003 注册时，输入错误验证码导致注册失败')
+    @allure.title('test_account_003')
+    @allure.description('注册时输入错误验证码导致注册失败')
     def test_account_003(self):
-        with allure.step("注册"):
+        with allure.step("注册时输入错误验证码"):
             data = {
                 "emailAddress": generate_email(),
-                "verificationCode": "166666",
+                "verificationCode": "126656",
                 "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
@@ -71,7 +71,26 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert 'The verification code was wrong' in r.text, "注册时，输入错误验证码导致注册失败，返回值是{}".format(r.text)
 
+    @allure.title('test_account_004')
+    @allure.description('注册时输入小于8位密码')
+    def test_account_004(self):
+        with allure.step("注册时输入错误验证码"):
+            data = {
+                "emailAddress": generate_email(),
+                "verificationCode": "666666",
+                "password": 'zcs1'
+            }
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['code'] == '001003', "注册时输入小于8位密码失败，返回值是{}".format(r.text)
+
     @allure.title('test_account_007 登录已经注册账号')
+    @allure.description('登录已经注册账号')
     def test_account_007(self):
         account = get_json()['email']['email']
         with allure.step("登录已经注册账号"):
