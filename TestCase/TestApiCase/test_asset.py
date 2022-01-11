@@ -2,6 +2,7 @@ from Function.api_function import *
 from Function.operate_sql import *
 
 
+@allure.feature("mobile api asset 相关 testcases")
 class TestAssetApi:
 
     # 初始化class
@@ -9,8 +10,6 @@ class TestAssetApi:
         ApiFunction.add_headers()
 
     @allure.title('test_asset_001 查询每个币种当前资产市值')
-    @pytest.mark.multiprocess
-    @pytest.mark.pro
     def test_asset_001(self):
         crypto_list = get_json()['crypto_list']
         with allure.step("查询每个币种当前资产市值"):

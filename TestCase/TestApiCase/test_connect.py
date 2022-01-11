@@ -2,7 +2,7 @@ from Function.api_function import *
 from Function.operate_sql import *
 
 
-# convert相关cases
+@allure.feature("mobile api connect 相关 testcases")
 class TestConnectApi:
     url = get_json()['connect'][get_json()['env']]['url']
 

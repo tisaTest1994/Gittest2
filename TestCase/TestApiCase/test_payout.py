@@ -1,9 +1,8 @@
-import json
-
 from Function.api_function import *
 from Function.operate_sql import *
 
 
+@allure.feature("mobile api payout 相关 testcases")
 class TestPayoutApi:
 
     # 初始化class

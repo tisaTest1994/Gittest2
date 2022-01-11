@@ -4,7 +4,7 @@ from Function.api_function import *
 from Function.operate_sql import *
 
 
-@allure.feature("account 相关 testcases")
+@allure.feature("mobile api account 相关 testcases")
 class TestAccountApi:
 
     # 初始化class
@@ -14,7 +14,6 @@ class TestAccountApi:
 
     @allure.title('test_account_001')
     @allure.description('注册新用户')
-    @allure.severity("blocker")
     def test_account_001(self):
         with allure.step("注册账户"):
             data = {
@@ -89,9 +88,27 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['code'] == '001003', "注册时输入小于8位密码失败，返回值是{}".format(r.text)
 
-    @allure.title('test_account_007 登录已经注册账号')
+    @allure.title('test_account_005')
+    @allure.description('注册时输入不是邮箱的账号')
+    def test_account_005(self):
+        with allure.step("注册时输入不是邮箱的账号"):
+            data = {
+                "emailAddress": 'zdsadqwdqweqe',
+                "verificationCode": "666666",
+                "password": get_json()['email']['password']
+            }
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['code'] == '000006', "注册时输入不是邮箱的账号失败，返回值是{}".format(r.text)
+
+    @allure.title('test_account_006 登录已经注册账号')
     @allure.description('登录已经注册账号')
-    def test_account_007(self):
+    def test_account_006(self):
         account = get_json()['email']['email']
         with allure.step("登录已经注册账号"):
             data = {

@@ -2,7 +2,7 @@ from Function.api_function import *
 from Function.operate_sql import *
 
 
-# market相关cases
+@allure.feature("mobile api market 相关 testcases")
 class TestMarketApi:
 
     # 初始化

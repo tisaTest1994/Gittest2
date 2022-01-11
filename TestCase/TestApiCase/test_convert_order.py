@@ -2,7 +2,7 @@ from Function.api_function import *
 from Function.operate_sql import *
 
 
-# convert order相关cases
+@allure.feature("mobile api convert order 相关 testcases")
 class TestConvertOrderApi:
 
     # 初始化class

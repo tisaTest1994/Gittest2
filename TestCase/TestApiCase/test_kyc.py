@@ -2,7 +2,7 @@ from Function.api_function import *
 from Function.operate_sql import *
 
 
-# kyc相关cases
+@allure.feature("mobile api kyc 相关 testcases")
 class TestKycApi:
     # 初始化class
     def setup_method(self):

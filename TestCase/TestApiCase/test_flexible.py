@@ -2,7 +2,7 @@ from Function.api_function import *
 from Function.operate_sql import *
 
 
-# saving相关cases
+@allure.feature("mobile api flexible 相关 testcases")
 class TestFlexibleApi:
 
     # 初始化class
