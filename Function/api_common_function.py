@@ -233,9 +233,9 @@ def get_iban(iban):
 
 
 # 增加货币符号
-def add_currency_symbol(number, currency):
+def add_currency_symbol(number, currency, is_symbol=False):
+
     currency = currency.upper()
-    print(currency)
     if currency == 'USD':
         number = '$' + number
     elif currency == 'EUR':

@@ -104,8 +104,8 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['code'] == '000006', "注册时输入不是邮箱的账号失败，返回值是{}".format(r.text)
 
-    @allure.title('test_account_006 登录已经注册账号')
-    @allure.description('登录已经注册账号')
+    @allure.title('test_account_006')
+    @allure.description('登录已经注册账号获取accessToken')
     def test_account_006(self):
         account = get_json()['email']['email']
         with allure.step("登录已经注册账号"):
@@ -120,10 +120,11 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'accessToken' in r.text, "登录已经注册账号错误，返回值是{}".format(r.text)
+            assert 'accessToken' in r.text, "登录已经注册账号获取accessToken错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_009 登录未注册账号')
-    def test_account_009(self):
+    @allure.title('test_account_007')
+    @allure.description('登录未注册账号')
+    def test_account_007(self):
         with allure.step("登录未注册账号"):
             data = {
                 "username": generate_email(),
@@ -136,27 +137,29 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 404, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'Incorrect account or password.' in r.text, "登录已经注册账号输入错误密码错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001004', "登录未注册账号错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_010 登录已经注册的黑名单账号')
-    def test_account_010(self):
-        with allure.step("登录已经注册的黑名单账号"):
-            blacklist = get_json()['blacklist']
+    @allure.title('test_account_008')
+    @allure.description('使用错误密码登录账号')
+    def test_account_008(self):
+        account = get_json()['email']['email']
+        with allure.step("登录已经注册账号"):
             data = {
-                "username": blacklist['email'],
-                "password": blacklist['password']
+                "username": account,
+                "password": '11111111'
             }
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 404, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'accessToken' in r.text, "登录已经注册的黑名单账号错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001004', "登录已经注册账号错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_011 刷新账户token')
-    def test_account_011(self):
+    @allure.title('test_account_009')
+    @allure.description('刷新账户token')
+    def test_account_009(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token()
         with allure.step("获取refreshToken"):
             data = {
@@ -165,8 +168,7 @@ class TestAccountApi:
             }
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
             refreshToken = r.json()['refreshToken']
-            print(headers['Authorization'])
-        with allure.step("刷新tokne"):
+        with allure.step("刷新账户token"):
             data = {
                 "refreshToken": refreshToken
             }
@@ -179,8 +181,9 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert 'accessToken' in r.text, "刷新账户token错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_012 用错误的token刷新token')
-    def test_account_012(self):
+    @allure.title('test_account_010')
+    @allure.description('用错误的token刷新token')
+    def test_account_010(self):
         with allure.step("用错误的token刷新token"):
             data = {
                 "refreshToken": "123"
@@ -192,9 +195,10 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 401, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'Refresh token error' in r.text, "用错误的token刷新token错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001006', "用错误的token刷新token错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_013 用空的token刷新token')
+    @allure.title('test_account_011')
+    @allure.description('用空的token刷新token')
     def test_account_013(self):
         with allure.step("用空的token刷新token"):
             data = {
@@ -207,10 +211,11 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'Invalid refresh token' in r.text, "用空的token刷新token错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '000006', "用空的token刷新token错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_018 忘记密码')
-    def test_account_018(self):
+    @allure.title('test_account_014 忘记密码')
+    @allure.description('忘记密码')
+    def test_account_014(self):
         with allure.step("忘记密码"):
             account = generate_email()
             password = get_json()['email']['password']
@@ -219,7 +224,7 @@ class TestAccountApi:
             data = {
                 "code": "666666",
                 "email": account,
-                "password": get_json()['email']['password']
+                "password": "Abc112233"
             }
             r = session.request('POST', url='{}/account/user/forgetPassword'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
@@ -230,8 +235,9 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json() == {}, "忘记密码错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_019 未注册用户忘记密码失败')
-    def test_account_019(self):
+    @allure.title('test_account_015')
+    @allure.description('未注册用户忘记密码失败')
+    def test_account_015(self):
         with allure.step("未注册用户忘记密码失败"):
             data = {
                 "code": "666666",
@@ -245,10 +251,11 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "The verification code was wrong." in r.text, "未注册用户忘记密码失败错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001013', "未注册用户忘记密码失败错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_020 用户忘记密码验证码错误')
-    def test_account_020(self):
+    @allure.title('test_account_016')
+    @allure.description('用户忘记密码验证码错误')
+    def test_account_016(self):
         with allure.step("用户忘记密码验证码错误"):
             account = generate_email()
             password = get_json()['email']['password']
@@ -267,10 +274,11 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert "The verification code was wrong." in r.text, "用户忘记密码验证码错误错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001013', "用户忘记密码验证码错误错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_021 查询用户信息')
-    def test_account_021(self):
+    @allure.title('test_account_017')
+    @allure.description('查询用户信息')
+    def test_account_017(self):
         with allure.step("查询用户信息"):
             r = session.request('GET', url='{}/account/info'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
@@ -281,19 +289,16 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['user']['userId'] is not None, "查询用户信息错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_023 用户使用特殊符号注册')
-    def test_account_023(self):
-        with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
+    @allure.title('test_account_018')
+    @allure.description('用户使用特殊符号注册')
+    def test_account_018(self):
         with allure.step("注册"):
             data = {
                 "emailAddress": '%$#{}@dsadda.com'.format(generate_number(8)),
                 "verificationCode": "666666",
-                "citizenCountryCode": citizenCountryCode,
                 "password": get_json()['email']['password']
             }
-            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -302,15 +307,13 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert 'accessToken' in r.text, "用户使用特殊符号注册错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_024 注册用户验证码缺少位数输入')
-    def test_account_024(self):
-        with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
+    @allure.title('test_account_019')
+    @allure.description('注册用户验证码缺少位数输入')
+    def test_account_019(self):
         with allure.step("注册"):
             data = {
                 "emailAddress": generate_email(),
                 "verificationCode": "16666",
-                "citizenCountryCode": citizenCountryCode,
                 "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
@@ -320,17 +323,15 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'Invalid verification code' in r.text, "注册用户验证码缺少位数输入错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '000006', "注册用户验证码缺少位数输入错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_025 注册用户验证码输入字符')
-    def test_account_025(self):
-        with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
-        with allure.step("注册"):
+    @allure.title('test_account_020')
+    @allure.description('注册用户验证码输入字符')
+    def test_account_020(self):
+        with allure.step("注册用户"):
             data = {
                 "emailAddress": generate_email(),
-                "verificationCode": "dqwdqwd",
-                "citizenCountryCode": citizenCountryCode,
+                "verificationCode": "1234wd",
                 "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
@@ -340,40 +341,43 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'Invalid verification code' in r.text, "注册用户验证码输入字符错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001013', "注册用户验证码输入字符错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_028 获取opt二维码')
-    def test_account_028(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei1@163.com')
-        r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
-        ApiFunction.add_headers()
+    @allure.title('test_account_021')
+    @allure.description('获取opt二维码')
+    def test_account_021(self):
+        with allure.step("修改测试账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei1@163.com')
+            r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['totpSecret'] is not None, "获取opt二维码不对，目前返回值是{}".format(r.text)
+            assert r.json()['totpSecret'] is not None, "获取opt二维码失败，目前返回值是{}".format(r.text)
 
-    @allure.title('test_account_029 创建opt验证，并且删除。')
-    def test_account_029(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei3@163.com')
-        # 获得opt secretKey
-        r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
-        print(r.text)
-        if '001018' in r.text:
-            # 删除opt
-            secretKey = get_json()['secretKeyForTest']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            data = {
-                "mfaVerificationCode": str(mfaVerificationCode),
-                "emailVerificationCode": "666666"
-            }
-            session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data), headers=headers)
-            write_json('secretKeyForTest', ' ')
-        else:
+    @allure.title('test_account_022')
+    @allure.description('创建opt验证，并且删除')
+    def test_account_022(self):
+        with allure.step("修改测试账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei3@163.com')
+        with allure.step("获得opt secretKey"):
             r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
+        with allure.step("判断opt状态"):
+            if '001018' in r.text:
+                with allure.step("删除opt"):
+                    secretKey = get_json()['secretKeyForTest']
+                    totp = pyotp.TOTP(secretKey)
+                    mfaVerificationCode = totp.now()
+                    data = {
+                        "mfaVerificationCode": str(mfaVerificationCode),
+                        "emailVerificationCode": "666666"
+                    }
+                    session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data), headers=headers)
+                    write_json('secretKeyForTest', ' ')
+            else:
+                r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
         if r.status_code == 200:
             secretData = r.json()['totpSecret']
             secretKey = r.json()['uriParams']['secret']
@@ -407,13 +411,15 @@ class TestAccountApi:
             session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data), headers=headers)
             write_json('secretKeyForTest', ' ')
 
-    @allure.title('test_account_030 验证opt code')
-    def test_account_030(self):
-        # 验证opt code
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
-        secretKey = get_json()['secretKey']
-        totp = pyotp.TOTP(secretKey)
-        mfaVerificationCode = totp.now()
+    @allure.title('test_account_023')
+    @allure.description('验证opt code')
+    def test_account_023(self):
+        with allure.step("修改测试账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
+        with allure.step("验证opt code"):
+            secretKey = get_json()['secretKey']
+            totp = pyotp.TOTP(secretKey)
+            mfaVerificationCode = totp.now()
         data = {
             "totp": str(mfaVerificationCode)
         }
@@ -426,8 +432,9 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert {} == r.json(), " 验证opt code不对，目前返回值是{}".format(r.text)
 
-    @allure.title('test_account_031 接受隐私政策版本')
-    def test_account_031(self):
+    @allure.title('test_account_024')
+    @allure.description('接受隐私政策版本')
+    def test_account_024(self):
         data = {
             "privacyPolicyVersion": 20210528,
             "termOfServiceVersion": 20210528
@@ -460,17 +467,13 @@ class TestAccountApi:
 
     @allure.title('test_account_034 注册时，多输入几位验证码导致注册失败')
     def test_account_034(self):
-        with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
         with allure.step("注册"):
             data = {
                 "emailAddress": generate_email(),
                 "verificationCode": "1366666",
-                "citizenCountryCode": citizenCountryCode,
                 "password": get_json()['email']['password']
             }
-            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data),
-                                 headers=headers)
+            r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -505,13 +508,10 @@ class TestAccountApi:
 
     @allure.title('test_account_037 referal注册用户')
     def test_account_037(self):
-        with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
         with allure.step("注册"):
             data = {
                 "emailAddress": generate_email(),
                 "verificationCode": "666666",
-                "citizenCountryCode": citizenCountryCode,
                 "password": get_json()['email']['password'],
                 "metadata": {
                     "referral": {
@@ -702,7 +702,6 @@ class TestAccountApi:
                 "emailAddress": account,
                 "password": password,
                 "verificationCode": "666666",
-                "citizenCountryCode": random.choice(get_json()['citizenCountryCodeList']),
                 "metadata": {
                     "referral": {
                         "code": "metadata_test"
@@ -769,7 +768,6 @@ class TestAccountApi:
                 "emailAddress": account,
                 "password": password,
                 "verificationCode": "666666",
-                "citizenCountryCode": random.choice(get_json()['citizenCountryCodeList']),
                 "metadata": {
                     "userType": "INTERNAL"
                 }
