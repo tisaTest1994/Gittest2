@@ -2,34 +2,43 @@ from Function.web_function import *
 from Function.api_function import *
 
 
-class TestWebCassApi:
+@allure.feature("web ui asset 相关 testcases")
+class TestWebAssetApi:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']
+    currency = ''
 
     # 初始化class
     def setup_method(self):
-        ApiFunction.add_headers()
-        self.driver = webFunction.launch_web(self.web_url)
-        webFunction.login_web(self.driver)
+        with allure.step("登录客户账户获得后续操作需要的token"):
+            ApiFunction.add_headers()
+        with allure.step("获取用户偏好设置"):
+            r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
+            self.currency = r.json()['currency']
+            headers['X-Currency'] = self.currency
+        with allure.step("获得driver"):
+            self.driver = webFunction.launch_web(self.web_url)
+        with allure.step("登录"):
+            webFunction.login_web(self.driver)
 
     def teardown_method(self):
-        webFunction.logout_web(self.driver)
-        self.driver.close()
+        with allure.step("登出"):
+            webFunction.logout_web(self.driver)
+        with allure.step("关闭driver"):
+            self.driver.close()
 
     @allure.title('test_web_asset_001 查询Total Asset Value')
     def test_web_asset_001(self):
         with allure.step("通过api获得Total Asset Value数据"):
-            headers['X-Currency'] = 'USD'
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
             abs_amount = r.json()['summary']['abs_amount']
         with allure.step("通过页面获得Total Asset Value数据"):
             page_abs_amount = get_element_text(self.driver, 'assetPage', 'assets-overview-amount')
-        assert '$' + str(abs_amount) == str(page_abs_amount), "Total Asset Value后端接口返回{},页面上显示{}".format(abs_amount, page_abs_amount)
+        assert add_comma_number(add_currency_symbol(str(abs_amount), currency=self.currency)) == str(page_abs_amount), "Total Asset Value后端接口返回{},页面上显示{}".format(abs_amount, page_abs_amount)
 
     @allure.title('test_web_asset_002 查询Total Balance Value')
     def test_web_asset_002(self):
         with allure.step("通过api获得Total Balance Value数据"):
-            headers['X-Currency'] = 'USD'
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
             balance_list = r.json()['assets']
             for i in balance_list:
@@ -37,7 +46,7 @@ class TestWebCassApi:
                     abs_amount = i['abs_amount']
         with allure.step("通过页面获得Total Balance Value数据"):
             page_abs_amount = get_element_text(self.driver, 'assetPage', 'assets-balance-amount')
-        assert '$' + str(abs_amount) == str(page_abs_amount), "Total Balance Value后端接口返回{},页面上显示{}".format(abs_amount, page_abs_amount)
+        assert add_comma_number(add_currency_symbol(str(abs_amount), currency=self.currency)) == str(page_abs_amount), "Total Balance Value后端接口返回{},页面上显示{}".format(abs_amount, page_abs_amount)
 
     @allure.title('test_web_asset_003 检查每个币种balance的分类金额')
     def test_web_asset_003(self):

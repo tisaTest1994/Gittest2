@@ -7,15 +7,22 @@ from Function.api_common_function import *
 # 获取测试结果
 def get_test_result():
     # 读report
-    with open('Reports/html/data/behaviors.csv')as f:
-        f_csv = csv.reader(f)
-        result = {}
-        for row in f_csv:
-            result['PASSED'] = row[5]
-            result['FAILED'] = row[3]
-            result['BROKEN'] = row[4]
-            result['SKIPPED'] = row[6]
-        result['Total'] = int(result['PASSED']) + int(result['FAILED']) + int(result['BROKEN']) + int(result['SKIPPED'])
+    path = os.path.split(os.path.realpath(__file__))[0] + '/../Reports/html/data/behaviors.csv'
+    result = {
+        'PASSED': 0,
+        'FAILED': 0,
+        'BROKEN': 0,
+        'SKIPPED': 0
+    }
+    with open(path)as f:
+        reader = csv.DictReader(f)
+        column = [row for row in reader]
+        for i in column:
+            result['PASSED'] = result['PASSED'] + int(i['PASSED'])
+            result['FAILED'] = result['FAILED'] + int(i['FAILED'])
+            result['BROKEN'] = result['BROKEN'] + int(i['BROKEN'])
+            result['SKIPPED'] = result['SKIPPED'] + int(i['SKIPPED'])
+    result['Total'] = int(result['PASSED']) + int(result['FAILED']) + int(result['BROKEN']) + int(result['SKIPPED'])
     return result
 
 

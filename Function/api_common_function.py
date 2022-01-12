@@ -230,3 +230,40 @@ def get_iban(iban):
         elif iban in ['MT', 'SC']:
             iban = '{}{}{}'.format(iban, generate_number(2), generate_string(27))
         return iban
+
+
+# 增加货币符号
+def add_currency_symbol(number, currency):
+    currency = currency.upper()
+    print(currency)
+    if currency == 'USD':
+        number = '$' + number
+    elif currency == 'EUR':
+        number = '€' + number
+    elif currency == 'GBP':
+        number = '￡' + number
+    else:
+        number = '$' + number
+    return number
+
+
+# 数量加入,
+def add_comma_number(number):
+    if '.' in str(number):
+        number_int = str(number).split('.')[0]
+        number_radix = str(number).split('.')[1]
+    else:
+        number_int = str(number)
+        number_radix = ''
+    count = 0
+    sumstr = ''
+    for one_str in number_int[::-1]:  # 注意循环是倒着输出的
+        count += 1  # 计数
+        if count % 3 == 0 and count != len(number_int):  # 如果count等于3或3的倍数并且不等于总长度
+            one_str = ',' + one_str  # 当前循环的字符串前面加逗号
+            sumstr = one_str + sumstr  # 拼接当前字符串
+        else:
+            sumstr = one_str + sumstr  # 正常拼接字符串
+    if number_radix != '':
+        sumstr = sumstr + '.' + number_radix
+    return sumstr

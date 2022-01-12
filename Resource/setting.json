@@ -458,15 +458,10 @@
   "secretKeyForTest": " ",
   "slackUrl": "https://hooks.slack.com/services/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",
   "test": "https://api.latibac.com/api/v1",
-  "web": {
-    "test": {
-      "account": "richard.wan@cabital.com",
-      "password": "Zcdsw123",
-      "url": "https://portal.latibac.com/"
-    }
-  },
   "transaction_type": {
     "1": "Deposit",
+    "10": "",
+    "11": "",
     "2": "Convert",
     "3": "Subscribe",
     "4": "Interest",
@@ -474,8 +469,13 @@
     "6": "Withdraw",
     "7": "Reward",
     "8": "Transfer",
-    "9": "",
-    "10": "",
-    "11": ""
+    "9": ""
+  },
+  "web": {
+    "test": {
+      "account": "richard.wan@cabital.com",
+      "password": "Zcdsw123",
+      "url": "https://portal.latibac.com/"
+    }
   }
 }
