@@ -108,14 +108,17 @@ class TestWebAssetApi:
                             with allure.step("验证Accruing Amount"):
                                 assert add_currency_symbol(r.json()['accruing_amount']['amount'], currency=currency_type) == flexible_dict[currency_type][2], 'API获得的Accruing Amount是{},Page获得的Accruing Amount是{}'.format(r.json()['accruing_amount']['amount'], flexible_dict[currency_type][2])
                             with allure.step("验证Yesterday Interest"):
-                                assert add_currency_symbol(r.json()['today_yield']['amount'], currency=currency_type) == flexible_dict[currency_type][3], 'API获得的Yesterday Interest是{},Page获得的Yesterday Interest是{}'.format(r.json()['today_yield']['amount'], flexible_dict[currency_type][3])
+                                if r.json()['today_yield']['amount'] == '-1':
+                                    assert flexible_dict[currency_type][3] == '--', 'Page获得的Yesterday Interest是{}'.format(flexible_dict[currency_type][3])
+                                else:
+                                    assert add_currency_symbol(r.json()['today_yield']['amount'], currency=currency_type) == flexible_dict[currency_type][3], 'API获得的Yesterday Interest是{},Page获得的Yesterday Interest是{}'.format(r.json()['today_yield']['amount'], flexible_dict[currency_type][3])
                             with allure.step("验证Subscribe Today"):
                                 assert add_currency_symbol(r.json()['subscribing_amount']['amount'], currency=currency_type) == flexible_dict[currency_type][4], 'API获得的Subscribe Today是{},Page获得的Subscribe Today是{}'.format(r.json()['subscribing_amount']['amount'], flexible_dict[currency_type][4])
                             with allure.step("验证Redeeming"):
                                 assert add_currency_symbol(r.json()['redeeming_amount']['amount'], currency=currency_type) == flexible_dict[currency_type][5], 'API获得的Redeeming是{},Page获得的Redeeming是{}'.format(r.json()['redeeming_amount']['amount'], flexible_dict[currency_type][5])
 
-    @allure.title('test_web_asset_006 查询flexible Savings数据')
-    def test_web_asset_006(self):
-        with allure.step("点击Fixed Savings"):
-            operate_element(self.driver, 'assetPage', 'simple-tab-1')
-            print(get_element_text(self.driver, 'assetPage', 'assets-fixed-table'))
+    # @allure.title('test_web_asset_006 查询flexible Savings数据')
+    # def test_web_asset_006(self):
+    #     with allure.step("点击Fixed Savings"):
+    #         operate_element(self.driver, 'assetPage', 'simple-tab-1')
+    #         print(get_element_text(self.driver, 'assetPage', 'assets-fixed-table'))
