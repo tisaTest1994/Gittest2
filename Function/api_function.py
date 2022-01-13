@@ -72,8 +72,9 @@ class ApiFunction:
         }
         r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
                             headers=headers)
-        logger.info('获取的交易订单json是{}'.format(r.text))
-        ApiFunction.add_headers()
+        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        assert r.json()['transaction_id'] is not None, "payout币种是{}，金额是{}错误，返回值是{}".format(data['code'], data['amount'], r.text)
+        sleep(30)
         return r.json()['transaction_id']
 
     # 获取下次清算金额

@@ -73,17 +73,10 @@ class TestWebAssetApi:
     @allure.title('test_web_asset_004 查询Total Saving Amount')
     def test_web_asset_004(self):
         with allure.step("通过api获得Total Saving Amount数据"):
-            r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
-            balance_list = r.json()['assets']
-            for i in balance_list:
-                if i['type'] == 'SAVING':
-                    saving_amount = i['abs_amount']
-                elif i['type'] == 'SAVING-FIX':
-                    saving_fix_amount = i['abs_amount']
-            abs_amount = Decimal(saving_amount) + Decimal(saving_fix_amount)
+            r = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
         with allure.step("通过页面获得Total Asset Value数据"):
             page_abs_amount = get_element_text(self.driver, 'assetPage', 'assets-earn-amount')
-        assert add_currency_symbol(str(abs_amount), currency=self.currency, is_symbol=True) == str(page_abs_amount), "Total Saving Amount后端接口返回{},页面上显示{}".format(abs_amount, page_abs_amount)
+        assert add_currency_symbol(str(r.json()['total_holding']), currency=self.currency, is_symbol=True) == str(page_abs_amount), "Total Saving Amount后端接口返回{},页面上显示{}".format(str(r.json()['total_holding']), page_abs_amount)
 
     @allure.title('test_web_asset_005 查询flexible Savings数据')
     def test_web_asset_005(self):

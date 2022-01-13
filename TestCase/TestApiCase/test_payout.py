@@ -9,7 +9,8 @@ class TestPayoutApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.title('test_payout_001 没有Kyc用户添加常用收款地址失败')
+    @allure.title('test_payout_001')
+    @allure.description('没有Kyc用户添加常用收款地址失败')
     def test_payout_001(self):
         account = generate_email()
         password = get_json()['email']['password']
@@ -33,9 +34,10 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 403, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'ACC_FORBIDDEN' in r.text, "没有Kyc用户添加常用收款地址失败错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == 'ACC_FORBIDDEN', "没有Kyc用户添加常用收款地址失败错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_002 获取存储的常用收款地址list')
+    @allure.description('获取存储的常用收款地址list')
     def test_payout_002(self):
         with allure.step("获取存储的常用收款地址list"):
             r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
@@ -47,7 +49,8 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert r.json()['payeeList'] is not None, "获取存储的常用收款地址list错误，返回值是{}".format(r.text)
 
-    @allure.title('test_payout_003 获取某个常用收款地址')
+    @allure.title('test_payout_003')
+    @allure.description('获取某个常用收款地址')
     def test_payout_003(self):
         with allure.step("获取收款地址list"):
             r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
@@ -63,7 +66,8 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert r.json()['payeeList'] is not None, "获取某个常用收款地址错误，返回值是{}".format(r.text)
 
-    @allure.title('test_payout_004 使用不存在id获取常用收款地址')
+    @allure.title('test_payout_004')
+    @allure.description('使用不存在id获取常用收款地址')
     def test_payout_004(self):
         with allure.step("使用不存在id获取常用收款地址"):
             r = session.request('GET', url='{}/account/myPayee/{}'.format(env_url, '1111300'), headers=headers)
@@ -73,10 +77,10 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'This address is not exist, please refresh and retry.' in r.text, "使用不存在id获取常用收款地址错误，返回值是{}".format(
-                r.text)
+            assert r.json()['code'] == '0010015', "使用不存在id获取常用收款地址错误，返回值是{}".format(r.text)
 
-    @allure.title('test_payout_005 删除不存在的收款地址')
+    @allure.title('test_payout_005')
+    @allure.description('删除不存在的收款地址')
     def test_payout_005(self):
         with allure.step("凭借空id号删除地址"):
             r = session.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, '123131300'), headers=headers)
@@ -86,9 +90,10 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'This address is not exist, please refresh and retry.' in r.text, "删除收款地址错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '0010015', "删除收款地址错误，返回值是{}".format(r.text)
 
-    @allure.title('test_payout_006 获取提现费率和提现限制')
+    @allure.title('test_payout_006')
+    @allure.description('获取提现费率和提现限制')
     def test_payout_006(self):
         with allure.step("获取提现费率和提现限制"):
             data = {
@@ -105,26 +110,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert '"code":"ETH"' in r.text, "获取提现费率和提现限制错误，返回值是{}".format(r.text)
-
-    @allure.title('test_payout_007 MFA认证提现ETH成功')
-    def test_payout_007(self):
-        transaction_id = ApiFunction.get_payout_transaction_id(amount='0.01',
-                                                               address='0x0f841561A9e5c95926b234FC5fA12cDcf9BEB378',
-                                                               code_type='ETH')
-        logger.info('transaction_id是{}'.format(transaction_id))
-        # with allure.step("p/l验证"):
-        #     sleep(5)
-        #     sql = "select * from transaction_history where transaction_id='{}';".format(transaction_id)
-        #     logger.info(sql)
-        #     sql_info = sqlFunction.connect_mysql(db='assetstat', sql=sql)
-        #     assert sql_info[0] is not None, "payout的P/L错误，sql命令是{}".format(sql)
-        # with allure.step("wallet internal_balance验证"):
-        #     sleep(5)
-        #     sql = "select wallet_id from internal_balance where transaction_id='{}';".format(transaction_id)
-        #     sql_info = sqlFunction.connect_mysql(db='wallet', sql=sql)
-        #     for i in sql_info:
-        #         assert i['wallet_id'] is not None, "payout的P/L错误，sql命令是{}".format(sql)
+            assert r.json()['code'] == 'ETH', "获取提现费率和提现限制错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_008 查询提现详情')
     def test_payout_008(self):
@@ -541,3 +527,22 @@ class TestPayoutApi:
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json()['code'] == '103031', "USDT确认Crypto提现交易超过每日限额错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_028 MFA认证提现ETH成功')
+    def test_payout_028(self):
+        ApiFunction.get_payout_transaction_id(amount='0.01', address='0x0f841561A9e5c95926b234FC5fA12cDcf9BEB378', code_type='ETH')
+
+    @allure.title('test_payout_029 MFA认证提现BTC成功')
+    def test_payout_029(self):
+        ApiFunction.get_payout_transaction_id(amount='0.01', address='tb1q3fhjd9f0th907cuym9dtyzpy3zu9tn6205jhwm', code_type='BTC')
+
+    @allure.title('test_payout_030 MFA认证提现USDT成功')
+    def test_payout_030(self):
+        ApiFunction.get_payout_transaction_id(amount='30.01', address='0x0f841561A9e5c95926b234FC5fA12cDcf9BEB378', code_type='USDT')
+
+    @allure.title('test_payout_031 MFA认证提现USDC成功')
+    def test_payout_031(self):
+        ApiFunction.get_payout_transaction_id(amount='40.11', address='0x0f841561A9e5c95926b234FC5fA12cDcf9BEB378', code_type='USDC')
+
+
+
