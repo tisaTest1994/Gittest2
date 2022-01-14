@@ -420,10 +420,11 @@ class TestAccountApi:
             secretKey = get_json()['secretKey']
             totp = pyotp.TOTP(secretKey)
             mfaVerificationCode = totp.now()
-        data = {
-            "totp": str(mfaVerificationCode)
-        }
-        r = session.request('POST', url='{}/account/security/mfa/otp/verify'.format(env_url), data=json.dumps(data), headers=headers)
+            data = {
+                "totp": str(mfaVerificationCode)
+            }
+            r = session.request('POST', url='{}/account/security/mfa/otp/verify'.format(env_url), data=json.dumps(data),
+                                headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -445,13 +446,15 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert {} == r.json(), "接受隐私政策版本不对，目前返回值是{}".format(r.text)
 
-    @allure.title('test_account_032 查询最新隐私政策版本')
-    def test_account_032(self):
-        r = session.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
-        data = {
-            "privacyPolicyVersion": r.json()['privacyPolicyVersion'],
-            "termOfServiceVersion": r.json()['termOfServiceVersion']
-        }
+    @allure.title('test_account_025')
+    @allure.description('查询最新隐私政策版本')
+    def test_account_025(self):
+        with allure.step("查询最新隐私政策版本"):
+            r = session.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
+            data = {
+                "privacyPolicyVersion": r.json()['privacyPolicyVersion'],
+                "termOfServiceVersion": r.json()['termOfServiceVersion']
+            }
         session.request('POST', url='{}/account/setting/privacy'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -460,14 +463,15 @@ class TestAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'privacyPolicyVersion' in r.text, "查询最新隐私政策版本不对，目前返回值是{}".format(r.text)
-            # 查询用户信息
+        with allure.step("查询用户信息"):
             r1 = session.request('GET', url='{}/account/info'.format(env_url), headers=headers)
             assert r.json()['privacyPolicyVersion'] == r1.json()['user']['userPrivacyPolicy']['privacyPolicyVersion'], 'privacyPolicyVersion最新版本和个人接受版本不匹配'
             assert r.json()['termOfServiceVersion'] == r1.json()['user']['userPrivacyPolicy']['termOfServiceVersion'], 'termOfServiceVersion最新版本和个人接受版本不匹配'
 
-    @allure.title('test_account_034 注册时，多输入几位验证码导致注册失败')
-    def test_account_034(self):
-        with allure.step("注册"):
+    @allure.title('test_account_026')
+    @allure.description('注册时多输入几位验证码导致注册失败')
+    def test_account_026(self):
+        with allure.step("注册时多输入几位验证码导致注册失败"):
             data = {
                 "emailAddress": generate_email(),
                 "verificationCode": "1366666",
@@ -480,10 +484,11 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'Invalid verification code' in r.text, "注册时，输入错误验证码导致注册失败，返回值是{}".format(r.text)
+            assert r.json()['code'] == '000006', "注册时，输入错误验证码导致注册失败，返回值是{}".format(r.text)
 
-    @allure.title('test_account_035 获得邀请人数和奖励')
-    def test_account_035(self):
+    @allure.title('test_account_027')
+    @allure.description('获得邀请人数和奖励')
+    def test_account_027(self):
         with allure.step("获得邀请人数和奖励"):
             r = session.request('GET', url='{}/recruit/referal/referees'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
@@ -492,7 +497,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'count' in r.json().keys(), "获得邀请人数和奖励失败，返回值是{}".format(r.text)
+            assert r.json()['count'] is not None, "获得邀请人数和奖励失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_036 获得邀请码和链接')
     def test_account_036(self):

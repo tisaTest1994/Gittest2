@@ -267,7 +267,7 @@ def add_currency_symbol(number, currency, is_symbol=False):
         elif currency == 'EUR':
             sumstr = '€' + sumstr
         elif currency == 'GBP':
-            sumstr = '￡' + sumstr
+            sumstr = '£' + sumstr
         else:
             sumstr = '$' + sumstr
     return sumstr
