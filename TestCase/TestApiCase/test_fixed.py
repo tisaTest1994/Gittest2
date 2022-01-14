@@ -85,7 +85,7 @@ class TestFixedApi:
                     data = {
                         "subscribe_amount": {
                             "code": i["code"],
-                            "amount": "0.00124"
+                            "amount": "0.13"
                         },
                         "maturity_interest": {
                             "code": i["code"],
@@ -134,7 +134,7 @@ class TestFixedApi:
                     data = {
                         "subscribe_amount": {
                             "code": i["code"],
-                            "amount": "0.0224"
+                            "amount": "0.13"
                         },
                         "maturity_interest": {
                             "code": i["code"],
@@ -183,7 +183,7 @@ class TestFixedApi:
                     data = {
                         "subscribe_amount": {
                             "code": i["code"],
-                            "amount": "22"
+                            "amount": "50"
                         },
                         "maturity_interest": {
                             "code": i["code"],
