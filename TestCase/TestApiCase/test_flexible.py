@@ -7,7 +7,8 @@ class TestFlexibleApi:
 
     # 初始化class
     def setup_method(self):
-        ApiFunction.add_headers()
+        with allure.step("登录客户账户获得后续操作需要的token"):
+            ApiFunction.add_headers()
 
     @allure.title('test_flexible_001 获取产品列表')
     def test_flexible_001(self):

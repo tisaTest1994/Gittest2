@@ -8,9 +8,11 @@ class TestConnectApi:
 
     # 初始化class
     def setup_method(self):
-        ApiFunction.add_headers()
+        with allure.step("登录客户账户获得后续操作需要的token"):
+            ApiFunction.add_headers()
 
-    @allure.title('test_connect_001 获取合作方配置')
+    @allure.title('test_connect_001')
+    @allure.description('获取合作方配置')
     def test_connect_001(self):
         with allure.step("获取合作方配置"):
             r = session.request('GET', url='{}/connect/{}/transfer/limit'.format(self.url, get_json()['connect'][
@@ -23,7 +25,8 @@ class TestConnectApi:
             with allure.step("校验返回值"):
                 assert r.json()['crypto'] is not None, "获取合作方配置错误，返回值是{}".format(r.text)
 
-    @allure.title('test_connect_002 transfer 预校验')
+    @allure.title('test_connect_002')
+    @allure.description('transfer 预校验')
     def test_connect_002(self):
         with allure.step("获取合作方配置"):
             r = session.request('GET', url='{}/connect/{}/transfer/limit'.format(self.url, get_json()['connect'][
@@ -45,7 +48,8 @@ class TestConnectApi:
                 with allure.step("校验返回值"):
                     assert r.json() == {}, "transfer 预校验错误，返回值是{}".format(r.text)
 
-    @allure.title('test_connect_003 transfer 预校验小于最小值')
+    @allure.title('test_connect_003')
+    @allure.description('transfer 预校验小于最小值')
     def test_connect_003(self):
         with allure.step("获取合作方配置"):
             r = session.request('GET', url='{}/connect/{}/transfer/limit'.format(self.url, get_json()['connect'][
@@ -68,6 +72,7 @@ class TestConnectApi:
                     assert r.json()['code'] == 'PA003', "transfer 预校验小于最小值错误，返回值是{}".format(r.text)
 
     @allure.title('test_connect_004 transfer 交易')
+    @allure.description('transfer 交易')
     def test_connect_004(self):
         with allure.step("指定account"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
@@ -106,7 +111,8 @@ class TestConnectApi:
                     wallet_balance_latest = ApiFunction.get_crypto_number(type=i['symbol'])
                 assert Decimal(wallet_balance_old) - Decimal(data['amount']) == Decimal(wallet_balance_latest), 'transfer币种是{},transfer前金额是{},transfer金额是{}，transfer后金额是{}'.format(i['symbol'], wallet_balance_old, data['amount'], wallet_balance_latest)
 
-    @allure.title('test_connect_005 transfer 交易小于最小值')
+    @allure.title('test_connect_005')
+    @allure.description('transfer 交易小于最小值')
     def test_connect_005(self):
         with allure.step("指定account"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
