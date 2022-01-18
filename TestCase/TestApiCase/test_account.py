@@ -499,8 +499,9 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['count'] is not None, "获得邀请人数和奖励失败，返回值是{}".format(r.text)
 
-    @allure.title('test_account_036 获得邀请码和链接')
-    def test_account_036(self):
+    @allure.title('test_account_028')
+    @allure.description('获得邀请码和链接')
+    def test_account_028(self):
         with allure.step("获得邀请人数和奖励"):
             r = session.request('GET', url='{}/recruit/referal/code'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
@@ -511,8 +512,9 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['code'] is not None, "获得邀请人数和奖励失败，返回值是{}".format(r.text)
 
-    @allure.title('test_account_037 referal注册用户')
-    def test_account_037(self):
+    @allure.title('test_account_029')
+    @allure.description('referral注册用户')
+    def test_account_029(self):
         with allure.step("注册"):
             data = {
                 "emailAddress": generate_email(),
@@ -520,7 +522,7 @@ class TestAccountApi:
                 "password": get_json()['email']['password'],
                 "metadata": {
                     "referral": {
-                    "code": "6EM7LK"
+                        "code": "6EM7LK"
                     }
                 }
             }
@@ -539,8 +541,9 @@ class TestAccountApi:
             relation = sqlFunction.connect_mysql('referral', sql)
             assert relation[0]['relation'] == 1, '数据库查询值是{}'.format(relation)
 
-    @allure.title('test_account_038 查询指定版本的隐私政策')
-    def test_account_038(self):
+    @allure.title('test_account_030')
+    @allure.description('查询指定版本的隐私政策')
+    def test_account_030(self):
         with allure.step("获取最新隐私版本号"):
             r = session.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
         with allure.step("查询指定版本的隐私政策"):
@@ -554,10 +557,11 @@ class TestAccountApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert '"version":' in r.text, "查询指定版本的隐私政策失败，返回值是{}".format(r.text)
+                assert r.json()['version'] == 20210604, "查询指定版本的隐私政策失败，返回值是{}".format(r.text)
 
-    @allure.title('test_account_039 查询指定版本的服务条款')
-    def test_account_039(self):
+    @allure.title('test_account_031')
+    @allure.description('查询指定版本的服务条款')
+    def test_account_031(self):
         with allure.step("获取最新隐私版本号"):
             r = session.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
         with allure.step("查询指定版本的服务条款"):
@@ -571,10 +575,11 @@ class TestAccountApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert '"version":' in r.text, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
+                assert r.json()['version'] == 20210611, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
 
-    @allure.title('test_account_040 忘记密码并且验证code')
-    def test_account_040(self):
+    @allure.title('test_account_032')
+    @allure.description('忘记密码并且验证code')
+    def test_account_032(self):
         account = get_json()['email']['payout_email']
         with allure.step("发忘记密码邮件"):
             code = ApiFunction.get_verification_code('FORGET_PASSWORD', account)
@@ -582,8 +587,9 @@ class TestAccountApi:
             ApiFunction.verify_verification_code('FORGET_PASSWORD', account, code)
         ApiFunction.add_headers()
 
-    @allure.title('test_account_041 开启MFA且验证code')
-    def test_account_041(self):
+    @allure.title('test_account_033')
+    @allure.description('开启MFA且验证code')
+    def test_account_033(self):
         account = get_json()['email']['payout_email']
         with allure.step("开启MFA且验证code"):
             code = ApiFunction.get_verification_code('ENABLE_MFA', account)
