@@ -1,7 +1,7 @@
 .idea/
-*.pyc
 Reports/
 src/
+*.pyc
+Resource/multiple_languages*
 TestCase/TestWebCase/temp.jpg
-Resource/multiple_languages_web.json
-Resource/multiple_languages_app.json
+TestCase/TestAndroidCase/temp.jpg
