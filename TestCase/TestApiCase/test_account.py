@@ -280,6 +280,7 @@ class TestAccountApi:
     @allure.description('查询用户信息')
     def test_account_017(self):
         with allure.step("查询用户信息"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='mirana@test.com', password='Mirana123!')
             r = session.request('GET', url='{}/account/info'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -522,7 +523,7 @@ class TestAccountApi:
                 "password": get_json()['email']['password'],
                 "metadata": {
                     "referral": {
-                        "code": "6EM7LK"
+                        "code": "WP9KLV"
                     }
                 }
             }

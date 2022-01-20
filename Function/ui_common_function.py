@@ -13,13 +13,9 @@ def operate_element_app(page_name, element_string, type='click'):
             if type == 'click':
                 poco(text_string).click()
             elif type == 'check':
-                print(poco(text_string).exists())
                 return poco(text_string).exists()
     else:
         assert False, "page name {}在app_tree中不存在".format(page_name)
-
-
-click('welcomePage', 'Sign Up')
 
 
 # 查询页面元素存在
