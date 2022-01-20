@@ -16,7 +16,7 @@ class TestOperateApi:
         with allure.step("提现USDC成功"):
             data = {
                 "currency": "USDC",
-                "amount": "20",
+                "amount": "13.141592",
                 "destination": "0xF9C184974f2eAfE6d43A8A5f1c2799ee7517D5C5"
             }
             r = session.request('POST', url='{}/operatorapi/account/{}/withdraw'.format(operateUrl,
