@@ -3,4 +3,5 @@
 Reports/
 src/
 TestCase/TestWebCase/temp.jpg
-Resource/multiple_languages*
+Resource/multiple_languages_web.json
+Resource/multiple_languages_app.json
