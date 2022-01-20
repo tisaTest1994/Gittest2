@@ -311,7 +311,7 @@ class TestFlexibleApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'Minimum: 0.01 ETH' in r.text, "投资金额小于最小投资ETH数量错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == 'EARNINGTXN000009', "投资金额小于最小投资ETH数量错误，返回值是{}".format(r.text)
 
     @allure.title('test_flexible_010 投资金额小于最小投资USDT数量')
     def test_flexible_010(self):

@@ -557,7 +557,7 @@ class TestAccountApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['version'] == 20210604, "查询指定版本的隐私政策失败，返回值是{}".format(r.text)
+                assert r.json()['version'] == 20220118, "查询指定版本的隐私政策失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_031')
     @allure.description('查询指定版本的服务条款')
@@ -575,7 +575,7 @@ class TestAccountApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['version'] == 20210611, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
+                assert r.json()['version'] == 20220118, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_032')
     @allure.description('忘记密码并且验证code')

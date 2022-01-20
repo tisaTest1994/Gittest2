@@ -59,7 +59,6 @@ def generate_email(Type='random', rang='random'):
 # 获得资源里面的配置参数
 def get_json(file='setting.json'):
     path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/{}'.format(file)
-    print(path)
     with open(path, "rb+") as f:
         js = json.load(f)
     return js
