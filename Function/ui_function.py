@@ -16,6 +16,8 @@ class UiFunction:
             else:
                 with allure.step("开始登录流程"):
                     operate_element_app('welcomePage', 'Log In')
+        with allure.step("检查是否到达log in 页面"):
+            assert operate_element_app('loginPage', 'Welcome Back'), '没有到达{}页面或者找不到{}页面元素'.format('loginPage', 'Welcome Back')
             # # 检查到达welcome Back
             # check('CB306')
             # # 判断是否存在预设账户

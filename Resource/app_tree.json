@@ -6,5 +6,8 @@
   },
   "portfolioPage": {
     "Portfolio": "CB214"
+  },
+  "loginPage": {
+    "Welcome Back": "CB306"
   }
 }
