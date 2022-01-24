@@ -3,7 +3,8 @@
     "username": "id",
     "signinForm": "id",
     "sign_password_input": "id",
-    "login_login": "id"
+    "login_login": "id",
+    "username-helper-text": "id"
   },
   "assetPage": {
     "Cabital Logo": "alt",
