@@ -306,8 +306,12 @@
   "crypto_list": [
     "BTC",
     "USDT",
-    "ETH"
+    "ETH",
+    "USDC"
   ],
+  "websocket": {
+    "url": "wss://api.latibac.com/api/v1/realtime/ws"
+  },
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
     "email": "richard.wan@cabital.com",
@@ -478,5 +482,11 @@
       "url": "https://portal.latibac.com/",
       "code": "666666"
     }
+  },
+  "2B": {
+    "fixed_product": "eaa5595d-745e-11ec-ae7e-0a3898443cb8",
+    "flexible_product": "eaa55390-745e-11ec-ae7e-0a3898443cb8",
+    "mirana_account": "5661da70-a84f-4d49-adf0-1e7aebcd2820",
+    "txn_id": "8ef34912-4a45-46b2-aa31-235aa9ffbf8d"
   }
 }

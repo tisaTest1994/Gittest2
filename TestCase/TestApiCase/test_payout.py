@@ -539,10 +539,3 @@ class TestPayoutApi:
     @allure.title('test_payout_030 MFA认证提现USDT成功')
     def test_payout_030(self):
         ApiFunction.get_payout_transaction_id(amount='30.01', address='0x0f841561A9e5c95926b234FC5fA12cDcf9BEB378', code_type='USDT')
-
-    @allure.title('test_payout_031 MFA认证提现USDC成功')
-    def test_payout_031(self):
-        ApiFunction.get_payout_transaction_id(amount='40.11', address='0x0f841561A9e5c95926b234FC5fA12cDcf9BEB378', code_type='USDC')
-
-
-

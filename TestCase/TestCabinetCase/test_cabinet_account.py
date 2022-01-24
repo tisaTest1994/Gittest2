@@ -7,7 +7,9 @@ class TestCabinetAccountApi:
 
     # 初始化class
     def setup_method(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['operate_admin_account']['email'], password=get_json()['operate_admin_account']['password'], type='operate')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+            account=get_json()['operate_admin_account']['email'],
+            password=get_json()['operate_admin_account']['password'], type='operate')
 
     @allure.title('test_cabinet_account_001 用户修改邮箱')
     def test_cabinet_account_001(self):
@@ -18,7 +20,8 @@ class TestCabinetAccountApi:
             data = {
                 "email": account
             }
-            r = session.request('PUT', url='{}/operator/operator/users/{}/email'.format(operateUrl, user_id), data=json.dumps(data),
+            r = session.request('PUT', url='{}/operator/operator/users/{}/email'.format(operateUrl, user_id),
+                                data=json.dumps(data),
                                 headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -35,7 +38,8 @@ class TestCabinetAccountApi:
             data = {
                 "email": 'yilei4@163.com'
             }
-            r = session.request('PUT', url='{}/operator/operator/users/{}/email'.format(operateUrl, user_id), data=json.dumps(data),
+            r = session.request('PUT', url='{}/operator/operator/users/{}/email'.format(operateUrl, user_id),
+                                data=json.dumps(data),
                                 headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -52,7 +56,8 @@ class TestCabinetAccountApi:
             data = {
                 "email": generate_email()
             }
-            r = session.request('PUT', url='{}/operator/operator/users/{}/email'.format(operateUrl, user_id), data=json.dumps(data),
+            r = session.request('PUT', url='{}/operator/operator/users/{}/email'.format(operateUrl, user_id),
+                                data=json.dumps(data),
                                 headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -69,7 +74,8 @@ class TestCabinetAccountApi:
             data = {
                 "type": "OTP"
             }
-            r = session.request('POST', url='{}/operator/operator/users/{}/mfa/reset'.format(operateUrl, user_id), data=json.dumps(data),
+            r = session.request('POST', url='{}/operator/operator/users/{}/mfa/reset'.format(operateUrl, user_id),
+                                data=json.dumps(data),
                                 headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -88,7 +94,8 @@ class TestCabinetAccountApi:
             data = {
                 "email": account
             }
-            session.request('PUT', url='{}/operator/operator/users/{}/email'.format(operateUrl, user_id), data=json.dumps(data), headers=headers)
+            session.request('PUT', url='{}/operator/operator/users/{}/email'.format(operateUrl, user_id),
+                            data=json.dumps(data), headers=headers)
         with allure.step("绑定otp"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account)
             r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
@@ -106,7 +113,7 @@ class TestCabinetAccountApi:
                     "emailVerificationCode": "666666"
                 }
                 session.request('POST', url='{}/account/security/mfa/otp/enable'.format(env_url),
-                                    data=json.dumps(data), headers=headers)
+                                data=json.dumps(data), headers=headers)
         with allure.step("关闭otp"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['operate_admin_account']['email'],
@@ -115,7 +122,8 @@ class TestCabinetAccountApi:
             data = {
                 "type": "OTP"
             }
-            r = session.request('POST', url='{}/operator/operator/users/{}/mfa/reset'.format(operateUrl, user_id), data=json.dumps(data),
+            r = session.request('POST', url='{}/operator/operator/users/{}/mfa/reset'.format(operateUrl, user_id),
+                                data=json.dumps(data),
                                 headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))

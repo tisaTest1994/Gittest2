@@ -845,3 +845,20 @@ class TestOperateApi:
                     return
             assert False
 
+    @allure.testcase('test_operate_036 创建notify')
+    @pytest.mark.multiprocess
+    def test_operate_036(self):
+        with allure.step("创建notify"):
+            data = {
+                "notify_name": "reward",
+                "notify_channel": 3,
+                "account_ids": [get_json()['email']['accountId']],
+                "params": {"currency": "123 ETH", "transaction_id": "776d7752-acdb-4231-89e7-4dd24fa37cfd",
+                           "sub_type": "7"}
+            }
+            r = session.request('POST', url='{}/operatorapi/notification/create'.format(operateUrl), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)

@@ -48,6 +48,7 @@ session = sessions()
 
 if __name__ == '__main__':
     get_language_map()
+    get_language_map(type='web')
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
     if sys.argv[1] == 'api':

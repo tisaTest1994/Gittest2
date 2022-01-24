@@ -1,3 +1,13 @@
 {
-  "upNewVersion": {}
+  "welcomePage": {
+    "Sign Up": "CB250",
+    "Log In": "CB172",
+    "Later": "CB178"
+  },
+  "portfolioPage": {
+    "Portfolio": "CB214"
+  },
+  "loginPage": {
+    "Welcome Back": "CB306"
+  }
 }

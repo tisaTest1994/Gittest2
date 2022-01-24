@@ -7,9 +7,11 @@ class TestConvertOrderApi:
 
     # 初始化class
     def setup_method(self):
-        ApiFunction.add_headers()
+        with allure.step("登录客户账户获得后续操作需要的token"):
+            ApiFunction.add_headers()
 
-    @allure.title('test_convert_order_001 一次损益计算')
+    @allure.title('test_convert_order_001')
+    @allure.description('一次损益计算')
     def test_convert_order_001(self):
         # 获得 cfx_book
         cfx_book = get_json()['cfx_book']

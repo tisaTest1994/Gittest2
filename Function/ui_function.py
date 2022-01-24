@@ -5,33 +5,34 @@ class UiFunction:
 
     @staticmethod
     def login(account, password):
-        # 判断升级提示
-        if check('CB196', type=1, wait_time_max=10) is True:
-            click('CB196')
-        # 先判断是否已经登录
-        if check('CB214', type=1) is True:
-            pass
-        # 判断升级提示
-        elif check('CB196', type=1, wait_time_max=5) is True:
-            click('CB196')
-        else:
-            # 点击登录
-            click('CB172')
-            # 检查到达welcome Back
-            check('CB306')
-            # 判断是否存在预设账户
-            if check('CB008', type=1) is True:
-                click('CB008')
+        with allure.step("判断升级提示"):
+            if operate_element_app('welcomePage', 'Later', type='check'):
+                operate_element_app('welcomePage', 'Later')
+        with allure.step("先判断是否已经登录，判断升级提示"):
+            if operate_element_app('portfolioPage', 'Portfolio', type='check'):
+                pass
+            elif operate_element_app('welcomePage', 'Later', type='check'):
+                operate_element_app('welcomePage', 'Later')
             else:
-                poco(get_json(file='multiple_languages.json')['CB306']).offspring("android.view.View")[0].click()
-                # 输入账户密码
-                text(account)
-                text(password)
-                # 判断升级提示
-                if check('CB196', type=1, wait_time_max=5) is True:
-                    click('CB196')
-                # 判断登录到首页
-                click('CB214')
+                with allure.step("开始登录流程"):
+                    operate_element_app('welcomePage', 'Log In')
+        with allure.step("检查是否到达log in 页面"):
+            assert operate_element_app('loginPage', 'Welcome Back'), '没有到达{}页面或者找不到{}页面元素'.format('loginPage', 'Welcome Back')
+            # # 检查到达welcome Back
+            # check('CB306')
+            # # 判断是否存在预设账户
+            # if check('CB008', type=1) is True:
+            #     click('CB008')
+            # else:
+            #     poco(get_json(file='multiple_languages.json')['CB306']).offspring("android.view.View")[0].click()
+            #     # 输入账户密码
+            #     text(account)
+            #     text(password)
+            #     # 判断升级提示
+            #     if check('CB196', type=1, wait_time_max=5) is True:
+            #         click('CB196')
+            #     # 判断登录到首页
+            #     click('CB214')
 
     @staticmethod
     def logout():

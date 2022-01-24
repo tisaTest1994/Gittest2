@@ -13,7 +13,7 @@ class TestPayInApi:
     @pytest.mark.multiprocess
     def test_pay_in_001(self):
         with allure.step("查询转入记录"):
-            currency = ['USDT', 'BTC', 'ETH']
+            currency = get_json()['crypto_list']
             data = {}
             for i in currency:
                 data['code'] = i

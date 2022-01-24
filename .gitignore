@@ -1,5 +1,7 @@
 .idea/
-*.pyc
 Reports/
 src/
+*.pyc
+Resource/multiple_languages*
 TestCase/TestWebCase/temp.jpg
+TestCase/TestAndroidCase/temp.jpg

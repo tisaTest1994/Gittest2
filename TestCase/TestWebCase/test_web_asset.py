@@ -54,16 +54,9 @@ class TestWebAssetApi:
             balance_list = ['assets-blance-table-row-0', 'assets-blance-table-row-1', 'assets-blance-table-row-2', 'assets-blance-table-row-3', 'assets-blance-table-row-4']
             for i in balance_list:
                 balance_dict = {}
-                #['BTC', '1,011.77276969 1,011.12184089 0.6509288', 'Deposit']
                 a = self.driver.find_element_by_id(i).text.split('\n')
-                print(a)
                 balance_dict[a[0]] = a[1].split(' ')
-                #['1,011.77276969', '1,011.12184089', '0.6509288']
-                print(balance_dict[a[0]])
                 currency_type = list(balance_dict.keys())[0]
-                print(balance_dict.keys())
-                #BTC
-                print(currency_type)
                 with allure.step("通过API获得Available Balance数据"):
                     available_balance = ApiFunction.get_crypto_number(type=currency_type, balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
                 with allure.step("判断API获得的Available Balance数据和页面显示的一致"):
