@@ -19,6 +19,10 @@ def check_web(driver, page, text):
             if driver.find_element_by_xpath('//*[@alt="{}"]'.format(text)).is_displayed():
                 logger.info('在{}页面上寻找到了{}'.format(page, text))
                 return True
+        elif type == 'class':
+            if driver.find_element_by_xpath('//*[@class="{}"][1]'.format(text)).is_displayed():
+                logger.info('在{}页面上寻找到了{}'.format(page, text))
+                return True
         elif type == 'name':
             if driver.find_element_by_name(text).is_displayed():
                 logger.info('在{}页面上寻找到了{}'.format(page, text))
@@ -61,6 +65,13 @@ def operate_element(driver, page, text, type='click', input='', cycle=15):
             elif type == 'delete':
                 for i in range(cycle):
                     driver.find_element_by_name(text).send_keys(Keys.BACKSPACE)
+        elif element_type == 'class':
+            if type == 'click':
+                driver.find_element_by_xpath('//*[@class="{}"]'.format(text)).click()
+            elif type == 'clear':
+                driver.find_element_by_xpath('//*[@class="{}"]'.format(text)).clear()
+            elif type == 'input':
+                driver.find_element_by_xpath('//*[@class="{}"]'.format(text)).send_keys(input)
 
 
 # 获取页面元素的text
