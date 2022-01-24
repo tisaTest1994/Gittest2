@@ -8,6 +8,12 @@
     "Portfolio": "CB214"
   },
   "loginPage": {
-    "Welcome Back": "CB306"
+    "Welcome Back": "CB306",
+    "Account": "CB008"
+  },
+  "accountPage": {
+    "Account": "CB008",
+    "log out": "CB173",
+    "Are you sure to log out?": "CB354"
   }
 }

@@ -6,46 +6,48 @@ class UiFunction:
     @staticmethod
     def login(account, password):
         with allure.step("判断升级提示"):
-            if operate_element_app('welcomePage', 'Later', type='check'):
+            if operate_element_app('welcomePage', 'Later', type='check', wait_time_max=10):
                 operate_element_app('welcomePage', 'Later')
         with allure.step("先判断是否已经登录，判断升级提示"):
             if operate_element_app('portfolioPage', 'Portfolio', type='check'):
-                pass
-            elif operate_element_app('welcomePage', 'Later', type='check'):
-                operate_element_app('welcomePage', 'Later')
+                return True
             else:
                 with allure.step("开始登录流程"):
                     operate_element_app('welcomePage', 'Log In')
         with allure.step("检查是否到达log in 页面"):
-            assert operate_element_app('loginPage', 'Welcome Back'), '没有到达{}页面或者找不到{}页面元素'.format('loginPage', 'Welcome Back')
-            # # 检查到达welcome Back
-            # check('CB306')
-            # # 判断是否存在预设账户
-            # if check('CB008', type=1) is True:
-            #     click('CB008')
-            # else:
-            #     poco(get_json(file='multiple_languages.json')['CB306']).offspring("android.view.View")[0].click()
-            #     # 输入账户密码
-            #     text(account)
-            #     text(password)
-            #     # 判断升级提示
-            #     if check('CB196', type=1, wait_time_max=5) is True:
-            #         click('CB196')
-            #     # 判断登录到首页
-            #     click('CB214')
+            assert operate_element_app('loginPage', 'Welcome Back', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('loginPage', 'Welcome Back')
+        with allure.step("输入账户密码"):
+            poco(text='Account').click()
+            text(account)
+            text(password)
+            sleep(1)
+        with allure.step("判断升级提示"):
+            if operate_element_app('welcomePage', 'Later', type='check'):
+                operate_element_app('welcomePage', 'Later')
+        with allure.step("判断登录到首页"):
+            assert operate_element_app('portfolioPage', 'Portfolio', type='check'), '没有到达{}页面或者找不到{}页面元素'.format(
+                'portfolioPage', 'Portfolio')
 
     @staticmethod
     def logout():
-        # 点击 Account 页面
-        click('CB008')
-        # 点击 log out
-        click('CB173')
-        # 检查log out 弹框文案
-        check('CB354')
-        # 点击 log out
-        poco(get_json(file='multiple_languages.json')['CB173'])[1].click()
-        # 检车退出到登录页面
-        click('CB172')
+        with allure.step("判断登录到首页"):
+            assert operate_element_app('portfolioPage', 'Portfolio', type='check'), '没有到达{}页面或者找不到{}页面元素'.format(
+                'portfolioPage', 'Portfolio')
+        with allure.step("点击 Account 页面"):
+            operate_element_app('accountPage', 'Account')
+        with allure.step("点击 log out 元素"):
+            operate_element_app('accountPage', 'log out')
+        with allure.step("检查log out 弹框文案"):
+            assert operate_element_app('accountPage', 'Are you sure to log out?', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('accountPage', 'Are you sure to log out?')
+        with allure.step("点击log out"):
+            operate_element_app('accountPage', 'log out', type='1')[1].click()
+            sleep(2)
+        with allure.step("判断升级提示"):
+            if operate_element_app('welcomePage', 'Later', type='check', wait_time_max=10):
+                operate_element_app('welcomePage', 'Later')
+        with allure.step("检查已经退出"):
+            assert operate_element_app('welcomePage', 'Log In', type='check'), '没有到达{}页面或者找不到{}页面元素'.format(
+                'welcomePage', 'Log In')
 
     @staticmethod
     def choose_transaction(crypto_type=['BTC', 'ETH', 'USDT'], num=0, type=[1, 2, 3, 4, 5, 6, 7], product_sub_type=[1, 2]):
