@@ -5,24 +5,40 @@ from run import *
 poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
 
 
-# 点击某个text
-def click(text):
-    if text in get_json(file='multiple_languages_app.json').keys():
-        text_string = get_json(file='multiple_languages_app.json')[text]
+def operate_element_app(page_name, element_string, type='click', wait_time_max=5, input_string=''):
+    if page_name in get_json(file='app_tree.json').keys():
+        if element_string in get_json(file='app_tree.json')[page_name].keys():
+            translation_code = get_json(file='app_tree.json')[page_name][element_string]
+            text_string = get_json(file='multiple_languages_app.json')[translation_code]
+            if type == 'click':
+                poco(text_string).click()
+                logger.info('点击{}元素'.format(text_string))
+            elif type == 'check':
+                wait_time = 0
+                while wait_time < wait_time_max:
+                    wait_time = wait_time + 1
+                    sleep(1)
+                    if poco(text_string).exists() is True:
+                        logger.info('检查{}元素，是否存在前页面:{}'.format(text_string, poco(text_string).exists()))
+                        return True
+                return False
+            elif type == 'input':
+                poco(text_string).set_text(input_string)
+                logger.info('点击{},输入{}'.format(text_string, input_string))
+            else:
+                return poco(text_string)
     else:
-        text_string = text
-    poco(text_string).wait_for_appearance(timeout=20)
-    poco(text_string).click()
+        assert False, "page name {}在app_tree中不存在".format(page_name)
 
 
 # 查询页面元素存在
-def check(text, type=2, wait_time_max=20):
-    # type 为1 返回结果(true, false)，type为2直接断言判断
-    if text in get_json(file='multiple_languages_app.json').keys():
-        text_string = get_json(file='multiple_languages_app.json')[text]
+def check(page_name, element_string, wait_time_max=20, is_display=True):
+    if page_name in get_json(file='app_tree.json').keys():
+        if element_string in get_json(file='app_tree.json')[page_name].keys():
+            text_string = get_json(file='app_tree.json')[page_name][element_string]
     else:
-        text_string = text
-    if type == 1:
+        assert False, "page name {}在app_tree中不存在".format(page_name)
+    if is_display:
         wait_time = 0
         while wait_time < wait_time_max:
             wait_time = wait_time + 1
@@ -37,12 +53,6 @@ def check(text, type=2, wait_time_max=20):
     else:
         poco(text_string).wait_for_appearance(timeout=20)
         assert poco(text_string).exists() is True, "页面元素{}不存在,翻译码是{}".format(text_string, text)
-
-
-
-# 通过转换码获得数据
-def get_ui_text(code):
-    return str(get_json(file='multiple_languages_app.json')[code])
 
 
 # 滑动

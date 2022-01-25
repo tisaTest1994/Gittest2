@@ -1,3 +1,5 @@
+import allure
+
 from Function.api_function import *
 from Function.operate_sql import *
 
@@ -11,7 +13,8 @@ class TestRebalanceApi:
             account=get_json()['operate_admin_account']['email'],
             password=get_json()['operate_admin_account']['password'], type='operate')
 
-    @allure.testcase('test_rebalance_001 查询rebalance order')
+    @allure.title('test_rebalance_001')
+    @allure.description('查询rebalance order')
     def test_rebalance_001(self):
         with allure.step("查询rebalance order"):
             data = {
@@ -32,7 +35,6 @@ class TestRebalanceApi:
                 "matched": 0,
                 "txn_hash": ""
             }
-        with allure.step("调用接口"):
             r = session.request('POST', url='{}/operatorapi/orders/rebalance/search'.format(operateUrl),
                                 data=json.dumps(data),
                                 headers=headers)
@@ -44,11 +46,11 @@ class TestRebalanceApi:
         with allure.step("校验返回值"):
             assert 'pagination_response' in r.text, "查询order错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_rebalance_002 查询rebalance order detail')
+    @allure.title('test_rebalance_002')
+    @allure.description('查询rebalance order detail')
     def test_rebalance_002(self):
         with allure.step("查询rebalance order detail"):
             orderId = "e93a34fd-c3ea-4d8a-9d30-85a01fa32686"
-        with allure.step("调用接口"):
             r = session.request('GET', url='{}/operatorapi/orders/rebalance/{}'.format(operateUrl, orderId),
                                 headers=headers)
         with allure.step("状态码和返回值"):
@@ -59,7 +61,8 @@ class TestRebalanceApi:
         with allure.step("校验返回值"):
             assert 'order' in r.text, "查询order detail错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_rebalance_003 创建双边net fee rebalance order')
+    @allure.title('test_rebalance_003')
+    @allure.description('创建双边net fee rebalance order')
     def test_rebalance_003(self):
         with allure.step("创建双边net fee rebalance order"):
             txn_hash = generate_string(16)
@@ -101,7 +104,6 @@ class TestRebalanceApi:
                         }
                     ]
             }
-        with allure.step("调用接口"):
             r = session.request('POST', url='{}/operatorapi/orders/rebalance/create'.format(operateUrl),
                                 data=json.dumps(data),
                                 headers=headers)
@@ -113,7 +115,8 @@ class TestRebalanceApi:
         with allure.step("校验返回值"):
             assert 'order_ids' in r.text, "创建双边net fee rebalance order错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_rebalance_004 创建双边separate fee rebalance order')
+    @allure.title('test_rebalance_004')
+    @allure.description('创建双边separate fee rebalance order')
     def test_rebalance_004(self):
         with allure.step("创建双边separate fee rebalance order"):
             txn_hash = generate_string(16)
@@ -158,7 +161,6 @@ class TestRebalanceApi:
                         }
                     ]
             }
-        with allure.step("调用接口"):
             r = session.request('POST', url='{}/operatorapi/orders/rebalance/create'.format(operateUrl),
                                 data=json.dumps(data),
                                 headers=headers)
@@ -170,7 +172,8 @@ class TestRebalanceApi:
         with allure.step("校验返回值"):
             assert 'order_ids' in r.text, "创建双边separate fee rebalance order错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_rebalance_005 创建单边pay-in order')
+    @allure.title('test_rebalance_005')
+    @allure.description('创建单边pay-in order')
     def test_rebalance_005(self):
         with allure.step("创建单边pay-in order"):
             data = {
@@ -195,7 +198,6 @@ class TestRebalanceApi:
                         }
                     ]
             }
-        with allure.step("调用接口"):
             r = session.request('POST', url='{}/operatorapi/orders/rebalance/create'.format(operateUrl),
                                 data=json.dumps(data),
                                 headers=headers)
@@ -207,7 +209,8 @@ class TestRebalanceApi:
         with allure.step("校验返回值"):
             assert 'order_ids' in r.text, "创建单边pay-in order错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_rebalance_006 创建单边pay-out order')
+    @allure.title('test_rebalance_006')
+    @allure.description('创建单边pay-out order')
     def test_rebalance_006(self):
         with allure.step("创建单边pay-out order"):
             data = {
@@ -224,7 +227,7 @@ class TestRebalanceApi:
                                 "cost_type": 2,
                                 "amount": "0.0003",
                                 "money_house_account_id": "3a3b75b8-f04e-11eb-9e63-ba224deb3be4",
-                                "cost_txn_id": "costtest1344",
+                                "cost_txn_id": generate_string(16),
                                 "currency": "BNB",
                                 "value_date": "2021-12-21"
                             },
@@ -235,7 +238,6 @@ class TestRebalanceApi:
                         }
                     ]
             }
-        with allure.step("调用接口"):
             r = session.request('POST', url='{}/operatorapi/orders/rebalance/create'.format(operateUrl),
                                 data=json.dumps(data),
                                 headers=headers)
@@ -247,7 +249,9 @@ class TestRebalanceApi:
         with allure.step("校验返回值"):
             assert 'order_ids' in r.text, "创建单边pay-out order错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_rebalance_007 查询fx order')
+
+    @allure.title('test_rebalance_007')
+    @allure.description('查询fx order')
     def test_rebalance_007(self):
         with allure.step("查询fx order"):
             data = {
@@ -273,7 +277,8 @@ class TestRebalanceApi:
         with allure.step("校验返回值"):
             assert 'orders' in r.text, "查询order错误，返回值是{}".format(r.text)
 
-    @allure.testcase('test_rebalance_008 创建fx order')
+    @allure.title('test_rebalance_008')
+    @allure.description('创建fx order')
     def test_rebalance_008(self):
         with allure.step("创建fx order"):
             data = {

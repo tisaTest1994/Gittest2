@@ -374,7 +374,7 @@ class TestConnectAccountApi:
     @allure.title('test_connect_account_013 成功解绑+name match用户 pass')
     def test_connect_account_013(self):
         with allure.step("准备参数"):
-            account_id = '96f29441-feb4-495a-a531-96c833e8261a'
+            account_id = 'f64d22f8-ffae-401c-91e5-6d630052b2a7'
         with allure.step("name match 数据"):
             data = {
                 'name': 'Wan yilei',

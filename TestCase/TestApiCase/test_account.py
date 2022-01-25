@@ -280,6 +280,7 @@ class TestAccountApi:
     @allure.description('查询用户信息')
     def test_account_017(self):
         with allure.step("查询用户信息"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='mirana@test.com', password='Mirana123!')
             r = session.request('GET', url='{}/account/info'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -522,7 +523,7 @@ class TestAccountApi:
                 "password": get_json()['email']['password'],
                 "metadata": {
                     "referral": {
-                        "code": "6EM7LK"
+                        "code": "WP9KLV"
                     }
                 }
             }
@@ -557,7 +558,7 @@ class TestAccountApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['version'] == 20210604, "查询指定版本的隐私政策失败，返回值是{}".format(r.text)
+                assert r.json()['version'] == 20220118, "查询指定版本的隐私政策失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_031')
     @allure.description('查询指定版本的服务条款')
@@ -575,7 +576,7 @@ class TestAccountApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['version'] == 20210611, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
+                assert r.json()['version'] == 20220118, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_032')
     @allure.description('忘记密码并且验证code')

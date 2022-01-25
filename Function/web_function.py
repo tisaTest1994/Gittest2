@@ -1,4 +1,5 @@
 from Function.web_common_function import *
+from Function.api_function import *
 import platform
 import allure
 import os
@@ -50,7 +51,30 @@ class webFunction:
             operate_element(driver, 'assetPage', 'header-btn-hi-nickname')
             operate_element(driver, 'assetPage', 'header-btn-user-signout')
 
+    @staticmethod
+    def account_setting(driver):
+        with allure.step("切到Account Settings"):
+            operate_element(driver, 'AccountSetPage', 'header-desktop-menu-item-WE031', type='click')
 
+    @staticmethod
+    def change_password(driver, password=get_json()['web'][get_json()['env']]['password']):
+        with allure.step("点击修改密码"):
+            operate_element(driver, 'AccountSetPage', 'account-change-password-trigger', type='click')
+        # with allure.step("输入email账号"):
+            operate_element(driver, 'AccountSetPage', 'mailcode', type='clean')
+            operate_element(driver, 'AccountSetPage', 'mailcode', type='input', input='666666')
+        # with allure.step("输入新密码"):
+            operate_element(driver, 'AccountSetPage', 'password', type='clean')
+            operate_element(driver, 'AccountSetPage', 'password', type='input', input=password)
+        with allure.step("点击Confirm"):
+            operate_element(driver, 'AccountSetPage', 'update-password-btn-submit', type='click')
 
-
-
+    @staticmethod
+    def edit_account_name(driver, account=get_json()['web'][get_json()['env']]['account']):
+        with allure.step("点击修改accountname"):
+            operate_element(driver, 'AccountSetPage', 'MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06', type='click')
+        with allure.step("输入新账号名称"):
+            operate_element(driver, 'AccountSetPage', 'account-info-nickname-input', type='delete')
+            operate_element(driver, 'AccountSetPage', 'account-info-nickname-input', type='input', input=account)
+        with allure.step("点击Confirm"):
+            operate_element(driver, 'AccountSetPage', 'update-nickname-btn', type='click')

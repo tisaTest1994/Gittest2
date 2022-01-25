@@ -481,5 +481,10 @@
       "password": "Zcdsw123",
       "url": "https://portal.latibac.com/"
     }
+  },
+  "2B": {
+    "fixed_product": "eaa5595d-745e-11ec-ae7e-0a3898443cb8",
+    "flexible_product": "eaa55390-745e-11ec-ae7e-0a3898443cb8",
+    "mirana_account": "5661da70-a84f-4d49-adf0-1e7aebcd2820"
   }
 }

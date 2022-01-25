@@ -1,3 +1,19 @@
 {
-  "upNewVersion": {}
+  "welcomePage": {
+    "Sign Up": "CB250",
+    "Log In": "CB172",
+    "Later": "CB178"
+  },
+  "portfolioPage": {
+    "Portfolio": "CB214"
+  },
+  "loginPage": {
+    "Welcome Back": "CB306",
+    "Account": "CB008"
+  },
+  "accountPage": {
+    "Account": "CB008",
+    "log out": "CB173",
+    "Are you sure to log out?": "CB354"
+  }
 }

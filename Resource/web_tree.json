@@ -22,7 +22,8 @@
     "service": "name",
     "privacy": "name",
     "full-width-tab-0": "id",
-    "MuiDialogActions-spacing": "class"
+    "MuiDialogActions-spacing": "class",
+    "username-helper-text": "id"
   },
   "assetPage": {
     "Cabital Logo": "alt",
@@ -73,6 +74,36 @@
     "undefined-option-CB176-8": "id",
     "undefined-option-CB229-9": "id",
     "undefined-option-CB401-10": "id"
+
+  },
+  "AccountSetPage": {
+    "header-desktop-menu-item-WE031": "id",
+    "account-change-password-trigger": "id",
+    "mailcode": "name",
+    "password": "name",
+    "update-password-btn-submit": "id",
+
+    "MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06": "class",
+    "account-info-nickname-input": "id",
+    "update-nickname-btn": "id",
+
+    "account-change-mfa-trigger": "id",
+    "disable-gauth-code": "id",
+    "update-gauth-btn-submit": "id",
+    "account-goto-mfa-trigger":"id",
+
+    "assets-blance-table-row-3": "id",
+    "assets-blance-table-row-4": "id",
+    "assets-earn-amount": "id",
+    "simple-tab-0": "id",
+    "simple-tab-1": "id",
+    "assets-flexiable-table-row-0": "id",
+    "assets-flexiable-table-row-1": "id",
+    "assets-flexiable-table-row-2": "id",
+    "assets-fixed-table": "id",
+    "header-desktop-menu-item-WE096": "id",
+    "header-desktop-menu-item-WE099": "id",
+    "header-desktop-menu-item-CB284": "id"
 
   }
 }
