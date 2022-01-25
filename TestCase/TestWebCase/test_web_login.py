@@ -1,5 +1,3 @@
-import time
-
 from Function.web_function import *
 from Function.web_common_function import *
 

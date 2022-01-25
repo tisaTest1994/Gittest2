@@ -5,6 +5,7 @@ from run import *
 poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
 
 
+# 元素操作
 def operate_element_app(page_name, element_string, type='click', wait_time_max=5, input_string=''):
     if page_name in get_json(file='app_tree.json').keys():
         if element_string in get_json(file='app_tree.json')[page_name].keys():

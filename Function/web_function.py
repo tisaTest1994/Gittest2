@@ -9,12 +9,10 @@ class webFunction:
 
     @staticmethod
     def launch_web(url):
-
         # os.path.abspath()获得绝对路径
         path = os.path.abspath(os.path.dirname(__file__))
         options = webdriver.ChromeOptions()
         options.add_argument('--disable-gpu')
-
         # 指定浏览器的分辨率
         options.add_argument('--window-size=1920,1080')
         # 无界面运行
@@ -30,51 +28,25 @@ class webFunction:
     @staticmethod
     def login_web(driver, account=get_json()['web'][get_json()['env']]['account'], password=get_json()['web'][get_json()['env']]['password']):
         with allure.step("确定打开登录页面"):
-            assert check_web(driver, 'loginPage', 'signinForm'), '未打开登录页面'
+            assert operate_element_web(driver, 'loginPage', 'signinForm', type='check'), '未打开登录页面'
         with allure.step("输入账号"):
-            operate_element(driver, 'loginPage', 'username', type='clean')
-            operate_element(driver, 'loginPage', 'username', type='input', input=account)
+            operate_element_web(driver, 'loginPage', 'username', type='delete')
+            operate_element_web(driver, 'loginPage', 'username', type='input', input_string=account)
         with allure.step("输入密码"):
-            operate_element(driver, 'loginPage', 'sign_password_input', type='clean')
-            operate_element(driver, 'loginPage', 'sign_password_input', type='input', input=password)
+            operate_element_web(driver, 'loginPage', 'sign_password_input', type='delete')
+            operate_element_web(driver, 'loginPage', 'sign_password_input', type='input', input_string=password)
         with allure.step("点击sign in"):
-            operate_element(driver, 'loginPage', 'login_login')
+            operate_element_web(driver, 'loginPage', 'login_login')
             sleep(2)
         with allure.step("确定已经登录成功到首页"):
-            assert check_web(driver, 'assetPage', 'Cabital Logo'), '已经成功登录'
+            assert operate_element_web(driver, 'assetPage', 'Cabital Logo'), '已经成功登录'
             sleep(2)
 
     # 登出 web
     @staticmethod
     def logout_web(driver):
         with allure.step("点击登出"):
-            operate_element(driver, 'assetPage', 'header-btn-hi-nickname')
-            operate_element(driver, 'assetPage', 'header-btn-user-signout')
+            operate_element_web(driver, 'assetPage', 'header-btn-hi-nickname')
+            operate_element_web(driver, 'assetPage', 'header-btn-user-signout')
 
-    @staticmethod
-    def account_setting(driver):
-        with allure.step("切到Account Settings"):
-            operate_element(driver, 'AccountSetPage', 'header-desktop-menu-item-WE031', type='click')
 
-    @staticmethod
-    def change_password(driver, password=get_json()['web'][get_json()['env']]['password']):
-        with allure.step("点击修改密码"):
-            operate_element(driver, 'AccountSetPage', 'account-change-password-trigger', type='click')
-        # with allure.step("输入email账号"):
-            operate_element(driver, 'AccountSetPage', 'mailcode', type='clean')
-            operate_element(driver, 'AccountSetPage', 'mailcode', type='input', input='666666')
-        # with allure.step("输入新密码"):
-            operate_element(driver, 'AccountSetPage', 'password', type='clean')
-            operate_element(driver, 'AccountSetPage', 'password', type='input', input=password)
-        with allure.step("点击Confirm"):
-            operate_element(driver, 'AccountSetPage', 'update-password-btn-submit', type='click')
-
-    @staticmethod
-    def edit_account_name(driver, account=get_json()['web'][get_json()['env']]['account']):
-        with allure.step("点击修改accountname"):
-            operate_element(driver, 'AccountSetPage', 'MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06', type='click')
-        with allure.step("输入新账号名称"):
-            operate_element(driver, 'AccountSetPage', 'account-info-nickname-input', type='delete')
-            operate_element(driver, 'AccountSetPage', 'account-info-nickname-input', type='input', input=account)
-        with allure.step("点击Confirm"):
-            operate_element(driver, 'AccountSetPage', 'update-nickname-btn', type='click')
