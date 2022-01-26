@@ -893,8 +893,8 @@ class TestFlexibleApi:
                         balance_available_latest = ApiFunction.get_crypto_number(type=i['code'])
                         balance_saving_available_latest = ApiFunction.get_crypto_number(type=i['code'], wallet_type='SAVING')
                     with allure.step("检查balance增减正确"):
-                        assert float(balance_available) + float(data['amount']) == float(balance_available_latest)
-                        assert float(balance_saving_available) == float(data['amount']) + float(balance_saving_available_latest)
+                        assert Decimal(balance_available) + Decimal(data['amount']) == Decimal(balance_available_latest)
+                        assert Decimal(balance_saving_available) == Decimal(data['amount']) + Decimal(balance_saving_available_latest)
 
     @allure.title('test_flexible_026')
     @allure.description('快速赎回使用无效product id')
