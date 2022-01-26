@@ -32,30 +32,6 @@ def operate_element_app(page_name, element_string, type='click', wait_time_max=5
         assert False, "page name {}在app_tree中不存在".format(page_name)
 
 
-# 查询页面元素存在
-def check(page_name, element_string, wait_time_max=20, is_display=True):
-    if page_name in get_json(file='app_tree.json').keys():
-        if element_string in get_json(file='app_tree.json')[page_name].keys():
-            text_string = get_json(file='app_tree.json')[page_name][element_string]
-    else:
-        assert False, "page name {}在app_tree中不存在".format(page_name)
-    if is_display:
-        wait_time = 0
-        while wait_time < wait_time_max:
-            wait_time = wait_time + 1
-            sleep(1)
-            if poco(text_string).exists() is True:
-                wait_time = 21
-        return poco(text_string).exists()
-    elif type == 'textMatches':
-        assert poco(textMatches=text_string).exists() is True, "页面元素{}不存在,翻译码是{}".format(text_string, text)
-    elif type == 'nameMatches':
-        assert poco(nameMatches=text_string).exists() is True, "页面元素{}不存在,翻译码是{}".format(text_string, text)
-    else:
-        poco(text_string).wait_for_appearance(timeout=20)
-        assert poco(text_string).exists() is True, "页面元素{}不存在,翻译码是{}".format(text_string, text)
-
-
 # 滑动
 def slide(direction, cycle=1):
     xy = poco.get_screen_size()

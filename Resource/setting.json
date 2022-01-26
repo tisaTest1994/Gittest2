@@ -306,8 +306,7 @@
   "crypto_list": [
     "BTC",
     "USDT",
-    "ETH",
-    "USDC"
+    "ETH"
   ],
   "websocket": {
     "url": "wss://api.latibac.com/api/v1/realtime/ws"

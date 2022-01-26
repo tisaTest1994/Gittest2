@@ -10,7 +10,8 @@ class TestFlexibleApi:
         with allure.step("登录客户账户获得后续操作需要的token"):
             ApiFunction.add_headers()
 
-    @allure.title('test_flexible_001 获取产品列表')
+    @allure.title('test_flexible_001')
+    @allure.description('获取产品列表')
     def test_flexible_001(self):
         with allure.step("获取产品列表"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -21,9 +22,11 @@ class TestFlexibleApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert len(r.json()) >= 1, '至少有一个活期项目'
-                assert 'product_id' in r.text, "获取产品列表错误，返回值是{}".format(r.text)
+                for i in r.json():
+                    assert i['name_code'] != '', '获取产品列表错误'
 
-    @allure.title('test_flexible_002 通过产品id获取id产品的详情')
+    @allure.title('test_flexible_002')
+    @allure.description('通过产品id获取id产品的详情')
     def test_flexible_002(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -43,7 +46,8 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert 'product_id' in r.text, "通过产品id获取id产品的详情错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_003 获取今日之后的利息列表')
+    @allure.title('test_flexible_003')
+    @allure.description('获取今日之后的利息列表')
     def test_flexible_003(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -68,6 +72,7 @@ class TestFlexibleApi:
                 assert 'items' in r.text, "获取今日之后的利息列表错误，返回值是{}".format(r.text)
 
     @allure.title('test_flexible_004 获取交易记录')
+    @allure.description('获取交易记录')
     def test_flexible_004(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -92,7 +97,8 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert 'items' in r.text, "获取多条交易记录错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_005 有足够BTC的用户发起购买BTC投资项目成功')
+    @allure.title('test_flexible_005')
+    @allure.description('有足够BTC的用户发起购买BTC投资项目成功')
     def test_flexible_005(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -147,7 +153,8 @@ class TestFlexibleApi:
                 assert Decimal(balance_type_available_amount_old) - Decimal(data['amount']) == Decimal(balance_type_available_amount_latest), \
                     "有足够BTC的用户发起购买BTC投资项目,剩余可用资金错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_006 有足够ETH的用户发起购买ETH投资项目成功')
+    @allure.title('test_flexible_006')
+    @allure.description('有足够ETH的用户发起购买ETH投资项目成功')
     def test_flexible_006(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -202,7 +209,8 @@ class TestFlexibleApi:
                 assert Decimal(balance_type_available_amount_old) - Decimal(data['amount']) == Decimal(balance_type_available_amount_latest), \
                     "有足够ETH的用户发起购买ETH投资项目,剩余可用资金错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_007 有足够USDT的用户发起购买USDT投资项目成功')
+    @allure.title('test_flexible_007')
+    @allure.description('有足够USDT的用户发起购买USDT投资项目成功')
     def test_flexible_007(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -259,7 +267,8 @@ class TestFlexibleApi:
                 assert Decimal(balance_type_available_amount_old) - Decimal(data['amount']) == Decimal(balance_type_available_amount_latest), \
                     "有足够BTC的用户发起购买USDT投资项目,剩余可用资金错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_008 投资金额小于最小投资BTC数量')
+    @allure.title('test_flexible_008')
+    @allure.description('投资金额小于最小投资BTC数量')
     def test_flexible_008(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -286,7 +295,8 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert 'Minimum: 0.001 BTC' in r.text, "投资金额小于最小投资BTC数量错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_009 投资金额小于最小投资ETH数量')
+    @allure.title('test_flexible_009')
+    @allure.description('投资金额小于最小投资ETH数量')
     def test_flexible_009(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -313,7 +323,8 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert r.json()['code'] == 'EARNINGTXN000009', "投资金额小于最小投资ETH数量错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_010 投资金额小于最小投资USDT数量')
+    @allure.title('test_flexible_010')
+    @allure.description('投资金额小于最小投资USDT数量')
     def test_flexible_010(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -341,7 +352,8 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert 'Minimum: 0.01 USDT' in r.text, "投资金额小于最小投资USDT数量错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_011 获取产品持有情况')
+    @allure.title('test_flexible_011')
+    @allure.description('获取产品持有情况')
     def test_flexible_011(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -361,7 +373,8 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert 'total_holding' in r.text, "获取产品持有情况错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_012 赎回BTC投资项目成功')
+    @allure.title('test_flexible_012')
+    @allure.description('赎回BTC投资项目成功')
     def test_flexible_012(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -427,7 +440,8 @@ class TestFlexibleApi:
             with allure.step("赎回项目后，之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"):
                 assert Decimal(redeeming_amount_old) + Decimal(data['amount']) == Decimal(redeeming_amount_latest), "之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"
 
-    @allure.title('test_flexible_013 赎回ETH投资项目成功')
+    @allure.title('test_flexible_013')
+    @allure.description('赎回ETH投资项目成功')
     def test_flexible_013(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -493,7 +507,8 @@ class TestFlexibleApi:
             with allure.step("赎回项目后，之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"):
                 assert Decimal(redeeming_amount_old) + Decimal(data['amount']) == Decimal(redeeming_amount_latest), "之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"
 
-    @allure.title('test_flexible_014 赎回USDT投资项目成功')
+    @allure.title('test_flexible_014')
+    @allure.description('赎回USDT投资项目成功')
     def test_flexible_014(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -559,7 +574,8 @@ class TestFlexibleApi:
             with allure.step("赎回项目后，之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"):
                 assert Decimal(redeeming_amount_old) + Decimal(data['amount']) == Decimal(redeeming_amount_latest), "之前正在赎回金额 + 赎回金额 = 当前正在赎回金额"
 
-    @allure.title('test_flexible_015 赎回金额超过最大的可赎回BTC数量')
+    @allure.title('test_flexible_015')
+    @allure.description('赎回金额超过最大的可赎回BTC数量')
     def test_flexible_015(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -600,7 +616,8 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert r.json()['status'] == 3, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_016 赎回金额超过最大的可赎回ETH数量')
+    @allure.title('test_flexible_016')
+    @allure.description('赎回金额超过最大的可赎回ETH数量')
     def test_flexible_016(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -643,7 +660,8 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert r.json()['status'] == 3, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_017 赎回金额超过最大的可赎回USDT数量')
+    @allure.title('test_flexible_017')
+    @allure.description('赎回金额超过最大的可赎回USDT数量')
     def test_flexible_017(self):
         with allure.step("获取产品product_id"):
             r1 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -686,7 +704,8 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert r.json()['status'] == 3, "赎回金额超过最大的可赎回BTC数量错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_018 正在赎回金额等于wallet中冻结金额')
+    @allure.title('test_flexible_018')
+    @allure.description('正在赎回金额等于wallet中冻结金额')
     def test_flexible_018(self):
         with allure.step("获取产品product"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -709,6 +728,7 @@ class TestFlexibleApi:
         assert redeeming_amount == frozen_amount, "获得项目当前持有中的赎回冻结金额不等于不wallet中saving冻结金额"
 
     @allure.title('test_flexible_019 校验明日计息金额')
+    @allure.description('校验明日计息金额')
     def test_flexible_019(self):
         sleep(10)
         with allure.step("获取产品product"):
@@ -739,7 +759,8 @@ class TestFlexibleApi:
                 logger.info('自己计算明天计息情况是{}'.format(interest_my_count))
         assert interest_my_count == Decimal(interest), '接口获得和自己计算今天计算的利息不对'
 
-    @allure.title('test_flexible_020 获取今日之前的利息列表')
+    @allure.title('test_flexible_020')
+    @allure.description('获取今日之前的利息列表')
     def test_flexible_020(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -763,7 +784,8 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert 'items' in r.text, "获取今日之前的利息列表错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_021 确定利息派发日期是T+1')
+    @allure.title('test_flexible_021')
+    @allure.description('确定利息派发日期是T+1')
     def test_flexible_021(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -789,6 +811,7 @@ class TestFlexibleApi:
             assert int(now_time) + 86400 >= int(earning_start_time), '确定利息派发日期是T+1错误'
 
     @allure.title('test_flexible_022 确定赎回日期是D+1')
+    @allure.description('确定赎回日期是D+1')
     def test_flexible_022(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -813,8 +836,9 @@ class TestFlexibleApi:
             assert int(now_time) <= int(redeem_settle_time), '确定赎回日期是D+1错误'
             assert int(now_time) + 86400*2 >= int(redeem_settle_time), '确定赎回日期是D+1错误'
 
-    @allure.title('test_flexible_023 获取所有产品持有情况')
-    def test_flexible_022(self):
+    @allure.title('test_flexible_023')
+    @allure.description('获取所有产品持有情况')
+    def test_flexible_023(self):
         with allure.step("获取所有产品持有情况"):
             r = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
             with allure.step("状态码和返回值"):
@@ -825,8 +849,9 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert 'total_holding' in r.text, "获取所有产品持有情况错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_023 获取所有产品持有情况以EUR显示')
-    def test_flexible_023(self):
+    @allure.title('test_flexible_024')
+    @allure.description('获取所有产品持有情况以EUR显示')
+    def test_flexible_024(self):
         with allure.step("获取所有产品持有情况以EUR显示"):
             headers['X-Currency'] = 'EUR'
             r = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
@@ -838,3 +863,73 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert 'total_holding' in r.text, "获取所有产品持有情况以EUR显示错误，返回值是{}".format(r.text)
                 assert r.json()['code'] == 'EUR', "获取所有产品持有情况以EUR显示错误，返回值是{}".format(r.text)
+
+    @allure.title('test_flexible_025')
+    @allure.description('快速赎回')
+    def test_flexible_025(self):
+        with allure.step("获取产品列表"):
+            r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+            for i in r.json():
+                with allure.step("获取目前balance"):
+                    balance_available = ApiFunction.get_crypto_number(type=i['code'])
+                    balance_saving_available = ApiFunction.get_crypto_number(type=i['code'], wallet_type='SAVING')
+                with allure.step("快速赎回"):
+                    data = {
+                        "amount": "0.01",
+                        "code": i['code'],
+                        "tx_type": 2,
+                        "is_fast_redemption": True
+                    }
+                    r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, i['product_id']), data=json.dumps(data), headers=headers)
+                    with allure.step("状态码和返回值"):
+                        logger.info('状态码是{}'.format(str(r.status_code)))
+                        logger.info('返回值是{}'.format(str(r.text)))
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    with allure.step("校验返回值"):
+                        assert r.json()['tx_id'] is not None, "快速赎回错误，返回值是{}".format(r.text)
+                    sleep(10)
+                    with allure.step("获取目前balance"):
+                        balance_available_latest = ApiFunction.get_crypto_number(type=i['code'])
+                        balance_saving_available_latest = ApiFunction.get_crypto_number(type=i['code'], wallet_type='SAVING')
+                    with allure.step("检查balance增减正确"):
+                        assert float(balance_available) + float(data['amount']) == float(balance_available_latest)
+                        assert float(balance_saving_available) == float(data['amount']) + float(balance_saving_available_latest)
+
+    @allure.title('test_flexible_026')
+    @allure.description('快速赎回使用无效product id')
+    def test_flexible_026(self):
+        with allure.step("快速赎回"):
+            data = {
+                "amount": "0.01",
+                "code": 'ETH',
+                "tx_type": 2,
+                "is_fast_redemption": True
+            }
+            r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, '123123123123'), data=json.dumps(data), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['code'] == '104001', "快速赎回使用无效product id错误，返回值是{}".format(r.text)
+
+    @allure.title('test_flexible_027')
+    @allure.description('快速赎回使用错误product id')
+    def test_flexible_027(self):
+        with allure.step("快速赎回"):
+            data = {
+                "amount": "0.01",
+                "code": 'ETH',
+                "tx_type": 2,
+                "is_fast_redemption": True
+            }
+            r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, 'a1220392-194c-432c-a961-eff561bb72b3'), data=json.dumps(data), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['code'] == 'EARNINGTXN000042', "快速赎回使用错误product id错误，返回值是{}".format(r.text)

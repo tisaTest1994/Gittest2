@@ -22,7 +22,12 @@ class TestFixedApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 for i in r.json():
-                    assert i['code'] == 'BTC' or i['code'] == 'ETH' or i['code'] == 'USDT', "获取定期产品列表失败，返回值是{}".format(r.text)
+                    if i['code'] in get_json()['crypto_list']:
+                        for y in i['products']:
+                            assert i['code'] in y['name'], '定期产品列表名字出现问题'
+                            assert y['name_code'] != '', '定期产品列表名字出现问题'
+                    else:
+                        assert False
 
     @allure.title('test_fixed_002')
     @allure.description('获取定期产品详情')
