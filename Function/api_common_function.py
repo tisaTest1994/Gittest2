@@ -120,7 +120,9 @@ def get_email():
             title = text.decode(enc) if enc else text
             if '(UTC)' in title:
                 email_time = time.mktime(time.strptime(title.split(' - ')[1].split(' (UTC)')[0], "%Y-%m-%d %H:%M:%S"))
-                utc_now_time = time.mktime(time.strptime(datetime.now(tz=pytz.timezone('UTC')).strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S"))
+                utc_now_time = time.mktime(
+                    time.strptime(datetime.now(tz=pytz.timezone('UTC')).strftime("%Y-%m-%d %H:%M:%S"),
+                                  "%Y-%m-%d %H:%M:%S"))
                 if int(email_time) + int(30) >= int(utc_now_time):
                     break
         sleep_time = sleep_time + 10
@@ -132,13 +134,16 @@ def get_email():
 # 获取翻译码
 def get_language_map(type='app'):
     if type == 'app':
-        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(get_json()['language']), timeout=20)
+        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(
+            get_json()['language']), timeout=20)
         path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages_app.json'
     elif type == 'web':
-        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_web/{}/latest'.format(get_json()['language']), timeout=20)
+        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_web/{}/latest'.format(
+            get_json()['language']), timeout=20)
         path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages_web.json'
     else:
-        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(get_json()['language']), timeout=20)
+        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(
+            get_json()['language']), timeout=20)
         path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages_app.json'
     with open(path, "w+", encoding='utf8') as f:
         json.dump(r.json()['data'], f, sort_keys=True, indent=2, ensure_ascii=False)
@@ -198,41 +203,41 @@ def is_alphabet(uchar):
 
 # 获取iban账号
 def get_iban(iban):
-        if iban in ['GB', 'GG', 'JE', 'IM', 'RS']:
-            iban = '{}{}{}'.format(iban, generate_number(2),generate_string(18))
-        elif iban == 'NO':
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(11))
-        elif iban == 'BE':
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(12))
-        elif iban in ['DK', 'FI', 'NL', 'FO', 'GL']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(14))
-        elif iban in ['MK', 'SI']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(15))
-        elif iban in ['AT', 'BA', 'EE', 'KZ', 'LT', 'LU', 'XK']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(16))
-        elif iban in ['CH', 'HR', 'LI', 'LV', 'CR']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(17))
-        elif iban in ['BG', 'BH', 'DE', 'GE', 'IE', 'ME', 'RS']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(18))
-        elif iban in ['CZ', 'ES', 'MD', 'PK', 'RO', 'SE', 'SK', 'TN', 'SA', 'VG', 'AD']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(20))
-        elif iban in ['GI', 'IL', 'AE']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(19))
-        elif iban in ['PT']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(21))
-        elif iban in ['IS, TR']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(22))
-        elif iban in ['FR', 'GR', 'IT', 'MC', 'MQ', 'PM', 'SM', 'TF', 'YT', 'MR']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(23))
-        elif iban in ['AZ', 'CY', 'DO', 'GT', 'HU', 'LB', 'PL', 'AL']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(24))
-        elif iban in ['QA', 'BR', 'PS']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(25))
-        elif iban in ['JO', 'KW', 'MU']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(26))
-        elif iban in ['MT', 'SC']:
-            iban = '{}{}{}'.format(iban, generate_number(2), generate_string(27))
-        return iban
+    if iban in ['GB', 'GG', 'JE', 'IM', 'RS']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(18))
+    elif iban == 'NO':
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(11))
+    elif iban == 'BE':
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(12))
+    elif iban in ['DK', 'FI', 'NL', 'FO', 'GL']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(14))
+    elif iban in ['MK', 'SI']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(15))
+    elif iban in ['AT', 'BA', 'EE', 'KZ', 'LT', 'LU', 'XK']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(16))
+    elif iban in ['CH', 'HR', 'LI', 'LV', 'CR']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(17))
+    elif iban in ['BG', 'BH', 'DE', 'GE', 'IE', 'ME', 'RS']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(18))
+    elif iban in ['CZ', 'ES', 'MD', 'PK', 'RO', 'SE', 'SK', 'TN', 'SA', 'VG', 'AD']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(20))
+    elif iban in ['GI', 'IL', 'AE']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(19))
+    elif iban in ['PT']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(21))
+    elif iban in ['IS, TR']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(22))
+    elif iban in ['FR', 'GR', 'IT', 'MC', 'MQ', 'PM', 'SM', 'TF', 'YT', 'MR']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(23))
+    elif iban in ['AZ', 'CY', 'DO', 'GT', 'HU', 'LB', 'PL', 'AL']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(24))
+    elif iban in ['QA', 'BR', 'PS']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(25))
+    elif iban in ['JO', 'KW', 'MU']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(26))
+    elif iban in ['MT', 'SC']:
+        iban = '{}{}{}'.format(iban, generate_number(2), generate_string(27))
+    return iban
 
 
 # 增加货币符号

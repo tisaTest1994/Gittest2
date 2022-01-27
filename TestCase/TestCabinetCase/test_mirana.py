@@ -2,8 +2,7 @@ from Function.api_function import *
 from Function.operate_sql import *
 
 
-# operate相关cases
-class TestOperateApi:
+class TestMiranaApi:
 
     # 初始化class
     def setup_method(self):

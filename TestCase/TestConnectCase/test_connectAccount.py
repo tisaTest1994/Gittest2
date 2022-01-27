@@ -374,14 +374,14 @@ class TestConnectAccountApi:
     @allure.title('test_connect_account_013 成功解绑+name match用户 pass')
     def test_connect_account_013(self):
         with allure.step("准备参数"):
-            account_id = 'f64d22f8-ffae-401c-91e5-6d630052b2a7'
+            account_id = 'b013327e-ae65-4197-acf6-806f03873f51'
         with allure.step("name match 数据"):
             data = {
                 'name': 'Wan yilei',
                 'id': '131sw478956',
-                'id_document': '',
-                'issued_by': 'HKG',
-                'dob': '19800202'
+                'id_document': 'ID',
+                'issued_by': 'RKS',
+                'dob': '19900202'
             }
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -390,7 +390,6 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-SIGN'] = sign
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
-            print(connect_headers)
         with allure.step("name match"):
             r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
         with allure.step("状态码和返回值"):
@@ -405,8 +404,7 @@ class TestConnectAccountApi:
     def test_connect_account_014(self):
         with allure.step("准备参数"):
             partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice.wang+1217@cabital.com')
-            account_id = '2d41bbd6-8298-43e5-81a9-ca1b359c421f'
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang@cabital.com', password='85600327158Hyt')
         with allure.step("unlink the cabital connect"):
             r = session.request('POST', url='{}/connect/account/{}/unlink'.format(self.url, partner_id), headers=headers)
         with allure.step("状态码和返回值"):
