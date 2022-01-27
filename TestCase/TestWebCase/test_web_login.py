@@ -25,38 +25,40 @@ class TestWebLogin:
     def test_login_001(self):
         # Sign up
         with allure.step("Sign Up注册页面跳转"):
-            operate_element(self.driver, 'loginPage', "login_gotosignup")
-            assert check_web(self.driver, 'signupPage', "signupForm"), '跳转Sign Up页面失败'
+            operate_element_web(self.driver, 'loginPage', "login_gotosignup", "click")
+            assert operate_element_web(self.driver, 'signupPage', "signupForm", "check"), '跳转Sign Up页面失败'
 
     @allure.title('test_web_login_001')
     @allure.description('signup邮箱规则校验')
     def test_signup_001(self):
         with allure.step("测试第一个字符为<>()[\]\\.,;:\s@\“字符的邮箱"):
-            operate_element(self.driver, 'loginPage', "login_gotosignup")
-            operate_element(self.driver, 'signupPage', "signup_form_password_email", "input", "<>test@cabital.com")
-            assert get_element_text(self.driver, "signupPage", "signup_form_password_email-helper-text") ==\
-                   'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
+            operate_element_web(self.driver, 'loginPage', "login_gotosignup", "click")
+            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "input", "<>test@cabital.com")
+            assert operate_element_web(self.driver, "signupPage", "signup_form_password_email-helper-text", "get_text")\
+                   == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
         with allure.step("如@后为[ ]内非4个一到三位数字且以.分割，如：test@[23.143.42.1234]"):
-            operate_element(self.driver, 'signupPage', "signup_form_password_email", "clear2")
-            operate_element(self.driver, 'signupPage', "signup_form_password_email", "input", "test@[23.143.42.1234]")
-            assert get_element_text(self.driver, "signupPage", "signup_form_password_email-helper-text") == \
-                   'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
+            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "delete",)
+            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "input",
+                                "test@[23.143.42.1234]")
+            assert operate_element_web(self.driver, "signupPage", "signup_form_password_email-helper-text", "get_text")\
+                   == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
         with allure.step("如@后为大写字母，小写字母，“-”或数字，.后面不为2个或2个以上的大写字母或小写字母。如：test@qwe12.c 和test@DF-.a1"):
-            operate_element(self.driver, 'signupPage', "signup_form_password_email", "clear2")
-            operate_element(self.driver, 'signupPage', "signup_form_password_email", "input", "test@qwe12.c")
-            assert get_element_text(self.driver, "signupPage", "signup_form_password_email-helper-text") == \
-                   'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
-            operate_element(self.driver, 'signupPage', "signup_form_password_email", "clear2")
-            operate_element(self.driver, 'signupPage', "signup_form_password_email", "input", "test@DF-.a1")
-            assert get_element_text(self.driver, "signupPage", "signup_form_password_email-helper-text") == \
-                   'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
+            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "delete")
+            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "input", "test@qwe12.c")
+            assert operate_element_web(self.driver, "signupPage", "signup_form_password_email-helper-text", "get_text")\
+                   == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
+            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "delete")
+            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "input", "test@DF-.a1")
+            assert operate_element_web(self.driver, "signupPage", "signup_form_password_email-helper-text", "get_text")\
+                   == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
         with allure.step("邮箱含中文，如测试@163.com"):
-            operate_element(self.driver, 'signupPage', "signup_form_password_email", "clear2")
-            operate_element(self.driver, 'signupPage', "signup_form_password_email", "input", "测试@163.com")
+            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "delete")
+            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "input", "测试@163.com")
+            print(operate_element_web(self.driver, 'signupPage', "click_sendcode", type='').is_enable())
             assert self.driver.find_element_by_xpath("//*[@id='signup_sendcode'][@tabindex='0']"), "send code显示状态错误"
         with allure.step("输入正确格式邮箱"):
-            operate_element(self.driver, 'signupPage', "signup_form_password_email", "clear2")
-            operate_element(self.driver, 'signupPage', "signup_form_password_email", "input", "qwe@cabital.com")
+            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "delete")
+            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "input", "qwe@cabital.com")
 
             #assert self.driver.find_element_by_xpath("//*[@id='signup_sendcode'][@tabindex='0']"), "send code显示状态错误"
 

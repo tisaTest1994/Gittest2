@@ -23,7 +23,8 @@
     "privacy": "name",
     "full-width-tab-0": "id",
     "MuiDialogActions-spacing": "class",
-    "username-helper-text": "id"
+    "username-helper-text": "id",
+    "click_sendcode": "name"
   },
   "assetPage": {
     "Cabital Logo": "alt",
