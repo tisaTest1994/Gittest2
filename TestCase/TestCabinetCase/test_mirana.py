@@ -10,9 +10,9 @@ class TestMiranaApi:
             account=get_json()['operate_admin_account']['email'],
             password=get_json()['operate_admin_account']['password'], type='operate')
 
-    @allure.title('test_2B_001')
+    @allure.title('test_mirana_001')
     @allure.description('提现USDC成功')
-    def test_2B_001(self):
+    def test_mirana_001(self):
         with allure.step("提现USDC成功"):
             data = {
                 "currency": "USDC",
@@ -32,9 +32,9 @@ class TestMiranaApi:
         with allure.step("校验返回值"):
             assert 'transaction_id' in r.text, "查询transaction_id错误，返回值是{}".format(r.text)
 
-    @allure.title('test_2B_002')
+    @allure.title('test_mirana_002')
     @allure.description('申购活期产品成功')
-    def test_2B_002(self):
+    def test_mirana_002(self):
         with allure.step("申购活期产品成功"):
             data = {
                 "amount": "10"
@@ -54,9 +54,9 @@ class TestMiranaApi:
         with allure.step("校验返回值"):
             assert 'transaction_id' in r.text, "查询transaction_id错误，返回值是{}".format(r.text)
 
-    @allure.title('test_2B_003')
+    @allure.title('test_mirana_003')
     @allure.description('申购定期产品成功')
-    def test_2B_003(self):
+    def test_mirana_003(self):
         with allure.step("申购定期产品成功"):
             data = {
                 "amount": "10"
@@ -76,9 +76,9 @@ class TestMiranaApi:
         with allure.step("校验返回值"):
             assert 'transaction_id' in r.text, "查询transaction_id错误，返回值是{}".format(r.text)
 
-    @allure.title('test_2B_004')
+    @allure.title('test_mirana_004')
     @allure.description('赎回活期产品成功')
-    def test_2B_004(self):
+    def test_mirana_004(self):
         with allure.step("赎回活期产品成功"):
             data = {
                 "amount": "10"
@@ -98,9 +98,9 @@ class TestMiranaApi:
         with allure.step("校验返回值"):
             assert 'transaction_id' in r.text, "查询transaction_id错误，返回值是{}".format(r.text)
 
-    @allure.title('test_2B_005')
+    @allure.title('test_mirana_005')
     @allure.description('申购定期产品后打开auto renew')
-    def test_2B_005(self):
+    def test_mirana_005(self):
         with allure.step("申购定期产品成功"):
             data = {
                 "amount": "1"
@@ -136,11 +136,11 @@ class TestMiranaApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['update_result'] == True, "查询update_result错误，返回值是{}".format(r.text)
+            assert r.json()['update_result'] is True, "查询update_result错误，返回值是{}".format(r.text)
 
-    @allure.title('test_2B_006')
+    @allure.title('test_mirana_006')
     @allure.description('申购定期后产品关闭auto renew')
-    def test_2B_006(self):
+    def test_mirana_006(self):
         with allure.step("申购定期产品成功"):
             data = {
                 "amount": "1.12"

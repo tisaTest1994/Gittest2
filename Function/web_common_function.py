@@ -30,7 +30,7 @@ def operate_element_web(driver, page, element_string, type='click', input_string
             logger.info('{}页面{}元素是否存在{}'.format(page, element_string, result))
             return result
         elif element_type == 'name':
-            result = driver.driver.find_element_by_name(element_string).is_displayed()
+            result = driver.find_element_by_name(element_string).is_displayed()
             logger.info('{}页面{}元素是否存在{}'.format(page, element_string, result))
             return result
         else:
@@ -52,6 +52,32 @@ def operate_element_web(driver, page, element_string, type='click', input_string
             return driver.find_element_by_name(element_string).text
         else:
             return driver.find_element_by_xpath('//*[@{}="{}"]'.format(type, element_string)).text
+    elif type == 'check_enabled':
+        if element_type == 'id':
+            result = driver.find_element_by_id(element_string).is_enabled()
+            logger.info('{}页面{}元素是否可被修改{}'.format(page, element_string, result))
+            return result
+        elif element_type == 'name':
+            result = driver.find_element_by_name(element_string).is_enabled()
+            logger.info('{}页面{}元素是否可被修改{}'.format(page, element_string, result))
+            return result
+        else:
+            result = driver.find_element_by_xpath('//*[@{}="{}"]'.format(type, element_string)).is_enabled()
+            logger.info('{}页面{}元素是否可被修改{}'.format(page, element_string, result))
+            return result
+    elif type == 'check_selected':
+        if element_type == 'id':
+            result = driver.find_element_by_id(element_string).is_selected()
+            logger.info('{}页面{}元素是否被选中{}'.format(page, element_string, result))
+            return result
+        elif element_type == 'name':
+            result = driver.find_element_by_name(element_string).is_selected()
+            logger.info('{}页面{}元素是否被选中{}'.format(page, element_string, result))
+            return result
+        else:
+            result = driver.find_element_by_xpath('//*[@{}="{}"]'.format(type, element_string)).is_selected()
+            logger.info('{}页面{}元素是否被选中{}'.format(page, element_string, result))
+            return result
     else:
         return driver.find_element_by_xpath('//*[@{}="{}"]'.format(type, element_string))
 
