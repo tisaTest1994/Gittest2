@@ -2,6 +2,7 @@ from Function.ui_function import *
 import allure
 from Function.api_common_function import *
 
+
 class TestAccountUi:
 
     def setup_method(self):
@@ -39,10 +40,9 @@ class TestAccountUi:
                 with allure.step("检查是否到达Sign Up 页面"):
                     assert operate_element_app('signupPage', 'Sign up with email', type='check'), '没有到达{}页面或者找不到{}页面元素'.format( 'signupPage', 'Sign up with email')
                 with allure.step("输入邮箱"):
-                    poco("android.widget.EditText").click()
                     text(generate_email())
                 with allure.step("勾选协议"):
-                    poco("android.widget.CheckBox").click()
+                    operate_element_app('signupPage', 'rule box')
                     with allure.step("勾选协议"):
                         operate_element_app('signupPage', "Send Verification Code", type='click')
 

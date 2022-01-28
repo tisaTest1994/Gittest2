@@ -21,6 +21,6 @@
     "Email Address": "CB329",
     "Sign up with email": "CB251",
     "Send Verification Code": "CB242",
-    
+    "rule box": "android.widget.CheckBox"
   }
 }
