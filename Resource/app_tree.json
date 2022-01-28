@@ -21,6 +21,9 @@
     "Email Address": "CB329",
     "Sign up with email": "CB251",
     "Send Verification Code": "CB242",
-    
+    "Verify your email": "CB298",
+    "Resend": "CB234",
+    "Next":"CB192"
+
   }
 }
