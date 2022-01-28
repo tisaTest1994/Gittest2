@@ -15,5 +15,12 @@
     "Account": "CB008",
     "log out": "CB173",
     "Are you sure to log out?": "CB354"
+  },
+  "signupPage": {
+    "Sign Up": "CB250",
+    "Email Address": "CB329",
+    "Sign up with email": "CB251",
+    "Send Verification Code": "CB242",
+    
   }
 }

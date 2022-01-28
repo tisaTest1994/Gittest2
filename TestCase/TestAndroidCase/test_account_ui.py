@@ -1,6 +1,6 @@
 from Function.ui_function import *
 import allure
-
+from Function.api_common_function import *
 
 class TestAccountUi:
 
@@ -21,4 +21,35 @@ class TestAccountUi:
         with allure.step("登出"):
             UiFunction.logout()
             sleep(3)
+
+    @allure.title('test_account_002')
+    @allure.description('注册新账号')
+    def test_account_002(self):
+        with allure.step("判断升级提示"):
+            if operate_element_app('welcomePage', 'Later', type='check', wait_time_max=10):
+                operate_element_app('welcomePage', 'Later')
+        with allure.step("先判断是否已经登录，判断升级提示"):
+            if operate_element_app('portfolioPage', 'Portfolio', type='check'):
+                return True
+            else:
+                with allure.step("开始注册流程"):
+                    operate_element_app('signupPage', 'Sign Up')
+                    sleep(3)
+                # assert断言进入注册页面
+                with allure.step("检查是否到达Sign Up 页面"):
+                    assert operate_element_app('signupPage', 'Sign up with email', type='check'), '没有到达{}页面或者找不到{}页面元素'.format( 'signupPage', 'Sign up with email')
+                with allure.step("输入邮箱"):
+                    poco("android.widget.EditText").click()
+                    text(generate_email())
+                with allure.step("勾选协议"):
+                    poco("android.widget.CheckBox").click()
+                    with allure.step("勾选协议"):
+                        operate_element_app('signupPage', "Send Verification Code", type='click')
+
+
+
+
+
+
+
 
