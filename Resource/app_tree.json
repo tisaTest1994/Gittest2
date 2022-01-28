@@ -24,6 +24,12 @@
     "Verify your email": "CB298",
     "Resend": "CB234",
     "Next":"CB192",
-    "rule box": "android.widget.CheckBox"
+    "rule box": "android.widget.CheckBox",
+    "code box": "android.view.View",
+    "password": "android.widget.EditText",
+    "Set login password":"CB243",
+    "Create your password": "CB332",
+    "Confirm Password": "CB056",
+    "Total Assert Value": "CB277"
   }
 }

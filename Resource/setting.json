@@ -478,7 +478,8 @@
     "test": {
       "account": "richard.wan@cabital.com",
       "password": "Zcdsw123",
-      "url": "https://portal.latibac.com/"
+      "url": "https://portal.latibac.com/",
+      "code": "666666"
     }
   },
   "2B": {
