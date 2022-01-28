@@ -53,7 +53,7 @@ class TestWebLogin:
         #            == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
         # with allure.step("邮箱含中文，如测试@163.com"):
         #     operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "delete")
-            operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "input", "测试@163.com")
+            #operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "input", "测试@163.com")
             print(operate_element_web(self.driver, 'signupPage', "click_sendcode", 'check_enabled'))
             #assert self.driver.find_element_by_xpath("//*[@id='signup_sendcode'][@tabindex='0']"), "send code显示状态错误"
         # with allure.step("输入正确格式邮箱"):
