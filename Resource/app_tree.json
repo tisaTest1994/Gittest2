@@ -23,7 +23,7 @@
     "Send Verification Code": "CB242",
     "Verify your email": "CB298",
     "Resend": "CB234",
-    "Next":"CB192"
-
+    "Next":"CB192",
+    "rule box": "android.widget.CheckBox"
   }
 }
