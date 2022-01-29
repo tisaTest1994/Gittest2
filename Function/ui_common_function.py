@@ -27,8 +27,12 @@ def operate_element_app(page_name, element_string, type='click', wait_time_max=5
                 elif type == 'input':
                     poco(text_string).set_text(input_string)
                     logger.info('点击{},输入{}'.format(text_string, input_string))
-                elif type == '':
-                    pass
+                elif type == 'get_text':
+                    return poco(text_string).get_text()
+                elif type == 'check_enabled':
+                    return poco(text_string).attr('enabled')
+                elif type == 'check_selected':
+                    return poco(text_string).attr('selected')
                 else:
                     return poco(text_string)
             else:
