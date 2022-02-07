@@ -31,6 +31,7 @@
   "CB079": "Deposit",
   "CB080": "Deposit Amount",
   "CB090": "Display Currency",
+  "CB091": "Insufficient Amount",
   "CB095": "Earn a high-yield 12% APY and receive $20 bonus on crypto stablecoin",
   "CB097": "Email",
   "CB098": "Verification Code",
@@ -389,5 +390,6 @@
   "WE141": "Recommended",
   "WE142": "You only can toggle your Auto-Renew on or off any time before 00:00(UTC+0) of Maturity Date.",
   "WE143": "Disconnect Successful",
-  "WE144": "Got it"
+  "WE144": "Got it",
+  "WE145": "Please fill in"
 }
