@@ -4,7 +4,7 @@ from Function.web_common_function import *
 
 class TestWebLogin:
     # 获取测试网站url
-    web_url = get_json()['web'][get_json()['env']]['url']
+    web_url = get_json()['Web'][get_json()['env']]['url']
 
     # 初始化class
     def setup_method(self):

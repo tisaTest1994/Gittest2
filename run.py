@@ -48,14 +48,14 @@ session = sessions()
 
 if __name__ == '__main__':
     get_language_map()
-    get_language_map(type='web')
+    get_language_map(type='Web')
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
     if sys.argv[1] == 'api':
         pytest.main(['./TestCase/TestApiCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == 'kyc':
         pytest.main(['./TestCase/TestComplianceServiceCase', '-v', '--alluredir', './Reports', '--clean-alluredir', '--timeout=600'])
-    elif sys.argv[1] == "ui":
+    elif sys.argv[1] == "app":
         pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "cabinet":
         pytest.main(['./TestCase/TestCabinetCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])

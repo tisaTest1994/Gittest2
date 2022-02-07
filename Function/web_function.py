@@ -26,7 +26,7 @@ class webFunction:
         return driver
 
     @staticmethod
-    def login_web(driver, account=get_json()['web'][get_json()['env']]['account'], password=get_json()['web'][get_json()['env']]['password']):
+    def login_web(driver, account=get_json()['Web'][get_json()['env']]['account'], password=get_json()['Web'][get_json()['env']]['password']):
         with allure.step("确定打开登录页面"):
             assert operate_element_web(driver, 'loginPage', 'signinForm', type='check'), '未打开登录页面'
         with allure.step("输入账号"):
@@ -42,7 +42,7 @@ class webFunction:
             assert operate_element_web(driver, 'assetPage', 'Cabital Logo'), '已经成功登录'
             sleep(2)
 
-    # 登出 web
+    # 登出 Web
     @staticmethod
     def logout_web(driver):
         with allure.step("点击登出"):
