@@ -5,7 +5,9 @@
     "sign_password_input": "id",
     "login_login": "id",
     "username-label": "id",
-    "login_gotosignup": "id"
+    "login_gotosignup": "id",
+    "login_forgotpw": "id",
+    "dialog_forgetpassword": "id"
   },
   "signupPage": {
     "signupForm": "id",
@@ -24,7 +26,12 @@
     "full-width-tab-0": "id",
     "MuiDialogActions-spacing": "class",
     "username-helper-text": "id",
-    "click_sendcode": "name"
+    "click_sendcode": "name",
+    "VisibilityIcon": "data-testid",
+    "VisibilityOffIcon": "data-testid",
+    "signup_registernow": "id",
+    "MuiAlert-message": "class",
+    "signup_gotologin": "id"
   },
   "assetPage": {
     "Cabital Logo": "alt",
@@ -104,7 +111,8 @@
     "assets-fixed-table": "id",
     "header-desktop-menu-item-WE096": "id",
     "header-desktop-menu-item-WE099": "id",
-    "header-desktop-menu-item-CB284": "id"
-
+    "header-desktop-menu-item-CB284": "id",
+    "mainpage_menu_account": "id",
+    "account-nickname": "id"
   }
 }
