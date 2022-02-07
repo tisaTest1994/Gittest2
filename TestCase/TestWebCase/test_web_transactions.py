@@ -4,7 +4,7 @@ from Function.api_function import *
 
 class TestWebTransactionApi:
     # 获取测试网站url
-    web_url = get_json()['web'][get_json()['env']]['url']
+    web_url = get_json()['Web'][get_json()['env']]['url']
 
     # 初始化class
     def setup_method(self):
@@ -31,7 +31,7 @@ class TestWebTransactionApi:
                     "codes": [i]
                 }
                 with allure.step("查询特定条件的交易"):
-                    r = session.request('POST', url='{}/txn/query/web'.format(env_url), data=json.dumps(data),
+                    r = session.request('POST', url='{}/txn/query/Web'.format(env_url), data=json.dumps(data),
                                         headers=headers)
                     transaction_info_api = r.json()['transactions'][0]
 
@@ -59,7 +59,7 @@ class TestWebTransactionApi:
 #                     "codes": []
 #                 }
 #                 with allure.step("查询特定条件的交易"):
-#                     r = session.request('POST', url='{}/txn/query/web'.format(env_url), data=json.dumps(data),
+#                     r = session.request('POST', url='{}/txn/query/Web'.format(env_url), data=json.dumps(data),
 #                                         headers=headers)
 #                     if r.json()['transactions'] != []:
 #                         transaction_info_api = r.json()['transactions'][0]

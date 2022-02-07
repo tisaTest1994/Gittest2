@@ -1,5 +1,6 @@
 .idea/
 Reports/
+Screenshot/
 src/
 *.pyc
 Resource/multiple_languages*
