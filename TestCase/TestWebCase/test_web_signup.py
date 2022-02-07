@@ -1,10 +1,8 @@
-import time
-import pytest
 from Function.web_function import *
 from Function.web_common_function import *
 from Function.api_common_function import *
 
-class TestWebLogin:
+class TestWebSignup:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']
 
@@ -23,16 +21,17 @@ class TestWebLogin:
         with allure.step("关闭driver"):
             self.driver.close()
 
-    @allure.title('test_web_login_001 signup页面跳转')
-    def test_login_001(self):
+    @allure.title('test_web_signup_001')
+    @allure.description('signup按钮页面跳转')
+    def test_signup_001(self):
         # Sign up
         with allure.step("Sign Up注册页面跳转"):
             operate_element_web(self.driver, 'loginPage', "login_gotosignup")
             assert operate_element_web(self.driver, 'signupPage', "signupForm", "check"), '跳转Sign Up页面失败'
 
-    @allure.title('test_web_signup_001')
+    @allure.title('test_web_signup_002')
     @allure.description('signup邮箱规则校验')
-    def test_signup_001(self):
+    def test_signup_002(self):
         with allure.step("测试第一个字符为<>()[\]\\.,;:\s@\“字符的邮箱"):
             operate_element_web(self.driver, 'loginPage', "login_gotosignup")
             operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "input", "<>test@cabital.com")
@@ -62,9 +61,9 @@ class TestWebLogin:
             operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "input", "qwe@cabital.com")
             assert operate_element_web(self.driver, 'signupPage', "click_sendcode", 'check_enabled'), "send code显示状态错误"
 
-    @allure.title('test_web_signup_002')
+    @allure.title('test_web_signup_003')
     @allure.description('signup_send code')
-    def test_signup_002(self):
+    def test_signup_003(self):
         """注册账号用脚本跑账号不好管理，故不写注册部分脚本"""
         operate_element_web(self.driver, 'loginPage', "login_gotosignup")
         operate_element_web(self.driver, 'signupPage', "signup_form_password_email", "input", "qwe@cabital.com")
@@ -74,9 +73,9 @@ class TestWebLogin:
             # 输入7个6，看value是否为6个6。
             assert self.driver.find_element_by_name("mailcode").get_attribute("value") == "666666", "验证码输入字符未限制"
 
-    @allure.title('test_web_signup_003')
+    @allure.title('test_web_signup_004')
     @allure.description('密码显隐默认状态及设置密码')
-    def test_signup_003(self):
+    def test_signup_004(self):
         operate_element_web(self.driver, 'loginPage', "login_gotosignup")
         with allure.step("设置密码-正确密码格式,并密码显隐切换"):
             operate_element_web(self.driver, 'signupPage', "signup_form_password_input", "input", "Aaaa1234")
@@ -122,9 +121,9 @@ class TestWebLogin:
                                                           " 1 uppercase letter, 1 lowercase letter and 1 number.",\
                 "输入错误格式密码，提示信息未显示"
 
-    @allure.title('test_web_signup_004')
+    @allure.title('test_web_signup_005')
     @allure.description('协议条款复选框及条款信息检查')
-    def test_signup_004(self):
+    def test_signup_005(self):
         operate_element_web(self.driver, 'loginPage', "login_gotosignup")
         with allure.step("点击协议同意书前复选框"):
             # 复选框默认不勾选,点击复选框
@@ -142,42 +141,15 @@ class TestWebLogin:
         #     operate_element_web(self.driver, 'signupPage', "privacy")
         #     assert operate_element_web(self.driver, "signupPage", "full-width-tab-0", "check"), "Privacy Policy页面未显示"
 
-    @allure.title('test_web_signup_005')
+    @allure.title('test_web_signup_006')
     @allure.description('注册账号')
-    def test_signup_005(self):
+    def test_signup_006(self):
         webFunction.signup_web(self)
 
 
-    @allure.title('test_web_signup_006')
+    @allure.title('test_web_signup_007')
     @allure.description('signup页面，login按钮跳转')
-    def test_signup_006(self):
+    def test_signup_007(self):
         operate_element_web(self.driver, 'loginPage', "login_gotosignup")
         operate_element_web(self.driver, 'signupPage', "signup_gotologin")
         assert operate_element_web(self.driver, 'loginPage', "login_gotosignup", "check"), "log in按钮跳转失败"
-
-
-    @allure.title('test_web_login_002')
-    @allure.description('log in')
-    def test_login_002(self):
-        account = get_json()['web'][get_json()['env']]['account']
-        password = get_json()['web'][get_json()['env']]['password']
-        with allure.step("输入账号"):
-            operate_element_web(self.driver, 'loginPage', 'username', 'delete')
-            operate_element_web(self.driver, 'loginPage', 'username', 'input', input_string=account)
-        with allure.step("输入密码"):
-            operate_element_web(self.driver, 'loginPage', 'sign_password_input', 'delete')
-            operate_element_web(self.driver, 'loginPage', 'sign_password_input', 'input', input_string=password)
-        with allure.step("点击sign in"):
-            operate_element_web(self.driver, 'loginPage', 'login_login')
-            sleep(2)
-        with allure.step("确定已经登录成功到首页"):
-            assert operate_element_web(self.driver, 'assetPage', 'Cabital Logo', 'check'), '未成功登录'
-            sleep(2)
-
-    @allure.title('test_web_login_003')
-    @allure.description('重置密码')
-    def test_login_003(self):
-        with allure.step("确认弹出重置密码框"):
-            operate_element_web(self.driver, 'loginPage', 'login_forgotpw', 'check'), '未弹出重置密码框'
-
-

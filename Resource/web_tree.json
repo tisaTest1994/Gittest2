@@ -7,7 +7,15 @@
     "username-label": "id",
     "login_gotosignup": "id",
     "login_forgotpw": "id",
-    "dialog_forgetpassword": "id"
+    "dialog_forgetpassword": "id",
+    "dialog_forgetpassword_email_input": "id",
+    "mailcode": "name",
+    "dialog_forgetpassword_password_input": "id",
+    "VisibilityIcon": "data-testid",
+    "VisibilityOffIcon": "data-testid",
+    "dialog_forgetpassword_confirm": "id",
+    "login_partner": "id",
+    "MuiAlert-message": "class"
   },
   "signupPage": {
     "signupForm": "id",
@@ -56,7 +64,10 @@
     "header-desktop-menu-item-WE096": "id",
     "header-desktop-menu-item-WE099": "id",
     "header-desktop-menu-item-CB284": "id",
-    "header-desktop-menu-item-WE031": "id"
+    "header-desktop-menu-item-WE031": "id",
+    "assets_balanceaction_withdraw": "id",
+    "simple-tab-0": "id",
+    "-drop-btn-up": "id"
   },
   "transactionPage": {
     "transaction-filter-types": "name",
@@ -114,5 +125,12 @@
     "header-desktop-menu-item-CB284": "id",
     "mainpage_menu_account": "id",
     "account-nickname": "id"
+  },
+
+  "BybitPage": {
+    "log-newui-head-title" : "class",
+    "username": "autocomplete",
+    "password": "type",
+    "log-newui-footer-submit": "class"
   }
 }
