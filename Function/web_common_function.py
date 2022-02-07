@@ -1,7 +1,5 @@
-from airtest_selenium.proxy import WebChrome
-from selenium import webdriver
-from Function.api_function import *
-from airtest.core.api import *
+from run import *
+from TestCase.TestWebCase.conftest import *
 from selenium.webdriver.common.keys import Keys
 
 
@@ -85,6 +83,6 @@ def operate_element_web(driver, page, element_string, type='click', input_string
 
 
 # 图像识别
-def check_web_photo(driver, photo_name):
+def check_web_photo(photo_name):
     driver.assert_template(Template("{}/{}".format(get_photo(), photo_name)), "验证图片{}是否存在".format(photo_name))
 

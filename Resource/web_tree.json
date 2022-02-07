@@ -67,7 +67,8 @@
     "header-desktop-menu-item-WE031": "id",
     "assets_balanceaction_withdraw": "id",
     "simple-tab-0": "id",
-    "-drop-btn-up": "id"
+    "-drop-btn-up": "id",
+    "-option-GBP-1": "id"
   },
   "transactionPage": {
     "transaction-filter-types": "name",
