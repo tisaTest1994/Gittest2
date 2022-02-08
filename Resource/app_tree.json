@@ -5,7 +5,9 @@
     "Later": "CB178"
   },
   "portfolioPage": {
-    "Portfolio": "CB214"
+    "Portfolio": "CB214",
+    "View":"CB407",
+    "Asset Allocation": "CB031"
   },
   "loginPage": {
     "Welcome Back": "CB306",
@@ -30,6 +32,7 @@
     "Set login password":"CB243",
     "Create your password": "CB332",
     "Confirm Password": "CB056",
-    "Total Assert Value": "CB277"
+    "Total Assert Value": "CB277",
+    "password rule box":"android.widget.ImageView"
   }
 }
