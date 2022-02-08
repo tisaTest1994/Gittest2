@@ -95,6 +95,7 @@ class TestWebLogin:
             operate_element_web(chrome_driver, 'BybitPage', 'password', 'input', password)
         with allure.step("点击继续"):
             operate_element_web(chrome_driver, 'BybitPage', 'log-newui-footer-submit')
+            sleep(2)
         with allure.step("检查用bybit登录成功"):
             assert operate_element_web(chrome_driver, 'assetPage', 'Cabital Logo', 'check'), '未成功登录'
             sleep(2)
