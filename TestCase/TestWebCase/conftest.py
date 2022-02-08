@@ -4,6 +4,7 @@ import allure
 from airtest.core.api import *
 from Function.web_common_function import *
 from Function.web_function import *
+from Function.web_function import webFunction
 from run import *
 
 logger = logging.getLogger("airtest")
