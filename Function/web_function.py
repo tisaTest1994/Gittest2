@@ -1,5 +1,6 @@
 from Function.web_common_function import *
 from Function.api_function import *
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import allure
 
 
@@ -21,7 +22,11 @@ class webFunction:
         if 'mac' in str(platform.platform()):
             driver = WebChrome(executable_path=path + "/../Resource/chromedriver_mac", chrome_options=options)
         else:
-            driver = WebChrome(executable_path=path + "/../Resource/chromedriver_liunx", chrome_options=options)
+            driver = WebChrome(
+                command_executor="http://chrome:4444/wd/hub",
+                desired_capabilities=DesiredCapabilities.CHROME
+            )
+            #driver = WebChrome(executable_path=path + "/../Resource/chromedriver_liunx", chrome_options=options)
         driver.get(url)
         return driver
 
