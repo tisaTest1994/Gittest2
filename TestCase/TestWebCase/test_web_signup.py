@@ -2,7 +2,7 @@ from Function.web_function import *
 from .conftest import *
 
 
-class TestWebLogin:
+class TestWebSignup:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']
 
@@ -175,3 +175,4 @@ class TestWebLogin:
     #     operate_element_web('signupPage', "signup_gotologin")
     #     assert operate_element_web('loginPage', "login_gotosignup", "check"), "log in按钮跳转失败"
     #
+

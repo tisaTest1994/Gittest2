@@ -26,7 +26,7 @@ class webFunction:
     @staticmethod
     def login_web(account=get_json()['web'][get_json()['env']]['account'], password=get_json()['web'][get_json()['env']]['password']):
         with allure.step("确定打开登录页面"):
-            assert operate_element_web(driver, 'loginPage', 'signinForm', type='check'), '未打开登录页面'
+            assert operate_element_web('loginPage', 'signinForm', type='check'), '未打开登录页面'
         with allure.step("输入账号"):
             operate_element_web('loginPage', 'username', type='delete')
             operate_element_web('loginPage', 'username', type='input', input_string=account)
@@ -51,7 +51,9 @@ class webFunction:
     @staticmethod
     def signup_web():
         test_account = generate_email()
-        email_code = 666666
+
+        email_code = get_json()['web'][get_json()['env']]['code']
+        pword = get_json()['web'][get_json()['env']]['password']
         password = get_json()['web'][get_json()['env']]['password']
         with allure.step("确定打开登录页面"):
             assert operate_element_web('loginPage', 'signinForm', type='check'), '未打开登录页面'
