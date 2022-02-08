@@ -1,7 +1,7 @@
 .idea/
 Reports/
-#Screenshot/App/*.png
-#Screenshot/Web/*.png
+Screenshot/App/*.png
+Screenshot/Web/*.png
 src/
 *.pyc
 Resource/multiple_languages_web.json
