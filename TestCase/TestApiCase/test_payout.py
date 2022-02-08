@@ -282,7 +282,7 @@ class TestPayoutApi:
                 assert 'txn_id' in r.text, "开启法币提现画面错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_017')
-    @allure.description('GBP法币提现、')
+    @allure.description('GBP法币提现')
     def test_payout_017(self):
         with allure.step("开启GBP法币提现画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -562,3 +562,25 @@ class TestPayoutApi:
     @allure.description('MFA认证提现USDT成功')
     def test_payout_030(self):
         ApiFunction.get_payout_transaction_id(amount='30.01', address='0x0f841561A9e5c95926b234FC5fA12cDcf9BEB378', code_type='USDT')
+
+    @allure.title('test_payout_031')
+    @allure.description('确认法币提现交易，bic使用小写')
+    def test_payout_031(self):
+        with allure.step("确认法币提现交易"):
+            data = {
+                "code": "EUR",
+                "amount": "2.51",
+                "payment_method": "SEPA",
+                "account_name": "yilei",
+                "iban": "AT234567891827364532",
+                "bic": "bkauatwwxxx"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json() == {}, "开启法币提现画面错误，返回值是{}".format(r.text)

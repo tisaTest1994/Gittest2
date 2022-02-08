@@ -22,6 +22,7 @@ class TestAccountUi:
         with allure.step("登录"):
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
             sleep(5)
+            assert False, '123'
         with allure.step("登出"):
             UiFunction.logout()
             sleep(3)
@@ -53,7 +54,7 @@ class TestAccountUi:
                 # with allure.step("Resend"):
                 #     operate_element_app('signupPage', "Resend", type='click')
                 with allure.step("输入邮箱验证码"):
-                    text(get_json()['web'][get_json()['env']]['code'])
+                    text(get_json()['Web'][get_json()['env']]['code'])
                 # assert断言Next按钮可点击
                 with allure.step("判断是否可点击Next"):
                     assert operate_element_app('signupPage', "Next", type='check_enabled'), '没有到达{}页面或者找不到{}页面元素'.format('signupPage', 'Next')
@@ -65,6 +66,8 @@ class TestAccountUi:
                     operate_element_app('signupPage', 'password', type='input', input_string=get_json()['web'][get_json()['env']]['password'])
                 # with allure.step("断言密码设置成功，高亮显示3个规则"):
                 #     assert operate_element_app('signupPage', 'password rule box', type='check_selected'), '没有到达{}页面或者找不到{}页面元素'.format('signupPage', 'password rule box')
+                    operate_element_app('signupPage', 'password', type='input', input_string=get_json()['Web'][get_json()['env']]['password'])
+
                 with allure.step("点击Confirm Password"):
                     operate_element_app('signupPage', "Confirm Password", type='click')
                 with allure.step("断言进入设置密码页面"):
@@ -83,8 +86,7 @@ class TestAccountUi:
         with allure.step("断言进入Asset overview页面"):
             assert operate_element_app('portfolioPage', 'Asset Allocation', type='check'), '没有到达{}页面或者找不到{}页面元素'.format( 'portfolioPage', 'Asset Allocation')
         with allure.step("获取Total Asset value"):
-
-
+            pass
 
 
 

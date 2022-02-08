@@ -90,7 +90,7 @@ class TestTransactionApi:
             "codes": []
         }
         with allure.step("查询特定条件的交易"):
-            r = session.request('POST', url='{}/txn/query/web'.format(env_url), data=json.dumps(data), headers=headers)
+            r = session.request('POST', url='{}/txn/query/Web'.format(env_url), data=json.dumps(data), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -111,7 +111,7 @@ class TestTransactionApi:
             "codes": []
         }
         with allure.step("web查询很后面页面交易数据为空"):
-            r = session.request('POST', url='{}/txn/query/web'.format(env_url), data=json.dumps(data), headers=headers)
+            r = session.request('POST', url='{}/txn/query/Web'.format(env_url), data=json.dumps(data), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))

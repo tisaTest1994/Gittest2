@@ -7,13 +7,18 @@ import allure
 import pyotp
 import uuid
 import sys
+import ssl
+import platform
 from Function.slack import *
 from Function.log import *
 from decimal import *
 from urllib.parse import urlencode
 from time import sleep
 from hashlib import sha256
-import ssl
+from airtest_selenium.proxy import WebChrome
+from selenium import webdriver
+from airtest.core.api import *
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
@@ -48,14 +53,14 @@ session = sessions()
 
 if __name__ == '__main__':
     get_language_map()
-    get_language_map(type='web')
+    get_language_map(type='Web')
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
     if sys.argv[1] == 'api':
         pytest.main(['./TestCase/TestApiCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == 'kyc':
         pytest.main(['./TestCase/TestComplianceServiceCase', '-v', '--alluredir', './Reports', '--clean-alluredir', '--timeout=600'])
-    elif sys.argv[1] == "ui":
+    elif sys.argv[1] == "app":
         pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "cabinet":
         pytest.main(['./TestCase/TestCabinetCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])

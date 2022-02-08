@@ -787,9 +787,9 @@ class TestFixedApi:
             code = product_list['code']
             product_id = product_list['product_id']
             if code == 'USDT':
-                amount = '20'
+                amount = '50'
             else:
-                amount = "0.01327"
+                amount = "0.21327"
             data = {
                 "subscribe_amount": {
                     "code": code,
@@ -831,9 +831,9 @@ class TestFixedApi:
             code = product_list['code']
             product_id = product_list['product_id']
             if code == 'USDT':
-                amount = '20'
+                amount = '50'
             else:
-                amount = "0.01327"
+                amount = "0.21327"
             data = {
                 "subscribe_amount": {
                     "code": code,
