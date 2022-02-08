@@ -361,10 +361,10 @@ class ApiFunction:
         code = product_list['code']
         product_id = product_list['product_id']
         if code == 'USDT':
-            amount = '30'
+            amount = '100'
             interest_amount = str(((Decimal(amount) * (Decimal(product_list['apy']) / 100) / Decimal(365)).quantize(Decimal('0.000000'), ROUND_FLOOR)) * Decimal(product_list['tenor']))
         else:
-            amount = "0.03"
+            amount = "0.23"
             interest_amount = str(((Decimal(amount) * (Decimal(product_list['apy']) / 100) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(product_list['tenor']))
         data = {
             "subscribe_amount": {
