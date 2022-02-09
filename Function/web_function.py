@@ -2,6 +2,7 @@ from Function.web_common_function import *
 from Function.api_function import *
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import allure
+import platform
 
 
 class webFunction:

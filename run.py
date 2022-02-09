@@ -8,7 +8,6 @@ import pyotp
 import uuid
 import sys
 import ssl
-import platform
 from Function.slack import *
 from Function.log import *
 from decimal import *
