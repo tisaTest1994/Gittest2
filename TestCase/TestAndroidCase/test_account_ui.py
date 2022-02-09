@@ -81,26 +81,12 @@ class TestAccountUi:
     def test_account_003(self):
         with allure.step("登录"):
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
-            sleep(5)
         with allure.step("通过API 获取Total Asset value"):
             headers['X-Currency'] = 'USD'
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
             total_asset_value = r.json()['summary']['abs_amount']
             total_asset_value_page = add_currency_symbol(total_asset_value, 'USD', True)
-            print(operate_element_app('portfolioPage', total_asset_value_page, 'check'))
             assert operate_element_app('portfolioPage', total_asset_value_page, 'check') is True, 'total asset value在页面的值是{}'.format(total_asset_value_page)
-
-
-
-
-
-
-
-            # assert operate_element_app('portfolioPage', 'Total Asset Value', type='get_text', wait_time_max=10) == ApiFunction.get_summary_abs_amount(), '{}是从接口获取到的'.format(total_asset_value)
-
-
-
-
 
 
 
