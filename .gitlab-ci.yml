@@ -68,19 +68,24 @@ before_script:
 
 WebTest:
   stage: test5
-  services:
-  spider:
-    image: selenium-py
-    volumes:
-      - /home/core/data/python:/home/code/
-    command: python run.py web test
-    depends_on:
-      - chrome
   chrome:
-    image: selenium/standalone-chrome
-    container_name: chrome
-    volumes:
-      - /dev/shm:/dev/shm
+    image: selenium/node-chrome:4.1.2-20220208
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    ports:
+      - "6900:5900"
+
+    selenium-hub:
+    image: selenium/hub:4.1.2-20220208
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
 
 #   tags:
 #     - python
