@@ -53,6 +53,24 @@ def operate_element_app(page_name, element_string, type='click', wait_time_max=5
                     logger.info('点击{},输入{}'.format(translation_code, input_string))
                 else:
                     return poco(translation_code)
+        else:
+            if type == 'click':
+                poco(element_string).click()
+                logger.info('点击{}元素'.format(element_string))
+            elif type == 'check':
+                wait_time = 0
+                while wait_time < wait_time_max:
+                    wait_time = wait_time + 1
+                    sleep(1)
+                    if poco(element_string).exists() is True:
+                        logger.info('检查{}元素，是否存在前页面:{}'.format(element_string, poco(element_string).exists()))
+                        return True
+                return False
+            elif type == 'input':
+                poco(element_string).set_text(input_string)
+                logger.info('点击{},输入{}'.format(element_string, input_string))
+            else:
+                return poco(element_string)
     else:
         assert False, "page name {}在app_tree中不存在".format(page_name)
 
