@@ -65,7 +65,13 @@ before_script:
 #     paths:
 #       - Reports
 #     expire_in: 1 week
-
+selenium-hub:
+    image: selenium/hub:4.1.2-20220208
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+ 
 WebTest:
   stage: test5
   image: selenium/node-chrome:4.1.2-20220208
