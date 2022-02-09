@@ -308,6 +308,13 @@
     "USDT",
     "ETH"
   ],
+  "asset_list": [
+    "BTC",
+    "USDT",
+    "ETH",
+    "GBP",
+    "EUR"
+  ],
   "websocket": {
     "url": "wss://api.latibac.com/api/v1/realtime/ws"
   },
