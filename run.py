@@ -8,16 +8,12 @@ import pyotp
 import uuid
 import sys
 import ssl
-import platform
 from Function.slack import *
 from Function.log import *
 from decimal import *
 from urllib.parse import urlencode
 from time import sleep
 from hashlib import sha256
-from airtest_selenium.proxy import WebChrome
-from selenium import webdriver
-from airtest.core.api import *
 
 ssl._create_default_https_context = ssl._create_unverified_context
 

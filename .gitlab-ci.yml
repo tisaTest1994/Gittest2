@@ -20,7 +20,6 @@ before_script:
     - tar -zxvf allure-2.13.9.tgz -C /opt/
     - ln -s /opt/allure-2.13.9/bin/allure /usr/bin/allure
     - pip install -r requirements.txt
-    - Xvfb :99 -ac &
 
 ApiTest:
   stage: test1
@@ -28,17 +27,6 @@ ApiTest:
     - python
   script:
     - python run.py api test
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
-
-KycTest:
-  stage: test4
-  tags:
-    - python
-  script:
-    - python run.py kyc test
   artifacts:
     paths:
       - Reports
@@ -66,12 +54,21 @@ ConnectTest:
       - Reports
     expire_in: 1 week
 
+KycTest:
+  stage: test4
+  tags:
+    - python
+  script:
+    - python run.py kyc test
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
 WebTest:
   stage: test5
   tags:
     - python
-  variables:
-    DISPLAY: :99
   script:
     - python run.py web test
   artifacts:

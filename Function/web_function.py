@@ -1,6 +1,11 @@
 from Function.web_common_function import *
 from Function.api_function import *
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from airtest_selenium.proxy import WebChrome
+from selenium import webdriver
+from airtest.core.api import *
 import allure
+import platform
 
 
 class webFunction:
@@ -10,16 +15,22 @@ class webFunction:
         # os.path.abspath()获得绝对路径
         path = os.path.abspath(os.path.dirname(__file__))
         options = webdriver.ChromeOptions()
-        options.add_argument('--disable-gpu')
+        #options.add_argument('--disable-gpu')
         # 指定浏览器的分辨率
         options.add_argument('--window-size=1920,1080')
         # 无界面运行
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
+        options.add_argument("--no-sandbox")
+        options.add_argument('disable-infobars')
         # 判断运行环境
         if 'mac' in str(platform.platform()):
             driver = WebChrome(executable_path=path + "/../Resource/chromedriver_mac", chrome_options=options)
         else:
-            driver = WebChrome(executable_path=path + "/../Resource/chromedriver_liunx", chrome_options=options)
+            driver = WebChrome(
+                command_executor="http://chrome:4444/wd/hub",
+                desired_capabilities=DesiredCapabilities.CHROME
+            )
+            #driver = WebChrome(executable_path=path + "/../Resource/chromedriver_liunx", chrome_options=options)
         driver.get(url)
         return driver
 
