@@ -71,7 +71,6 @@ WebTest:
     - python
   ports:
     - "4444:4444"
-  shm_size: 2g
   script:
     - python run.py web test
   artifacts:
