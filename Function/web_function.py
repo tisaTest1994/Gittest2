@@ -62,7 +62,6 @@ class webFunction:
     @staticmethod
     def signup_web(chrome_driver):
         test_account = generate_email()
-
         email_code = get_json()['web'][get_json()['env']]['code']
         password = get_json()['web'][get_json()['env']]['password']
         with allure.step("确定打开登录页面"):
