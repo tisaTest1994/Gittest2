@@ -488,3 +488,9 @@ class ApiFunction:
         crypto_list = get_json()['crypto_list']
         cash_list = get_json()['cash_list']
         return crypto_list + cash_list
+
+    @staticmethod
+    def get_mfa_code():
+        secretKey = get_json()['secretKey']
+        totp = pyotp.TOTP(secretKey)
+        return totp.now()
