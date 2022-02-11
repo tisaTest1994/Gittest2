@@ -115,7 +115,8 @@
     "assets-deposit-cash": "name",
     "crypto-payment-method": "name",
     "assets-withdraw-fiat-userNum": "id",
-    "assets-withdraw-fiat-userCode": "id"
+    "assets-withdraw-fiat-userCode": "id",
+    "assets_savingstype_Flexible": "id"
   },
   "transactionPage": {
     "transaction-filter-types": "name",
