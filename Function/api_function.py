@@ -428,6 +428,7 @@ class ApiFunction:
     # 收取邮箱验证码只收
     @staticmethod
     def get_email_code(type):
+        sleep(30)
         sleep_time = 0
         while sleep_time < 60:
             email_info = get_email()

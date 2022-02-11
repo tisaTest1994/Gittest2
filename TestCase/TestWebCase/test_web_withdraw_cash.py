@@ -606,8 +606,9 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '25')
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-        with allure.step("通过email获取邮箱验证码"):
+        with allure.step("申请邮箱验证码"):
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn')
+        with allure.step("通过email获取邮箱验证码"):
             code = ApiFunction.get_email_code(type='MFA_EMAIL')
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailcode', 'input', code)
         # 输入google验证码
