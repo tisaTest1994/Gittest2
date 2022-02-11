@@ -33,7 +33,7 @@ class TestWebAssetApi:
 
     @allure.title('test_web_asset_002')
     @allure.description('查询Total Balance Value')
-    def test_web_asset_002(self,chrome_driver):
+    def test_web_asset_002(self, chrome_driver):
         webFunction.login_web(chrome_driver)
         with allure.step("通过api获得Total Balance Value数据"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
