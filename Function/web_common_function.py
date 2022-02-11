@@ -5,7 +5,10 @@ from selenium.webdriver.common.keys import Keys
 
 # 操作页面元素
 def operate_element_web(driver, page, element_string, type='click', input_string=''):
-    element_type = get_json(file='web_tree.json')[page][element_string]
+    if page == '':
+        element_type = 'text'
+    else:
+        element_type = get_json(file='web_tree.json')[page][element_string]
     if type == 'click':
         if element_type == 'id':
             driver.find_element_by_id(element_string).click()
@@ -29,6 +32,10 @@ def operate_element_web(driver, page, element_string, type='click', input_string
             return result
         elif element_type == 'name':
             result = driver.find_element_by_name(element_string).is_displayed()
+            logger.info('{}页面{}元素是否存在{}'.format(page, element_string, result))
+            return result
+        elif element_type == 'text':
+            result = driver.find_element_by_xpath('//*[text()="{}"]'.format(element_string)).is_displayed()
             logger.info('{}页面{}元素是否存在{}'.format(page, element_string, result))
             return result
         else:
@@ -78,11 +85,32 @@ def operate_element_web(driver, page, element_string, type='click', input_string
             result = driver.find_element_by_xpath('//*[@{}="{}"]'.format(element_type, element_string)).is_selected()
             logger.info('{}页面{}元素是否被选中{}'.format(page, element_string, result))
             return result
+    elif type == 'get_value':
+        if element_type == 'id':
+            return driver.find_element_by_id(element_string).get_attribute('value')
+        elif element_type == 'name':
+            return driver.find_element_by_name(element_string).get_attribute('value')
+        else:
+            return driver.find_element_by_xpath('//*[@{}="{}"]'.format(element_type, element_string)).get_attribute('value')
+    elif type == 'check_exist':
+        flag = True
+        try:
+            if element_type == 'id':
+                driver.find_element_by_id(element_string)
+                return flag
+            elif element_type == 'name':
+                driver.find_element_by_name(element_string)
+                return flag
+            else:
+                driver.find_element_by_xpath('//*[@{}="{}"]'.format(element_type, element_string))
+                return flag
+        except:
+            flag = False
+            return flag
     else:
         return driver.find_element_by_xpath('//*[@{}="{}"]'.format(element_type, element_string))
 
 
 # 图像识别
-def check_web_photo(photo_name):
+def check_web_photo(driver, photo_name):
     driver.assert_template(Template("{}/{}".format(get_photo(), photo_name)), "验证图片{}是否存在".format(photo_name))
-
