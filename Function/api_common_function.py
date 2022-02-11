@@ -9,6 +9,7 @@ import imaplib
 import email
 import chardet
 import logger
+import pyotp
 
 
 # 获取当前时间
@@ -301,3 +302,10 @@ def add_comma_number(number):
     if number_radix != '':
         sumstr = sumstr + '.' + number_radix
     return sumstr
+
+
+# 获取2fa google code
+def get_mfa_code():
+    secretKey = get_json()['secretKey']
+    totp = pyotp.TOTP(secretKey)
+    return totp.now()
