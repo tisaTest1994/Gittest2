@@ -606,28 +606,8 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '25')
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-        with allure.step("申请邮箱验证码"):
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailcode', 'input', '666663')
-
-            # 输入google验证码
-            with allure.step("通过接口获取google验证码"):
-                secretKey = get_json()['secretKey']
-                totp = pyotp.TOTP(secretKey)
-                mfaVerificationCode = totp.now()
-                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-googlecode', 'input',
-                                    mfaVerificationCode)
-                # 点击【confirm withdrawal】
-                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-submit')
-                assert operate_element_web(chrome_driver, 'assetPage', 'MuiAlert-message', 'get_text') ==\
-                       'The verification code was wrong.', 'google验证码错误提示信息未显示'
-        with allure.step("输入正确邮箱验证码，错误google验证码"):
-            # 输入正确邮箱验证码
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailcode', 'delete')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailcode', 'input', '666666')
-            # 输入错误谷歌验证码
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-googlecode', 'input', '666666')
         with allure.step("通过email获取邮箱验证码"):
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn')
             code = ApiFunction.get_email_code(type='MFA_EMAIL')
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailcode', 'input', code)
         # 输入google验证码
