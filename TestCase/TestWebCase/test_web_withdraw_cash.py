@@ -627,7 +627,6 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailcode', 'input', '666666')
             # 输入错误谷歌验证码
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-googlecode', 'input', '666666')
-=======
         with allure.step("通过email获取邮箱验证码"):
             code = ApiFunction.get_email_code(type='MFA_EMAIL')
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailcode', 'input', code)
@@ -636,7 +635,6 @@ class TestWebWithdraw:
             mfaVerificationCode = get_mfa_code()
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-googlecode', 'input', mfaVerificationCode)
         with allure.step("点击 confirm withdrawal"):
->>>>>>> e00fa143ad6535362d528e2d1d60802ac1a54935
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-submit')
             sleep(1000)
 
