@@ -947,9 +947,9 @@ class TestFixedApi:
                 assert int(i['settle_date']) <= int(params['created_at_to']), '查询某个时间段的申购交易记录错误，时间不在范围内'
                 assert int(i['settle_date']) >= int(params['created_at_from']), '查询某个时间段的申购交易记录错误，时间不在范围内'
 
-    @allure.title('test_fixed_022')
+    @allure.title('test_fixed_023')
     @allure.description('查询某个时间段的申购交易记录,并且指定项目天数')
-    def test_fixed_022(self):
+    def test_fixed_023(self):
         with allure.step("查询某个时间段的申购交易记录"):
             params = {
                 'tx_type': "1",
