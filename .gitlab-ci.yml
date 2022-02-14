@@ -21,49 +21,49 @@ before_script:
     - ln -s /opt/allure-2.13.9/bin/allure /usr/bin/allure
     - pip install -r requirements.txt
 
-ApiTest:
-  stage: test1
-  tags:
-    - python
-  script:
-    - python run.py api test
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
-
-CabinetTest:
-  stage: test2
-  tags:
-    - python
-  script:
-    - python run.py cabinet test
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
-
-ConnectTest:
-  stage: test3
-  tags:
-    - python
-  script:
-    - python run.py connect test
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
-
-KycTest:
-  stage: test4
-  tags:
-    - python
-  script:
-    - python run.py kyc test
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
+# ApiTest:
+#   stage: test1
+#   tags:
+#     - python
+#   script:
+#     - python run.py api test
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+#
+# CabinetTest:
+#   stage: test2
+#   tags:
+#     - python
+#   script:
+#     - python run.py cabinet test
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+#
+# ConnectTest:
+#   stage: test3
+#   tags:
+#     - python
+#   script:
+#     - python run.py connect test
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+#
+# KycTest:
+#   stage: test4
+#   tags:
+#     - python
+#   script:
+#     - python run.py kyc test
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
 
 WebTest:
   stage: test5

@@ -15,22 +15,20 @@ class webFunction:
         # os.path.abspath()获得绝对路径
         path = os.path.abspath(os.path.dirname(__file__))
         options = webdriver.ChromeOptions()
-        #options.add_argument('--disable-gpu')
+        options.add_argument('--disable-gpu')
         # 指定浏览器的分辨率
         options.add_argument('--window-size=1920,1080')
-        # 无界面运行
-        #options.add_argument('--headless')
         options.add_argument("--no-sandbox")
-        options.add_argument('disable-infobars')
+        # 不显示正在受自动化软件控制
+        options.add_experimental_option("excludeSwitches", ['enable-automation'])
+        options.add_experimental_option('useAutomationExtension', False)
         # 判断运行环境
         if 'mac' in str(platform.platform()):
-            driver = WebChrome(executable_path=path + "/../Resource/chromedriver_mac", chrome_options=options)
+            driver = WebChrome(executable_path=path + "/../Resource/chromedriver_mac", chrome_options=options, desired_capabilities=DesiredCapabilities.CHROME)
         else:
-            driver = WebChrome(
-                command_executor="http://chrome:4444/wd/hub",
-                desired_capabilities=DesiredCapabilities.CHROME
-            )
-            #driver = WebChrome(executable_path=path + "/../Resource/chromedriver_liunx", chrome_options=options)
+            # 无界面运行
+            options.add_argument('--headless')
+            driver = WebChrome(executable_path=path + "/../Resource/chromedriver_liunx", desired_capabilities=DesiredCapabilities.CHROME, chrome_options=options)
         driver.get(url)
         return driver
 
