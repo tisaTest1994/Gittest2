@@ -3,6 +3,7 @@ from Function.web_common_function import *
 from Function.api_common_function import *
 
 
+@allure.feature("web ui transactions 相关 testcases")
 class TestWebWithdraw:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']

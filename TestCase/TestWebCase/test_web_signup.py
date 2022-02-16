@@ -2,6 +2,7 @@ from Function.web_function import *
 from .conftest import *
 
 
+@allure.feature("web ui sign up 相关 testcases")
 class TestWebSignup:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']
