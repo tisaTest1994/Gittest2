@@ -39,25 +39,27 @@ class TestWebSignup:
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "delete")
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input",
                                 "test@[23.143.42.1234]")
-            assert operate_element_web(chrome_driver, "signupPage", "signup_form_password_email-helper-text", "get_text")\
-                   == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
+            assert operate_element_web(chrome_driver, "signupPage", "signup_form_password_email-helper-text",
+                                       "get_text") == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
         with allure.step("如@后为大写字母，小写字母，“-”或数字，.后面不为2个或2个以上的大写字母或小写字母。如：test@qwe12.c 和test@DF-.a1"):
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "delete")
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input", "test@qwe12.c")
-            assert operate_element_web(chrome_driver, "signupPage", "signup_form_password_email-helper-text", "get_text")\
-                   == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
+            assert operate_element_web(chrome_driver, "signupPage", "signup_form_password_email-helper-text",
+                                       "get_text") == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "delete")
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input", "test@DF-.a1")
-            assert operate_element_web(chrome_driver, "signupPage", "signup_form_password_email-helper-text", "get_text")\
-                   == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
+            assert operate_element_web(chrome_driver, "signupPage", "signup_form_password_email-helper-text",
+                                       "get_text") == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
         with allure.step("邮箱含中文，如测试@163.com"):
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "delete")
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input", "测试@163.com")
-            assert operate_element_web(chrome_driver, 'signupPage', "click_sendcode", 'check_enabled'), "send code显示状态错误"
+            assert operate_element_web(chrome_driver, 'signupPage', "click_sendcode", 'check_enabled'),\
+                "send code显示状态错误"
         with allure.step("输入正确格式邮箱"):
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "delete")
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input", "qwe@cabital.com")
-            assert operate_element_web(chrome_driver, 'signupPage', "click_sendcode", 'check_enabled'), "send code显示状态错误"
+            assert operate_element_web(chrome_driver, 'signupPage', "click_sendcode", 'check_enabled'),\
+                "send code显示状态错误"
 
     @allure.title('test_web_signup_003')
     @allure.description('signup_send code')

@@ -91,7 +91,8 @@ def operate_element_web(driver, page, element_string, type='click', input_string
         elif element_type == 'name':
             return driver.find_element_by_name(element_string).get_attribute('value')
         else:
-            return driver.find_element_by_xpath('//*[@{}="{}"]'.format(element_type, element_string)).get_attribute('value')
+            return driver.find_element_by_xpath('//*[@{}="{}"]'.format(element_type, element_string)).\
+                get_attribute('value')
     elif type == 'check_exist':
         flag = True
         try:

@@ -29,16 +29,17 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
         with allure.step("检查默认币种，并切换币种"):
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'get_value') == 'EUR', "默认币种错误"
+            assert chrome_driver.find_element_by_xpath('//*[@id="assets-withdraw-fiat-selector"][@name="assets-withdraw-fiat-selector-change"]').\
+                get_attribute('value') == 'EUR', "默认币种错误"
             # 点击下拉框
-            operate_element_web(chrome_driver, 'assetPage', '-assets-withdraw-fiat-selector-change-drop-btn-up')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-change-drop-btn-up')
             # 选择GBP
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-option-GBP-1')
             assert chrome_driver.find_element_by_xpath('//div/img[@src="../images/coin/GBP.png"]'), '币种未切换至GBP'
             # 点击下拉框
-            operate_element_web(chrome_driver, 'assetPage', '-assets-withdraw-fiat-selector-change-drop-btn-up')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-change-drop-btn-up')
             # 选择EUR
-            operate_element_web(chrome_driver, 'assetPage', '-option-EUR-0')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-option-EUR-0')
             assert chrome_driver.find_element_by_xpath('//div/img[@src="../images/coin/EUR.png"]'), '币种未切换至EUR'
 
     @allure.title('test_web_withdraw_cash_002')
@@ -109,61 +110,28 @@ class TestWebWithdraw:
             # 输入错误格式iban
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN', 'input',
                                 'AA12345678901234567890')
-            time.sleep(1)
-            # 输入正确格式bic
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC', 'input', 'ZXCVBG12')
-            time.sleep(1)
-            # 输入正确金额
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '5')
-            # 点击Next: Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            with allure.step("调用接口获得数据"):
-                data1 = {
-                    "code": "EUR",
-                    "amount": "22.5",
-                    "payment_method": "SEPA",
-                    "account_name": "kimi w",
-                    "iban": "AA12345678901234567890",
-                    "bic": "ZXCVBG12"
-                }
-                r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url),
-                                    data=json.dumps(data1), headers=headers)
-                time.sleep(2)
-                message = r.json()['message']
-                print(message)
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
+            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN-helper-text',
+                                       type='get_text') == 'Invalid or non-SEPA account', '提示信息错误'
         with allure.step("输入错误格式iban：正确范围内的bank_country_code+错误长度阿拉伯数字"):
             # 清空iban输入框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN', 'delete')
             # 输入错误格式iban
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN', 'input',
                                 'BG1234567890123456789')
-            time.sleep(5)
-            # 点击Next: Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            with allure.step("调用接口获得数据"):
-                data2 = {
-                    "code": "EUR",
-                    "amount": "22.5",
-                    "payment_method": "SEPA",
-                    "account_name": "kimi w",
-                    "iban": "BG1234567890123456789",
-                    "bic": "ZXCVBG12"
-                }
-                r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url),
-                                    data=json.dumps(data2), headers=headers)
-                time.sleep(2)
-                message = r.json()['message']
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
+            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN-helper-text',
+                                       type='get_text') == 'Invalid or non-SEPA account', '提示信息错误'
         with allure.step("输入正确格式iban：正确范围内的bank_country_code+正确长度阿拉伯数字"):
             # 清空iban输入框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN', 'delete')
-            # 输入错误格式iban
+            # 输入正确格式iban
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN', 'input',
                                 'BG12345678901234567890')
-            time.sleep(5)
+            # 输入正确格式bic，正确长度（8位或11位）且前六位为字母
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC', 'input', 'ZXCVBG12')
+            # 输入正确金额
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '5')
+            time.sleep(2)
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn', 'check'),\
@@ -179,63 +147,30 @@ class TestWebWithdraw:
                 '页面未跳转至Withdraw-withdraw Cash页面'
             time.sleep(2)
         with allure.step("输入错误格式bic，错误长度"):
-            # 输入正确格式iban
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN', 'input',
-                                'BG12345678901234567890')
-            time.sleep(1)
             # 输入错误格式bic，错误长度
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC', 'input', 'ZXCVBG123')
-            time.sleep(1)
-            # 输入正确金额
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '5')
-            time.sleep(2)
-            # 点击Next: Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            with allure.step("调用接口获得数据"):
-                data1 = {
-                    "code": "EUR",
-                    "amount": "22.5",
-                    "payment_method": "SEPA",
-                    "account_name": "kimi w",
-                    "iban": "BG12345678901234567890",
-                    "bic": "ZXCVBG123"
-                }
-                r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data1),
-                                    headers=headers)
-                time.sleep(2)
-                message = r.json()['message']
-                print(message)
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
+            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC-helper-text',
+                                       'get_text') == 'Invalid or non-SEPA BIC Code', '提示信息错误'
         with allure.step("输入错误格式bic，前6位非字母"):
             # 清空bic
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC', 'delete')
             # 输入错误格式bic，前6位非字母
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC', 'input', 'ZXC123')
-            time.sleep(1)
-            # 点击Next: Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            with allure.step("调用接口获得数据"):
-                data1 = {
-                    "code": "EUR",
-                    "amount": "22.5",
-                    "payment_method": "SEPA",
-                    "account_name": "kimi w",
-                    "iban": "BG12345678901234567890",
-                    "bic": "ZXC123"
-                }
-                r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data1),
-                                    headers=headers)
-                time.sleep(2)
-                message = r.json()['message']
-                print(message)
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
+            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC-helper-text',
+                                   'get_text') == 'Invalid or non-SEPA BIC Code', '提示信息错误'
         with allure.step("输入正确格式bic，正确长度（8位或11位）且前六位为字母"):
+            # 输入正确格式iban
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN', 'input',
+                                'BG12345678901234567890')
             # 清空bic
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC', 'delete')
             # 输入正确格式bic，正确长度（8位或11位）且前六位为字母
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC', 'input', 'ZXCVBG12')
             time.sleep(1)
+            # 输入正确金额
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '5')
+            time.sleep(2)
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn', 'check'),\
@@ -259,6 +194,22 @@ class TestWebWithdraw:
             # 输入account number
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum', 'input',
                                 '123456')
+            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum-helper-text',
+                                       'get_text') == 'Invalid Account Number', '提示信息错误'
+        with allure.step("输入错误格式account number,正确长度非纯数字"):
+            # 清空account number
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum', 'delete')
+            # 输入account number
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum', 'input',
+                                '12345abc')
+            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum-helper-text',
+                                       'get_text') == 'Invalid Account Number', '提示信息错误'
+        with allure.step("输入正确格式account number（8位纯数字）"):
+            # 清空account number
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum', 'delete')
+            # 输入account number
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum', 'input',
+                                '12345678')
             time.sleep(1)
             # 输入正确格式sort code
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userCode', 'input', '123456')
@@ -267,54 +218,6 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2')
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '0')
             time.sleep(2)
-            # 点击Next: Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            with allure.step("调用接口获得数据"):
-                data1 = {
-                    "code": "GBP",
-                    "amount": "17.5",
-                    "payment_method": "Faster Payments",
-                    "account_name": "kimi w",
-                    "account_number": "123456",
-                    "sort_code": "123456"
-                }
-                r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data1),
-                                    headers=headers)
-                time.sleep(2)
-                message = r.json()['message']
-                print(message)
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
-        with allure.step("输入错误格式account number,正确长度非纯数字"):
-            # 清空account number
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum', 'delete')
-            # 输入account number
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum', 'input',
-                                '12345abc')
-            time.sleep(1)
-            # 点击Next: Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            with allure.step("调用接口获得数据"):
-                data1 = {
-                    "code": "GBP",
-                    "amount": "17.5",
-                    "payment_method": "Faster Payments",
-                    "account_name": "kimi w",
-                    "account_number": "12345abc",
-                    "sort_code": "123456"
-                }
-                r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data1),
-                                    headers=headers)
-                time.sleep(2)
-                message = r.json()['message']
-                print(message)
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
-        with allure.step("输入正确格式account number（8位纯数字）"):
-            # 清空account number
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum', 'delete')
-            # 输入account number
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum', 'input',
-                                '12345678')
-            time.sleep(1)
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn', 'check'),\
@@ -335,64 +238,29 @@ class TestWebWithdraw:
             # 选择GBP
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-option-GBP-1')
         with allure.step("输入错误格式从sort code,6位非纯数字"):
-            # 输入account number
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum', 'input',
-                                '12345678')
-            time.sleep(1)
             # 输入sort code
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userCode', 'input', 'abc666')
-            time.sleep(1)
-            # 输入正确金额
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '0')
-            time.sleep(2)
-            # 点击Next: Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            with allure.step("调用接口获得数据"):
-                data1 = {
-                    "code": "GBP",
-                    "amount": "17.5",
-                    "payment_method": "Faster Payments",
-                    "account_name": "kimi w",
-                    "account_number": "12345678",
-                    "sort_code": "abc666"
-                }
-                r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data1),
-                                    headers=headers)
-                time.sleep(2)
-                message = r.json()['message']
-                print(message)
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
+            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userCode-helper-text',
+                                       'get_text') == 'Invalid Sort Code', '提示信息错误'
         with allure.step("输入错误格式从sort code,非6位纯数字"):
             # 清空sort code
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userCode', 'delete')
             # 输入sort code
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userCode', 'input', '12345')
-            time.sleep(1)
-            # 点击Next: Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            with allure.step("调用接口获得数据"):
-                data1 = {
-                    "code": "GBP",
-                    "amount": "17.5",
-                    "payment_method": "Faster Payments",
-                    "account_name": "kimi w",
-                    "account_number": "12345678",
-                    "sort_code": "12345"
-                }
-                r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url),
-                                    data=json.dumps(data1),
-                                    headers=headers)
-                time.sleep(2)
-                message = r.json()['message']
-                print(message)
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
+            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userCode-helper-text',
+                                       'get_text') == 'Invalid Sort Code', '提示信息错误'
         with allure.step("输入正确格式sort code,6位纯数字"):
+            # 输入account number
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userNum', 'input',
+                                '12345678')
             # 清空sort code
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userCode', 'delete')
             # 输入sort code
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userCode', 'input', '123456')
-            time.sleep(1)
+            # 输入正确金额
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '0')
+            time.sleep(2)
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn', 'check'), \
@@ -414,7 +282,7 @@ class TestWebWithdraw:
                                 'BG12345678901234567890')
             time.sleep(1)
             # 输入bic
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC', 'input', 'ZXCVGB123')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC', 'input', 'ZXCVGB12')
             time.sleep(1)
             # 输入正确金额
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2')
@@ -429,14 +297,14 @@ class TestWebWithdraw:
                     "payment_method": "SEPA",
                     "account_name": "kimi w",
                     "iban": "BG12345678901234567890",
-                    "bic": "ZXCVGB123"
+                    "bic": "ZXCVGB12"
                 }
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data1),
                                     headers=headers)
                 time.sleep(2)
                 message = r.json()['message']
                 print(message)
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
+                assert operate_element_web(chrome_driver, '', message, type='check'), '提示信息错误'
 
     @allure.title('test_web_withdraw_cash_010')
     @allure.description('withdrawal amount金额限制校验（EUR）')
@@ -447,26 +315,38 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
             time.sleep(2)
-        with allure.step("输入的值小于最小提现金额"):
+        with allure.step("获取可用金额数据"):
+            available_balance_eur = operate_element_web(chrome_driver, 'assetPage',
+                                                        'assets-withdraw-fiat-amount-helper-text', 'get_text')
+            available_balance_eur = available_balance_eur.replace(
+                'Available Balance:', '').replace(' ', '').replace('EUR', '').replace(',', '')
+        with allure.step("输入的值小于最小提现金额(25)"):
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount-helper-text',
                                        'get_text') == 'Minimum: 25', '最小限额提示信息未显示'
-        with allure.step("输入的值大于最大可提现金额（available balance）"):
+        with allure.step("输入的值大于可用余额（available balance）"):
+            input_amount = float(available_balance_eur) + 1
+            print(input_amount)
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'delete')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2000000')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '{}'.format(input_amount))
             assert 'Insufficient Amount' in operate_element_web(chrome_driver, 'assetPage',
                                                                 'assets-withdraw-fiat-amount-helper-text', 'get_text'),\
                 '最大限额提示信息未显示'
-        with allure.step("输入的值大于最大可提现金额（available balance）"):
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'delete')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '50001')
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount-helper-text',
-                                       'get_text') == 'Maximum: 50,000.00', '最大限额提示信息未显示'
+        with allure.step("输入的值大于单笔限额额（EUR单笔限额50000）"):
+            # 如可用金额>最大可提现金额，则继续测试,否则跳过
+            if float(available_balance_eur) > 50000:
+                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '50001')
+                assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount-helper-text',
+                                           'get_text') == 'Maximum: 50,000.00', '最大限额提示信息未显示'
+            else:
+                pass
         with allure.step("输入符合要求的提现金额"):
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'delete')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '30')
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount-helper-text',
-                                       'check_exist') is False, '提示信息未显示错误'
+            if float(available_balance_eur) >= 30:
+                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'delete')
+                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '30')
+                assert 'Available Balance' in operate_element_web(chrome_driver, 'assetPage',
+                                                                  'assets-withdraw-fiat-amount-helper-text', 'get_text'),\
+                    '提示信息未显示错误'
 
     @allure.title('test_web_withdraw_cash_011')
     @allure.description('withdrawal amount金额限制校验（GBP）')
@@ -482,26 +362,39 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-change-drop-btn-up')
             # 选择GBP
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-option-GBP-1')
+        with allure.step("获取可用金额数据"):
+            available_balance_gbp = operate_element_web(chrome_driver, 'assetPage',
+                                                        'assets-withdraw-fiat-amount-helper-text', 'get_text')
+            available_balance_gbp = available_balance_gbp.replace(
+                'Available Balance:', '').replace(' ', '').replace('GBP', '').replace(',', '')
         with allure.step("输入的值小于最小提现金额"):
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount-helper-text',
                                        'get_text') == 'Minimum: 20', '最小限额提示信息未显示'
-        with allure.step("输入的值大于最大可提现金额（available balance）"):
+        with allure.step("输入的值大于可用余额（available balance）"):
+            input_amount = float(available_balance_gbp) + 1
+            print(input_amount)
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'delete')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '2000000')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '{}'.format(input_amount))
             assert 'Insufficient Amount' in operate_element_web(chrome_driver, 'assetPage',
                                                                 'assets-withdraw-fiat-amount-helper-text', 'get_text'),\
                 '最大限额提示信息未显示'
-        with allure.step("输入的值大于最大可提现金额（available balance）"):
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'delete')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '40001')
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount-helper-text',
-                                       'get_text') == 'Maximum: 40,000.00', '最大限额提示信息未显示'
+        with allure.step("输入的值大于单笔限额额（EUR单笔限额40000）"):
+            # 如可用金额>最大可提现金额，则继续测试,否则跳过
+            if float(available_balance_gbp) > 40000:
+                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'delete')
+                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '40001')
+                assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount-helper-text',
+                                           'get_text') == 'Maximum: 40,000.00', '最大限额提示信息未显示'
+            else:
+                pass
         with allure.step("输入符合要求的提现金额"):
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'delete')
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '25')
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount-helper-text',
-                                       'check_exist') is False, '提示信息未显示错误'
+            if float(available_balance_gbp) >= 25:
+                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'delete')
+                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '25')
+                assert 'Available Balance' in operate_element_web(chrome_driver, 'assetPage',
+                                                                  'assets-withdraw-fiat-amount-helper-text', 'get_text'),\
+                    '提示信息未显示错误'
 
     @allure.title('test_web_withdraw_cash_012')
     @allure.description('withdrawal amount-Max')
@@ -555,7 +448,7 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'delete')
             time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-receive', 'get_text')\
-                   == '-2.5 EUR', 'receive金额未更新'
+                   == '-2.50 EUR', 'receive金额未更新'
 
     @allure.title('test_web_withdraw_cash_014')
     @allure.description('Next：Submit WithDrawal')
@@ -617,7 +510,6 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-googlecode', 'input', mfaVerificationCode)
         with allure.step("点击 confirm withdrawal"):
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-submit')
-            sleep(1000)
 
 
 
