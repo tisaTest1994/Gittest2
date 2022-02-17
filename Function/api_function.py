@@ -73,7 +73,7 @@ class ApiFunction:
                             headers=headers)
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json()['transaction_id'] is not None, "payout币种是{}，金额是{}错误，返回值是{}".format(data['code'], data['amount'], r.text)
-        sleep(30)
+        sleep(60)
         return r.json()['transaction_id']
 
     # 获取下次清算金额
@@ -383,7 +383,7 @@ class ApiFunction:
         assert 'tx_id' in r.text, "赎回错误，返回值是{}".format(r.text)
         return {'product_id': product_id, 'code': code, 'tx_id': r.json()['tx_id']}
 
-    # 收取验证码
+    # 收取验证码先发再收
     @staticmethod
     def get_verification_code(type, account):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account)
@@ -396,6 +396,39 @@ class ApiFunction:
         logger.info('返回值是{}'.format(str(r.text)))
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json() == {}, "收取验证码失败，返回值是{}".format(r.text)
+        sleep_time = 0
+        while sleep_time < 60:
+            email_info = get_email()
+            if type == 'REGISTRY':
+                if '[Cabital] Verify Your Email' in email_info['title']:
+                    break
+                    sleep_time == 81
+            elif type == 'FORGET_PASSWORD':
+                if 'Reset Password Request' in email_info['title']:
+                    break
+                    sleep_time == 81
+            elif type == 'ENABLE_MFA':
+                if 'Enable Google Authenticator' in email_info['title']:
+                    break
+                    sleep_time == 81
+            elif type == 'DISABLE_MFA':
+                if 'Disable Google Authenticator' in email_info['title']:
+                    break
+                    sleep_time == 81
+            elif type == 'MFA_EMAIL':
+                sleep(20)
+                if 'Withdrawal Request' in email_info['title']:
+                    break
+                    sleep_time == 81
+            sleep_time = sleep_time + 5
+            sleep(5)
+        code = str(email_info['body']).split('"code":')[1].split('"')[1]
+        return code
+
+    # 收取邮箱验证码只收
+    @staticmethod
+    def get_email_code(type):
+        sleep(30)
         sleep_time = 0
         while sleep_time < 60:
             email_info = get_email()

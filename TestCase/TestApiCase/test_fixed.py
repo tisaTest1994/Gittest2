@@ -922,3 +922,55 @@ class TestFixedApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json() is not None, '查询申购ETH项目的交易记录失败，返回值是{}'.format(r.text)
+
+    @allure.title('test_fixed_022')
+    @allure.description('查询某个时间段的申购交易记录')
+    def test_fixed_022(self):
+        with allure.step("查询某个时间段的申购交易记录"):
+            params = {
+                'tx_type': "1",
+                'cursor': 0,
+                'size': 900,
+                'order': "1",
+                'code': "",
+                'created_at_from': '1626249600',
+                'created_at_to': '1627249000'
+            }
+            r = session.request('GET', url='{}/earn/fix/transactions'.format(env_url), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            for i in r.json()['transactions']:
+                assert int(i['settle_date']) <= int(params['created_at_to']), '查询某个时间段的申购交易记录错误，时间不在范围内'
+                assert int(i['settle_date']) >= int(params['created_at_from']), '查询某个时间段的申购交易记录错误，时间不在范围内'
+
+    @allure.title('test_fixed_023')
+    @allure.description('查询某个时间段的申购交易记录,并且指定项目天数')
+    def test_fixed_023(self):
+        with allure.step("查询某个时间段的申购交易记录"):
+            params = {
+                'tx_type': "1",
+                'cursor': 0,
+                'size': 900,
+                'order': "1",
+                'code': "",
+                'created_at_from': '1626249600',
+                'created_at_to': '1727249000',
+                'tenor_unit': '1',
+                'tenor_value': '7'
+            }
+            r = session.request('GET', url='{}/earn/fix/transactions'.format(env_url), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            for i in r.json()['transactions']:
+                assert int(i['settle_date']) <= int(params['created_at_to']), '查询某个时间段的申购交易记录错误，时间不在范围内'
+                assert int(i['settle_date']) >= int(params['created_at_from']), '查询某个时间段的申购交易记录错误，时间不在范围内'
+                assert i['tenor']['unit'] == int(params['tenor_unit']), '查询某个时间段的申购交易记录错误，项目天数错误'
+                assert i['tenor']['interval'] == int(params['tenor_value']), '查询某个时间段的申购交易记录错误，项目天数错误'

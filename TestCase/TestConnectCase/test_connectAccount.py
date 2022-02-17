@@ -382,6 +382,13 @@ class TestConnectAccountApi:
                 'id_document': 'PASSPORT',
                 'issued_by': 'HKG',
                 'dob': '19900502'
+        with allure.step("name match 数据"):
+            data = {
+                'name': 'yanting37 huang3',
+                'id': '12345678',
+                'id_document': 'PASSPORT',
+                'issued_by': 'HKG',
+                'dob': '19860101'
             }
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -400,17 +407,17 @@ class TestConnectAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)
-
-    @allure.title('test_connect_account_014 成功解绑+name match用户mismatch')
-    def test_connect_account_014(self):
-        with allure.step("准备参数"):
-            partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang@cabital.com', password='85600327158Hyt')
-        with allure.step("unlink the cabital connect"):
-            r = session.request('POST', url='{}/connect/account/{}/unlink'.format(self.url, partner_id), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
+    #
+    # @allure.title('test_connect_account_014 成功解绑+name match用户mismatch')
+    # def test_connect_account_014(self):
+    #     with allure.step("准备参数"):
+    #         partner_id = get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']
+    #         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang@cabital.com', password='85600327158Hyt')
+    #     with allure.step("unlink the cabital connect"):
+    #         r = session.request('POST', url='{}/connect/account/{}/unlink'.format(self.url, partner_id), headers=headers)
+    #     with allure.step("状态码和返回值"):
+    #         logger.info('状态码是{}'.format(str(r.status_code)))
+    #         logger.info('返回值是{}'.format(str(r.text)))
     #     with allure.step("校验状态码和返回值"):
     #         if r.status_code == 200:
     #             assert r.json() == {}, "unlink the cabital connect错误，返回值是{}".format(r.text)

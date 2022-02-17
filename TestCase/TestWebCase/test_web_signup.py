@@ -2,6 +2,7 @@ from Function.web_function import *
 from .conftest import *
 
 
+@allure.feature("web ui sign up 相关 testcases")
 class TestWebSignup:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']
@@ -26,39 +27,40 @@ class TestWebSignup:
             operate_element_web(chrome_driver, 'loginPage', "login_gotosignup")
             assert operate_element_web(chrome_driver, 'signupPage', "signupForm", "check"), '跳转Sign Up页面失败'
 
-
-
     @allure.title('test_web_signup_002')
     @allure.description('signup邮箱规则校验')
     def test_signup_002(self, chrome_driver):
         with allure.step("测试第一个字符为<>()[\]\\.,;:\s@\“字符的邮箱"):
             operate_element_web(chrome_driver, 'loginPage', "login_gotosignup")
-            operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input", "<>test@cabital.com")
-            assert operate_element_web(chrome_driver,"signupPage", "signup_form_password_email-helper-text", "get_text")\
-                   == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
+            operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input",
+                                "<>test@cabital.com")
+            assert operate_element_web(chrome_driver, "signupPage", "signup_form_password_email-helper-text",
+                                       "get_text") == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
         with allure.step("如@后为[ ]内非4个一到三位数字且以.分割，如：test@[23.143.42.1234]"):
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "delete")
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input",
                                 "test@[23.143.42.1234]")
-            assert operate_element_web(chrome_driver,"signupPage", "signup_form_password_email-helper-text", "get_text")\
-                   == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
+            assert operate_element_web(chrome_driver, "signupPage", "signup_form_password_email-helper-text",
+                                       "get_text") == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
         with allure.step("如@后为大写字母，小写字母，“-”或数字，.后面不为2个或2个以上的大写字母或小写字母。如：test@qwe12.c 和test@DF-.a1"):
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "delete")
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input", "test@qwe12.c")
-            assert operate_element_web(chrome_driver,"signupPage", "signup_form_password_email-helper-text", "get_text")\
-                   == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
+            assert operate_element_web(chrome_driver, "signupPage", "signup_form_password_email-helper-text",
+                                       "get_text") == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "delete")
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input", "test@DF-.a1")
-            assert operate_element_web(chrome_driver,"signupPage", "signup_form_password_email-helper-text", "get_text")\
-                   == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
+            assert operate_element_web(chrome_driver, "signupPage", "signup_form_password_email-helper-text",
+                                       "get_text") == 'Please enter a valid email address', "未显示邮箱格式错误或提示信息错误"
         with allure.step("邮箱含中文，如测试@163.com"):
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "delete")
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input", "测试@163.com")
-            assert operate_element_web(chrome_driver, 'signupPage', "click_sendcode", 'check_enabled'), "send code显示状态错误"
+            assert operate_element_web(chrome_driver, 'signupPage', "click_sendcode", 'check_enabled'),\
+                "send code显示状态错误"
         with allure.step("输入正确格式邮箱"):
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "delete")
             operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input", "qwe@cabital.com")
-            assert operate_element_web(chrome_driver, 'signupPage', "click_sendcode", 'check_enabled'), "send code显示状态错误"
+            assert operate_element_web(chrome_driver, 'signupPage', "click_sendcode", 'check_enabled'),\
+                "send code显示状态错误"
 
     @allure.title('test_web_signup_003')
     @allure.description('signup_send code')
@@ -130,15 +132,16 @@ class TestWebSignup:
                 "复选框默认状态错误"
             operate_element_web(chrome_driver, 'signupPage', "signup_termschk")
             assert operate_element_web(chrome_driver, 'signupPage', "signup_termschk", "check_selected"), "复选框勾选失败"
-        # with allure.step("点击Terms of Services,然后并关闭页面"):
-        #     operate_element_web(chrome_driver, 'signupPage', "service")
-        #     assert operate_element_web(chrome_driver,"signupPage", "full-width-tab-0", "check"), "Terms of Services页面未显示"
-        #     # 关闭窗口的close按钮缺一个id
-        #     # operate_element('signupPage', "")
-        #     # assert (check_web("signupPage", "full-width-tab-0") is False), "Terms of Services页面未显示"
-        # with allure.step("点击Privacy Policy并关闭页面"):
-        #     operate_element_web(chrome_driver, 'signupPage', "privacy")
-        #     assert operate_element_web(chrome_driver,"signupPage", "full-width-tab-0", "check"), "Privacy Policy页面未显示"
+        with allure.step("点击Terms of Services,然后并关闭页面"):
+            operate_element_web(chrome_driver, 'signupPage', "service")
+            sleep(2)
+            assert operate_element_web(chrome_driver, "signupPage", "full-width-tab-0", "check"),\
+                "Terms of Services页面未显示"
+            # 关闭窗口（缺id，先用xpath写）
+            chrome_driver.find_element_by_xpath("//div/div[3]/button").click()
+        with allure.step("点击Privacy Policy并关闭页面"):
+            operate_element_web(chrome_driver, 'signupPage', "privacy")
+            assert operate_element_web(chrome_driver, "signupPage", "full-width-tab-0", "check"), "Privacy Policy页面未显示"
 
     @allure.title('test_web_signup_006')
     @allure.description('注册账号')
@@ -151,5 +154,3 @@ class TestWebSignup:
         operate_element_web(chrome_driver, 'loginPage', "login_gotosignup")
         operate_element_web(chrome_driver, 'signupPage', "signup_gotologin")
         assert operate_element_web(chrome_driver, 'loginPage', "login_gotosignup", "check"), "log in按钮跳转失败"
-
-

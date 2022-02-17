@@ -2,6 +2,8 @@ from Function.web_function import *
 from Function.web_common_function import *
 from Function.api_common_function import *
 
+
+@allure.feature("web ui log in 相关 testcases")
 class TestWebLogin:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']
@@ -18,16 +20,15 @@ class TestWebLogin:
     def teardown_method(self):
         pass
 
-
     @allure.title('test_web_login_001')
     @allure.description('登录账号')
     def test_login_001(self, chrome_driver):
         account = get_json()['web'][get_json()['env']]['account']
         password = get_json()['web'][get_json()['env']]['password']
-        with allure.step("输入账号"):
+        with allure.step("输入登录账号"):
             operate_element_web(chrome_driver, 'loginPage', 'username', 'delete')
             operate_element_web(chrome_driver, 'loginPage', 'username', 'input', input_string=account)
-        with allure.step("输入密码"):
+        with allure.step("输入登录密码"):
             operate_element_web(chrome_driver, 'loginPage', 'sign_password_input', 'delete')
             operate_element_web(chrome_driver, 'loginPage', 'sign_password_input', 'input', input_string=password)
         with allure.step("点击sign in"):
@@ -48,7 +49,8 @@ class TestWebLogin:
             operate_element_web(chrome_driver, 'loginPage', 'login_forgotpw')
             assert operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword', 'check'), '未弹出重置密码框'
         with allure.step("输入需要重置密码账号"):
-            operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword_email_input', 'input', input_string=account)
+            operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword_email_input', 'input',
+                                input_string=account)
         with allure.step("输入邮箱验证码"):
             operate_element_web(chrome_driver, 'loginPage', 'mailcode', 'input', email_code)
         with allure.step("输入新密码"):
@@ -76,7 +78,8 @@ class TestWebLogin:
             # 把账号密码改回城默认
             operate_element_web(chrome_driver, 'loginPage', 'login_forgotpw')
             assert operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword', 'check'), '未弹出重置密码框'
-            operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword_email_input', 'input', input_string=account)
+            operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword_email_input', 'input',
+                                input_string=account)
             operate_element_web(chrome_driver, 'loginPage', 'mailcode', 'input', email_code)
             operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword_password_input', 'input', password)
             operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword_confirm')
@@ -99,4 +102,3 @@ class TestWebLogin:
         with allure.step("检查用bybit登录成功"):
             assert operate_element_web(chrome_driver, 'assetPage', 'Cabital Logo', 'check'), '未成功登录'
             sleep(2)
-
