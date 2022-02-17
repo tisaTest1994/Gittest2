@@ -144,7 +144,6 @@ class TestAccountUi:
             r = session.request('GET', url='{}/assetstatapi/assetstat'.format(env_url), headers=headers)
             total_asset_value = r.json()['history'][0]['total_value']
             total_asset_value_page = add_currency_symbol(total_asset_value, 'USD', True)
-            print(operate_element_app('portfolioPage', total_asset_value_page, 'check'))
             assert operate_element_app('portfolioPage', total_asset_value_page, 'check') is True, 'total asset value在页面的值是{}'.format(total_asset_value_page)
         history = r.json()['history']
         print(history)
@@ -176,28 +175,6 @@ class TestAccountUi:
             total_asset_value = r.json()['history'][0]['total_value']
             total_asset_value_page = add_currency_symbol(total_asset_value, 'USD', True)
             print(operate_element_app('portfolioPage', total_asset_value_page, 'check'))
-
-                    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

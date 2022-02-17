@@ -69,6 +69,8 @@ WebTest:
   stage: test5
   tags:
     - python
+  services:
+    - selenium/standalone-chrome:latest
   script:
     - python run.py web test
   artifacts:
