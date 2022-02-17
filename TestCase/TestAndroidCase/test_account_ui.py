@@ -2,6 +2,7 @@ from Function.ui_function import *
 import allure
 from Function.api_common_function import *
 from TestCase.TestApiCase.test_asset import *
+import datetime
 
 
 class TestAccountUi:
@@ -42,7 +43,7 @@ class TestAccountUi:
                     sleep(3)
                 # assert断言进入注册页面
                 with allure.step("检查是否到达Sign Up 页面"):
-                    assert operate_element_app('signupPage', 'Sign up with email',type='check'), '没有到达{}页面或者找不到{}页面元素'.format('signupPage', 'Sign up with email')
+                    assert operate_element_app('signupPage', 'Sign up with email', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('signupPage', 'Sign up with email')
                 with allure.step("输入邮箱"):
                     text(generate_email())
                 with allure.step("勾选协议"):
@@ -77,26 +78,116 @@ class TestAccountUi:
                 sleep(3)
 
     @allure.title('test_account_003')
-    @allure.description('portfolio 没 total asset value')
+    @allure.description('portfolio 页面验证 total asset value')
     def test_account_003(self):
         with allure.step("登录"):
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
-            sleep(5)
         with allure.step("通过API 获取Total Asset value"):
             headers['X-Currency'] = 'USD'
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
             total_asset_value = r.json()['summary']['abs_amount']
+            print(total_asset_value)
             total_asset_value_page = add_currency_symbol(total_asset_value, 'USD', True)
+            print(total_asset_value_page)
+            print(operate_element_app('portfolioPage', total_asset_value_page, 'check'))
+            assert operate_element_app('portfolioPage', total_asset_value_page, 'check') is True, 'total_asset_value_page在页面的值是{}'.format(total_asset_value_page)
+
+    @allure.title('test_account_004')
+    @allure.description('portfolio 页面跳转进Asset Overview验证total asset value')
+    def test_account_004(self):
+        with allure.step("登录"):
+            UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
+        with allure.step("点击View"):
+            operate_element_app('portfolioPage', 'View', 'click')
+        assert operate_element_app('portfolioPage', 'Asset Allocation', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('portfolioPage', 'Asset Allocation')
+        with allure.step("通过API 获取BTC的百分比"):
+            headers['X-Currency'] = 'USD'
+            r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
+            print(r.json())
+            total_asset_value = r.json()['summary']['abs_amount']
+            print('total_asset_value：{}'.format(total_asset_value))
+            total_asset_value_page = add_currency_symbol(total_asset_value, 'USD', True)
+            print('total_asset_value_page：{}'.format(total_asset_value_page))
             print(operate_element_app('portfolioPage', total_asset_value_page, 'check'))
             assert operate_element_app('portfolioPage', total_asset_value_page, 'check') is True, 'total asset value在页面的值是{}'.format(total_asset_value_page)
 
+    @allure.title('test_account_005')
+    @allure.description('portfolio 页面跳转进Asset Overview验证5种币种的占比')
+    def test_account_005(self):
+        with allure.step("登录"):
+            UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
+        with allure.step("点击View"):
+            operate_element_app('portfolioPage', 'View', 'click')
+        assert operate_element_app('portfolioPage', 'Asset Allocation', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('portfolioPage', 'Asset Allocation')
+        with allure.step("通过API 获取BTC的百分比"):
+            headers['X-Currency'] = 'USD'
+            r = session.request('GET', url='{}/assetstatapi/assetstat'.format(env_url), headers=headers)
+            print(r.json())
+            overview = r.json()['overview']
+            for i in overview:
+                code = i['code']
+                percent = i['percent']
+                print(code, percent)
+                assert operate_element_app('portfolioPage', code, 'check') is True, 'code在页面的值是{}'.format(code)
+                assert operate_element_app('portfolioPage', percent, 'check') is True, 'percent在页面的值是{}'.format(percent)
+
+    @allure.title('test_account_006')
+    @allure.description('portfolio 页面跳转进Asset Value初始值')
+    def test_account_006(self):
+        with allure.step("登录"):
+            UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
+        with allure.step("点击View"):
+            operate_element_app('portfolioPage', 'View', 'click')
+        assert operate_element_app('portfolioPage', 'Asset Allocation', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('portfolioPage', 'Asset Allocation')
+        with allure.step("通过API 获取Asset Value初始值"):
+            headers['X-Currency'] = 'USD'
+            r = session.request('GET', url='{}/assetstatapi/assetstat'.format(env_url), headers=headers)
+            total_asset_value = r.json()['history'][0]['total_value']
+            total_asset_value_page = add_currency_symbol(total_asset_value, 'USD', True)
+            print(operate_element_app('portfolioPage', total_asset_value_page, 'check'))
+            assert operate_element_app('portfolioPage', total_asset_value_page, 'check') is True, 'total asset value在页面的值是{}'.format(total_asset_value_page)
+        history = r.json()['history']
+        print(history)
+        today = datetime.date.today()
+        yesterday = today - datetime.timedelta(days=1)
+        for i in history:
+            date1 = i['date'].split()[0]
+            if date1 == yesterday:
+                total_value='$'+ i['total_value']
+                print('date1的值是：{}'.format(date1))
+                print('total_value的值是：{}'.format(total_value))
+                assert operate_element_app('portfolioPage', date, 'check') is True, 'date在页面的值是{}'.format(date)
+                assert operate_element_app('portfolioPage', total_value, 'check') is True, 'total_value在页面的值是{}'.format(total_value)
+            else:
+                pass
+
+    @allure.title('test_account_007')
+    @allure.description('portfolio 页面跳转进Asset Value初始值')
+    def test_account_007(self):
+        with allure.step("登录"):
+            UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
+        with allure.step("点击View"):
+            operate_element_app('portfolioPage', 'View', 'click')
+        assert operate_element_app('portfolioPage', 'Asset Allocation', type='check'), '没有到达{}页面或者找不到{}页面元素'.format(
+            'portfolioPage', 'Asset Allocation')
+        with allure.step("通过API 获取Asset Value初始值"):
+            headers['X-Currency'] = 'USD'
+            r = session.request('GET', url='{}/assetstatapi/assetstat'.format(env_url), headers=headers)
+            total_asset_value = r.json()['history'][0]['total_value']
+            total_asset_value_page = add_currency_symbol(total_asset_value, 'USD', True)
+            print(operate_element_app('portfolioPage', total_asset_value_page, 'check'))
+
+                    
 
 
 
 
 
 
-            # assert operate_element_app('portfolioPage', 'Total Asset Value', type='get_text', wait_time_max=10) == ApiFunction.get_summary_abs_amount(), '{}是从接口获取到的'.format(total_asset_value)
+
+
+
+
 
 
 

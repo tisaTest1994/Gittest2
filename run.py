@@ -57,7 +57,7 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'kyc':
         pytest.main(['./TestCase/TestComplianceServiceCase', '-v', '--alluredir', './Reports', '--clean-alluredir', '--timeout=600'])
     elif sys.argv[1] == "app":
-        pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
+        pytest.main(['./TestCase/TestAndroidCase/test_account_ui.py::TestAccountUi::test_account_006', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "cabinet":
         pytest.main(['./TestCase/TestCabinetCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "connect":
