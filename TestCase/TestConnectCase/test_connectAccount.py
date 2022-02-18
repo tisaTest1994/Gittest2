@@ -374,7 +374,14 @@ class TestConnectAccountApi:
     @allure.title('test_connect_account_013 成功解绑+name match用户 pass')
     def test_connect_account_013(self):
         with allure.step("准备参数"):
-            account_id = '1f2c2a67-301f-4ebb-82a7-c95d46dbef17'
+            account_id = '95c3f010-b008-40f1-bd80-40713e2f1aa8'
+        with allure.step("name match 数据"):
+            data = {
+                'name': 'alice66 wang766',
+                'id': '266643',
+                'id_document': 'PASSPORT',
+                'issued_by': 'HKG',
+                'dob': '19900502'
         with allure.step("name match 数据"):
             data = {
                 'name': 'yanting37 huang3',
@@ -392,6 +399,7 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("name match"):
             r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
+            print(r.json())
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))

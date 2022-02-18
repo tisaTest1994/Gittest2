@@ -1,6 +1,8 @@
 from airtest.core.api import *
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 from run import *
+from selenium.webdriver.common.keys import Keys
+
 
 poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
 
@@ -51,6 +53,7 @@ def operate_element_app(page_name, element_string, type='click', wait_time_max=5
                 elif type == 'input':
                     poco(translation_code).set_text(input_string)
                     logger.info('点击{},输入{}'.format(translation_code, input_string))
+
                 else:
                     return poco(translation_code)
         else:
@@ -61,7 +64,7 @@ def operate_element_app(page_name, element_string, type='click', wait_time_max=5
                 wait_time = 0
                 while wait_time < wait_time_max:
                     wait_time = wait_time + 1
-                    sleep(1)
+                    # sleep(1)
                     if poco(element_string).exists() is True:
                         logger.info('检查{}元素，是否存在前页面:{}'.format(element_string, poco(element_string).exists()))
                         return True
@@ -83,6 +86,8 @@ def slide(direction, cycle=1):
     for i in range(cycle):
         if direction == 'up':
             swipe([w/2, h*0.8], [w/2, h*0.4])
+        elif direction == 'bottom':
+            swipe([w/2, h*0.9], [w/2, h*0.1])
         elif direction == 'down':
             swipe([w/2, h*0.3], [w/2, h*0.9])
         elif direction == 'left':
