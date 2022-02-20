@@ -463,11 +463,6 @@ class TestWebWithdraw:
             time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-        with allure.step("信息填写不完整：不输入信息直接点击next"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            time.sleep(2)
-            assert chrome_driver.find_element_by_xpath('//*[text()="{}"]'.format('Please fill in IBAN, BIC, Amount')).is_displayed(),\
-                '未显示提示信息'
         with allure.step("信息填写完整"):
             # 输入iban
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN', 'input',
