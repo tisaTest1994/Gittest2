@@ -62,7 +62,6 @@ class ApiFunction:
         mfaVerificationCode = totp.now()
         headers['X-Mfa-Otp'] = str(mfaVerificationCode)
         headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
-        logger.info('交易的订单headers是{}'.format(headers))
         data = {
             "amount": amount,
             "code": code_type,
@@ -71,7 +70,11 @@ class ApiFunction:
         }
         r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
                             headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json()['transaction_id'] is not None, "payout币种是{}，金额是{}错误，返回值是{}".format(data['code'], data['amount'], r.text)
         sleep(60)
         return r.json()['transaction_id']
