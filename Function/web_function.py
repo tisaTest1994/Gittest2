@@ -22,12 +22,12 @@ class webFunction:
         # 不显示正在受自动化软件控制
         options.add_experimental_option("excludeSwitches", ['enable-automation'])
         options.add_experimental_option('useAutomationExtension', False)
+
         # 判断运行环境
         if 'mac' in str(platform.platform()):
-            driver = WebChrome(executable_path='http://10.10.20.64:4444/wd/hub', chrome_options=options,
-                               desired_capabilities=DesiredCapabilities.CHROME)
-
-            #driver = WebChrome(executable_path=path + "/../Resource/chromedriver_mac", chrome_options=options, desired_capabilities=DesiredCapabilities.CHROME)
+            # driver = WebChrome(executable_path='http://10.10.20.64:4444/wd/hub', chrome_options=options,
+            #                    desired_capabilities=DesiredCapabilities.CHROME)
+            driver = WebChrome(executable_path=path + "/../Resource/chromedriver_mac", chrome_options=options, desired_capabilities=DesiredCapabilities.CHROME)
         else:
             # 无界面运行
             options.add_argument('--headless')
