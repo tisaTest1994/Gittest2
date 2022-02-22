@@ -49,9 +49,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         with allure.step("点击change按钮，并判断是否弹出更改信息框"):
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_namechange')
             time.sleep(2)
@@ -63,9 +63,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         with allure.step("点击change按钮"):
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_namechange')
         with allure.step("点击FAQ about Account Name文字"):
@@ -75,7 +75,7 @@ class TestWebWithdraw:
             chrome_driver.switch_to_window(handles[1])
             # 获取当前的url
             now_url = chrome_driver.current_url
-            print(now_url)
+            time.sleep(2)
             # 对url做判断
             assert now_url == "https://faq.cabital.com/s/article/What-if-my-bank-account-name-is-different-from-my-" \
                               "Cabital-username?topicId=0TO5g000000ClReGAK", '页面跳转错误'
@@ -86,9 +86,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         with allure.step("点击cancel按钮"):
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_namechange')
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-modal-close')
@@ -104,9 +104,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         with allure.step("输入错误格式iban：不在范围内的bank_country_code"):
             # 输入错误格式iban
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN', 'input',
@@ -135,6 +135,7 @@ class TestWebWithdraw:
             time.sleep(2)
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn', 'check'),\
                 '未弹出withdrawal认证框'
 
@@ -144,9 +145,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         with allure.step("输入错误格式bic，错误长度"):
             # 输入错误格式bic，错误长度
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userBIC', 'input', 'ZXCVBG123')
@@ -174,8 +175,10 @@ class TestWebWithdraw:
             time.sleep(2)
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn', 'check'),\
                 '未弹出withdrawal认证框'
+
 
     @allure.title('test_web_withdraw_cash_007')
     @allure.description('account number规则校验')
@@ -183,9 +186,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         with allure.step("切换至GBP"):
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-change-drop-btn-up')
@@ -230,9 +233,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         with allure.step("切换至GBP"):
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-change-drop-btn-up')
@@ -273,9 +276,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         # 接口会进行校验，如IBAN_CODE和BIC_CODE不匹配（BIC是第5位和第6位是国家代码，IBAN是前两位）
         with allure.step("IBAN_CODE和BIC_CODE不匹配"):
             # 输入iban
@@ -313,9 +316,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         with allure.step("获取可用金额数据"):
             available_balance_eur = operate_element_web(chrome_driver, 'assetPage',
                                                         'assets-withdraw-fiat-amount-helper-text', 'get_text')
@@ -355,9 +358,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         with allure.step("切换币种：GBP"):
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-change-drop-btn-up')
@@ -403,9 +406,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         with allure.step("获取可用金额数据"):
             available_balance_text = operate_element_web(chrome_driver, 'assetPage',
                                                          'assets-withdraw-fiat-amount-helper-text', 'get_text')
@@ -423,9 +426,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
         with allure.step("receive默认金额显示，用0调取显示fee"):
             withdrawal_fee = operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-fee',
                                                  'get_text').replace(' ', '').replace('EUR', '')
@@ -457,14 +460,9 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver)
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
-            time.sleep(2)
-        with allure.step("信息填写不完整：不输入信息直接点击next"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            time.sleep(2)
-            assert chrome_driver.find_element_by_xpath('//*[text()="{}"]'.format('Please fill in IBAN, BIC, Amount')).is_displayed(),\
-                '未显示提示信息'
         with allure.step("信息填写完整"):
             # 输入iban
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-userIBAN', 'input',
@@ -488,6 +486,7 @@ class TestWebWithdraw:
         webFunction.login_web(chrome_driver, account=get_json()['email']['payout_email'])
         with allure.step("点击withdraw按钮，并判断是否跳转至withdraw页面,默认为Withdraw Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
+            time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
         with allure.step("填写提现信息"):

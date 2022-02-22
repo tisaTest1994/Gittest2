@@ -1,3 +1,5 @@
+import time
+
 from Function.web_function import *
 from Function.web_common_function import *
 from Function.api_common_function import *
@@ -56,18 +58,19 @@ class TestWebAssetApi:
                 a = chrome_driver.find_element_by_id(i).text.split('\n')
                 balance_dict[a[0]] = a[1].split(' ')
                 currency_type = list(balance_dict.keys())[0]
+                time.sleep(2)
                 with allure.step("通过API获得Available Balance数据"):
                     available_balance = ApiFunction.get_crypto_number(type=currency_type, balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
                 with allure.step("判断API获得的Available Balance数据和页面显示的一致"):
-                    assert add_currency_symbol(str(available_balance), currency=self.currency) == str(balance_dict[currency_type][1]), "API获得Available Balance是{},页面上的Available Balance是{}".format(available_balance, balance_dict[currency_type][1])
+                    assert str(balance_dict[currency_type][1]) == add_currency_symbol(str(available_balance), currency=self.currency), "币种：{}，API获得Available Balance是{},页面上的Available Balance是{}".format(a[0], available_balance, balance_dict[currency_type][1])
                 with allure.step("通过API获得Frozen Balance数据"):
                     frozen_balance = ApiFunction.get_crypto_number(type=currency_type, balance_type='BALANCE_TYPE_FROZEN', wallet_type='BALANCE')
                 with allure.step("判断API获得的Frozen Balance数据和页面显示的一致"):
-                    assert add_currency_symbol(str(frozen_balance), currency=self.currency) == str(balance_dict[currency_type][2]), "API获得Frozen Balance是{},页面上的Frozen Balance是{}".format(frozen_balance, balance_dict[currency_type][2])
+                    assert str(balance_dict[currency_type][2]) == add_currency_symbol(str(frozen_balance), currency=self.currency), "币种：{}，API获得Frozen Balance是{},页面上的Frozen Balance是{}".format(a[0], frozen_balance, balance_dict[currency_type][2])
                 with allure.step("通过API获得Total Balance数据"):
                     total_balance = Decimal(available_balance) + Decimal(frozen_balance)
                 with allure.step("判断API获得的Total Balance数据和页面显示的一致"):
-                    assert add_currency_symbol(str(total_balance), currency=self.currency) == str(balance_dict[currency_type][0]), "API获得Total Balance是{},页面上的Total Balance是{}".format(total_balance, balance_dict[currency_type][0])
+                    assert str(balance_dict[currency_type][0]) == add_currency_symbol(str(total_balance), currency=self.currency), "币种：{}，API获得Total Balance是{},页面上的Total Balance是{}".format(a[0], total_balance, balance_dict[currency_type][0])
 
     @allure.title('test_web_asset_004')
     @allure.description('查询Total Saving Amount')
