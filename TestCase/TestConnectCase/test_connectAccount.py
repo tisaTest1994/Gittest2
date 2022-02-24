@@ -376,19 +376,19 @@ class TestConnectAccountApi:
         with allure.step("准备参数"):
             account_id = '95c3f010-b008-40f1-bd80-40713e2f1aa8'
         with allure.step("name match 数据"):
+            # data = {
+            #     'name': 'Alice Wang 1231',
+            #     'id': '21212121',
+            #     'id_document': 'PASSPORT',
+            #     'issued_by': 'HKG',
+            #     'dob': '19950101'
+            # }
             data = {
                 'name': 'alice66 wang766',
                 'id': '266643',
                 'id_document': 'PASSPORT',
                 'issued_by': 'HKG',
-                'dob': '19900502'
-        with allure.step("name match 数据"):
-            data = {
-                'name': 'yanting37 huang3',
-                'id': '12345678',
-                'id_document': 'PASSPORT',
-                'issued_by': 'HKG',
-                'dob': '19860101'
+                'dob': '19950101'
             }
         with allure.step("验签"):
             unix_time = int(time.time())

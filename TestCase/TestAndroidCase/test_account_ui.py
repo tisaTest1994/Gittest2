@@ -1,6 +1,7 @@
 from Function.ui_function import *
 import allure
 from Function.api_common_function import *
+from Function.ui_common_function import *
 from TestCase.TestApiCase.test_asset import *
 import datetime
 
@@ -139,42 +140,35 @@ class TestAccountUi:
         with allure.step("点击View"):
             operate_element_app('portfolioPage', 'View', 'click')
         assert operate_element_app('portfolioPage', 'Asset Allocation', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('portfolioPage', 'Asset Allocation')
+        with allure.step("获取用户偏好设置"):
+            r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
+            self.currency = r.json()['currency']
+            headers['X-Currency'] = self.currency
         with allure.step("通过API 获取Asset Value初始值"):
-            headers['X-Currency'] = 'USD'
             r = session.request('GET', url='{}/assetstatapi/assetstat'.format(env_url), headers=headers)
             total_asset_value = r.json()['history'][0]['total_value']
-            total_asset_value_page = add_currency_symbol(total_asset_value, 'USD', True)
+            total_asset_value_page = add_currency_symbol(total_asset_value, currency=self.currency, is_symbol=True)
+            print(total_asset_value_page)
+            print('-------------')
             assert operate_element_app('portfolioPage', total_asset_value_page, 'check') is True, 'total asset value在页面的值是{}'.format(total_asset_value_page)
         history = r.json()['history']
         print(history)
         today = datetime.date.today()
         yesterday = today - datetime.timedelta(days=1)
+        print(yesterday)
         for i in history:
             date1 = i['date'].split()[0]
-            if date1 == yesterday:
-                total_value='$'+ i['total_value']
+            print(date1)
+            if date1 == str(yesterday):
+                total_value= add_currency_symbol(i['total_value'], currency=self.currency, is_symbol=True)
                 print('date1的值是：{}'.format(date1))
                 print('total_value的值是：{}'.format(total_value))
-                assert operate_element_app('portfolioPage', date, 'check') is True, 'date在页面的值是{}'.format(date)
+                assert operate_element_app('portfolioPage', date1, 'check') is True, 'date1在页面的值是{}'.format(date1)
                 assert operate_element_app('portfolioPage', total_value, 'check') is True, 'total_value在页面的值是{}'.format(total_value)
             else:
-                pass
+                return 'yesterday该元素不存在'
 
-    @allure.title('test_account_007')
-    @allure.description('portfolio 页面跳转进Asset Value初始值')
-    def test_account_007(self):
-        with allure.step("登录"):
-            UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
-        with allure.step("点击View"):
-            operate_element_app('portfolioPage', 'View', 'click')
-        assert operate_element_app('portfolioPage', 'Asset Allocation', type='check'), '没有到达{}页面或者找不到{}页面元素'.format(
-            'portfolioPage', 'Asset Allocation')
-        with allure.step("通过API 获取Asset Value初始值"):
-            headers['X-Currency'] = 'USD'
-            r = session.request('GET', url='{}/assetstatapi/assetstat'.format(env_url), headers=headers)
-            total_asset_value = r.json()['history'][0]['total_value']
-            total_asset_value_page = add_currency_symbol(total_asset_value, 'USD', True)
-            print(operate_element_app('portfolioPage', total_asset_value_page, 'check'))
+
 
 
 

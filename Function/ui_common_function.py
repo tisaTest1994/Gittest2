@@ -86,8 +86,6 @@ def slide(direction, cycle=1):
     for i in range(cycle):
         if direction == 'up':
             swipe([w/2, h*0.8], [w/2, h*0.4])
-        elif direction == 'bottom':
-            swipe([w/2, h*0.9], [w/2, h*0.1])
         elif direction == 'down':
             swipe([w/2, h*0.3], [w/2, h*0.9])
         elif direction == 'left':

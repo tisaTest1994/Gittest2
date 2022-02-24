@@ -9,9 +9,15 @@
     "View":"CB407",
     "Asset Allocation": "CB031"
   },
+  "walletPage": {
+    "Wallet": "CB301",
+    "Total Balance": "CB278",
+    "Balance": "CB038"
+  },
   "loginPage": {
     "Welcome Back": "CB306",
     "Account": "CB008"
+
   },
   "accountPage": {
     "Account": "CB008",
