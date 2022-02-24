@@ -244,12 +244,15 @@ def get_iban(iban):
 # 增加货币符号
 def add_currency_symbol(number, currency, is_symbol=False):
     currency = currency.upper()
-    # 末尾加0
+    # 小数点后不足两位末尾加0,小数点后超过两位，末尾去0
     if '.' in str(number):
         number_int = str(number).split('.')[0]
         number_radix = str(number).split('.')[1]
         if len(number_radix) < 2:
             number_radix = str(number_radix) + '0'
+        elif len(number_radix) > 2:
+            if number_radix[-1] == 0:
+                number_radix = number_radix[0:(len(number_radix) - 1)]
     elif number == 0 or number == '0':
         number_int = '0'
         number_radix = '0'

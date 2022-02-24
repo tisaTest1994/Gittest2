@@ -390,6 +390,7 @@ class TestWebWithdraw:
                 operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '5')
                 you_will_receive2 = operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-receive',
                                                         'get_text').replace(' ', '').replace('BTC', '')
+                time.sleep(2)
                 assert you_will_receive2[1] == ',', '金额未千分位显示'
                 you_will_receive_string = you_will_receive2.replace(',', '')
                 assert float(withdrawal_fee) + 1015 == float(you_will_receive_string), 'you_will_receive显示金额错误'

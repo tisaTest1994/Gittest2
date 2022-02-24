@@ -77,7 +77,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['code'] == '0010015', "使用不存在id获取常用收款地址错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001015', "使用不存在id获取常用收款地址错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_005')
     @allure.description('删除不存在的收款地址')
@@ -90,7 +90,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['code'] == '0010015', "删除收款地址错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001015', "删除收款地址错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_006')
     @allure.description('获取提现费率和提现限制')
@@ -620,3 +620,28 @@ class TestPayoutApi:
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json()['code'] == '103036', "EUR法币提现使用不支持的国家错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_033')
+    @allure.description('BTC使用带有特殊字符的地址提现会报错')
+    def test_payout_033(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
+        code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+        secretKey = get_json()['secretKey']
+        totp = pyotp.TOTP(secretKey)
+        mfaVerificationCode = totp.now()
+        headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+        headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+        data = {
+            "amount": '0.012',
+            "code": 'BTC',
+            "address": 'tb1q3fhjd9f0th907cuym9dtyzpy3zu9tn6205jh@m',
+            "method": "ERC20"
+        }
+        r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
+                            headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        assert r.json()['code'] == '103035', "BTC使用带有特殊字符的地址提现会报错"

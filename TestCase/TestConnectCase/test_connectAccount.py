@@ -384,11 +384,13 @@ class TestConnectAccountApi:
             #     'dob': '19950101'
             # }
             data = {
+
                 'name': 'alice66 wang766',
                 'id': '266643',
                 'id_document': 'PASSPORT',
                 'issued_by': 'HKG',
                 'dob': '19950101'
+
             }
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -399,7 +401,6 @@ class TestConnectAccountApi:
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("name match"):
             r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
-            print(r.json())
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
