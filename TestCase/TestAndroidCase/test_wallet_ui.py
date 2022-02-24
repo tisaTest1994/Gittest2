@@ -43,9 +43,7 @@ class TestWalletUi:
         with allure.step("通过api获得Total Balance数据"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
             print(r.json())
-            print('-----------------')
             balance_list = r.json()['assets']
-            print('-----------------')
             print(balance_list)
             for i in balance_list:
                 if i['type'] == 'BALANCE':
