@@ -77,7 +77,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['code'] == '0010015', "使用不存在id获取常用收款地址错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001015', "使用不存在id获取常用收款地址错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_005')
     @allure.description('删除不存在的收款地址')
@@ -90,7 +90,7 @@ class TestPayoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['code'] == '0010015', "删除收款地址错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001015', "删除收款地址错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_006')
     @allure.description('获取提现费率和提现限制')
