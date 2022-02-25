@@ -21,49 +21,49 @@ before_script:
     - ln -s /opt/allure-2.13.9/bin/allure /usr/bin/allure
     - pip install -r requirements.txt
 
-# ApiTest:
-#   stage: test1
-#   tags:
-#     - python
-#   script:
-#     - python run.py api test
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-#
-# CabinetTest:
-#   stage: test2
-#   tags:
-#     - python
-#   script:
-#     - python run.py cabinet test
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-#
-# ConnectTest:
-#   stage: test3
-#   tags:
-#     - python
-#   script:
-#     - python run.py connect test
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-#
-# KycTest:
-#   stage: test4
-#   tags:
-#     - python
-#   script:
-#     - python run.py kyc test
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
+ApiTest:
+  stage: test1
+  tags:
+    - python
+  script:
+    - python run.py api test
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+CabinetTest:
+  stage: test2
+  tags:
+    - python
+  script:
+    - python run.py cabinet test
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+ConnectTest:
+  stage: test3
+  tags:
+    - python
+  script:
+    - python run.py connect test
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+KycTest:
+  stage: test4
+  tags:
+    - python
+  script:
+    - python run.py kyc test
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
 
 WebTest:
   stage: test5
@@ -72,15 +72,6 @@ WebTest:
   services:
     - selenium/standalone-chrome:latest
   script:
-    - apt-get update && apt-get upgrade --assume-yes
-    - wget -O ~/FirefoxSetup.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64"
-    - tar xjf ~/FirefoxSetup.tar.bz2 -C /opt/
-    - ln -s /opt/firefox/firefox /usr/lib/firefox
-    - export PATH=$PATH:/opt/firefox/
-    - wget -O ~/geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/v0.28.0/geckodriver-v0.28.0-linux64.tar.gz"
-    - tar -zxvf ~/geckodriver.tar.gz -C /opt/
-    - export PATH=$PATH:/opt/
-    - pip install selenium pytest
     - python run.py web test
   artifacts:
     paths:
