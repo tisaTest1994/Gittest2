@@ -25,13 +25,10 @@ class webFunction:
         # 指定浏览器以无头模式运行
         # 无界面运行
         options.add_argument('--headless')
-        #if 'mac' in str(platform.platform()):
-            # driver = WebChrome(executable_path='http://10.10.20.64:4444/wd/hub', chrome_options=options,
-            #                    desired_capabilities=DesiredCapabilities.CHROME)
-            #driver = WebChrome(executable_path=path + "/../Resource/chromedriver_mac", chrome_options=options, desired_capabilities=DesiredCapabilities.CHROME)
-        #else:
-        driver = webdriver.Firefox(options=options)
-            #driver = WebChrome(executable_path=path + "/../Resource/chromedriver_linux", desired_capabilities=DesiredCapabilities.CHROME, chrome_options=options)
+        if 'mac' in str(platform.platform()):
+            driver = WebChrome(executable_path=path + "/../Resource/chromedriver_mac", chrome_options=options, desired_capabilities=DesiredCapabilities.CHROME)
+        else:
+            driver = WebChrome(executable_path=path + "/../Resource/chromedriver_linux", desired_capabilities=DesiredCapabilities.CHROME, chrome_options=options)
         driver.get(url)
         return driver
 
