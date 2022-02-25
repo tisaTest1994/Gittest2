@@ -35,22 +35,18 @@ class TestWalletUi:
         with allure.step("登录"):
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
         operate_element_app('walletPage', 'Wallet', 'click')
-        sleep(2)
+        sleep(1)
         with allure.step("获取用户偏好设置"):
             r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
             self.currency = r.json()['currency']
             headers['X-Currency'] = self.currency
         with allure.step("通过api获得Total Balance数据"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
-            print(r.json())
             balance_list = r.json()['assets']
-            print(balance_list)
             for i in balance_list:
                 if i['type'] == 'BALANCE':
                     abs_amount = i['abs_amount']
-                    print(abs_amount)
             total_balance_value_page = add_currency_symbol(abs_amount, currency=self.currency, is_symbol=True)
-            print(total_balance_value_page)
             assert operate_element_app('walletPage', total_balance_value_page, 'check') is True, 'total_balance_value_page在页面的值是{}'.format(total_balance_value_page)
 
 
