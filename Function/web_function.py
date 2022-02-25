@@ -30,7 +30,8 @@ class webFunction:
             #                    desired_capabilities=DesiredCapabilities.CHROME)
             driver = WebChrome(executable_path=path + "/../Resource/chromedriver_mac", chrome_options=options, desired_capabilities=DesiredCapabilities.CHROME)
         else:
-            driver = WebChrome(executable_path=path + "/../Resource/chromedriver_linux", desired_capabilities=DesiredCapabilities.CHROME, chrome_options=options)
+            driver = webdriver.Firefox(options=options)
+            #driver = WebChrome(executable_path=path + "/../Resource/chromedriver_linux", desired_capabilities=DesiredCapabilities.CHROME, chrome_options=options)
         driver.get(url)
         return driver
 
