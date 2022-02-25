@@ -18,7 +18,6 @@ class TestWalletUi:
         with allure.step("关闭 app"):
             stop_app(package_name)
 
-
     @allure.title('test_wallet_001')
     @allure.description('wallet页面验证 Total Balance')
     def test_wallet_001(self):
@@ -37,8 +36,9 @@ class TestWalletUi:
                 if i['type'] == 'BALANCE':
                     abs_amount = i['abs_amount']
             total_balance_value_page = add_currency_symbol(abs_amount, currency=self.currency, is_symbol=True)
-            print(total_balance_value_page)
-            assert operate_element_app('walletPage', total_balance_value_page, 'check') is False, 'total_balance_value_page在页面的值是{}'.format(total_balance_value_page)
+            print(poco(textMatches='.*{}.*'.format(total_balance_value_page)).exists())
+            print(poco(textMatches='{}.*'.format('Total Balance')).exists())
+            #assert operate_element_app('walletPage', total_balance_value_page, 'check') is False, 'total_balance_value_page在页面的值是{}'.format(total_balance_value_page)
 
     @allure.title('test_wallet_002')
     @allure.description('wallet页面验证 5个币种total Balance,Available,Processing')
