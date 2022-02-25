@@ -12,7 +12,14 @@
   "walletPage": {
     "Wallet": "CB301",
     "Total Balance": "CB278",
-    "Balance": "CB038"
+    "Balance": "CB038",
+    "Deposit": "CB079",
+    "Convert": "CB062",
+    "Withdraw": "CB307",
+    "How would you like to deposit?": "CB574",
+    "Crypto": "CB334",
+    "I want to transfer in cryptocurrencies I am already holding.": "CB576",
+    "Select Crypto": "CB577"
   },
   "loginPage": {
     "Welcome Back": "CB306",

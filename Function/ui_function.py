@@ -17,19 +17,20 @@ class UiFunction:
         with allure.step("检查是否到达log in 页面"):
             assert operate_element_app('loginPage', 'Welcome Back', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('loginPage', 'Welcome Back')
         with allure.step("输入账户密码"):
-            poco(text="Account").click()
-            text(account)
-            text(password)
-            sleep(1)
+            # poco(text="Account").click()
+            # text(account)
+            # text(password)
+            # sleep(1)
             poco("android.widget.EditText").click()
-            # if operate_element_app('loginPage', 'android.widget.ImageView', 'check') is True:
-            #     poco(text="Password").click()
-            #     text(password)
-            #     sleep(1)
-            # else:
-            #     text(account)
-            #     text(password)
-            #     sleep(1)
+            sleep(1)
+            if operate_element_app('loginPage', 'android.widget.ImageView', 'check') is False:
+                poco(text="Password").click()
+                text(password)
+                sleep(1)
+            else:
+                text(account)
+                text(password)
+                sleep(1)
         with allure.step("判断升级提示"):
             if operate_element_app('welcomePage', 'Later', type='check'):
                 operate_element_app('welcomePage', 'Later')

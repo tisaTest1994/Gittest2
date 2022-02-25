@@ -168,6 +168,30 @@ class TestAccountUi:
             else:
                 return 'yesterday该元素不存在'
 
+    @allure.title('test_account_007')
+    @allure.description('portfolio 页面验证Profolio页面Crypto Holdings和Cash Holdings3个数值')
+    def test_account_007(self):
+        with allure.step("登录"):
+            UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
+        with allure.step("获取用户偏好设置"):
+            r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
+            self.currency = r.json()['currency']
+            headers['X-Currency'] = self.currency
+        with allure.step("通过Api获取Profolio页面Crypto Holdings"):
+            r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
+            total_asset_value = r.json()['wallets']
+            print(total_asset_value)
+            for i in total_asset_value:
+                code = i['code']
+                amount = i['amount']
+                abs_amount = i['abs_amount']
+                print(code, amount,abs_amount)
+                assert operate_element_app('portfolioPage', code, 'check') is False, 'code在页面的值是{}'.format(code)
+                assert operate_element_app('portfolioPage', amount, 'check') is False, 'percent在页面的值是{}'.format(amount)
+                assert operate_element_app('portfolioPage', abs_amount, 'check') is False, 'percent在页面的值是{}'.format(abs_amount)
+                #断言abs_amount时需注意下不满足2位小数需补0原则，assert断言时有可能会报错
+
+
 
 
 

@@ -64,7 +64,7 @@ def operate_element_app(page_name, element_string, type='click', wait_time_max=5
                 wait_time = 0
                 while wait_time < wait_time_max:
                     wait_time = wait_time + 1
-                    # sleep(1)
+                    sleep(1)
                     if poco(element_string).exists() is True:
                         logger.info('检查{}元素，是否存在前页面:{}'.format(element_string, poco(element_string).exists()))
                         return True
