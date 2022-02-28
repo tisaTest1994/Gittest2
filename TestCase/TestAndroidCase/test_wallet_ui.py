@@ -84,8 +84,13 @@ class TestWalletUi:
             operate_element_app('walletPage', 'Deposit', 'click')
             assert operate_element_app('walletPage', 'How would you like to deposit?', 'check') is True,'没有进入Deposit页面！'
         with allure.step("充值BTC"):
-            operate_element_app('walletPage', 'I want to transfer in cryptocurrencies I am already holding.', 'click')
+
+            # operate_element_app('walletPage', 'I want to transfer in cryptocurrencies I am already holding.', 'click')
             assert operate_element_app('walletPage', 'Select Crypto', 'check') is True,'没有进入Deposit页面！'
+
+
+
+
 
 
 
