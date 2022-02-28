@@ -131,7 +131,7 @@ class TestPortfolioUi:
         with allure.step("向上滑动"):
             slide('up', cycle=3)
         with allure.step("向上滑动"):
-            print(poco(textMatches='BTC.*').get_text())
+            print(poco(textMatches='BTC.*').exists())
 
 
 
