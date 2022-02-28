@@ -119,23 +119,19 @@ class TestPortfolioUi:
         with allure.step("获取用户偏好设置"):
             r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
             self.currency = r.json()['currency']
-            print(self.currency)
             headers['X-Currency'] = 'self.currency'
         with allure.step("通过Api获取Profolio页面Crypto Holdings"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
             total_holding_value = r.json()['wallets']
-            print(total_holding_value)
             for i in total_holding_value:
                 code = i['code']
                 amount = i['amount']
                 abs_amount = i['abs_amount']
                 abs_amount = add_currency_symbol(abs_amount, currency=self.currency, is_symbol=True)
-                print(code, amount, abs_amount)
-                #一整段文本进行断言需进行处理目前没有该方法
-                assert operate_element_app('portfolioPage', code, 'check') is True, 'code在页面的值是{}'.format(code)
-                assert operate_element_app('portfolioPage', amount, 'check') is True, 'amount在页面的值是{}'.format(amount)
-                assert operate_element_app('portfolioPage', abs_amount, 'check') is True, 'abs_amount在页面的值是{}'.format(abs_amount)
-                #断言abs_amount时需注意下不满足2位小数需补0原则，assert断言时有可能会报错
+        with allure.step("向上滑动"):
+            slide('up', cycle=3)
+        with allure.step("向上滑动"):
+            print(poco(textMatches='BTC.*').get_text())
 
 
 
