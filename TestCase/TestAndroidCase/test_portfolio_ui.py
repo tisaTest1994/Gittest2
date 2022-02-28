@@ -6,7 +6,7 @@ from TestCase.TestApiCase.test_asset import *
 import datetime
 
 
-class TestAccountUi:
+class TestPortfolioUi:
 
     def setup_method(self):
         with allure.step("打开 app"):
@@ -18,69 +18,10 @@ class TestAccountUi:
         with allure.step("关闭 app"):
             stop_app(package_name)
 
-    @allure.title('test_account_001')
-    @allure.description('使用已经注册账户登录，登录进入主页后退出')
-    def test_account_001(self):
-        with allure.step("登录"):
-            UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
-            sleep(5)
-            assert False, '123'
-        with allure.step("登出"):
-            UiFunction.logout()
-            sleep(3)
 
-    @allure.title('test_account_002')
-    @allure.description('注册新账号')
-    def test_account_002(self):
-        with allure.step("判断升级提示"):
-            if operate_element_app('welcomePage', 'Later', type='check', wait_time_max=10):
-                operate_element_app('welcomePage', 'Later')
-        with allure.step("先判断是否已经登录，判断升级提示"):
-            if operate_element_app('portfolioPage', 'Portfolio', type='check'):
-                return True
-            else:
-                with allure.step("开始注册流程"):
-                    operate_element_app('signupPage', 'Sign Up')
-                    sleep(3)
-                # assert断言进入注册页面
-                with allure.step("检查是否到达Sign Up 页面"):
-                    assert operate_element_app('signupPage', 'Sign up with email', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('signupPage', 'Sign up with email')
-                with allure.step("输入邮箱"):
-                    text(generate_email())
-                with allure.step("勾选协议"):
-                    operate_element_app('signupPage', 'rule box')
-                with allure.step("点击发送验证码"):
-                    operate_element_app('signupPage', "Send Verification Code", type='click')
-                with allure.step("检查是否到达输入邮箱验证码页面"):
-                    assert operate_element_app('signupPage', 'Verify your email', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('signupPage', 'Verify your email')
-                # with allure.step("Resend"):
-                #     operate_element_app('signupPage', "Resend", type='click')
-                with allure.step("输入邮箱验证码"):
-                    text(get_json()['Web'][get_json()['env']]['code'])
-                # assert断言Next按钮可点击
-                with allure.step("判断是否可点击Next"):
-                    assert operate_element_app('signupPage', "Next", type='check_enabled'), '没有到达{}页面或者找不到{}页面元素'.format('signupPage', 'Next')
-                with allure.step("点击Next"):
-                    operate_element_app('signupPage', "Next", type='click')
-                with allure.step("断言进入设置密码页面"):
-                    assert operate_element_app('signupPage', 'Set login password', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('signupPage', 'Set login password')
-                with allure.step("设置密码"):
-                    operate_element_app('signupPage', 'password', type='input', input_string=get_json()['web'][get_json()['env']]['password'])
-                # with allure.step("断言密码设置成功，高亮显示3个规则"):
-                #     assert operate_element_app('signupPage', 'password rule box', type='check_selected'), '没有到达{}页面或者找不到{}页面元素'.format('signupPage', 'password rule box')
-                    operate_element_app('signupPage', 'password', type='input', input_string=get_json()['Web'][get_json()['env']]['password'])
-
-                with allure.step("点击Confirm Password"):
-                    operate_element_app('signupPage', "Confirm Password", type='click')
-                with allure.step("断言进入设置密码页面"):
-                    assert operate_element_app('signupPage', 'Total Assert Value', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('signupPage', 'Total Assert Value')
-            with allure.step("登出"):
-                UiFunction.logout()
-                sleep(3)
-
-    @allure.title('test_account_003')
+    @allure.title('test_Portfolio_001')
     @allure.description('portfolio 页面验证 total asset value')
-    def test_account_003(self):
+    def test_portfolio_001(self):
         with allure.step("登录"):
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
         with allure.step("获取用户偏好设置"):
@@ -93,9 +34,9 @@ class TestAccountUi:
             total_asset_value_page = add_currency_symbol(total_asset_value, self.currency, True)
             assert operate_element_app('portfolioPage', total_asset_value_page, 'check') is True, 'total_asset_value_page在页面的值是{}'.format(total_asset_value_page)
 
-    @allure.title('test_account_004')
+    @allure.title('test_Portfolio_002')
     @allure.description('portfolio 页面跳转进Asset Overview验证total asset value')
-    def test_account_004(self):
+    def test_portfolio_002(self):
         with allure.step("登录"):
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
         with allure.step("获取用户偏好设置"):
@@ -115,9 +56,9 @@ class TestAccountUi:
             assert operate_element_app('portfolioPage', 'Asset Allocation', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('portfolioPage', 'Asset Allocation')
             assert operate_element_app('portfolioPage', total_asset_value_page, 'check') is True, 'total asset value在页面的值是{}'.format(total_asset_value_page)
 
-    @allure.title('test_account_005')
+    @allure.title('test_Portfolio_003')
     @allure.description('portfolio 页面跳转进Asset Overview验证5种币种的占比')
-    def test_account_005(self):
+    def test_portfolio_003(self):
         with allure.step("登录"):
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
         with allure.step("Details"):
@@ -134,9 +75,9 @@ class TestAccountUi:
                 assert operate_element_app('portfolioPage', code, 'check') is True, 'code在页面的值是{}'.format(code)
                 assert operate_element_app('portfolioPage', percent, 'check') is True, 'percent在页面的值是{}'.format(percent)
 
-    @allure.title('test_account_006')
+    @allure.title('test_Portfolio_004')
     @allure.description('portfolio 页面通过Details跳转进查看昨天Asset Value值')
-    def test_account_006(self):
+    def test_portfolio_004(self):
         with allure.step("登录"):
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
         with allure.step("点击Details"):
@@ -170,27 +111,30 @@ class TestAccountUi:
             else:
                 return 'yesterday该元素不等于昨天日期'
 
-    @allure.title('test_account_007')
-    @allure.description('portfolio 页面验证Profolio页面Crypto Holdings和Cash Holdings3个数值')
-    def test_account_007(self):
+    @allure.title('test_Portfolio_005')
+    @allure.description('portfolio 页面验证Portfolio页面Crypto Holdings和Cash Holdings3个数值')
+    def test_portfolio_005(self):
         with allure.step("登录"):
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
         with allure.step("获取用户偏好设置"):
             r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
             self.currency = r.json()['currency']
-            headers['X-Currency'] = self.currency
+            print(self.currency)
+            headers['X-Currency'] = 'self.currency'
         with allure.step("通过Api获取Profolio页面Crypto Holdings"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
-            total_asset_value = r.json()['wallets']
-            print(total_asset_value)
-            for i in total_asset_value:
+            total_holding_value = r.json()['wallets']
+            print(total_holding_value)
+            for i in total_holding_value:
                 code = i['code']
                 amount = i['amount']
                 abs_amount = i['abs_amount']
-                print(code, amount,abs_amount)
-                assert operate_element_app('portfolioPage', code, 'check') is False, 'code在页面的值是{}'.format(code)
-                assert operate_element_app('portfolioPage', amount, 'check') is False, 'percent在页面的值是{}'.format(amount)
-                assert operate_element_app('portfolioPage', abs_amount, 'check') is False, 'percent在页面的值是{}'.format(abs_amount)
+                abs_amount = add_currency_symbol(abs_amount, currency=self.currency, is_symbol=True)
+                print(code, amount, abs_amount)
+                #一整段文本进行断言需进行处理目前没有该方法
+                assert operate_element_app('portfolioPage', code, 'check') is True, 'code在页面的值是{}'.format(code)
+                assert operate_element_app('portfolioPage', amount, 'check') is True, 'amount在页面的值是{}'.format(amount)
+                assert operate_element_app('portfolioPage', abs_amount, 'check') is True, 'abs_amount在页面的值是{}'.format(abs_amount)
                 #断言abs_amount时需注意下不满足2位小数需补0原则，assert断言时有可能会报错
 
 
