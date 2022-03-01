@@ -116,15 +116,17 @@ class TestPortfolioUi:
     def test_portfolio_005(self):
         with allure.step("登录"):
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
+        with allure.step("向上滑动"):
+            slide('up', cycle=3)
+        with allure.step("向上滑动"):
+            print(poco(textMatches='BTC.*').exists())
         with allure.step("获取用户偏好设置"):
             r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
             self.currency = r.json()['currency']
-            print(self.currency)
             headers['X-Currency'] = 'self.currency'
         with allure.step("通过Api获取Profolio页面Crypto Holdings"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
             total_holding_value = r.json()['wallets']
-            print(total_holding_value)
             for i in total_holding_value:
                 code = i['code']
                 amount = i['amount']
@@ -136,6 +138,8 @@ class TestPortfolioUi:
                 assert operate_element_app('portfolioPage', amount, 'check') is False, 'amount在页面的值是{}'.format(amount)
                 assert operate_element_app('portfolioPage', abs_amount, 'check') is False, 'abs_amount在页面的值是{}'.format(abs_amount)
                 #断言abs_amount时需注意下不满足2位小数需补0原则，assert断言时有可能会报错
+
+
 
 
 
