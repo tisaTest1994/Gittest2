@@ -862,3 +862,22 @@ class TestOperateApi:
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+
+    @allure.testcase('test_operate_037')
+    @allure.description('create fiat account')
+    def test_operate_037(self):
+        with allure.step("create fiat account"):
+            data = {
+                "user_id": "4f7febdb-ae60-4daf-8015-e9c7a30a35cc",
+                "first_name": "yuke",
+                "last_name": "401",
+                "codes": [
+                    "EUR"
+                ]
+            }
+            r = session.request('POST', url='{}/operatorapi/fiat/account/{}'.format(operateUrl, 'b4afe46a-531a-49cf-9b45-7f89f173f894'), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
