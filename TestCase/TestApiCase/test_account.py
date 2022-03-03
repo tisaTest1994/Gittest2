@@ -897,3 +897,53 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert set(r.json()['missing']) == set(["RESIDENT", "REGISTRY_PURPOSE"]), "获取用户必填的KYC数据，获取全部信息失败，返回值是{}".format(r.text)
 
+    @allure.title('test_account_048')
+    @allure.description('普通referral推广code')
+    def test_account_048(self):
+        code = '6EM7LK'
+        with allure.step("推广code验证"):
+            params = {
+                'type': 'referral_code'
+            }
+            r = session.request('GET', url='{}/recruit/code_verification/{}'.format(env_url, code), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['promotion_details'] == '', "普通referral推广code失败，返回值是{}".format(r.text)
+
+    @allure.title('test_account_049')
+    @allure.description('特定referral推广code')
+    def test_account_049(self):
+        code = 'D7211T'
+        with allure.step("推广code验证"):
+            params = {
+                'type': 'referral_code'
+            }
+            r = session.request('GET', url='{}/recruit/code_verification/{}'.format(env_url, code), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['promotion_details'] is not None, "特定referral推广code失败，返回值是{}".format(r.text)
+
+    @allure.title('test_account_050')
+    @allure.description('promo_code推广code')
+    def test_account_050(self):
+        code = 'test1234'
+        with allure.step("推广code验证"):
+            params = {
+                'type': 'promo_code'
+            }
+            r = session.request('GET', url='{}/recruit/code_verification/{}'.format(env_url, code), params=params, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['promotion_details'] is not None, "promo_code推广code失败，返回值是{}".format(r.text)
