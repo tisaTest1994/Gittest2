@@ -580,4 +580,3 @@ class ApiFunction:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         return {'data': data, 'returnJson': r.json()}
 
-
