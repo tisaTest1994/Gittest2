@@ -24,10 +24,6 @@
       "url": "https://test.salesforce.com"
     }
   },
-  "cash_list": [
-    "GBP",
-    "EUR"
-  ],
   "cfx_book": {
     "1": "BTC-USDT",
     "2": "BTC-ETH",
@@ -308,12 +304,10 @@
     "USDT",
     "ETH"
   ],
-  "asset_list": [
-    "BTC",
-    "USDT",
-    "ETH",
+  "cash_list": [
     "GBP",
-    "EUR"
+    "EUR",
+    "CHF"
   ],
   "websocket": {
     "url": "wss://api.latibac.com/api/v1/realtime/ws"

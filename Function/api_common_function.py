@@ -164,6 +164,7 @@ def delete_extra_zero(n):
 
 # 控制货币单位长度
 def crypto_len(number, type):
+    # 删除多余的0
     number = delete_extra_zero(number)
     if '.' in str(number):
         if type == 'BTC' or type == 'ETH':

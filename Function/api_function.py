@@ -88,10 +88,9 @@ class ApiFunction:
     # 获取当前换汇报价
     @staticmethod
     def get_quote(pair):
-        cryptos = pair.split('-')
-        r = session.request('GET', url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[0], cryptos[1])), headers=headers)
+        r = session.request('GET', url='{}/core/quotes/{}'.format(env_url, pair), headers=headers)
         strTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(r.json()['valid_until'])))
-        logger.info('获得报价的服务器时间是{},换汇价格是{}'.format(strTime, r.json()))
+        logger.info('获得报价的服务器时间是{},换汇币种对是{},换汇价格是{}'.format(strTime, pair, r.json()))
         return r.json()
 
     # 获取钱包指定币种某个交易状态的数量
@@ -524,3 +523,61 @@ class ApiFunction:
         crypto_list = get_json()['crypto_list']
         cash_list = get_json()['cash_list']
         return crypto_list + cash_list
+
+    # 获得全部换汇币种对的list
+    @staticmethod
+    def get_cfx_list():
+        cfx_list = []
+        r = session.request('GET', url='{}/txn/cfx/codes'.format(env_url))
+        for i in ApiFunction.balance_list():
+            for y in r.json()['codes'][i]:
+                cfx_list.append('{}-{}'.format(i, y))
+        for z in cfx_list:
+            cfx_list.remove('{}-{}'.format(z.split('-')[1], z.split('-')[0]))
+        return cfx_list
+
+    # 换汇
+    @staticmethod
+    def cfx_random(pair, major_ccy):
+        buy_type = pair.split('-')[0]
+        sell_type = pair.split('-')[1]
+        if major_ccy.lower() == buy_type.lower():
+            with allure.step("major_ccy 是buy值"):
+                if buy_type == 'BTC' or buy_type == 'ETH':
+                    buy_amount = random.uniform(0.02, 0.39999999)
+                elif buy_type == 'USDT':
+                    buy_amount = random.uniform(10, 500.999999)
+                else:
+                    buy_amount = random.uniform(10, 500.99)
+                quote = ApiFunction.get_quote(pair)
+                buy_amount = crypto_len(number=str(buy_amount), type=buy_type)
+                sell_amount = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
+        else:
+            with allure.step("major_ccy 是sell值"):
+                if sell_type == 'BTC' or sell_type == 'ETH':
+                    sell_amount = random.uniform(0.02, 0.39999999)
+                elif sell_type == 'USDT':
+                    sell_amount = random.uniform(10, 500.999999)
+                else:
+                    sell_amount = random.uniform(10, 500.99)
+                quote = ApiFunction.get_quote(pair)
+                sell_amount = crypto_len(number=str(sell_amount), type=sell_type)
+                buy_amount = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
+        data = {
+            "quote_id": quote['quote_id'],
+            "quote": quote['quote'],
+            "pair": pair,
+            "buy_amount": str(buy_amount),
+            "sell_amount": str(sell_amount),
+            "major_ccy": major_ccy
+        }
+        logger.info('发送换汇参数是{}'.format(data))
+        r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        return {'data': data, 'returnJson': r.json()}
+
+
