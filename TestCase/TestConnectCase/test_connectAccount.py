@@ -374,35 +374,14 @@ class TestConnectAccountApi:
     @allure.title('test_connect_account_013 成功解绑+name match用户 pass')
     def test_connect_account_013(self):
         with allure.step("准备参数"):
-<<<<<<< HEAD
-            account_id = '0844d829-3939-4259-8dd4-ada16b96b6c5'
-=======
-            account_id = '6292578c-1620-4eb7-bc3e-73db514923b4'
->>>>>>> hyt
+            account_id = 'b013327e-ae65-4197-acf6-806f03873f51'
         with allure.step("name match 数据"):
-            # data = {
-            #     'name': 'Alice Wang 1231',
-            #     'id': '21212121',
-            #     'id_document': 'PASSPORT',
-            #     'issued_by': 'HKG',
-            #     'dob': '19950101'
-            # }
             data = {
-<<<<<<< HEAD
-
-                'name': 'qq',
-                'id': '132143',
-                'id_document': 'PASSPORT',
-                'issued_by': 'HKG',
-                'dob': '19920302'
-
-=======
-                'name': 'qq1',
+                'name': 'yanting22 huang33',
                 'id': '235766',
                 'id_document': 'PASSPORT',
                 'issued_by': 'HKG',
-                'dob': '19920321'
->>>>>>> hyt
+                'dob': '19900202'
             }
         with allure.step("验签"):
             unix_time = int(time.time())
