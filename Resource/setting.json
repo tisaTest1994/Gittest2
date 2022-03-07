@@ -484,6 +484,7 @@
   "web": {
     "test": {
       "account": "richard.wan@cabital.com",
+      "account2": "yanting.huang@cabital.com",
       "password": "Zcdsw123",
       "url": "https://portal.latibac.com/",
       "code": "666666"

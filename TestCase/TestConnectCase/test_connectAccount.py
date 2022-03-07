@@ -47,7 +47,7 @@ class TestConnectAccountApi:
     @allure.title('test_connect_account_002 获取关联用户状况，用户成功连接，还未在 Cabital 提交 KYC')
     def test_connect_account_002(self):
         with allure.step("测试用户的account_id"):
-            account_id = 'e19a6fa7-1b7d-4396-a8cf-f641467a910b'
+            account_id = '5a02d7ca-9d39-4acf-bb29-d4877856c026'
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
@@ -65,7 +65,7 @@ class TestConnectAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['account_status'] == 'INITIALIZED', "获取关联用户状况，用户成功连接，还未在 Cabital 提交 KYC错误，返回值是{}".format(r.text)
         with allure.step("获取partner信息"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc01@test.com', password='A!234sdfg')
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc12@test.com', password='A!234sdfg')
             r = session.request('GET', url='{}/connect/account/info'.format(self.url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -374,14 +374,14 @@ class TestConnectAccountApi:
     @allure.title('test_connect_account_013 成功解绑+name match用户 pass')
     def test_connect_account_013(self):
         with allure.step("准备参数"):
-            account_id = '95c3f010-b008-40f1-bd80-40713e2f1aa8'
+            account_id = '6292578c-1620-4eb7-bc3e-73db514923b4'
         with allure.step("name match 数据"):
             data = {
-                'name': 'yanting37 huang3',
-                'id': '12345678',
+                'name': 'qq1',
+                'id': '235766',
                 'id_document': 'PASSPORT',
                 'issued_by': 'HKG',
-                'dob': '19860101'
+                'dob': '19920321'
             }
         with allure.step("验签"):
             unix_time = int(time.time())

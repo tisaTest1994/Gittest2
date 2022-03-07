@@ -7,7 +7,7 @@
     "username-label": "id",
     "login_gotosignup": "id",
     "login_forgotpw": "id",
-    "dialog_forgetpassword": "id",
+    "login_forgotpw": "id",
     "dialog_forgetpassword_email_input": "id",
     "mailcode": "name",
     "dialog_forgetpassword_password_input": "id",
@@ -32,6 +32,7 @@
     "service": "name",
     "privacy": "name",
     "full-width-tab-0": "id",
+    "full-width-tab-1": "id",
     "MuiDialogActions-spacing": "class",
     "username-helper-text": "id",
     "click_sendcode": "name",
@@ -39,7 +40,8 @@
     "VisibilityOffIcon": "data-testid",
     "signup_registernow": "id",
     "MuiAlert-message": "class",
-    "signup_gotologin": "id"
+    "signup_gotologin": "id",
+    "terms-dialog-close-btn": "id"
   },
   "assetPage": {
     "Cabital Logo": "alt",
@@ -188,13 +190,26 @@
     "header-desktop-menu-item-WE099": "id",
     "header-desktop-menu-item-CB284": "id",
     "mainpage_menu_account": "id",
-    "account-nickname": "id"
+    "account-nickname": "id",
+    "account_menu_connect_Bybit": "id"
   },
 
   "BybitPage": {
     "log-newui-head-title" : "class",
+    "reg-newui-head-title" : "class",
     "username": "autocomplete",
     "password": "type",
-    "log-newui-footer-submit": "class"
+    "log-newui-footer-submit": "class",
+    "reg-newui-footer-submit": "class",
+    "btn-default": "class",
+    "password": "type",
+    "by-verification-input-wrapper": "class"
+  },
+  "ConvertPage": {
+    "assets_balanceaction_convert" : "id",
+    "popup_kyc_action_verify" : "id",
+    "kyc_basicinfo" : "id",
+    "convert_sell_input" : "id",
+    "CloseSharpIcon" : "data-testid"
   }
 }

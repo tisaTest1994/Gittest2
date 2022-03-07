@@ -3,11 +3,9 @@ from Function.web_common_function import *
 from Function.api_common_function import *
 
 
+
 @allure.feature("web ui withdraw cash 相关 testcases")
 class TestWebWithdraw:
-    # 获取测试网站url
-    web_url = get_json()['web'][get_json()['env']]['url']
-
     # 初始化class
     def setup_method(self):
         with allure.step("登录客户账户获得后续操作需要的token"):
@@ -29,6 +27,9 @@ class TestWebWithdraw:
             time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
+        with allure.step("从接口获取币种信息"):
+            fiat = session.request('GET', url='{}/pay/deposit/ccy/fiat'.format(env_url), headers=headers)
+            print(fiat.json())
         with allure.step("检查默认币种，并切换币种"):
             assert chrome_driver.find_element_by_xpath('//*[@id="assets-withdraw-fiat-selector"][@name="assets-withdraw-fiat-selector-change"]').\
                 get_attribute('value') == 'EUR', "默认币种错误"
