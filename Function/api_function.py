@@ -455,6 +455,11 @@ class ApiFunction:
                 if 'Withdrawal Request' in email_info['title']:
                     break
                     sleep_time == 81
+            elif type == "REGISTRY_BYBIT":
+                sleep(20)
+                if 'Testnet-Bybit' in email_info['title']:
+                    break
+                    sleep_time == 81
             sleep_time = sleep_time + 5
             sleep(5)
         code = str(email_info['body']).split('"code":')[1].split('"')[1]

@@ -14,6 +14,8 @@ def operate_element_web(driver, page, element_string, type='click', input_string
             driver.find_element_by_id(element_string).click()
         elif element_type == 'name':
             driver.find_element_by_name(element_string).click()
+        elif element_type == 'text':
+            driver.find_element_by_xpath('//*[text()="{}"]'.format(element_string)).click()
         else:
             driver.find_element_by_xpath('//*[@{}="{}"]'.format(element_type, element_string)).click()
         logger.info('点击{}页面{}元素'.format(page, element_string))

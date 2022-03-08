@@ -261,7 +261,7 @@ def add_currency_symbol(number, currency, is_symbol=False):
             number_radix = str(number_radix) + '0'
     else:
         number_int = str(number)
-        number_radix = ''
+        number_radix = '00'
     count = 0
     sumstr = ''
     # 加逗号

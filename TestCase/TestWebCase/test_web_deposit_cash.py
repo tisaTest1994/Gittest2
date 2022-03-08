@@ -6,7 +6,7 @@ from Function.api_common_function import *
 
 
 @allure.feature("web ui deposit cash 相关 testcases")
-class TestWebWithdraw:
+class TestWebDeposit:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']
 
@@ -30,13 +30,21 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_deposit')
             assert operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_CB578', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
+        with allure.step("从接口获取币种信息"):
+            fiat = session.request('GET', url='{}/pay/deposit/ccy/fiat'.format(env_url), headers=headers)
+            fiat_list = fiat.json()['fiat']
+            fiat_all = []
+            for i in range(0, len(fiat_list)):
+                fiat_all.append(fiat_list[i]['name'])
+            print(fiat_all)
+            fiat_default = fiat_all[0]
         with allure.step("检查默认币种，并切换币种"):
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash', 'get_value') ==\
-                   'EUR', "默认币种错误"
+                   fiat_default, "默认币种错误"
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
             # 选择GBP
-            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-GBP-1')
+            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-GBP-2')
             time.sleep(2)
             # 检查币种是否切换成功
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash', 'get_value') == \
@@ -44,8 +52,16 @@ class TestWebWithdraw:
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
             # 选择EUR
-            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-EUR-0')
+            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-EUR-1')
             time.sleep(2)
             # 检查币种是否切换成功
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash', 'get_value') ==\
                    'EUR', '币种未切换至EUR'
+            # 点击下拉框
+            operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
+            # 选择CHF
+            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-CHF-0')
+            time.sleep(2)
+            # 检查币种是否切换成功
+            assert operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash', 'get_value') == \
+                   'CHF', '币种未切换至CHF'

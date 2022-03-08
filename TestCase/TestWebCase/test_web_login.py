@@ -47,7 +47,7 @@ class TestWebLogin:
         new_pword = '123456Test'
         with allure.step("确认弹出重置密码框"):
             operate_element_web(chrome_driver, 'loginPage', 'login_forgotpw')
-            assert operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword', 'check'), '未弹出重置密码框'
+            assert operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword_email_input', 'check'), '未弹出重置密码框'
         with allure.step("输入需要重置密码账号"):
             operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword_email_input', 'input',
                                 input_string=account)
@@ -77,7 +77,7 @@ class TestWebLogin:
             operate_element_web(chrome_driver, 'assetPage', 'header-btn-user-signout')
             # 把账号密码改回城默认
             operate_element_web(chrome_driver, 'loginPage', 'login_forgotpw')
-            assert operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword', 'check'), '未弹出重置密码框'
+            assert operate_element_web(chrome_driver, 'loginPage', 'login_forgotpw', 'check'), '未弹出重置密码框'
             operate_element_web(chrome_driver, 'loginPage', 'dialog_forgetpassword_email_input', 'input',
                                 input_string=account)
             operate_element_web(chrome_driver, 'loginPage', 'mailcode', 'input', email_code)

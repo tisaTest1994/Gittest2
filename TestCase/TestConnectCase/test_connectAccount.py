@@ -47,7 +47,7 @@ class TestConnectAccountApi:
     @allure.title('test_connect_account_002 获取关联用户状况，用户成功连接，还未在 Cabital 提交 KYC')
     def test_connect_account_002(self):
         with allure.step("测试用户的account_id"):
-            account_id = 'e19a6fa7-1b7d-4396-a8cf-f641467a910b'
+            account_id = '5a02d7ca-9d39-4acf-bb29-d4877856c026'
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
@@ -65,7 +65,7 @@ class TestConnectAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['account_status'] == 'INITIALIZED', "获取关联用户状况，用户成功连接，还未在 Cabital 提交 KYC错误，返回值是{}".format(r.text)
         with allure.step("获取partner信息"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc01@test.com', password='A!234sdfg')
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winniekyc12@test.com', password='A!234sdfg')
             r = session.request('GET', url='{}/connect/account/info'.format(self.url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -374,23 +374,14 @@ class TestConnectAccountApi:
     @allure.title('test_connect_account_013 成功解绑+name match用户 pass')
     def test_connect_account_013(self):
         with allure.step("准备参数"):
-            account_id = '0844d829-3939-4259-8dd4-ada16b96b6c5'
+            account_id = 'b013327e-ae65-4197-acf6-806f03873f51'
         with allure.step("name match 数据"):
-            # data = {
-            #     'name': 'Alice Wang 1231',
-            #     'id': '21212121',
-            #     'id_document': 'PASSPORT',
-            #     'issued_by': 'HKG',
-            #     'dob': '19950101'
-            # }
             data = {
-
-                'name': 'qq',
-                'id': '132143',
+                'name': 'yanting22 huang33',
+                'id': '235766',
                 'id_document': 'PASSPORT',
                 'issued_by': 'HKG',
-                'dob': '19920302'
-
+                'dob': '19900202'
             }
         with allure.step("验签"):
             unix_time = int(time.time())

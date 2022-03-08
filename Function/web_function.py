@@ -54,7 +54,8 @@ class webFunction:
     def logout_web(chrome_driver):
         with allure.step("点击登出"):
             operate_element_web(chrome_driver, 'assetPage', 'header-btn-hi-nickname')
-            assert operate_element_web(chrome_driver, 'assetPage', 'dialog_forgetpassword')
+            operate_element_web(chrome_driver, 'assetPage', 'header-btn-user-signout')
+            assert operate_element_web(chrome_driver, 'loginPage', 'login_forgotpw', "check"), "未退出账号"
 
     # 注册 web
     @staticmethod
@@ -81,9 +82,31 @@ class webFunction:
             operate_element_web(chrome_driver, 'signupPage', "signup_registernow")
             time.sleep(2)
         with allure.step("确定注册成功"):
-            account_name = test_account.split('@')
-            operate_element_web(chrome_driver, "AccountSetPage", "mainpage_menu_account")
-            assert operate_element_web(chrome_driver, "AccountSetPage", "account-nickname", "get_text") == \
-                account_name[0], "注册失败"
+            assert operate_element_web(chrome_driver, "assetPage", "Cabital Logo", "check"), "注册失败"
+
+    # 注册 web指定账号（因为要很多账号且能收到bybit邮件）
+    @staticmethod
+    def signup_web_specified(chrome_driver, test_account, email_code=get_json()['web'][get_json()['env']]['code'],
+                             password=get_json()['web'][get_json()['env']]['password']):
+        with allure.step("确定打开登录页面"):
+            assert operate_element_web(chrome_driver, 'loginPage', 'signinForm', type='check'), '未打开登录页面'
+        with allure.step("填写注册信息"):
+            # 点击signup按钮，跳转至signup页面
+            operate_element_web(chrome_driver, 'loginPage', "login_gotosignup")
+            # 输入账号
+            operate_element_web(chrome_driver, 'signupPage', "signup_form_password_email", "input", test_account)
+            # 点击发送验证码
+            operate_element_web(chrome_driver, 'signupPage', "signup_sendcode")
+            # 输入验证码
+            operate_element_web(chrome_driver, 'signupPage', "mailcode", "input", email_code)
+            # 输入密码
+            operate_element_web(chrome_driver, 'signupPage', "signup_form_password_input", "input", password)
+            # 勾选复选框
+            operate_element_web(chrome_driver, 'signupPage', "signup_termschk")
+            # 点击注册按钮
+            operate_element_web(chrome_driver, 'signupPage', "signup_registernow")
+            time.sleep(2)
+        with allure.step("确定注册成功"):
+            assert operate_element_web(chrome_driver, "assetPage", "Cabital Logo", "check"), "注册失败"
 
 

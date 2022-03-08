@@ -455,7 +455,7 @@ class TestWebWithdraw:
                 # 清空输入框
                 operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'delete')
                 assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-receive', 'get_text') \
-                       == '-12 USDT', 'receive金额未更新'
+                       == '-12.00 USDT', 'receive金额未更新'
                 
     @allure.title('test_web_withdraw_crypto_010')
     @allure.description('Next：Submit WithDrawal')
