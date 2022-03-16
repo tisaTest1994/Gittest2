@@ -95,13 +95,13 @@ class ApiFunction:
 
     # 获取钱包指定币种某个交易状态的数量
     @staticmethod
-    def get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE'):
+    def get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE', amount_type='amount'):
         r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
         for i in r.json():
             if i['code'] == type and i['wallet_type'] == wallet_type:
                 for y in i['balances']:
                     if y['type'] == balance_type:
-                        balance_type_available_amount = y['amount']
+                        balance_type_available_amount = y[amount_type]
         return balance_type_available_amount
 
     # 获取钱包指定币种全部数量
