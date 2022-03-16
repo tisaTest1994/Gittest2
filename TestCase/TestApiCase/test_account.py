@@ -14,6 +14,7 @@ class TestAccountApi:
     @allure.description('注册新用户')
     def test_account_001(self):
         with allure.step("注册账户"):
+            headers['X-Device'] = ''
             data = {
                 "emailAddress": generate_email(),
                 "verificationCode": "666666",
@@ -26,6 +27,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
+            logger.info('email是{}'.format(data['emailAddress']))
             assert 'accessToken' in r.text, "注册新用户失败，返回值是{}".format(r.text)
             assert r.json()['refreshExpiresTn'] == 86400, "token过期时间不是24小时，返回值是{}".format(r.text)
 

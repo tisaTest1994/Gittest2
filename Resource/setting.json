@@ -309,6 +309,7 @@
     "EUR",
     "CHF"
   ],
+  "show_list": ["USD", "GBP", "EUR"],
   "websocket": {
     "url": "wss://api.latibac.com/api/v1/realtime/ws"
   },

@@ -96,7 +96,7 @@ class ApiFunction:
     # 获取钱包指定币种某个交易状态的数量
     @staticmethod
     def get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE'):
-        r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers, timeout=10)
+        r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
         for i in r.json():
             if i['code'] == type and i['wallet_type'] == wallet_type:
                 for y in i['balances']:
@@ -528,6 +528,18 @@ class ApiFunction:
         crypto_list = get_json()['crypto_list']
         cash_list = get_json()['cash_list']
         return crypto_list + cash_list
+
+    # 获得全部换汇币种对的list
+    @staticmethod
+    def get_cfx_list():
+        cfx_list = []
+        r = session.request('GET', url='{}/txn/cfx/codes'.format(env_url))
+        for i in ApiFunction.balance_list():
+            for y in r.json()['codes'][i]:
+                cfx_list.append('{}-{}'.format(i, y))
+        for z in cfx_list:
+            cfx_list.remove('{}-{}'.format(z.split('-')[1], z.split('-')[0]))
+        return cfx_list
 
     # 获得全部换汇币种对的list
     @staticmethod

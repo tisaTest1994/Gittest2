@@ -399,7 +399,7 @@ class TestConnectAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)
-    #
+
     # @allure.title('test_connect_account_014 成功解绑+name match用户mismatch')
     # def test_connect_account_014(self):
     #     with allure.step("准备参数"):

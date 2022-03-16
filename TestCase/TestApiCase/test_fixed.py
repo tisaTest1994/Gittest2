@@ -660,7 +660,7 @@ class TestFixedApi:
                 'order': "1",
                 'code': "BTC"
             }
-            r = session.request('GET', url='{}/earn/fix/transactions'.format(env_url), params=params, headers=headers)
+            r = session.request('GET', url='{}/earn/fix/transactions'.format(env_url), params=params, headers=headers, timeout=200)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))

@@ -201,3 +201,94 @@ class TestCoreApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'currencies' in r.text, "获取metadata错误，返回值是{}".format(r.text)
+
+    @allure.title('test_core_014')
+    @allure.description('获取所有Saving产品的持有金额')
+    def test_core_014(self):
+        with allure.step("显示币种矩阵"):
+            for i in get_json()['show_list']:
+                headers['X-Currency'] = i
+                with allure.step("获取所有Saving产品的持有金额"):
+                    r = session.request('GET', url='{}/earn/saving/holding'.format(env_url), headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("通过api获得Total Saving Amount数据"):
+                    r1 = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
+                with allure.step("校验返回值"):
+                    assert r1.json()['total_holding'] == r.json()['total_saving_amount'], "获取所有Saving产品的持有金额错误显示货币类型是{}，返回值是{}".format(i, r.text)
+                    for y in get_json()['crypto_list']:
+                        assert y in r.json()['currencies'], "获取所有Saving产品的持有金额错误显示货币类型是{}，返回值是{}".format(i, r.text)
+
+    @allure.title('test_core_015')
+    @allure.description('获取所有Saving产品的持有金额详情')
+    def test_core_015(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
+        with allure.step("显示币种矩阵"):
+            for i in get_json()['show_list']:
+                headers['X-Currency'] = i
+                with allure.step("获取所有Saving产品的持有金额详情"):
+                    r = session.request('GET', url='{}/earn/saving/holding/details'.format(env_url), headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                # with allure.step("total_saving_amount计算"):
+                #     r1 = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
+                #     assert r1.json()['total_holding'] == r.json()['total_saving_amount'], "获取所有Saving产品的持有金额详情错误，显示货币类型是{}，返回值是{}".format(i, r.text)
+                with allure.step("cumulative_interest计算"):
+                    with allure.step("获取累计活期利息"):
+                        flexible_all_interest_list = []
+                        with allure.step("获取产品product_id"):
+                            r2 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+                            for z in r2.json():
+                                product_id = z['product_id']
+                                with allure.step("获取产品持有情况"):
+                                    r3 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, product_id), headers=headers)
+                                    flexible_all_interest_list.append(r3.json()['total_yield']['abs_amount'])
+                    with allure.step("获取累计定期利息"):
+                        fled_all_interest_list = []
+                        for x in get_json()['crypto_list']:
+                            fled_all_interest_amounts_list = []
+                            cursor = '0'
+                            while cursor != '-1':
+                                params = {
+                                    'tx_type': "2",
+                                    'cursor': cursor,
+                                    'size': 50,
+                                    'order': "1",
+                                    'code': x
+                                }
+                                r4 = session.request('GET', url='{}/earn/fix/transactions'.format(env_url),
+                                                     params=params,
+                                                     headers=headers, timeout=20)
+                                cursor = r4.json()['cursor']
+                                for k in r4.json()['transactions']:
+                                    fled_all_interest_amounts_list.append(Decimal(k['maturity_interest']['amount']))
+                            quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
+                            fled_all_interest_list.append(quote * sum(fled_all_interest_amounts_list))
+                        print(fled_all_interest_list)
+
+
+
+
+                # with allure.step("fixed_saving_map计算"):
+                #     for i in get_json()['crypto_list']:
+                #         assert float(r.json()['fixed_saving_map'][i]) == float(
+                #             ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_AVAILABLE',
+                #                                           wallet_type='SAVING-FIX')) + float(
+                #             ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_FROZEN',
+                #                                           wallet_type='SAVING-FIX')), "获取所有Saving产品的持有金额详情错误，返回值是{}".format(
+                #             r.text)
+                # with allure.step("flexible_saving_map计算"):
+                #     for i in get_json()['crypto_list']:
+                #         assert float(r.json()['flexible_saving_map'][i]) == float(
+                #             ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_AVAILABLE',
+                #                                           wallet_type='SAVING')) + float(
+                #             ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_FROZEN',
+                #                                           wallet_type='SAVING')), "获取所有Saving产品的持有金额详情错误，返回值是{}".format(
+                #             r.text)
+
