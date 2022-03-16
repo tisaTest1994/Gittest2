@@ -269,7 +269,7 @@ class TestCoreApi:
                                 for k in r4.json()['transactions']:
                                     fled_all_interest_amounts_list.append(Decimal(k['maturity_interest']['amount']))
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
-                            fled_all_interest_list.append(crypto_len(Decimal(quote['middle']) * sum(fled_all_interest_amounts_list), i))
+                            fled_all_interest_list.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fled_all_interest_amounts_list), i)))
                     logger.info('获取累计活期利息是{}'.format(str(sum(flexible_all_interest_list))))
                     logger.info('获取累计定期利息{}'.format(str(sum(fled_all_interest_list))))
                     assert r.json()['cumulative_interest'] == Decimal(sum(flexible_all_interest_list) + sum(fled_all_interest_list)), '获取所有Saving产品的持有金额详情cumulative_interest计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
