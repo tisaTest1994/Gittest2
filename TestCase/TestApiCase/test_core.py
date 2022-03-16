@@ -292,3 +292,31 @@ class TestCoreApi:
                 #                                           wallet_type='SAVING')), "获取所有Saving产品的持有金额详情错误，返回值是{}".format(
                 #             r.text)
 
+    @allure.title('test_core_016')
+    @allure.description('获取所有Saving产品的收益详情')
+    def test_core_016(self):
+        with allure.step("显示币种矩阵"):
+            for i in get_json()['show_list']:
+                headers['X-Currency'] = i
+                with allure.step("获取所有Saving产品的持有金额"):
+                    r = session.request('GET', url='{}/earn/saving/return'.format(env_url), headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+
+    @allure.title('test_core_017')
+    @allure.description('获取所有Saving产品的基于币种的收益')
+    def test_core_016(self):
+        with allure.step("显示币种矩阵"):
+            for i in get_json()['show_list']:
+                headers['X-Currency'] = i
+                with allure.step("获取所有Saving产品的基于币种的收益"):
+                    for y in get_json()['crypto_list']:
+                        r = session.request('GET', url='{}/earn/saving/return/{}'.format(env_url, y), headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
