@@ -275,7 +275,7 @@ class TestCoreApi:
                     with allure.step("获取所有Saving产品的持有金额详情"):
                         r = session.request('GET', url='{}/earn/saving/holding/details'.format(env_url),
                                             headers=headers)
-                    assert Decimal(r.json()['cumulative_interest']) == Decimal(sum(flexible_all_interest_list) + sum(fled_all_interest_list)), '获取所有Saving产品的持有金额详情cumulative_interest计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                    assert str(r.json()['cumulative_interest'])[:-1] == str(sum(flexible_all_interest_list) + sum(fled_all_interest_list))[:-1], '获取所有Saving产品的持有金额详情cumulative_interest计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
 
 
                 # with allure.step("fixed_saving_map计算"):
