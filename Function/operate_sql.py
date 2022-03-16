@@ -79,6 +79,6 @@ class sqlFunction:
         sql = "select middle from quote_{} where pair = '{}' and purpose = 'Customer' order by id desc limit 1;".format(utc_zero, pair)
         info = sqlFunction().connect_mysql('pricing', sql=sql)
         if info is not None and '()' not in str(info):
-            print(info)
-            print(info[0])
             return info[0]
+
+
