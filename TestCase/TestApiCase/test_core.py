@@ -238,7 +238,7 @@ class TestCoreApi:
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 # with allure.step("total_saving_amount计算"):
                 #     r1 = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
-                #     assert r1.json()['total_holding'] == r.json()['total_saving_amount'], "获取所有Saving产品的持有金额详情错误，显示货币类型是{}，返回值是{}".format(i, r.text)
+                #     assert r1.json()['total_holding'] == r.json()['total_saving_amount'], "获取所有Saving产品的持有金额详情total_saving_amount计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)
                 with allure.step("cumulative_interest计算"):
                     with allure.step("获取累计活期利息"):
                         flexible_all_interest_list = []
@@ -270,7 +270,9 @@ class TestCoreApi:
                                     fled_all_interest_amounts_list.append(Decimal(k['maturity_interest']['amount']))
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
                             fled_all_interest_list.append(crypto_len(Decimal(quote['middle']) * sum(fled_all_interest_amounts_list), i))
-                    assert r.json()['cumulative_inerest'] == Decimal(sum(flexible_all_interest_list) + sum(fled_all_interest_list)), '获取所有Saving产品的持有金额详情错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                    logger.info('获取累计活期利息是{}'.format(sum(flexible_all_interest_list)))
+                    logger.info('获取累计定期利息{}'.format(sum(fled_all_interest_list)))
+                    assert r.json()['cumulative_interest'] == Decimal(sum(flexible_all_interest_list) + sum(fled_all_interest_list)), '获取所有Saving产品的持有金额详情cumulative_interest计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
 
 
 
