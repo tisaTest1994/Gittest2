@@ -248,7 +248,7 @@ class TestCoreApi:
                                 product_id = z['product_id']
                                 with allure.step("获取产品持有情况"):
                                     r3 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, product_id), headers=headers)
-                                    flexible_all_interest_list.append(r3.json()['total_yield']['abs_amount'])
+                                    flexible_all_interest_list.append(Decimal(r3.json()['total_yield']['abs_amount']))
                     with allure.step("获取累计定期利息"):
                         fled_all_interest_list = []
                         for x in get_json()['crypto_list']:
@@ -270,13 +270,9 @@ class TestCoreApi:
                                     fled_all_interest_amounts_list.append(Decimal(k['maturity_interest']['amount']))
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
                             fled_all_interest_list.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fled_all_interest_amounts_list), i)))
-                    print(flexible_all_interest_list)
-                    print(fled_all_interest_list)
-                    # logger.info('获取累计活期利息是{}'.format(str(sum(flexible_all_interest_list))))
-                    # logger.info('获取累计定期利息{}'.format(str(sum(fled_all_interest_list))))
-                    assert r.json()['cumulative_interest'] == Decimal(sum(flexible_all_interest_list) + sum(fled_all_interest_list)), '获取所有Saving产品的持有金额详情cumulative_interest计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
-
-
+                    logger.info('获取累计活期利息是{}'.format(str(sum(flexible_all_interest_list))))
+                    logger.info('获取累计定期利息{}'.format(str(sum(fled_all_interest_list))))
+                    assert Decimal(r.json()['cumulative_interest']) == Decimal(sum(flexible_all_interest_list) + sum(fled_all_interest_list)), '获取所有Saving产品的持有金额详情cumulative_interest计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
 
 
                 # with allure.step("fixed_saving_map计算"):
