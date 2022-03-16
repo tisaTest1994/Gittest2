@@ -29,7 +29,7 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
         with allure.step("切换至withdraw crypto页面"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_WE120')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_crypto')
             time.sleep(5)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector', 'check'), '页面切换失败'
         with allure.step("检查默认币种"):
@@ -39,7 +39,8 @@ class TestWebWithdraw:
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
             # 选择ETH
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-ETH-1')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-ETH')
+            sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change',
                                        'get_value') == 'ETH', '币种切换失败'
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-method-radio0',
@@ -48,7 +49,7 @@ class TestWebWithdraw:
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
             # 选择USDT
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-USDT-2')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-USDT')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change',
                                        'get_value') == 'USDT', '币种切换失败'
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-method-radio0',
@@ -57,7 +58,8 @@ class TestWebWithdraw:
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
             # 选择BTC
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-BTC-0')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-BTC')
+            sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change',
                                        'get_value') == 'BTC', '币种切换失败'
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-method-radio0',
@@ -72,7 +74,7 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
         with allure.step("切换至withdraw crypto页面"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_WE120')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector', 'check'), '页面切换失败'
         with allure.step("BTC withdrawal address格式校验：特殊字符"):
             # 输入withdrawal address
@@ -88,7 +90,7 @@ class TestWebWithdraw:
             # 输入提现金额
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.001')
             # 点击Next：Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'click_withdraw_confirm_crypto')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
             with allure.step("调用接口获得数据"):
                 data1 = {
                     "amount": "0.001",
@@ -109,7 +111,7 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
                                 'tb1qn8fymr49zljfkvgsuhg3572fnfkljuga550asm')
             # 点击Next：Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'click_withdraw_confirm_crypto')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailcode-label', 'check'),\
                 '未弹出认证框'
 
@@ -122,13 +124,13 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
         with allure.step("切换至withdraw crypto页面"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_WE120')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector', 'check'), '页面切换失败'
         with allure.step("切换至ETH"):
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
             # 选择ETH
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-ETH-1')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-ETH')
         with allure.step("ETH withdrawal address格式校验：无效地址"):
             # 输入withdrawal address
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
@@ -136,7 +138,7 @@ class TestWebWithdraw:
             # 输入提现金额
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.02')
             # 点击Next：Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'click_withdraw_confirm_crypto')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
             with allure.step("调用接口获得数据"):
                 data1 = {
                     "amount": "0.02",
@@ -146,7 +148,6 @@ class TestWebWithdraw:
                 }
                 r = session.request('POST', url='{}/pay/withdraw/crypto/validate'.format(env_url),
                                     data=json.dumps(data1), headers=headers)
-                time.sleep(2)
                 message = r.json()['message']
                 print(message)
                 assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
@@ -157,7 +158,7 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
                                 '0x0C5816f5a381209164861B57Ddd8B257a9fbC50a')
             # 点击Next：Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'click_withdraw_confirm_crypto')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailcode-label', 'check'),\
                 '未弹出认证框'
 
@@ -170,13 +171,13 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
         with allure.step("切换至withdraw crypto页面"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_WE120')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector', 'check'), '页面切换失败'
         with allure.step("切换至USDT"):
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
             # 选择USDT
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-USDT-2')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-USDT')
         with allure.step("USDT withdrawal address格式校验：无效地址"):
             # 输入withdrawal address
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
@@ -184,7 +185,7 @@ class TestWebWithdraw:
             # 输入提现金额
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '40')
             # 点击Next：Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'click_withdraw_confirm_crypto')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
             with allure.step("调用接口获得数据"):
                 data1 = {
                     "amount": "40",
@@ -205,7 +206,7 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
                                 '0x0C5816f5a381209164861B57Ddd8B257a9fbC50a')
             # 点击Next：Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'click_withdraw_confirm_crypto')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailcode-label', 'check'),\
                 '未弹出认证框'
 
@@ -218,7 +219,7 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
         with allure.step("切换至withdraw crypto页面"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_WE120')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector', 'check'), '页面切换失败'
         with allure.step("输入的值小于最小提现金额<0.001"):
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.0006')
@@ -246,14 +247,14 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
         with allure.step("切换至withdraw crypto页面"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_WE120')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector', 'check'),\
                 '页面切换失败'
         with allure.step("切换至ETH"):
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
             # 选择ETH
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-ETH-1')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-ETH')
         with allure.step("输入的值小于最小提现金额<0.02"):
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.01')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount-helper-text',
@@ -280,14 +281,14 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
         with allure.step("切换至withdraw crypto页面"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_WE120')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector', 'check'),\
                 '页面切换失败'
         with allure.step("切换至USDT"):
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
             # 选择USDT
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-USDT-2')
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-USDT')
         with allure.step("输入的值小于最小提现金额<40"):
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '39')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount-helper-text',
@@ -314,13 +315,13 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
         with allure.step("切换至withdraw crypto页面"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_WE120')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector', 'check'),\
                 '页面切换失败'
         with allure.step("BTC：max"):
             with allure.step("获取可用金额数据"):
                 available_balance_btc = operate_element_web(chrome_driver, 'assetPage',
-                                                             'assets-withdraw-crypto-amount-helper-text', 'get_text')
+                                                            'assets-withdraw-crypto-amount-helper-text', 'get_text')
                 available_balance_btc = available_balance_btc.replace(
                     'Available Balance:', '').replace(' ', '').replace('BTC', '').replace(',', '')
                 # 自动填入可提现的最大金额，金额和下方的available balance相同
@@ -333,7 +334,7 @@ class TestWebWithdraw:
                 # 点击下拉框
                 operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
                 # 选择ETH
-                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-ETH-1')
+                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-ETH')
             with allure.step("获取可用金额数据"):
                 available_balance_eth = operate_element_web(chrome_driver, 'assetPage',
                                                             'assets-withdraw-crypto-amount-helper-text', 'get_text')
@@ -349,7 +350,7 @@ class TestWebWithdraw:
                 # 点击下拉框
                 operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
                 # 选择ETH
-                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-USDT-2')
+                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-USDT')
             with allure.step("获取可用金额数据"):
                 available_balance_usdt = operate_element_web(chrome_driver, 'assetPage',
                                                              'assets-withdraw-crypto-amount-helper-text', 'get_text')
@@ -371,8 +372,7 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
         with allure.step("切换至withdraw crypto页面"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_WE120')
-            time.sleep(2)
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector', 'check'),\
                 '页面切换失败'
         with allure.step("BTC:receive金额显示"):
@@ -390,7 +390,6 @@ class TestWebWithdraw:
                 operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '5')
                 you_will_receive2 = operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-receive',
                                                         'get_text').replace(' ', '').replace('BTC', '')
-                time.sleep(2)
                 assert you_will_receive2[1] == ',', '金额未千分位显示'
                 you_will_receive_string = you_will_receive2.replace(',', '')
                 assert float(withdrawal_fee) + 1015 == float(you_will_receive_string), 'you_will_receive显示金额错误'
@@ -404,7 +403,7 @@ class TestWebWithdraw:
                 # 点击下拉框
                 operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
                 # 选择ETH
-                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-ETH-1')
+                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-ETH')
             with allure.step("receive默认金额显示，用0调取显示fee"):
                 withdrawal_fee = operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-fee',
                                                      'get_text').replace(' ', '').replace('ETH', '')
@@ -432,7 +431,8 @@ class TestWebWithdraw:
                 # 点击下拉框
                 operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
                 # 选择USDT
-                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-USDT-2')
+                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-USDT')
+                sleep(2)
             with allure.step("receive默认金额显示，用0调取显示fee"):
                 withdrawal_fee = operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-fee',
                                                      'get_text').replace(' ', '').replace('USDT', '')
@@ -467,11 +467,11 @@ class TestWebWithdraw:
                 '页面未跳转至Withdraw-withdraw Cash页面'
             time.sleep(2)
         with allure.step("切换至withdraw crypto页面"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_WE120')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector', 'check'),\
                 '页面切换失败'
         # with allure.step("信息填写不完整：不输入信息直接点击next，现信息填写不完整，按钮为置灰状态，和cash不同"): operate_element_web(chrome_driver,
-        # 'assetPage', 'click_withdraw_confirm_crypto') assert chrome_driver.find_element_by_link_text('Please fill
+        # 'assetPage', 'withdraw_confirm_crypto') assert chrome_driver.find_element_by_link_text('Please fill
         # in withdrawal Address, Amount').is_displayed(),\ '未显示提示信息'
         with allure.step("信息填写完整"):
             # 输入withdrawal address
@@ -480,7 +480,7 @@ class TestWebWithdraw:
             # 输入提现金额
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.001')
             # 点击Next：Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'click_withdraw_confirm_crypto')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailbtn', 'check'),\
                 '未弹出认证框'
 
@@ -494,7 +494,7 @@ class TestWebWithdraw:
                 '页面未跳转至Withdraw-withdraw Cash页面'
             time.sleep(2)
         with allure.step("切换至withdraw crypto页面"):
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_WE120')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector', 'check'),\
                 '页面切换失败'
         with allure.step("填写提现信息"):
@@ -504,7 +504,7 @@ class TestWebWithdraw:
             # 输入提现金额
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.001')
             # 点击Next：Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'click_withdraw_confirm_crypto')
+            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
         # with allure.step("输入错误邮箱验证码"):
         #     # 输入错误邮箱验证码
         #     operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailbtn')

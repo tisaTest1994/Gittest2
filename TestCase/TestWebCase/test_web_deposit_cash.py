@@ -28,40 +28,47 @@ class TestWebDeposit:
         webFunction.login_web(chrome_driver)
         with allure.step("点击deposit按钮，并判断是否跳转至deposit页面,默认为deposit Cash"):
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_deposit')
-            assert operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_CB578', 'check'),\
+            assert operate_element_web(chrome_driver, 'assetPage', 'withdraw_select_Deposit Cash', 'check'),\
                 '页面未跳转至Withdraw-withdraw Cash页面'
-        with allure.step("从接口获取币种信息"):
+        with allure.step("从metadata接口获取已开启的币种信息"):
+            fiat_metadata = session.request('GET', url='{}/core/metadata'.format(env_url), headers=headers)
+            fiat_list_metadata = fiat_metadata.json()['currencies']
+            fiat_all_metadata = fiat_list_metadata.keys()
+        with allure.step("从接口获取币种信息,如在metada中关闭，则去除"):
             fiat = session.request('GET', url='{}/pay/deposit/ccy/fiat'.format(env_url), headers=headers)
             fiat_list = fiat.json()['fiat']
             fiat_all = []
             for i in range(0, len(fiat_list)):
-                fiat_all.append(fiat_list[i]['name'])
-            print(fiat_all)
+                if fiat_list[i]['name'] in fiat_all_metadata:
+                    fiat_all.append(fiat_list[i]['name'])
             fiat_default = fiat_all[0]
         with allure.step("检查默认币种，并切换币种"):
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash', 'get_value') ==\
                    fiat_default, "默认币种错误"
-            # 点击下拉框
-            operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
-            # 选择GBP
-            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-GBP-2')
-            time.sleep(2)
-            # 检查币种是否切换成功
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash', 'get_value') == \
-                   'GBP', '币种未切换至GBP'
-            # 点击下拉框
-            operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
-            # 选择EUR
-            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-EUR-1')
-            time.sleep(2)
-            # 检查币种是否切换成功
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash', 'get_value') ==\
-                   'EUR', '币种未切换至EUR'
-            # 点击下拉框
-            operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
-            # 选择CHF
-            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-CHF-0')
-            time.sleep(2)
-            # 检查币种是否切换成功
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash', 'get_value') == \
-                   'CHF', '币种未切换至CHF'
+            if "GBP" in fiat_all:
+                # 点击下拉框
+                operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
+                # 选择GBP
+                operate_element_web(chrome_driver, 'assetPage', 'undefined-option-GBP')
+                time.sleep(2)
+                # 检查币种是否切换成功
+                assert operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash', 'get_value') == \
+                       'GBP', '币种未切换至GBP'
+            if "EUR" in fiat_all:
+                # 点击下拉框
+                operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
+                # 选择EUR
+                operate_element_web(chrome_driver, 'assetPage', 'undefined-option-EUR')
+                time.sleep(2)
+                # 检查币种是否切换成功
+                assert operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash', 'get_value') ==\
+                       'EUR', '币种未切换至EUR'
+            if "EUR" in fiat_all:
+                # 点击下拉框
+                operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
+                # 选择CHF
+                operate_element_web(chrome_driver, 'assetPage', 'undefined-option-CHF')
+                time.sleep(2)
+                # 检查币种是否切换成功
+                assert operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash', 'get_value') == \
+                       'CHF', '币种未切换至CHF'
