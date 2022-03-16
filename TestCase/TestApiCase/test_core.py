@@ -236,9 +236,9 @@ class TestCoreApi:
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                # with allure.step("total_saving_amount计算"):
-                #     r1 = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
-                #     assert r1.json()['total_holding'] == r.json()['total_saving_amount'], "获取所有Saving产品的持有金额详情total_saving_amount计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)
+                with allure.step("total_saving_amount计算"):
+                    r1 = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
+                    assert r1.json()['total_holding'] == r.json()['total_saving_amount'], "获取所有Saving产品的持有金额详情total_saving_amount计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)
                 with allure.step("cumulative_interest计算"):
                     with allure.step("获取累计活期利息"):
                         flexible_all_interest_list = []
@@ -272,6 +272,9 @@ class TestCoreApi:
                             fled_all_interest_list.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fled_all_interest_amounts_list), i)))
                     logger.info('获取累计活期利息是{}'.format(str(sum(flexible_all_interest_list))))
                     logger.info('获取累计定期利息{}'.format(str(sum(fled_all_interest_list))))
+                    with allure.step("获取所有Saving产品的持有金额详情"):
+                        r = session.request('GET', url='{}/earn/saving/holding/details'.format(env_url),
+                                            headers=headers)
                     assert Decimal(r.json()['cumulative_interest']) == Decimal(sum(flexible_all_interest_list) + sum(fled_all_interest_list)), '获取所有Saving产品的持有金额详情cumulative_interest计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
 
 
@@ -295,6 +298,7 @@ class TestCoreApi:
     @allure.title('test_core_016')
     @allure.description('获取所有Saving产品的收益详情')
     def test_core_016(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
         with allure.step("显示币种矩阵"):
             for i in get_json()['show_list']:
                 headers['X-Currency'] = i
@@ -308,7 +312,8 @@ class TestCoreApi:
 
     @allure.title('test_core_017')
     @allure.description('获取所有Saving产品的基于币种的收益')
-    def test_core_016(self):
+    def test_core_017(self):
+        #headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
         with allure.step("显示币种矩阵"):
             for i in get_json()['show_list']:
                 headers['X-Currency'] = i
