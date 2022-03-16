@@ -331,16 +331,7 @@ class TestCoreApi:
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                with allure.step("cumulative_interest计算"):
-                    with allure.step("获取累计活期利息"):
-                        flexible_all_interest_list = []
-                        with allure.step("获取产品product_id"):
-                            r2 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
-                            for z in r2.json():
-                                product_id = z['product_id']
-                                with allure.step("获取产品持有情况"):
-                                    r3 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, product_id), headers=headers)
-                                    flexible_all_interest_list.append(Decimal(r3.json()['total_yield']['abs_amount']))
+                with allure.step("interest_to_settle计算"):
                     with allure.step("获取累计定期利息"):
                         fled_all_interest_list = []
                         for x in get_json()['crypto_list']:
@@ -362,9 +353,8 @@ class TestCoreApi:
                                     fled_all_interest_amounts_list.append(Decimal(k['maturity_interest']['amount']))
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
                             fled_all_interest_list.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fled_all_interest_amounts_list), i)))
-                    logger.info('获取累计活期利息是{}'.format(str(sum(flexible_all_interest_list))))
                     logger.info('获取累计定期利息{}'.format(str(sum(fled_all_interest_list))))
-                    assert str(r.json()['interest_to_settle'])[:-1] == str(sum(flexible_all_interest_list) + sum(fled_all_interest_list))[:-1], '获取所有Saving产品的持有金额详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                    assert str(r.json()['interest_to_settle']) == str(sum(fled_all_interest_list)), '获取所有Saving产品的持有金额详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
 
     @allure.title('test_core_019')
     @allure.description('获取所有Saving产品的持有金额详情fixed_saving_amount计算')
@@ -435,6 +425,104 @@ class TestCoreApi:
                                  params=params,
                                  headers=headers, timeout=20)
             print(r1.json())
+
+    @allure.title('test_core_022')
+    @allure.description('获取所有Saving产品的收益详情total_earnings计算')
+    def test_core_022(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
+        with allure.step("显示币种矩阵"):
+            for i in get_json()['show_list']:
+                headers['X-Currency'] = i
+                with allure.step("获取所有Saving产品的收益详情total_earnings计算"):
+                    r = session.request('GET', url='{}/earn/saving/return'.format(env_url),
+                                        headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("cumulative_interest计算"):
+                    with allure.step("获取累计活期利息"):
+                        flexible_all_interest_list = []
+                        with allure.step("获取产品product_id"):
+                            r2 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+                            for z in r2.json():
+                                product_id = z['product_id']
+                                with allure.step("获取产品持有情况"):
+                                    r3 = session.request('GET',
+                                                         url='{}/earn/products/{}/summary'.format(env_url, product_id),
+                                                         headers=headers)
+                                    flexible_all_interest_list.append(Decimal(r3.json()['total_yield']['abs_amount']))
+                    with allure.step("获取累计定期利息"):
+                        fled_all_interest_list = []
+                        for x in get_json()['crypto_list']:
+                            fled_all_interest_amounts_list = []
+                            cursor = '0'
+                            while cursor != '-1':
+                                params = {
+                                    'tx_type': "1",
+                                    'cursor': cursor,
+                                    'size': 50,
+                                    'order': "1",
+                                    'code': x
+                                }
+                                r4 = session.request('GET', url='{}/earn/fix/transactions'.format(env_url),
+                                                     params=params,
+                                                     headers=headers, timeout=20)
+                                cursor = r4.json()['cursor']
+                                for k in r4.json()['transactions']:
+                                    fled_all_interest_amounts_list.append(Decimal(k['maturity_interest']['amount']))
+                            quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
+                            fled_all_interest_list.append(
+                                Decimal(crypto_len(Decimal(quote['middle']) * sum(fled_all_interest_amounts_list), i)))
+                    logger.info('获取累计活期利息是{}'.format(str(sum(flexible_all_interest_list))))
+                    logger.info('获取累计定期利息{}'.format(str(sum(fled_all_interest_list))))
+                    assert str(r.json()['total_earnings'])[:-1] == str(
+                        sum(flexible_all_interest_list) + sum(fled_all_interest_list))[
+                                                                       :-1], '获取所有Saving产品的持有金额详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+
+    @allure.title('test_core_023')
+    @allure.description('获取所有Saving产品的收益详情interest_to_settle计算')
+    def test_core_023(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
+        with allure.step("显示币种矩阵"):
+            for i in get_json()['show_list']:
+                headers['X-Currency'] = i
+                with allure.step("获取所有Saving产品的收益详情interest_to_settle计算"):
+                    r = session.request('GET', url='{}/earn/saving/return'.format(env_url),
+                                        headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("interest_to_settle计算"):
+                    with allure.step("获取累计定期利息"):
+                        fled_all_interest_list = []
+                        for x in get_json()['crypto_list']:
+                            fled_all_interest_amounts_list = []
+                            cursor = '0'
+                            while cursor != '-1':
+                                params = {
+                                    'tx_type': "1",
+                                    'cursor': cursor,
+                                    'size': 50,
+                                    'order': "1",
+                                    'code': x
+                                }
+                                r4 = session.request('GET', url='{}/earn/fix/transactions'.format(env_url),
+                                                     params=params,
+                                                     headers=headers, timeout=20)
+                                cursor = r4.json()['cursor']
+                                for k in r4.json()['transactions']:
+                                    fled_all_interest_amounts_list.append(Decimal(k['maturity_interest']['amount']))
+                            quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
+                            fled_all_interest_list.append(
+                                Decimal(crypto_len(Decimal(quote['middle']) * sum(fled_all_interest_amounts_list), i)))
+                    logger.info('获取累计定期利息{}'.format(str(sum(fled_all_interest_list))))
+                    assert str(r.json()['interest_to_settle']) == str(
+                        sum(fled_all_interest_list)), '获取所有Saving产品的收益详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+
 
 
     # @allure.title('test_core_017')
