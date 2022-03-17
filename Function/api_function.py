@@ -97,7 +97,6 @@ class ApiFunction:
     @staticmethod
     def get_crypto_number(type='BTC', balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE', amount_type='amount'):
         r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
-        print(r.json())
         for i in r.json():
             if i['code'] == type and i['wallet_type'] == wallet_type:
                 for y in i['balances']:
