@@ -45,9 +45,10 @@ class TestCabinetAccountApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert '001002' == r.json()['code'], "用户使用已经注册的邮箱修改邮箱错误，返回值是{}".format(r.text)
+            assert 'BAD_REQUEST' == r.json()['code'], "用户使用已经注册的邮箱修改邮箱错误，返回值是{}".format(r.text)
+            assert 'The email address has been registered.' == r.json()['message'], "用户使用已经注册的邮箱修改邮箱错误，返回值是{}".format(r.text)
 
     @allure.title('test_cabinet_account_003 用户使用未找到的user_id修改绑定邮箱')
     def test_cabinet_account_003(self):
@@ -63,9 +64,10 @@ class TestCabinetAccountApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert '001023' == r.json()['code'], "用户使用未找到的user_id修改绑定邮箱错误，返回值是{}".format(r.text)
+            assert 'BAD_REQUEST' == r.json()['code'], "用户使用未找到的user_id修改绑定邮箱错误，返回值是{}".format(r.text)
+            assert 'User not exist.' == r.json()['message'], "用户使用未找到的user_id修改绑定邮箱错误，返回值是{}".format(r.text)
 
     @allure.title('test_cabinet_account_004 未找到关闭用户otp')
     def test_cabinet_account_004(self):
@@ -81,9 +83,10 @@ class TestCabinetAccountApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert '001021' == r.json()['code'], "未找到关闭用户otp错误，返回值是{}".format(r.text)
+            assert 'BAD_REQUEST' == r.json()['code'], "未找到关闭用户otp错误，返回值是{}".format(r.text)
+            assert 'To protect your account, you have to enable Two-Factor Authentication(2FA).' == r.json()['message'], "未找到关闭用户otp错误，返回值是{}".format(r.text)
 
     @allure.title('test_cabinet_account_005 关闭用户otp')
     def test_cabinet_account_005(self):

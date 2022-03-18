@@ -1,5 +1,4 @@
 from Function.web_function import *
-from .conftest import *
 
 
 @allure.feature("web ui sign up 相关 testcases")
@@ -137,11 +136,13 @@ class TestWebSignup:
             sleep(2)
             assert operate_element_web(chrome_driver, "signupPage", "full-width-tab-0", "check"),\
                 "Terms of Services页面未显示"
-            # 关闭窗口（缺id，先用xpath写）
-            chrome_driver.find_element_by_xpath("//div/div[3]/button").click()
+            # 关闭窗口
+            operate_element_web(chrome_driver, "signupPage", "terms-dialog-close-btn")
         with allure.step("点击Privacy Policy并关闭页面"):
             operate_element_web(chrome_driver, 'signupPage', "privacy")
-            assert operate_element_web(chrome_driver, "signupPage", "full-width-tab-0", "check"), "Privacy Policy页面未显示"
+            assert operate_element_web(chrome_driver, "signupPage", "full-width-tab-1", "check"), "Privacy Policy页面未显示"
+            # 关闭窗口
+            operate_element_web(chrome_driver, "signupPage", "terms-dialog-close-btn")
 
     @allure.title('test_web_signup_006')
     @allure.description('注册账号')

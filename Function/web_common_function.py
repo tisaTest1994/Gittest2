@@ -14,6 +14,8 @@ def operate_element_web(driver, page, element_string, type='click', input_string
             driver.find_element_by_id(element_string).click()
         elif element_type == 'name':
             driver.find_element_by_name(element_string).click()
+        elif element_type == 'text':
+            driver.find_element_by_xpath('//*[text()="{}"]'.format(element_string)).click()
         else:
             driver.find_element_by_xpath('//*[@{}="{}"]'.format(element_type, element_string)).click()
         logger.info('点击{}页面{}元素'.format(page, element_string))
@@ -44,14 +46,23 @@ def operate_element_web(driver, page, element_string, type='click', input_string
             return result
     elif type == 'delete':
         if element_type == 'id':
-            driver.find_element_by_id(element_string).send_keys(Keys.COMMAND+'a')
-            driver.find_element_by_id(element_string).send_keys(Keys.BACKSPACE)
+            long = len(driver.find_element_by_id(element_string).get_attribute('value'))
+            for i in range(0, long):
+                if driver.find_element_by_id(element_string).get_attribute('value') != "":
+                    driver.find_element_by_id(element_string).send_keys(Keys.BACKSPACE)
+                    i += 1
         elif element_type == 'name':
-            driver.find_element_by_id(element_string).send_keys(Keys.COMMAND+'a')
-            driver.find_element_by_name(element_string).send_keys(Keys.BACKSPACE)
+            long = len(driver.find_element_by_name(element_string).get_attribute('value'))
+            for i in range(0, long):
+                if driver.find_element_by_name(element_string).get_attribute('value') != "":
+                    driver.find_element_by_name(element_string).send_keys(Keys.BACKSPACE)
+                    i += 1
         else:
-            driver.find_element_by_id(element_string).send_keys(Keys.COMMAND+'a')
-            driver.find_element_by_xpath('//*[@{}="{}"]'.format(type, element_string)).send_keys(Keys.BACKSPACE)
+            long = len(driver.find_element_by_xpath('//*[@{}="{}"]'.format(type, element_string)).get_attribute('value'))
+            for i in range(0, long):
+                if driver.find_element_by_xpath('//*[@{}="{}"]'.format(type, element_string)).get_attribute('value') != "":
+                    driver.find_element_by_xpath('//*[@{}="{}"]'.format(type, element_string)).send_keys(Keys.BACKSPACE)
+                    i += 1
     elif type == 'get_text':
         if element_type == 'id':
             return driver.find_element_by_id(element_string).text
@@ -110,6 +121,7 @@ def operate_element_web(driver, page, element_string, type='click', input_string
             return flag
     else:
         return driver.find_element_by_xpath('//*[@{}="{}"]'.format(element_type, element_string))
+    sleep(2)
 
 
 # 图像识别

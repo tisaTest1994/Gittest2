@@ -24,10 +24,6 @@
       "url": "https://test.salesforce.com"
     }
   },
-  "cash_list": [
-    "GBP",
-    "EUR"
-  ],
   "cfx_book": {
     "1": "BTC-USDT",
     "2": "BTC-ETH",
@@ -308,22 +304,22 @@
     "USDT",
     "ETH"
   ],
-  "asset_list": [
-    "BTC",
-    "USDT",
-    "ETH",
+  "cash_list": [
     "GBP",
-    "EUR"
+    "EUR",
+    "CHF"
   ],
+  "show_list": ["USD", "GBP", "EUR"],
   "websocket": {
     "url": "wss://api.latibac.com/api/v1/realtime/ws"
   },
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
     "email": "richard.wan@cabital.com",
+    "payout_email": "external.qa@cabital.com",
+    "earn_email": "mrt1@cabital.com",
     "host": "imap.gmail.com",
     "password": "Zcdsw123",
-    "payout_email": "external.qa@cabital.com",
     "port": "993",
     "secretKey": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY",
     "security_code": "xbbhjajvnhxckmre",
@@ -484,6 +480,7 @@
   "web": {
     "test": {
       "account": "richard.wan@cabital.com",
+      "account2": "yanting.huang@cabital.com",
       "password": "Zcdsw123",
       "url": "https://portal.latibac.com/",
       "code": "666666"

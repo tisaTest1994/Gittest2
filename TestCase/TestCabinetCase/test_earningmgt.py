@@ -1,3 +1,5 @@
+import datetime
+
 from Function.api_function import *
 from Function.operate_sql import *
 
@@ -17,17 +19,16 @@ class TestEarningMgtApi:
         with allure.step("修改USDC toB 利率"):
             USDC_Flexible_Savings_2B = "eaa55390-745e-11ec-ae7e-0a3898443cb8"
             USDC_Fixed_Savings_1_Day_2B = "eaa5595d-745e-11ec-ae7e-0a3898443cb8"
-            date_list = datetime.now().strftime('%Y-%m-%d').split('-')
-            new_date = '{}-{}-{}'.format(int(date_list[0]) + 1, date_list[1], date_list[2])
+            date_list = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
             data = {
                 'interests': [{'product_id': USDC_Flexible_Savings_2B,
                                'apy': '0.031',
-                               'date': new_date,
+                               'date': date_list,
                                'created_by': 'richard auto test'
                                },
                               {'product_id': USDC_Fixed_Savings_1_Day_2B,
                                'apy': '0.041',
-                               'date': new_date,
+                               'date': date_list,
                                'created_by': 'richard auto test'
                                }
                               ]

@@ -1,12 +1,10 @@
-import time
-
 from Function.web_function import *
 from Function.web_common_function import *
 from Function.api_common_function import *
 
 
 @allure.feature("web ui deposit crypto 相关 testcases")
-class TestWebWithdraw:
+class TestWebDeposit:
     # 获取测试网站url
     web_url = get_json()['web'][get_json()['env']]['url']
 
@@ -42,7 +40,7 @@ class TestWebWithdraw:
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
             # 选择ETH
-            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-ETH-1')
+            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-ETH')
             time.sleep(2)
             assert chrome_driver.find_element_by_xpath('//div/img[@src="../images/coin/ETH.png"]'), '币种未切换至ETH'
             # 检查network是否正确
@@ -52,7 +50,7 @@ class TestWebWithdraw:
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
             # 选择USDT
-            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-USDT-2')
+            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-USDT')
             time.sleep(2)
             assert chrome_driver.find_element_by_xpath('//div/img[@src="../images/coin/USDT.png"]'), '币种未切换至USDT'
             # 检查network是否正确
@@ -62,7 +60,7 @@ class TestWebWithdraw:
             # 点击下拉框
             operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
             # 选择BTC
-            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-BTC-0')
+            operate_element_web(chrome_driver, 'assetPage', 'undefined-option-BTC')
             time.sleep(2)
             assert chrome_driver.find_element_by_xpath('//div/img[@src="../images/coin/BTC.png"]'), '币种未切换至BTC'
             # 检查network是否正确

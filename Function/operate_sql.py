@@ -71,3 +71,14 @@ class sqlFunction:
         if info is not None and '()' not in str(info):
             return info[0]
 
+    # 获取当前middle 汇率
+    @staticmethod
+    def get_now_quote(pair):
+        utc = pytz.timezone('UTC')
+        utc_zero = datetime.now(tz=utc).strftime("%Y%m%d")
+        sql = "select middle from quote_{} where pair = '{}' and purpose = 'Customer' order by id desc limit 1;".format(utc_zero, pair)
+        info = sqlFunction().connect_mysql('pricing', sql=sql)
+        if info is not None and '()' not in str(info):
+            return info[0]
+
+

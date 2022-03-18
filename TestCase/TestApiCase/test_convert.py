@@ -70,20 +70,18 @@ class TestConvertApi:
     @allure.description('换汇存在汇率差（手续费）')
     def test_convert_004(self):
         with allure.step("获取汇率对"):
-            cfx_dict = get_json()['cfx_book']
-        for i in cfx_dict.values():
-            cryptos = i.split('-')
-            r1 = session.request('GET',
-                                 url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[0], cryptos[1])),
-                                 headers=headers)
-            logger.info('客户买入{},卖出{},我们给出的汇率是{}'.format(cryptos[0], cryptos[1], r1.json()['quote']))
-            r2 = session.request('GET',
-                                 url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[1], cryptos[0])),
-                                 headers=headers)
-            logger.info('客户买入{},卖出{},我们给出的汇率是{}'.format(cryptos[1], cryptos[0], r2.json()['quote']))
-            print(float(str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]), float(r1.json()['quote']))
-            assert float(str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]) <= float(
-                r1.json()['quote']), "{}汇率对出现了问题".format(i)
+            for i in ApiFunction.get_cfx_list():
+                cryptos = i.split('-')
+                r1 = session.request('GET',
+                                     url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[0], cryptos[1])),
+                                     headers=headers)
+                logger.info('客户买入{},卖出{},我们给出的汇率是{}'.format(cryptos[0], cryptos[1], r1.json()['quote']))
+                r2 = session.request('GET',
+                                     url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[1], cryptos[0])),
+                                     headers=headers)
+                logger.info('客户买入{},卖出{},我们给出的汇率是{}'.format(cryptos[1], cryptos[0], r2.json()['quote']))
+                assert float(str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]) <= float(
+                    r1.json()['quote']), "{}汇率对出现了问题".format(i)
 
     @allure.title('test_convert_005 超时换汇交易')
     @allure.description('超时换汇交易')
@@ -108,9 +106,9 @@ class TestConvertApi:
     @allure.description('小于接受的最小值换汇交易')
     def test_convert_006(self):
         with allure.step("获取汇率对"):
-            cfx_dict = get_json()['cfx_book']
+            cfx_dict = ApiFunction.get_cfx_list()
             # 获取换汇值
-            for i in cfx_dict.values():
+            for i in cfx_dict:
                 cryptos = i.split('-')
                 with allure.step("major_ccy 是buy值，正兑换"):
                     if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
@@ -312,107 +310,154 @@ class TestConvertApi:
     @allure.title('test_convert_009')
     @allure.description('换汇交易')
     def test_convert_009(self):
-        with allure.step("获取汇率对"):
-            cfx_book = get_json()['cfx_book']
-            for i in cfx_book.values():
-                pair_dict = ApiFunction.cfx_hedging_pairs(pair=i)
-                with allure.step("判断是否是直盘"):
-                    if len(pair_dict.keys()) == 1:
-                        with allure.step("生成货币对"):
-                            pair = list(pair_dict.values())
-                            pair_list = pair[0].split('-')
-                            cfx_dict = [{'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]},
-                                        {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[1]},
-                                        {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[1]},
-                                        {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[0]}]
-                            for y in cfx_dict:
-                                cfx_amount = ApiFunction.cfx_random_number(y)
-                                data = {
-                                    "quote_id": cfx_amount['quote']['quote_id'],
-                                    "quote": cfx_amount['quote']['quote'],
-                                    "pair": '{}-{}'.format(cfx_amount['buy'], cfx_amount['sell']),
-                                    "buy_amount": str(cfx_amount['buy_amount']),
-                                    "sell_amount": str(cfx_amount['sell_amount']),
-                                    "major_ccy": cfx_amount['major_ccy']
-                                }
-                                logger.info('发送换汇data是{}'.format(data))
-                                with allure.step("获得换汇前buy币种balance金额"):
-                                    buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=cfx_amount['buy'])
-                                with allure.step('获得换汇前sell币种balance金额'):
-                                    sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=cfx_amount['sell'])
-                                r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
-                                                    headers=headers)
-                                logger.info('申请换汇参数{}'.format(data))
-                                logger.info('换汇返回值{}'.format(r.text))
-                                with allure.step("校验状态码"):
-                                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                                with allure.step("校验返回值"):
-                                    assert r.json()['transaction']['transaction_id'] is not None, "获取产品列表错误，返回值是{}".format(r.text)
-                                sleep(10)
-                                with allure.step("获得换汇后buy币种balance金额"):
-                                    buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cfx_amount['buy'])
-                                with allure.step("获得换汇后sell币种balance金额"):
-                                    sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=cfx_amount['sell'])
-                                logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cfx_amount['buy'], buy_amount_wallet_balance_old, cfx_amount['buy_amount'], buy_amount_wallet_balance_latest))
-                                logger.info('sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'], sell_amount_wallet_balance_latest))
-                                assert Decimal(buy_amount_wallet_balance_old) + Decimal(cfx_amount['buy_amount']) == Decimal(buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cfx_amount['buy'], buy_amount_wallet_balance_old, cfx_amount['buy_amount'], buy_amount_wallet_balance_latest)
-                                assert Decimal(sell_amount_wallet_balance_old) - Decimal(cfx_amount['sell_amount']) == Decimal(sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'], sell_amount_wallet_balance_latest)
-                    else:
-                        with allure.step("生成货币对"):
-                            pair_list = i.split('-')
-                            cfx_dict = [{'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]},
-                                        {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[1]},
-                                        {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[1]},
-                                        {'buy': pair_list[1], 'sell': pair_list[0], 'major_ccy': pair_list[0]}]
-                            for y in cfx_dict:
-                                cfx_amount = ApiFunction.cfx_random_number(y)
-                                data = {
-                                    "quote_id": cfx_amount['quote']['quote_id'],
-                                    "quote": cfx_amount['quote']['quote'],
-                                    "pair": '{}-{}'.format(cfx_amount['buy'], cfx_amount['sell']),
-                                    "buy_amount": str(cfx_amount['buy_amount']),
-                                    "sell_amount": str(cfx_amount['sell_amount']),
-                                    "major_ccy": cfx_amount['major_ccy']
-                                }
-                                logger.info('发送换汇data是{}'.format(data))
-                                with allure.step("获得换汇前buy币种balance金额"):
-                                    buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['buy'])
-                                with allure.step('获得换汇前sell币种balance金额'):
-                                    sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['sell'])
-                                r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
-                                                    headers=headers)
-                                logger.info('申请换汇参数{}'.format(data))
-                                logger.info('换汇返回值{}'.format(r.text))
-                                with allure.step("校验状态码"):
-                                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                                with allure.step("校验返回值"):
-                                    assert r.json()['transaction'][
-                                               'transaction_id'] is not None, "获取产品列表错误，返回值是{}".format(r.text)
-                                sleep(10)
-                                with allure.step("获得换汇后buy币种balance金额"):
-                                    buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['buy'])
-                                with allure.step("获得换汇后sell币种balance金额"):
-                                    sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(
-                                        type=cfx_amount['sell'])
-                                logger.info('buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(cfx_amount['buy'],
-                                                                                              buy_amount_wallet_balance_old,
-                                                                                              cfx_amount['buy_amount'],
-                                                                                              buy_amount_wallet_balance_latest))
-                                logger.info('sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(cfx_amount['sell'],
-                                                                                                sell_amount_wallet_balance_old,
-                                                                                                cfx_amount[
-                                                                                                    'sell_amount'],
-                                                                                                sell_amount_wallet_balance_latest))
-                                assert Decimal(buy_amount_wallet_balance_old) + Decimal(
-                                    cfx_amount['buy_amount']) == Decimal(
-                                    buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
-                                    cfx_amount['buy'], buy_amount_wallet_balance_old, cfx_amount['buy_amount'],
-                                    buy_amount_wallet_balance_latest)
-                                assert Decimal(sell_amount_wallet_balance_old) - Decimal(
-                                    cfx_amount['sell_amount']) == Decimal(
-                                    sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
-                                    cfx_amount['sell'], sell_amount_wallet_balance_old, cfx_amount['sell_amount'],
-                                    sell_amount_wallet_balance_latest)
+        for i in ApiFunction.get_cfx_list():
+            with allure.step("正向币种对，major_ccy 是buy值"):
+                with allure.step("获得换汇前buy币种balance金额"):
+                    buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[0])
+                with allure.step('获得换汇前sell币种balance金额'):
+                    sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[1])
+                    transaction = ApiFunction.cfx_random(i, i.split('-')[0])
+                    sleep(2)
+                    with allure.step("获得换汇后buy币种balance金额"):
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[0])
+                    with allure.step("获得换汇后sell币种balance金额"):
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[1])
+                    assert Decimal(buy_amount_wallet_balance_old) + Decimal(
+                        transaction['data']['buy_amount']) == Decimal(
+                        buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
+                        i.split('-')[0], buy_amount_wallet_balance_old, transaction['data']['buy_amount'],
+                        buy_amount_wallet_balance_latest)
+                    assert Decimal(sell_amount_wallet_balance_old) - Decimal(
+                        transaction['data']['sell_amount']) == Decimal(
+                        sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
+                        i.split('-')[1], sell_amount_wallet_balance_old, transaction['data']['sell_amount'],
+                        sell_amount_wallet_balance_latest)
+            with allure.step("正向币种对，major_ccy 是sell值"):
+                with allure.step("获得换汇前buy币种balance金额"):
+                    buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[0])
+                with allure.step('获得换汇前sell币种balance金额'):
+                    sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[1])
+                    transaction = ApiFunction.cfx_random(i, i.split('-')[1])
+                    sleep(2)
+                    with allure.step("获得换汇后buy币种balance金额"):
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[0])
+                    with allure.step("获得换汇后sell币种balance金额"):
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[1])
+                    assert Decimal(buy_amount_wallet_balance_old) + Decimal(
+                        transaction['data']['buy_amount']) == Decimal(
+                        buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
+                        i.split('-')[0], buy_amount_wallet_balance_old, transaction['data']['buy_amount'],
+                        buy_amount_wallet_balance_latest)
+                    assert Decimal(sell_amount_wallet_balance_old) - Decimal(
+                        transaction['data']['sell_amount']) == Decimal(
+                        sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
+                        i.split('-')[1], sell_amount_wallet_balance_old, transaction['data']['sell_amount'],
+                        sell_amount_wallet_balance_latest)
+            with allure.step("反向币种对，major_ccy 是buy值"):
+                with allure.step("获得换汇前buy币种balance金额"):
+                    buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[1])
+                with allure.step('获得换汇前sell币种balance金额'):
+                    sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[0])
+                    transaction = ApiFunction.cfx_random('{}-{}'.format(i.split('-')[1], i.split('-')[0]),
+                                                         i.split('-')[1])
+                    sleep(2)
+                    with allure.step("获得换汇后buy币种balance金额"):
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[1])
+                    with allure.step("获得换汇后sell币种balance金额"):
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[0])
+                    assert Decimal(buy_amount_wallet_balance_old) + Decimal(
+                        transaction['data']['buy_amount']) == Decimal(
+                        buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
+                        i.split('-')[1], buy_amount_wallet_balance_old, transaction['data']['buy_amount'],
+                        buy_amount_wallet_balance_latest)
+                    assert Decimal(sell_amount_wallet_balance_old) - Decimal(
+                        transaction['data']['sell_amount']) == Decimal(
+                        sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
+                        i.split('-')[0], sell_amount_wallet_balance_old, transaction['data']['sell_amount'],
+                        sell_amount_wallet_balance_latest)
+            with allure.step("反向币种对，major_ccy 是sell值"):
+                with allure.step("获得换汇前buy币种balance金额"):
+                    buy_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[1])
+                with allure.step('获得换汇前sell币种balance金额'):
+                    sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[0])
+                    transaction = ApiFunction.cfx_random('{}-{}'.format(i.split('-')[1], i.split('-')[0]),
+                                                         i.split('-')[0])
+                    sleep(2)
+                    with allure.step("获得换汇后buy币种balance金额"):
+                        buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[1])
+                    with allure.step("获得换汇后sell币种balance金额"):
+                        sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[0])
+                    assert Decimal(buy_amount_wallet_balance_old) + Decimal(
+                        transaction['data']['buy_amount']) == Decimal(
+                        buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
+                        i.split('-')[1], buy_amount_wallet_balance_old, transaction['data']['buy_amount'],
+                        buy_amount_wallet_balance_latest)
+                    assert Decimal(sell_amount_wallet_balance_old) - Decimal(
+                        transaction['data']['sell_amount']) == Decimal(
+                        sell_amount_wallet_balance_latest), '换汇后金额不匹配，sell币种是{}.在换汇前钱包有{},sell金额是{},交易完成后钱包金额是{}'.format(
+                        i.split('-')[0], sell_amount_wallet_balance_old, transaction['data']['sell_amount'],
+                        sell_amount_wallet_balance_latest)
+
+    @allure.title('test_convert_010')
+    @allure.description('一次损益计算')
+    def test_convert_010(self):
+        # 获得 cfx_book
+        cfx_book = get_json()['cfx_book']
+        # 从数据库拿到某日数据
+        cfx_info = ApiFunction.get_one_day_cfx_info()
+        # 拆分1天每一分钟
+        time_info = []
+        for i in cfx_info:
+            time_info.append(i['order_time'])
+        time_info = list(set(time_info))
+        for y in time_info:
+            # 基准货币数量
+            book_profit_dict = {}
+            amount_dict = {}
+            for x in cfx_book.values():
+                book_profit_dict[x + '_number'] = 0
+                amount_dict[x + '_amount'] = 0
+            for z in cfx_info:
+                if y == z['order_time']:
+                    for d in cfx_book.values():
+                        if z['buy_us'] == str(d).split('-')[0] and z['sell_us'] == str(d).split('-')[1]:
+                            book_profit_dict['{}_number'.format(d)] = Decimal(book_profit_dict['{}_number'.format(d)]) - Decimal(z['buy_us_amount'])
+                            cost_amount = Decimal(z['buy_us_amount']) * Decimal(z['cost'])
+                            cost_amount = crypto_len(number=str(cost_amount), type=z['sell_us'])
+                            amount_dict['{}_amount'.format(d)] = Decimal(amount_dict['{}_amount'.format(d)]) - Decimal(cost_amount)
+                        elif z['buy_us'] == str(d).split('-')[1] and z['sell_us'] == str(d).split('-')[0]:
+                            book_profit_dict['{}_number'.format(d)] = Decimal(book_profit_dict['{}_number'.format(d)]) + Decimal(z['sell_us_amount'])
+                            cost_amount = Decimal(z['sell_us_amount']) * Decimal(z['cost'])
+                            cost_amount = crypto_len(number=str(cost_amount), type=z['buy_us'])
+                            amount_dict['{}_amount'.format(d)] = Decimal(amount_dict['{}_amount'.format(d)]) + Decimal(cost_amount)
+            # 按照货币对算第1层损益
+            for x in cfx_book.keys():
+                # 获得数据库中的损益记录
+                info = sqlFunction.get_one_floor(aggregation_no=y, book_id=x)
+                if info is not None:
+                    info = info[0]
+                    if info['exposure_direction'] == 1:
+                        logger.info('交易对{}在{}时间中要买入{}数量的{}货币'.format(cfx_book[x], time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(y)), book_profit_dict['{}_number'.format(cfx_book[x])],str(cfx_book[x]).split('-')[0]))
+                        assert Decimal(info['trading_amount']) == book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(y)), book_profit_dict['{}_number'.format(cfx_book[x])])
+                    if info['exposure_direction'] == 2:
+                        logger.info('交易对{}在{}时间中要卖出{}数量的{}货币'.format(cfx_book[x], time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(y)), -book_profit_dict['{}_number'.format(cfx_book[x])], str(cfx_book[x]).split('-')[1]))
+                        assert Decimal(info['trading_amount']) == -book_profit_dict['{}_number'.format(cfx_book[x])], '在{}时间中，{}第一层损益不对'.format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(y)), book_profit_dict['{}_number'.format(cfx_book[x])])
+                    # # 获得bybit利率
+                    # cfx_order_info = sqlFunction.get_order_info(aggregation_no=y, book_id=x)
+                    # bybit_rate = cfx_order_info['rate']
+                    # quote_amount = cfx_order_info['quote_amount']
+                    # # 第2层损益
+                    # if str(book_profit_dict['{}_number'.format(cfx_book[x])]) != '0':
+                    #     amount = Decimal(bybit_rate) * Decimal(book_profit_dict['{}_number'.format(cfx_book[x])])
+                    #     if '.' in str(amount):
+                    #         if str(cfx_book[x]).split('-')[1] == 'ETH' or str(cfx_book[x]).split('-')[1] == 'BTC':
+                    #             amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:8])
+                    #         elif str(cfx_book[x]).split('-')[1] == 'USDT':
+                    #             amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:6])
+                    #         else:
+                    #             amount = '{}.{}'.format(str(amount).split('.')[0], str(amount).split('.')[1][:2])
+                    #     assert Decimal(quote_amount) == - Decimal(amount_dict['{}_amount'.format(cfx_book[x])]), '货币总量数据库反馈是{},计算是{}'.format(quote_amount, Decimal(amount_dict['{}_amount'.format(cfx_book[x])]))
+                    #     logger.info(
+                    #         '第2层损益{}'.format(Decimal(amount) - Decimal(amount_dict['{}_amount'.format(cfx_book[x])])))
+                    #     wallet_info = sqlFunction.get_two_floor('{}:{}'.format(y, x))
+                    #     print(wallet_info)

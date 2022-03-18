@@ -10,6 +10,7 @@ import email
 import chardet
 import logger
 import pyotp
+import xlrd
 
 
 # 获取当前时间
@@ -164,6 +165,7 @@ def delete_extra_zero(n):
 
 # 控制货币单位长度
 def crypto_len(number, type):
+    # 删除多余的0
     number = delete_extra_zero(number)
     if '.' in str(number):
         if type == 'BTC' or type == 'ETH':
@@ -260,7 +262,7 @@ def add_currency_symbol(number, currency, is_symbol=False):
             number_radix = str(number_radix) + '0'
     else:
         number_int = str(number)
-        number_radix = ''
+        number_radix = '00'
     count = 0
     sumstr = ''
     # 加逗号
@@ -312,3 +314,22 @@ def get_mfa_code():
     secretKey = get_json()['secretKey']
     totp = pyotp.TOTP(secretKey)
     return totp.now()
+
+
+# 获取excel sheet names
+def get_excel_sheet_names(path):
+    workbook = xlrd.open_workbook(path)
+    return workbook.sheet_names()
+
+
+# 获取excel sheet行数据
+def get_excel_sheet_row(path, line):
+    sheet2 = get_excel_sheet_names(path)
+    sheet2 = workbook.sheet_by_name('Accounting Subject')
+    print(sheet2.col_values(2))
+
+
+# 获取excel sheet列数据
+def get_excel_sheet_column(path):
+    workbook = xlrd.open_workbook(path)
+    sheet2 = workbook.sheet_by_name('Accounting Subject')
