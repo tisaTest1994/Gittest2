@@ -285,7 +285,7 @@ class TestCoreApi:
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
                             print(quote)
                             print(fixed_all_interest_amount_list)
-                            all_interest.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list))))
+                            all_interest.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i)))
                     print(all_interest)
                     print(sum(all_interest))
                     logger.info('显示币种是{}, 计算获取累利息是{}, 接口返回的累计利息总和是{}'.format(i, all_interest, str(r.json()['cumulative_interest'])))
