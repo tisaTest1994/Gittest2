@@ -499,9 +499,9 @@ class TestCoreApi:
                                     fixed_all_interest_amount_list.append(Decimal(k['maturity_interest']['amount']))
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
                             all_interest.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i)))
-                    logger.info('显示币种是{}, 计算获取累计利息总和是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['cumulative_interest'])))
+                    logger.info('显示币种是{}, 计算获取累计利息总和是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['total_earnings'])))
                     if Decimal(r.json()['total_earnings']) != Decimal(sum(all_interest)):
-                        assert Decimal(sum(all_interest)) - Decimal(r.json()['cumulative_interest']) >= Decimal(0.5) or Decimal(sum(all_interest)) - Decimal(r.json()['cumulative_interest']) <= Decimal(0.5), '获取所有Saving产品的持有金额详情的已派发利息, 显示币种是{}, 计算获取累计利息总和是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['total_earnings']))
+                        assert Decimal(sum(all_interest)) - Decimal(r.json()['total_earnings']) >= Decimal(0.5) or Decimal(sum(all_interest)) - Decimal(r.json()['total_earnings']) <= Decimal(0.5), '获取所有Saving产品的持有金额详情的已派发利息, 显示币种是{}, 计算获取累计利息总和是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['total_earnings']))
 
     @allure.title('test_core_024')
     @allure.description('获取所有Saving产品的收益详情interest_to_settle计算')
