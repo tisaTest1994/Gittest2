@@ -504,13 +504,13 @@ class TestCoreApi:
                         assert Decimal(sum(all_interest)) - Decimal(r.json()['total_earnings']) >= Decimal(0.5) or Decimal(sum(all_interest)) - Decimal(r.json()['total_earnings']) <= Decimal(0.5), '获取所有Saving产品的持有金额详情的已派发利息, 显示币种是{}, 计算获取累计利息总和是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['total_earnings']))
 
     @allure.title('test_core_024')
-    @allure.description('获取所有Saving产品的收益详情interest_to_settle计算')
+    @allure.description('获取所有Saving产品的收益详情未派发利息')
     def test_core_024(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['earn_email'])
         with allure.step("显示币种矩阵"):
             for i in get_json()['show_list']:
                 headers['X-Currency'] = i
-                with allure.step("获取所有Saving产品的收益详情interest_to_settle计算"):
+                with allure.step("获取所有Saving产品的收益详情未派发利息"):
                     r = session.request('GET', url='{}/earn/saving/return'.format(env_url),
                                         headers=headers)
                 with allure.step("状态码和返回值"):
@@ -520,9 +520,9 @@ class TestCoreApi:
                     assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("interest_to_settle计算"):
                     with allure.step("获取累计定期利息"):
-                        flexible_all_interest_list = []
+                        fixed_all_interest_list = []
                         for x in get_json()['crypto_list']:
-                            flexible_all_interest_amounts_list = []
+                            fixed_all_interest_amount_list = []
                             cursor = '0'
                             while cursor != '-1':
                                 params = {
@@ -537,16 +537,12 @@ class TestCoreApi:
                                                      headers=headers, timeout=20)
                                 cursor = r4.json()['cursor']
                                 for k in r4.json()['transactions']:
-                                    flexible_all_interest_amounts_list.append(Decimal(k['maturity_interest']['amount']))
+                                    fixed_all_interest_amount_list.append(Decimal(k['maturity_interest']['amount']))
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
-                            flexible_all_interest_list.append(
-                                Decimal(crypto_len(Decimal(quote['middle']) * sum(flexible_all_interest_amounts_list), i)))
-                    logger.info('获取累计定期利息{}'.format(str(sum(flexible_all_interest_list))))
-                    if Decimal(r.json()['interest_to_settle']) != Decimal(sum(flexible_all_interest_list)):
-                        if str(sum(flexible_all_interest_list)) < str(sum(flexible_all_interest_list)):
-                            assert str(r.json()['interest_to_settle']) == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益详情interest_to_settle计算错误,显示货币类型是{},返回值是{}".format(i, r.text)'
-                        else:
-                            assert str(r.json()['interest_to_settle'])[:-1] == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益详情interest_to_settle计算错误,显示货币类型是{},返回值是{}".format(i, r.text)'
+                            fixed_all_interest_list.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i)))
+                    logger.info('显示币种是{}, 计算获取未发放利息总和是{}, 接口返回的未发放利息总和是{}'.format(i, sum(fixed_all_interest_list), str(r.json()['interest_to_settle'])))
+                    if Decimal(r.json()['interest_to_settle']) != Decimal(sum(fixed_all_interest_list)):
+                        assert Decimal(sum(fixed_all_interest_list)) - Decimal(r.json()['interest_to_settle']) >= Decimal(0.5) or Decimal(sum(fixed_all_interest_list)) - Decimal(r.json()['interest_to_settle']) <= Decimal(0.5), '获取所有Saving产品的持有金额详情的已派发利息错误, 显示币种是{}, 计算获取未发放利息总和是{}, 接口返回的未发放利息总和是{}'.format(i, sum(fixed_all_interest_list), str(r.json()['interest_to_settle']))
 
     @allure.title('test_core_025')
     @allure.description('获取所有Saving产品的收益详情fixed_earnings计算')
