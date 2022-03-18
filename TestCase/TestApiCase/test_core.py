@@ -255,19 +255,18 @@ class TestCoreApi:
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("cumulative_interest计算"):
+                    all_interest = []
                     with allure.step("获取累计活期利息"):
-                        flexible_all_interest_list = []
                         with allure.step("获取产品product_id"):
                             r2 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
                             for z in r2.json():
                                 product_id = z['product_id']
                                 with allure.step("获取产品持有情况"):
                                     r3 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, product_id), headers=headers)
-                                    flexible_all_interest_list.append(Decimal(r3.json()['total_yield']['abs_amount']))
+                                    all_interest.append(Decimal(r3.json()['total_yield']['abs_amount']))
                     with allure.step("获取累计定期利息"):
-                        fixed_all_interest_list = []
                         for x in get_json()['crypto_list']:
-                            flexible_all_interest_amounts_list = []
+                            fixed_all_interest_amount_list = []
                             cursor = '0'
                             while cursor != '-1':
                                 params = {
@@ -282,12 +281,12 @@ class TestCoreApi:
                                                      headers=headers, timeout=20)
                                 cursor = r4.json()['cursor']
                                 for k in r4.json()['transactions']:
-                                    fixed_all_interest_list.append(Decimal(k['maturity_interest']['amount']))
+                                    fixed_all_interest_amount_list.append(Decimal(k['maturity_interest']['amount']))
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
-                            flexible_all_interest_list.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(flexible_all_interest_amounts_list), i)))
-                    print(sum(flexible_all_interest_list), sum(fixed_all_interest_list))
-                    logger.info('显示币种是{}, 获取累计活期利息是{}, 获取累计定期利息{}, 接口返回的累计利息总和是{}'.format(i, str(sum(flexible_all_interest_list))), str(sum(fixed_all_interest_list)), str(r.json()['cumulative_interest']))
-                    all_interest = sum(flexible_all_interest_list) + sum(fixed_all_interest_list)
+                            all_interest.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list))))
+                    print(all_interest)
+                    print(sum(all_interest))
+                    logger.info('显示币种是{}, 计算获取累利息是{}, 接口返回的累计利息总和是{}'.format(i, all_interest, str(r.json()['cumulative_interest'])))
                     if Decimal(r.json()['cumulative_interest']) != Decimal(all_interest):
                         assert Decimal(all_interest) - Decimal(r.json()['cumulative_interest']) >= Decimal(0.5) or Decimal(all_interest) - Decimal(r.json()['cumulative_interest']) <= Decimal(0.5), '获取所有Saving产品的持有金额详情的已派发利息, 显示币种是{}, 获取累计活期利息是{}, 获取累计定期利息{}, 接口返回的累计利息总和是{}'.format(i, sum(flexible_all_interest_list), sum(fixed_all_interest_list), r.json()['cumulative_interest'])
 
