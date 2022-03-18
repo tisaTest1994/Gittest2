@@ -410,6 +410,7 @@ class TestCoreApi:
             assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("flexible_saving_map计算"):
             for z in get_json()['crypto_list']:
+                logger.info("获取所有Saving产品的持有金额详情数字货币活期各币种数量错误, 数字货币类型是{}, 其他接口获得的数字货币活期数量是{}, 测试接口获得的数字货币活期数量是{}".format(z, Decimal(ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='SAVING')) + Decimal(ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_FROZEN', wallet_type='SAVING')), r.json()['flexible_saving_map'][z]))
                 assert Decimal(r.json()['flexible_saving_map'][z]) == Decimal(
                     ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='SAVING')) + Decimal(ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_FROZEN', wallet_type='SAVING')), "获取所有Saving产品的持有金额详情数字货币活期各币种数量错误, 数字货币类型是{}, 其他接口获得的数字货币活期数量是{}, 测试接口获得的数字货币活期数量是{}".format(z, Decimal(ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='SAVING')) + Decimal(ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_FROZEN', wallet_type='SAVING')), r.json()['flexible_saving_map'][z])
 
@@ -625,14 +626,14 @@ class TestCoreApi:
                             logger.info('显示币种是{}, 数字货币是{}, 计算获取累计利息金额总和是{}, 接口返回的累计利息金额总和是{}'.format(i, x, crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i), r.json()['fixed_earning_map'][x]['abs_amount']))
                             assert Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i)) == Decimal(r.json()['fixed_earning_map'][x]['abs_amount']), '显示币种是{}, 数字货币是{}, 计算获取累计利息金额总和是{}, 接口返回的累计利息金额总和是{}'.format(i, x, crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i), r.json()['fixed_earning_map'][x]['abs_amount'])
 
-    @allure.title('test_core_124')
-    @allure.description('获取所有Saving产品的收益详情flexible_earnings计算')
-    def test_core_124(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['earn_email'])
+    @allure.title('test_core_027')
+    @allure.description('获取所有Saving产品的收益详情数字货币活期已派发利息总金额')
+    def test_core_027(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
         with allure.step("显示币种矩阵"):
             for i in get_json()['show_list']:
                 headers['X-Currency'] = i
-                with allure.step("获取所有Saving产品的收益详情flexible_earnings计算"):
+                with allure.step("获取所有Saving产品的收益详情数字货币活期已派发利息总金额"):
                     r = session.request('GET', url='{}/earn/saving/return'.format(env_url),
                                         headers=headers)
                 with allure.step("状态码和返回值"):
@@ -640,8 +641,8 @@ class TestCoreApi:
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
-                with allure.step("fixed_saving_amount计算"):
-                    flexible_all_interest_list = []
+                with allure.step("获取累计活期利息"):
+                    all_interest = []
                     with allure.step("获取产品product_id"):
                         r2 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
                         for z in r2.json():
@@ -650,13 +651,40 @@ class TestCoreApi:
                                 r3 = session.request('GET',
                                                      url='{}/earn/products/{}/summary'.format(env_url, product_id),
                                                      headers=headers)
-                                flexible_all_interest_list.append(Decimal(r3.json()['total_yield']['abs_amount']))
-                    if str(sum(flexible_all_interest_list))[-1] == '0':
-                        assert str(r.json()['flexible_earnings']) == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益详情flexible_earnings计算错误,显示货币类型是{},返回值是{}".format(i, r.text)'
+                                all_interest.append(Decimal(r3.json()['total_yield']['abs_amount']))
+                assert Decimal(sum(all_interest)) == Decimal(r.json()['flexible_earnings']), '获取所有Saving产品的收益详情数字货币活期已派发利息总金额错误, 显示币种是{}, 计算获取累计利息总和是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['flexible_earnings']))
 
-    @allure.title('test_core_117')
+    @allure.title('test_core_028')
+    @allure.description('获取所有Saving产品的收益详情数字货币活期已派发利息的数量和金额')
+    def test_core_028(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
+        with allure.step("显示币种矩阵"):
+            for i in get_json()['show_list']:
+                headers['X-Currency'] = i
+                with allure.step("获取所有Saving产品的收益详情数字货币活期已派发利息的数量和金额"):
+                    r = session.request('GET', url='{}/earn/saving/return'.format(env_url),
+                                        headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
+                with allure.step("flexible_earning_map"):
+                    with allure.step("获取产品product_id"):
+                        for y in get_json()['crypto_list']:
+                            r2 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+                            for z in r2.json():
+                                if y == z['code']:
+                                    with allure.step("获取产品持有情况"):
+                                        r3 = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, z['product_id']), headers=headers)
+                                        logger.info('获取所有Saving产品的收益详情数字货币活期已派发利息总金额错误, 显示币种是{}, 数字货币币种是{}, 其他接口获得的是数量是{}, 测试接口获得的是数量是{}'.format(i, y, r3.json()['total_yield']['amount'], r.json()['flexible_earning_map'][y]['amount']))
+                                        assert Decimal(r3.json()['total_yield']['amount']) == Decimal(r.json()['flexible_earning_map'][y]['amount']), '获取所有Saving产品的收益详情数字货币活期已派发利息总金额错误, 显示币种是{}, 数字货币币种是{}, 其他接口获得的是数量是{}, 测试接口获得的是数量是{}'.format(i, y, r3.json()['total_yield']['amount'], r.json()['flexible_earning_map'][y]['amount'])
+                                        logger.info('获取所有Saving产品的收益详情数字货币活期已派发利息总金额错误, 显示币种是{}, 数字货币币种是{}, 其他接口获得的是数量是{}, 测试接口获得的是数量是{}'.format(i, y, r3.json()['total_yield']['abs_amount'], r.json()['flexible_earning_map'][y]['abs_amount']))
+                                        assert Decimal(r3.json()['total_yield']['abs_amount']) == Decimal(r.json()['flexible_earning_map'][y]['abs_amount']), '获取所有Saving产品的收益详情数字货币活期已派发利息总金额错误, 显示币种是{}, 数字货币币种是{}, 其他接口获得的是数量是{}, 测试接口获得的是数量是{}'.format(i, y, r3.json()['total_yield']['abs_amount'], r.json()['flexible_earning_map'][y]['abs_amount'])
+
+    @allure.title('test_core_029')
     @allure.description('获取所有Saving产品的基于币种的收益cumulative_interest数量计算')
-    def test_core_117(self):
+    def test_core_029(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['earn_email'])
         with allure.step("获取所有Saving产品的基于币种的收益cumulative_interest数量计算"):
             for y in get_json()['crypto_list']:
@@ -686,9 +714,9 @@ class TestCoreApi:
                                 flexible_interest_amount.append(Decimal(k['maturity_interest']['amount']))
                     assert Decimal(r.json()['cumulative_interest']) == Decimal(sum(flexible_interest_amount)), '获取所有Saving产品的基于币种的收益cumulative_interest数量计算失败,币种是{}, 定期cumulative_interest是{},接口返回是{}'.format(y, sum(flexible_interest_amount), r.text)
 
-    @allure.title('test_core_118')
+    @allure.title('test_core_030')
     @allure.description('获取所有Saving产品的基于币种的收益interest_to_settle数量计算')
-    def test_core_118(self):
+    def test_core_030(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['earn_email'])
         with allure.step("获取所有Saving产品的基于币种的收益interest_to_settle数量计算"):
             for y in get_json()['crypto_list']:
