@@ -283,6 +283,8 @@ class TestCoreApi:
                                 for k in r4.json()['transactions']:
                                     fixed_all_interest_amount_list.append(Decimal(k['maturity_interest']['amount']))
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
+                            print(quote)
+                            print(fixed_all_interest_amount_list)
                             all_interest.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list))))
                     print(all_interest)
                     print(sum(all_interest))
