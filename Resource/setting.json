@@ -316,9 +316,10 @@
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
     "email": "richard.wan@cabital.com",
+    "payout_email": "external.qa@cabital.com",
+    "earn_email": "mrt1@cabital.com",
     "host": "imap.gmail.com",
     "password": "Zcdsw123",
-    "payout_email": "external.qa@cabital.com",
     "port": "993",
     "secretKey": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY",
     "security_code": "xbbhjajvnhxckmre",
