@@ -322,13 +322,13 @@ class TestCoreApi:
                         i, r.text)
 
     @allure.title('test_core_018')
-    @allure.description('获取所有Saving产品的持有金额详情interest_to_settle计算')
+    @allure.description('获取所有Saving产品的持有金额详情未派发利息')
     def test_core_018(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice.wang+030705@cabital.com')
         with allure.step("显示币种矩阵"):
             for i in get_json()['show_list']:
                 headers['X-Currency'] = i
-                with allure.step("获取所有Saving产品的持有金额详情interest_to_settle计算"):
+                with allure.step("获取所有Saving产品的持有金额详情未派发利息"):
                     r = session.request('GET', url='{}/earn/saving/holding/details'.format(env_url), headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
@@ -358,11 +358,12 @@ class TestCoreApi:
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
                             flexible_all_interest_list.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(flexible_all_interest_amounts_list), i)))
                     logger.info('获取累计定期利息{}'.format(str(sum(flexible_all_interest_list))))
-                    if Decimal(r.json()['interest_to_settle']) != Decimal(sum(flexible_all_interest_list)):
-                        if len(str(sum(flexible_all_interest_list))) < len(str(sum(flexible_all_interest_list))):
-                            assert str(r.json()['interest_to_settle']) == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的持有金额详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
-                        else:
-                            assert str(r.json()['interest_to_settle'])[:-1] == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的持有金额详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                    assert str(r.json()['interest_to_settle']) == str(sum(flexible_all_interest_list)), '获取所有Saving产品的持有金额详情未派发利息，显示货币类型是{}，计算获得是{},接口获得是{}，返回值是{}'.format(i,str(sum(flexible_all_interest_list)), str(r.json()['interest_to_settle']), r.text)
+                    # if Decimal(r.json()['interest_to_settle']) != Decimal(sum(flexible_all_interest_list)):
+                    #     if len(str(sum(flexible_all_interest_list))) < len(str(sum(flexible_all_interest_list))):
+                    #         assert str(r.json()['interest_to_settle']) == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的持有金额详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                    #     else:
+                    #         assert str(r.json()['interest_to_settle'])[:-1] == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的持有金额详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
 
     @allure.title('test_core_019')
     @allure.description('获取所有Saving产品的持有金额详情fixed_saving_map计算')
