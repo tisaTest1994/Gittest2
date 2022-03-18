@@ -292,6 +292,7 @@ class TestCoreApi:
                     if Decimal(r.json()['cumulative_interest']) != Decimal(sum(all_interest)):
                         assert Decimal(sum(all_interest)) - Decimal(r.json()['cumulative_interest']) >= Decimal(0.5) or Decimal(sum(all_interest)) - Decimal(r.json()['cumulative_interest']) <= Decimal(0.5), '获取所有Saving产品的持有金额详情的已派发利息, 显示币种是{}, 计算获取累利息是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['cumulative_interest']))
 
+
     @allure.title('test_core_017')
     @allure.description('获取所有Saving产品的持有金额详情fixed_saving_amount计算')
     def test_core_017(self):
