@@ -629,7 +629,7 @@ class TestCoreApi:
     @allure.title('test_core_027')
     @allure.description('获取所有Saving产品的收益详情数字货币活期已派发利息总金额')
     def test_core_027(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['earn_email'])
         with allure.step("显示币种矩阵"):
             for i in get_json()['show_list']:
                 headers['X-Currency'] = i
