@@ -586,13 +586,13 @@ class TestCoreApi:
                         assert Decimal(sum(all_interest)) - Decimal(r.json()['fixed_earnings']) >= Decimal(0.5) or Decimal(sum(all_interest)) - Decimal(r.json()['fixed_earnings']) <= Decimal(0.5), '获取所有Saving产品的收益详情已派发利息错误, 显示币种是{}, 计算获取累计利息总和是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['fixed_earnings']))
 
     @allure.title('test_core_026')
-    @allure.description('获取所有Saving产品的收益详情数字货币')
+    @allure.description('获取所有Saving产品的收益详情数字货币定期已派发利息的数量和金额')
     def test_core_026(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['earn_email'])
         with allure.step("显示币种矩阵"):
             for i in get_json()['show_list']:
                 headers['X-Currency'] = i
-                with allure.step("获取所有Saving产品的收益详情fixed_earning_map计算"):
+                with allure.step("获取所有Saving产品的收益详情数字货币定期已派发利息的数量和金额"):
                     r = session.request('GET', url='{}/earn/saving/return'.format(env_url),
                                         headers=headers)
                 with allure.step("状态码和返回值"):
@@ -601,19 +601,29 @@ class TestCoreApi:
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("fixed_earning_map计算"):
-                    for z in get_json()['crypto_list']:
-                        assert float(r.json()['fixed_earning_map'][z]['amount']) == float(
-                            ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_AVAILABLE',
-                                                          wallet_type='SAVING-FIX')) + float(
-                            ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_FROZEN',
-                                                          wallet_type='SAVING-FIX')), "获取所有Saving产品的收益详情fixed_earning_map计算,显示货币类型是{},返回值是{}".format(
-                            i, r.text)
-                        assert float(r.json()['fixed_earning_map'][z]['amount']) == float(
-                            ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_AVAILABLE',
-                                                          wallet_type='SAVING-FIX', amount_type='abs_amount')) + float(
-                            ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_FROZEN',
-                                                          wallet_type='SAVING-FIX', amount_type='abs_amount')), "获取所有Saving产品的收益详情fixed_earning_map计算,显示货币类型是{},返回值是{}".format(
-                            i, r.text)
+                    with allure.step("获取累计定期利息"):
+                        for x in get_json()['crypto_list']:
+                            fixed_all_interest_amount_list = []
+                            cursor = '0'
+                            while cursor != '-1':
+                                params = {
+                                    'tx_type': "2",
+                                    'cursor': cursor,
+                                    'size': 50,
+                                    'order': "1",
+                                    'code': x
+                                }
+                                r4 = session.request('GET', url='{}/earn/fix/transactions'.format(env_url),
+                                                     params=params,
+                                                     headers=headers, timeout=20)
+                                cursor = r4.json()['cursor']
+                                for k in r4.json()['transactions']:
+                                    fixed_all_interest_amount_list.append(Decimal(k['maturity_interest']['amount']))
+                            quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
+                            logger.info('显示币种是{}, 数字货币是{}, 计算获取累计利息数量总和是{}, 接口返回的累计利息数量总和是{}'.format(i, x, sum(fixed_all_interest_amount_list), r.json()['fixed_earning_map'][x]['amount']))
+                            assert Decimal(sum(fixed_all_interest_amount_list)) == Decimal(r.json()['fixed_earning_map'][x]['amount']), '显示币种是{}, 数字货币是{}, 计算获取累计利息数量总和是{}, 接口返回的累计利息数量总和是{}'.format(i, x, sum(fixed_all_interest_amount_list), r.json()['fixed_earning_map'][x]['amount'])
+                            logger.info('显示币种是{}, 数字货币是{}, 计算获取累计利息金额总和是{}, 接口返回的累计利息金额总和是{}'.format(i, x, crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i), r.json()['fixed_earning_map'][x]['abs_amount']))
+                            assert Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i)) == Decimal(r.json()['fixed_earning_map'][x]['abs_amount']), '显示币种是{}, 数字货币是{}, 计算获取累计利息金额总和是{}, 接口返回的累计利息金额总和是{}'.format(i, x, crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i), r.json()['fixed_earning_map'][x]['abs_amount'])
 
     @allure.title('test_core_124')
     @allure.description('获取所有Saving产品的收益详情flexible_earnings计算')
