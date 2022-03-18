@@ -53,7 +53,7 @@ if __name__ == '__main__':
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
     if sys.argv[1] == 'api':
-        pytest.main(['./TestCase/TestApiCase/test_core.py::TestCoreApi::test_core_016', '-v', '--alluredir', './Reports', '--clean-alluredir'])
+        pytest.main(['./TestCase/TestApiCase/test_core.py::TestCoreApi::test_core_018', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == 'kyc':
         pytest.main(['./TestCase/TestComplianceServiceCase', '-v', '--alluredir', './Reports', '--clean-alluredir', '--timeout=600'])
     elif sys.argv[1] == "app":

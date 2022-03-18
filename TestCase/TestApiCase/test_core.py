@@ -10,17 +10,17 @@ class TestCoreApi:
         ApiFunction.add_headers()
 
     @allure.title('test_core_001')
-    @allure.description('查询钱包所有币种详细金额以及报价，以美元价格返回')
+    @allure.description('查询钱包所有币种详细金额以及报价,以美元价格返回')
     def test_core_001(self):
-        with allure.step("查询钱包所有币种详细金额以及报价，以美元价格返回"):
+        with allure.step("查询钱包所有币种详细金额以及报价,以美元价格返回"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'wallets' in r.text, "查询钱包所有币种详细金额以及报价，以美元价格返回错误，返回值是{}".format(r.text)
+            assert 'wallets' in r.text, "查询钱包所有币种详细金额以及报价,以美元价格返回错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_002')
     @allure.description('查询钱包所有币种金额')
@@ -31,9 +31,9 @@ class TestCoreApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'id' in r.text, "查询钱包所有币种金额错误，返回值是{}".format(r.text)
+            assert 'id' in r.text, "查询钱包所有币种金额错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_003')
     @allure.description('查询钱包某个币种的详细信息')
@@ -47,9 +47,9 @@ class TestCoreApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['id'] is not None, "查询钱包某个币种的详细信息错误，返回值是{}".format(r.text)
+            assert r.json()['id'] is not None, "查询钱包某个币种的详细信息错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_004 查询货币兑换比例')
     @allure.description('查询货币兑换比例')
@@ -64,9 +64,9 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
-                    assert r.json()['quote'] != {}, " 查询货币兑换比例错误，返回值是{}".format(r.text)
+                    assert r.json()['quote'] != {}, " 查询货币兑换比例错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_005')
     @allure.description('查询钱包中的所有币种投资于SAVING中的金额')
@@ -80,9 +80,9 @@ class TestCoreApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'SAVING' in r.text, "查询钱包中的所有币种投资于SAVING中的金额错误，返回值是{}".format(r.text)
+            assert 'SAVING' in r.text, "查询钱包中的所有币种投资于SAVING中的金额错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_006')
     @allure.description('查询钱包中的所有币种投资于SAVING中的金额')
@@ -96,9 +96,9 @@ class TestCoreApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'BALANCE' in r.text, "查询钱包中的所有币种投资于BALANCE中的金额错误，返回值是{}".format(r.text)
+            assert 'BALANCE' in r.text, "查询钱包中的所有币种投资于BALANCE中的金额错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_007')
     @allure.description('查询钱包BTC金额')
@@ -112,9 +112,9 @@ class TestCoreApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'BTC' in r.text, "查询钱包BTC金额错误，返回值是{}".format(r.text)
+            assert 'BTC' in r.text, "查询钱包BTC金额错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_008')
     @allure.description('查询钱包ETH金额')
@@ -128,9 +128,9 @@ class TestCoreApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'ETH' in r.text, "查询钱包ETH金额错误，返回值是{}".format(r.text)
+            assert 'ETH' in r.text, "查询钱包ETH金额错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_009')
     @allure.description('查询钱包USDT金额')
@@ -144,24 +144,24 @@ class TestCoreApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'USDT' in r.text, "查询钱包USDT金额错误，返回值是{}".format(r.text)
+            assert 'USDT' in r.text, "查询钱包USDT金额错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_010')
-    @allure.description('查询钱包所有币种详细金额以及报价，以欧元价格返回')
+    @allure.description('查询钱包所有币种详细金额以及报价,以欧元价格返回')
     def test_core_010(self):
         headers['X-Currency'] = 'EUR'
-        with allure.step("查询钱包所有币种详细金额以及报价，以欧元价格返回"):
+        with allure.step("查询钱包所有币种详细金额以及报价,以欧元价格返回"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         headers['X-Currency'] = 'USD'
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'wallets' in r.text, "查询钱包所有币种详细金额以及报价，以欧元价格返回错误，返回值是{}".format(r.text)
+            assert 'wallets' in r.text, "查询钱包所有币种详细金额以及报价,以欧元价格返回错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_011 查询客户状态')
     @allure.description('查询客户状态')
@@ -172,22 +172,22 @@ class TestCoreApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'customertags' in r.text, "查询客户状态错误，返回值是{}".format(r.text)
+            assert 'customertags' in r.text, "查询客户状态错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_012')
-    @allure.description('获得客户地区，服务器时间')
+    @allure.description('获得客户地区,服务器时间')
     def test_core_012(self):
-        with allure.step("获得客户地区，服务器时间"):
+        with allure.step("获得客户地区,服务器时间"):
             r = session.request('GET', url='{}/core/geo'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'time_zone' in r.text, "查询客户状态错误，返回值是{}".format(r.text)
+            assert 'time_zone' in r.text, "查询客户状态错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_013')
     @allure.description('获取metadata')
@@ -198,9 +198,9 @@ class TestCoreApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'currencies' in r.text, "获取metadata错误，返回值是{}".format(r.text)
+            assert 'currencies' in r.text, "获取metadata错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_014')
     @allure.description('获取所有Saving产品的持有金额')
@@ -214,13 +214,13 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("通过api获得Total Saving Amount数据"):
                     r1 = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
                 with allure.step("校验返回值"):
-                    assert r1.json()['total_holding'] == r.json()['total_saving_amount'], "获取所有Saving产品的持有金额错误显示货币类型是{}，返回值是{}".format(i, r.text)
+                    assert r1.json()['total_holding'] == r.json()['total_saving_amount'], "获取所有Saving产品的持有金额错误显示货币类型是{},返回值是{}".format(i, r.text)
                     for y in get_json()['crypto_list']:
-                        assert y in r.json()['currencies'], "获取所有Saving产品的持有金额错误,显示货币类型是{}，返回值是{}".format(i, r.text)
+                        assert y in r.json()['currencies'], "获取所有Saving产品的持有金额错误,显示货币类型是{},返回值是{}".format(i, r.text)
 
     @allure.title('test_core_015')
     @allure.description('获取所有Saving产品的持有金额详情的总金额')
@@ -235,10 +235,10 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("total_saving_amount计算"):
                     r1 = session.request('GET', url='{}/earn/products/summary'.format(env_url), headers=headers)
-                    assert r1.json()['total_holding'] == r.json()['total_saving_amount'], "获取所有Saving产品的持有金额详情的总金额错误，显示货币类型是{}，返回值是{}".format(i, r.text)
+                    assert r1.json()['total_holding'] == r.json()['total_saving_amount'], "获取所有Saving产品的持有金额详情的总金额错误,显示货币类型是{},返回值是{}".format(i, r.text)
 
     @allure.title('test_core_016')
     @allure.description('获取所有Saving产品的持有金额详情的已派发利息')
@@ -253,7 +253,7 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("cumulative_interest计算"):
                     all_interest = []
                     with allure.step("获取累计活期利息"):
@@ -283,28 +283,26 @@ class TestCoreApi:
                                 for k in r4.json()['transactions']:
                                     fixed_all_interest_amount_list.append(Decimal(k['maturity_interest']['amount']))
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
-                            print(quote)
-                            print(fixed_all_interest_amount_list)
                             all_interest.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i)))
-                    logger.info('显示币种是{}, 计算获取累利息是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['cumulative_interest'])))
+                    logger.info('显示币种是{}, 计算获取累计利息总和是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['cumulative_interest'])))
                     if Decimal(r.json()['cumulative_interest']) != Decimal(sum(all_interest)):
-                        assert Decimal(sum(all_interest)) - Decimal(r.json()['cumulative_interest']) >= Decimal(0.5) or Decimal(sum(all_interest)) - Decimal(r.json()['cumulative_interest']) <= Decimal(0.5), '获取所有Saving产品的持有金额详情的已派发利息, 显示币种是{}, 计算获取累利息是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['cumulative_interest']))
+                        assert Decimal(sum(all_interest)) - Decimal(r.json()['cumulative_interest']) >= Decimal(0.5) or Decimal(sum(all_interest)) - Decimal(r.json()['cumulative_interest']) <= Decimal(0.5), '获取所有Saving产品的持有金额详情的已派发利息, 显示币种是{}, 计算获取累计利息总和是{}, 接口返回的累计利息总和是{}'.format(i, sum(all_interest), str(r.json()['cumulative_interest']))
 
     @allure.title('test_core_017')
-    @allure.description('获取所有Saving产品的持有金额详情fixed_saving_amount计算')
+    @allure.description('获取所有Saving产品的持有金额详情数字货币定期金额')
     def test_core_017(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['earn_email'])
         with allure.step("显示币种矩阵"):
             for i in get_json()['show_list']:
                 headers['X-Currency'] = i
-                with allure.step("获取所有Saving产品的持有金额详情fixed_saving_amount计算"):
+                with allure.step("获取所有Saving产品的持有金额详情数字货币定期金额"):
                     r = session.request('GET', url='{}/earn/saving/holding/details'.format(env_url),
                                         headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("fixed_saving_amount计算"):
                     fixed_saving_abs_amount_list = []
                     for z in get_json()['crypto_list']:
@@ -314,13 +312,12 @@ class TestCoreApi:
                                                           amount_type='abs_amount')) + Decimal(
                             ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_FROZEN',
                                                           wallet_type='SAVING-FIX', amount_type='abs_amount')))
-                    assert sum(fixed_saving_abs_amount_list) == Decimal(r.json()[
-                                                                            'fixed_saving_amount']), "获取所有Saving产品的持有金额详情fixed_saving_amount计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)
+                    assert sum(fixed_saving_abs_amount_list) == Decimal(r.json()['fixed_saving_amount']), "获取所有Saving产品的持有金额详情数字货币定期金额错误, 显示货币类型是{}, 计算数字货币定期金额{}, 接口数字货币定期金额{}".format(i, sum(fixed_saving_abs_amount_list), r.json()['fixed_saving_amount'])
 
     @allure.title('test_core_018')
     @allure.description('获取所有Saving产品的持有金额详情未派发利息')
     def test_core_018(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice.wang+030705@cabital.com')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['earn_email'])
         with allure.step("显示币种矩阵"):
             for i in get_json()['show_list']:
                 headers['X-Currency'] = i
@@ -330,12 +327,12 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("interest_to_settle计算"):
                     with allure.step("获取累计定期利息"):
-                        flexible_all_interest_list = []
+                        fixed_all_interest_list = []
                         for x in get_json()['crypto_list']:
-                            flexible_all_interest_amounts_list = []
+                            fixed_all_interest_amount_list = []
                             cursor = '0'
                             while cursor != '-1':
                                 params = {
@@ -350,16 +347,12 @@ class TestCoreApi:
                                                      headers=headers, timeout=20)
                                 cursor = r4.json()['cursor']
                                 for k in r4.json()['transactions']:
-                                    flexible_all_interest_amounts_list.append(Decimal(k['maturity_interest']['amount']))
+                                    fixed_all_interest_amount_list.append(Decimal(k['maturity_interest']['amount']))
                             quote = sqlFunction.get_now_quote('{}-{}'.format(x, i))
-                            flexible_all_interest_list.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(flexible_all_interest_amounts_list), i)))
-                    logger.info('获取累计定期利息{}'.format(str(sum(flexible_all_interest_list))))
-                    assert Decimal(r.json()['interest_to_settle']) == Decimal(sum(flexible_all_interest_list)), '获取所有Saving产品的持有金额详情未派发利息，显示货币类型是{}，计算获得是{},接口获得是{}，返回值是{}'.format(i,str(sum(flexible_all_interest_list)), str(r.json()['interest_to_settle']), r.text)
-                    # if Decimal(r.json()['interest_to_settle']) != Decimal(sum(flexible_all_interest_list)):
-                    #     if len(str(sum(flexible_all_interest_list))) < len(str(sum(flexible_all_interest_list))):
-                    #         assert str(r.json()['interest_to_settle']) == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的持有金额详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
-                    #     else:
-                    #         assert str(r.json()['interest_to_settle'])[:-1] == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的持有金额详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                            fixed_all_interest_list.append(Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i)))
+                    logger.info('显示币种是{}, 计算获取未发放利息总和是{}, 接口返回的未发放利息总和是{}'.format(i, sum(fixed_all_interest_list), str(r.json()['interest_to_settle'])))
+                    if Decimal(r.json()['interest_to_settle']) != Decimal(sum(fixed_all_interest_list)):
+                        assert Decimal(sum(fixed_all_interest_list)) - Decimal(r.json()['interest_to_settle']) >= Decimal(0.5) or Decimal(sum(fixed_all_interest_list)) - Decimal(r.json()['interest_to_settle']) <= Decimal(0.5), '获取所有Saving产品的持有金额详情的已派发利息错误, 显示币种是{}, 计算获取未发放利息总和是{}, 接口返回的未发放利息总和是{}'.format(i, sum(fixed_all_interest_list), str(r.json()['interest_to_settle']))
 
     @allure.title('test_core_019')
     @allure.description('获取所有Saving产品的持有金额详情fixed_saving_map计算')
@@ -375,14 +368,14 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("fixed_saving_map计算"):
                     for z in get_json()['crypto_list']:
                         assert float(r.json()['fixed_saving_map'][z]) == float(
                             ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_AVAILABLE',
                                                           wallet_type='SAVING-FIX')) + float(
                             ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_FROZEN',
-                                                          wallet_type='SAVING-FIX')),  "获取所有Saving产品的持有金额详情fixed_saving_map计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)
+                                                          wallet_type='SAVING-FIX')),  "获取所有Saving产品的持有金额详情fixed_saving_map计算错误,显示货币类型是{},返回值是{}".format(i, r.text)
 
     @allure.title('test_core_020')
     @allure.description('获取所有Saving产品的持有金额详情flexible_saving_amount计算')
@@ -398,7 +391,7 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("flexible_saving_amount计算"):
                     fixed_saving_abs_amount_list = []
                     for z in get_json()['crypto_list']:
@@ -409,7 +402,7 @@ class TestCoreApi:
                             ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_FROZEN',
                                                           wallet_type='SAVING', amount_type='abs_amount')))
                     assert sum(fixed_saving_abs_amount_list) == Decimal(r.json()[
-                                                                            'flexible_saving_amount']), "获取所有Saving产品的持有金额详情flexible_saving_amount计算错误，显示货币类型是{}，返回值是{}".format(
+                                                                            'flexible_saving_amount']), "获取所有Saving产品的持有金额详情flexible_saving_amount计算错误,显示货币类型是{},返回值是{}".format(
                         i, r.text)
 
     @allure.title('test_core_021')
@@ -426,14 +419,14 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("flexible_saving_map计算"):
                     for z in get_json()['crypto_list']:
                         assert float(r.json()['flexible_saving_map'][z]) == float(
                             ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_AVAILABLE',
                                                           wallet_type='SAVING')) + float(
                             ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_FROZEN',
-                                                          wallet_type='SAVING')), "获取所有Saving产品的持有金额详情flexible_saving_map计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)
+                                                          wallet_type='SAVING')), "获取所有Saving产品的持有金额详情flexible_saving_map计算错误,显示货币类型是{},返回值是{}".format(i, r.text)
 
     @allure.title('test_core_022')
     @allure.description('获取所有Saving产品的收益详情first_subscription_time')
@@ -445,7 +438,7 @@ class TestCoreApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
         with allure.step("first_subscription_time验证"):
             params = {
                 'tx_type': "2",
@@ -472,9 +465,9 @@ class TestCoreApi:
             if r2.json()['transactions'][0]['time_line']['subscribed_at'] is not None:
                 subscribed_at_2 = r2.json()['transactions'][0]['time_line']['subscribed_at']
             if subscribed_at > subscribed_at_2:
-                assert r.json()['first_subscription_time'] == subscribed_at_2, "获取所有Saving产品的持有金额详情flexible_saving_map计算错误，返回值是{}".format(r.text)
+                assert r.json()['first_subscription_time'] == subscribed_at_2, "获取所有Saving产品的持有金额详情flexible_saving_map计算错误,返回值是{}".format(r.text)
             else:
-                assert r.json()['first_subscription_time'] == subscribed_at, "获取所有Saving产品的持有金额详情flexible_saving_map计算错误，返回值是{}".format(r.text)
+                assert r.json()['first_subscription_time'] == subscribed_at, "获取所有Saving产品的持有金额详情flexible_saving_map计算错误,返回值是{}".format(r.text)
 
     @allure.title('test_core_023')
     @allure.description('获取所有Saving产品的收益详情total_earnings计算')
@@ -490,7 +483,7 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("cumulative_interest计算"):
                     with allure.step("获取累计活期利息"):
                         flexible_all_interest_list = []
@@ -529,9 +522,9 @@ class TestCoreApi:
                     logger.info('获取累计定期利息{}'.format(str(sum(flexible_all_interest_list))))
                     if Decimal(r.json()['total_earnings']) != Decimal(sum(flexible_all_interest_list) + sum(flexible_all_interest_list)):
                         if len(str(r.json()['total_earnings'])) < len(str(sum(flexible_all_interest_list) + sum(flexible_all_interest_list))):
-                            assert str(r.json()['total_earnings']) == str(sum(flexible_all_interest_list) + sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益cumulative_interest计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                            assert str(r.json()['total_earnings']) == str(sum(flexible_all_interest_list) + sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益cumulative_interest计算错误,显示货币类型是{},返回值是{}".format(i, r.text)'
                         else:
-                            assert str(r.json()['total_earnings'])[:-1] == str(sum(flexible_all_interest_list) + sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益cumulative_interest计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                            assert str(r.json()['total_earnings'])[:-1] == str(sum(flexible_all_interest_list) + sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益cumulative_interest计算错误,显示货币类型是{},返回值是{}".format(i, r.text)'
 
     @allure.title('test_core_024')
     @allure.description('获取所有Saving产品的收益详情interest_to_settle计算')
@@ -547,7 +540,7 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("interest_to_settle计算"):
                     with allure.step("获取累计定期利息"):
                         flexible_all_interest_list = []
@@ -574,9 +567,9 @@ class TestCoreApi:
                     logger.info('获取累计定期利息{}'.format(str(sum(flexible_all_interest_list))))
                     if Decimal(r.json()['interest_to_settle']) != Decimal(sum(flexible_all_interest_list)):
                         if str(sum(flexible_all_interest_list)) < str(sum(flexible_all_interest_list)):
-                            assert str(r.json()['interest_to_settle']) == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                            assert str(r.json()['interest_to_settle']) == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益详情interest_to_settle计算错误,显示货币类型是{},返回值是{}".format(i, r.text)'
                         else:
-                            assert str(r.json()['interest_to_settle'])[:-1] == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益详情interest_to_settle计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                            assert str(r.json()['interest_to_settle'])[:-1] == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益详情interest_to_settle计算错误,显示货币类型是{},返回值是{}".format(i, r.text)'
 
     @allure.title('test_core_025')
     @allure.description('获取所有Saving产品的收益详情fixed_earnings计算')
@@ -592,7 +585,7 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("fixed_earnings计算"):
                     with allure.step("获取累计定期利息"):
                         flexible_all_interest_list = []
@@ -619,9 +612,9 @@ class TestCoreApi:
                     logger.info('获取累计定期利息{}'.format(str(sum(flexible_all_interest_list))))
                     if Decimal(r.json()['fixed_earnings']) != Decimal(sum(flexible_all_interest_list)):
                         if str(sum(flexible_all_interest_list))[-1] < str(sum(flexible_all_interest_list)):
-                            assert str(r.json()['fixed_earnings']) == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益cumulative_interest计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                            assert str(r.json()['fixed_earnings']) == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益cumulative_interest计算错误,显示货币类型是{},返回值是{}".format(i, r.text)'
                         else:
-                            assert str(r.json()['fixed_earnings'])[:-1] == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益cumulative_interest计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                            assert str(r.json()['fixed_earnings'])[:-1] == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益cumulative_interest计算错误,显示货币类型是{},返回值是{}".format(i, r.text)'
 
     @allure.title('test_core_026')
     @allure.description('获取所有Saving产品的收益详情fixed_earning_map计算')
@@ -637,20 +630,20 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("fixed_earning_map计算"):
                     for z in get_json()['crypto_list']:
                         assert float(r.json()['fixed_earning_map'][z]['amount']) == float(
                             ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_AVAILABLE',
                                                           wallet_type='SAVING-FIX')) + float(
                             ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_FROZEN',
-                                                          wallet_type='SAVING-FIX')), "获取所有Saving产品的收益详情fixed_earning_map计算，显示货币类型是{}，返回值是{}".format(
+                                                          wallet_type='SAVING-FIX')), "获取所有Saving产品的收益详情fixed_earning_map计算,显示货币类型是{},返回值是{}".format(
                             i, r.text)
                         assert float(r.json()['fixed_earning_map'][z]['amount']) == float(
                             ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_AVAILABLE',
                                                           wallet_type='SAVING-FIX', amount_type='abs_amount')) + float(
                             ApiFunction.get_crypto_number(type=z, balance_type='BALANCE_TYPE_FROZEN',
-                                                          wallet_type='SAVING-FIX', amount_type='abs_amount')), "获取所有Saving产品的收益详情fixed_earning_map计算，显示货币类型是{}，返回值是{}".format(
+                                                          wallet_type='SAVING-FIX', amount_type='abs_amount')), "获取所有Saving产品的收益详情fixed_earning_map计算,显示货币类型是{},返回值是{}".format(
                             i, r.text)
 
     @allure.title('test_core_124')
@@ -667,7 +660,7 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("fixed_saving_amount计算"):
                     flexible_all_interest_list = []
                     with allure.step("获取产品product_id"):
@@ -680,7 +673,7 @@ class TestCoreApi:
                                                      headers=headers)
                                 flexible_all_interest_list.append(Decimal(r3.json()['total_yield']['abs_amount']))
                     if str(sum(flexible_all_interest_list))[-1] == '0':
-                        assert str(r.json()['flexible_earnings']) == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益详情flexible_earnings计算错误，显示货币类型是{}，返回值是{}".format(i, r.text)'
+                        assert str(r.json()['flexible_earnings']) == str(sum(flexible_all_interest_list))[:-1], '获取所有Saving产品的收益详情flexible_earnings计算错误,显示货币类型是{},返回值是{}".format(i, r.text)'
 
     @allure.title('test_core_117')
     @allure.description('获取所有Saving产品的基于币种的收益cumulative_interest数量计算')
@@ -693,7 +686,7 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("cumulative_interest计算"):
                     with allure.step("获取累计定期利息"):
                         flexible_interest_amount = []
@@ -712,7 +705,7 @@ class TestCoreApi:
                             cursor = r4.json()['cursor']
                             for k in r4.json()['transactions']:
                                 flexible_interest_amount.append(Decimal(k['maturity_interest']['amount']))
-                    assert Decimal(r.json()['cumulative_interest']) == Decimal(sum(flexible_interest_amount)), '获取所有Saving产品的基于币种的收益cumulative_interest数量计算失败，币种是{}, 定期cumulative_interest是{},接口返回是{}'.format(y, sum(flexible_interest_amount), r.text)
+                    assert Decimal(r.json()['cumulative_interest']) == Decimal(sum(flexible_interest_amount)), '获取所有Saving产品的基于币种的收益cumulative_interest数量计算失败,币种是{}, 定期cumulative_interest是{},接口返回是{}'.format(y, sum(flexible_interest_amount), r.text)
 
     @allure.title('test_core_118')
     @allure.description('获取所有Saving产品的基于币种的收益interest_to_settle数量计算')
@@ -725,7 +718,7 @@ class TestCoreApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("cumulative_interest计算"):
                     with allure.step("获取累计定期利息"):
                         flexible_interest_amount = []
@@ -744,4 +737,4 @@ class TestCoreApi:
                             cursor = r4.json()['cursor']
                             for k in r4.json()['transactions']:
                                 flexible_interest_amount.append(Decimal(k['maturity_interest']['amount']))
-                    assert Decimal(r.json()['interest_to_settle']) == Decimal(sum(flexible_interest_amount)), '获取所有Saving产品的基于币种的收益interest_to_settle数量计算失败，币种是{}, 定期cumulative_interest是{},接口返回是{}'.format(y, sum(flexible_interest_amount), r.text)
+                    assert Decimal(r.json()['interest_to_settle']) == Decimal(sum(flexible_interest_amount)), '获取所有Saving产品的基于币种的收益interest_to_settle数量计算失败,币种是{}, 定期cumulative_interest是{},接口返回是{}'.format(y, sum(flexible_interest_amount), r.text)
