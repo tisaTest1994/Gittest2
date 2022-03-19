@@ -1,14 +1,5 @@
 {
   "PRIVATE-TOKEN": "tjkst4kHzfDPwyThPoX-",
-  "account_list": [
-    "yilei21@163.com",
-    "yilei22@163.com",
-    "yilei23@163.com",
-    "yilei24@163.com",
-    "yilei7@163.com",
-    "yilei10@163.com",
-    "yilei1@163.com"
-  ],
   "app_package": {
     "pro": "com.cabital.cabital",
     "test": "com.cabital.cabital.debug"
