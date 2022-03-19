@@ -113,7 +113,7 @@ class TestAccountApi:
     @allure.title('test_connect_account_004 获取关联用户状况，用户被 Cabital 要求提供正确材料')
     def test_connect_account_004(self):
         with allure.step("测试用户的account_id"):
-            account_id = '146aa112-2fd7-4cb5-a8ff-bb2fc45f55ed'
+            account_id = '95c3f010-b008-40f1-bd80-40713e2f1aa8'
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
@@ -374,14 +374,15 @@ class TestAccountApi:
     @allure.title('test_connect_account_013 成功解绑+name match用户 pass')
     def test_connect_account_013(self):
         with allure.step("准备参数"):
-            account_id = 'b7ff2c76-5dae-4ea3-bb42-4b355357072a'
+            account_id = 'a55690d8-459b-4efa-aa3c-154f22755983'
         with allure.step("name match 数据"):
             data = {
-                'name': 'riri',
-                'id': '123456',
+                'name': 'qq',
+                'id': '1234',
                 'id_document': 'PASSPORT',
                 'issued_by': 'HKG',
-                'dob': '19990101'
+                'dob': '19990909'
+
             }
         with allure.step("验签"):
             unix_time = int(time.time())

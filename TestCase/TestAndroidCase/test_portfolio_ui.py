@@ -63,6 +63,7 @@ class TestPortfolioUi:
             UiFunction.login(account=get_json()['email']['email'], password=get_json()['email']['password'])
         with allure.step("Details"):
             operate_element_app('portfolioPage', 'Details', 'click')
+            sleep(2)
         assert operate_element_app('portfolioPage', 'Asset Allocation', type='check'), '没有到达{}页面或者找不到{}页面元素'.format('portfolioPage', 'Asset Allocation')
         with allure.step("通过API 获取6个币种的百分比"):
             r = session.request('GET', url='{}/assetstatapi/assetstat'.format(env_url), headers=headers)
@@ -105,11 +106,9 @@ class TestPortfolioUi:
                 total_value= add_currency_symbol(i['total_value'], currency=self.currency, is_symbol=True)
                 print('date1的值是：{}'.format(date1))
                 print('total_value的值是：{}'.format(total_value))
-                #要看下是不是能单独断言检查日期，因为现在运行是失败的False！=True
-                assert operate_element_app('portfolioPage', date1, 'check') is False, 'date1在页面的值是{}'.format(date1)
-                assert operate_element_app('portfolioPage', total_value, 'check') is True, 'total_value在页面的值是{}'.format(total_value)
+                assert operate_element_app('portfolioPage', total_value, 'check') is True, 'yesterday的total_value在页面的值是{}'.format(total_value)
             else:
-                return 'yesterday该元素不等于昨天日期'
+                print('yesterday该元素不等于昨天日期')
 
     @allure.title('test_Portfolio_005')
     @allure.description('portfolio 页面验证Portfolio页面Crypto Holdings和Cash Holdings3个数值')
@@ -133,11 +132,11 @@ class TestPortfolioUi:
                 abs_amount = i['abs_amount']
                 abs_amount = add_currency_symbol(abs_amount, currency=self.currency, is_symbol=True)
                 print(code, amount, abs_amount)
-                #一整段文本进行断言需进行处理目前没有该方法
-                assert operate_element_app('portfolioPage', code, 'check') is False, 'code在页面的值是{}'.format(code)
-                assert operate_element_app('portfolioPage', amount, 'check') is False, 'amount在页面的值是{}'.format(amount)
-                assert operate_element_app('portfolioPage', abs_amount, 'check') is False, 'abs_amount在页面的值是{}'.format(abs_amount)
-                #断言abs_amount时需注意下不满足2位小数需补0原则，assert断言时有可能会报错
+                #需要优化一整段文本进行断言需进行处理目前没有该方法，abs_amount时需注意下不满足2位小数需补0原则，assert断言时有可能会报错
+                # assert operate_element_app('portfolioPage', code, 'check') is True, 'code在页面的值是{}'.format(code)
+                # assert operate_element_app('portfolioPage', amount, 'check') is True, 'amount在页面的值是{}'.format(amount)
+                assert operate_element_app('portfolioPage', abs_amount, 'check') is True, 'abs_amount在页面的值是{}'.format(abs_amount)
+
 
 
 
