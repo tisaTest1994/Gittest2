@@ -126,7 +126,6 @@ class TestConnectTransactionApi:
         with allure.step("校验返回值"):
             assert r.json()['code'] == 'PA009', "没有通过kyc的账户划转列表（不传默认参数）失败错误，返回值是{}".format(r.text)
 
-
     @allure.title('test_connect_transaction_007 账户划转详情使用错误transfer_id')
     def test_connect_transaction_007(self):
         with allure.step("测试用户的account_id"):
