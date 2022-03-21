@@ -131,7 +131,8 @@
     "assets-withdraw-fiat-userBIC-helper-text": "id",
     "assets-withdraw-fiat-userNum-helper-text": "id",
     "assets-withdraw-fiat-userCode-helper-text": "id",
-    "assets-deposit-cash-drop-btn-up": "id"
+    "assets-deposit-cash-drop-btn-up": "id",
+    "withdraw_select_Deposit Crypto": "id"
   },
   "transactionPage": {
     "transaction-filter-types": "name",
