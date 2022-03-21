@@ -113,7 +113,7 @@ class TestAccountApi:
     @allure.title('test_connect_account_004 获取关联用户状况，用户被 Cabital 要求提供正确材料')
     def test_connect_account_004(self):
         with allure.step("测试用户的account_id"):
-            account_id = '95c3f010-b008-40f1-bd80-40713e2f1aa8'
+            account_id = '146aa112-2fd7-4cb5-a8ff-bb2fc45f55ed'
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
