@@ -722,7 +722,12 @@ class TestCoreApi:
                                                                                                          x][
                                                                                                          'abs_amount']))
                             assert Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list),
-                                                      i)) == Decimal(r.json()['fixed_earning_map'][x][
+                                                      i)) + Decimal(0.5) >= Decimal(r.json()['fixed_earning_map'][x][
+                                                                         'abs_amount']), '显示币种是{}, 数字货币是{}, 计算获取累计利息金额总和是{}, 接口返回的累计利息金额总和是{}'.format(
+                                i, x, crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i),
+                                r.json()['fixed_earning_map'][x]['abs_amount'])
+                            assert Decimal(crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list),
+                                                      i)) - Decimal(0.5) <= Decimal(r.json()['fixed_earning_map'][x][
                                                                          'abs_amount']), '显示币种是{}, 数字货币是{}, 计算获取累计利息金额总和是{}, 接口返回的累计利息金额总和是{}'.format(
                                 i, x, crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i),
                                 r.json()['fixed_earning_map'][x]['abs_amount'])

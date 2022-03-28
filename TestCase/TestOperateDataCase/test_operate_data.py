@@ -33,7 +33,7 @@ class TestOperateDataApi:
                     "account_number": "",
                     "notes_external": "",
                     "account_address": "",
-                    "amount_instructed": 0.12
+                    "amount_instructed": 0.13
                 }
             ]
         }
