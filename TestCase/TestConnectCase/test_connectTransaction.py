@@ -236,7 +236,6 @@ class TestConnectTransactionApi:
         with allure.step("校验返回值"):
             assert r.json()['code'] == 'PA008', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
 
-
     @allure.title('test_connect_transaction_012 查询转账记录')
     def test_connect_transaction_012(self):
         with allure.step("测试用户的account_id"):

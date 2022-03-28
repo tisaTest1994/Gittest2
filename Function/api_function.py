@@ -120,6 +120,7 @@ class ApiFunction:
     @staticmethod
     def get_crypto_abs_amount(type='BTC'):
         r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
+        print(r.json()['wallets'])
         for i in r.json()['wallets']:
             if i['code'] == type:
                 return i['abs_amount']

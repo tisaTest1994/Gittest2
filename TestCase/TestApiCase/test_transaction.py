@@ -65,9 +65,9 @@ class TestTransactionApi:
 
     @allure.title('test_transaction_004 查询指定Debit详情')
     def test_transaction_004(self):
-        transaction_id = '416e3000-c317-4abe-98b2-48de222bde54'
+        transaction_id = 'd0a13eac-8818-42fe-ab94-7580e35300a9'
         params = {
-            'txn_sub_type': 8
+            'txn_sub_type': 1
         }
         r = session.request('GET', url='{}/txn/{}'.format(env_url, transaction_id), params=params, headers=headers)
         with allure.step("状态码和返回值"):
@@ -121,3 +121,4 @@ class TestTransactionApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json()['transactions'] == [], "web查询全部交易记录错误，返回值是{}".format(r.text)
+
