@@ -249,8 +249,7 @@ class TestPayoutApi:
     @allure.description('BCB EUR法币提现')
     def test_payout_016(self):
         with allure.step("开启法币提现画面"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
             params = {
                 'code': 'EUR'
             }
