@@ -21,4 +21,5 @@ class TestAccountingApi:
             line_info = OperateExcel.get_excel_sheet_row('Cash Wallet', i)
             sql = "select * from wallet where wallet_name = {};".format(str(line_info[3]).split(':')[1])
             info = sqlFunction().connect_mysql('wallet', sql=sql)
-            print(info)
+            print(info[0])
+            print(info[0]['code'])
