@@ -63,6 +63,8 @@ if __name__ == '__main__':
         pytest.main(['./TestCase/TestConnectCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "web":
         pytest.main(['./TestCase/TestWebCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
+    elif sys.argv[1] == "accounting":
+        pytest.main(['./TestCase/TestAccountingCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     else:
         assert False, 'error 需要传入正确的参数'
     os.system("allure generate ./Reports  -o ./Reports/html --clean")

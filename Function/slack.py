@@ -44,6 +44,8 @@ def slack_report(type):
         title = "Cabital Connect Test Report"
     elif type == 'web':
         title = "Web Test Report"
+    elif type == 'accounting':
+        title = "Accounting Test Report"
     else:
         title = "Test Report"
     attachment = [

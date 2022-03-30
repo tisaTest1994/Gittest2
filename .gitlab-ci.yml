@@ -3,11 +3,11 @@ default:
 
 
 stages:
-    - test1
-    - test2
-    - test3
-    - test4
-    #- test5
+#     - test1
+#     - test2
+#     - test3
+#     - test4
+    - test5
 
 before_script:
     - apt-get update
@@ -60,6 +60,17 @@ KycTest:
     - python
   script:
     - python run.py kyc test
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+WebTest:
+  stage: test5
+  tags:
+    - python
+  script:
+    - python run.py accounting test
   artifacts:
     paths:
       - Reports
