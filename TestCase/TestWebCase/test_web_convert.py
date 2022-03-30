@@ -255,7 +255,7 @@ class TestWebConvert:
             fiat_sell_default = 'EUR'
             sell_amount_wallet_balance = ApiFunction.get_crypto_number(type=fiat_sell_default)
         with allure.step("点击max按钮"):
-            operate_element_web(chrome_driver, 'convertPage', 'convert_sell_input_max_btn')
+            operate_element_web(chrome_driver, 'convertPage', 'dialog_convert_max')
             assert operate_element_web(chrome_driver, 'convertPage', 'convert_sell_input', 'get_value') == sell_amount_wallet_balance, 'max按钮未自动填入最大可用金额'
 
 

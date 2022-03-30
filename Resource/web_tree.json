@@ -86,7 +86,7 @@
     "assets-withdraw-cash-fee": "id",
     "assets-withdraw-cash-receive": "id",
     "assets-withdraw-cash-mailcode": "id",
-    "assets-withdraw-cash-mailbtn": "id",
+    "dialog_withdrawconfirm_mfa_fiat": "id",
     "assets-withdraw-cash-googlecode": "id",
     "assets-withdraw-cash-submit": "id",
     "MuiAlert-message": "class",
@@ -124,7 +124,7 @@
     "assets-withdraw-fiat-userNum": "id",
     "assets-withdraw-fiat-userCode": "id",
     "assets_savingstype_Flexible": "id",
-    "assets-withdraw-crypto-mailbtn": "id",
+    "dialog_withdrawconfirm_mfa_crypto": "id",
     "assets-withdraw-crypto-googlecode": "id",
     "assets-withdraw-crypto-submit": "id",
     "assets-withdraw-fiat-userIBAN-helper-text": "id",
@@ -225,6 +225,6 @@
     "convert_buy_select" : "id",
     "convert_buy_input" : "id",
     "convert_btn_submit" : "id",
-    "convert_sell_input_max_btn" : "id"
+    "dialog_convert_max" : "id"
   }
 }
