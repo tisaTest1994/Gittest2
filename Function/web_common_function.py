@@ -49,12 +49,14 @@ def operate_element_web(driver, page, element_string, type='click', input_string
             long = len(driver.find_element_by_id(element_string).get_attribute('value'))
             for i in range(0, long):
                 if driver.find_element_by_id(element_string).get_attribute('value') != "":
+                    driver.find_element_by_id(element_string).send_keys(Keys.COMMAND + 'a')
                     driver.find_element_by_id(element_string).send_keys(Keys.BACKSPACE)
                     i += 1
         elif element_type == 'name':
             long = len(driver.find_element_by_name(element_string).get_attribute('value'))
             for i in range(0, long):
                 if driver.find_element_by_name(element_string).get_attribute('value') != "":
+                    driver.find_element_by_id(element_string).send_keys(Keys.COMMAND + 'a')
                     driver.find_element_by_name(element_string).send_keys(Keys.BACKSPACE)
                     i += 1
         else:
@@ -121,7 +123,7 @@ def operate_element_web(driver, page, element_string, type='click', input_string
             return flag
     else:
         return driver.find_element_by_xpath('//*[@{}="{}"]'.format(element_type, element_string))
-    sleep(2)
+    sleep(1)
 
 
 # 图像识别

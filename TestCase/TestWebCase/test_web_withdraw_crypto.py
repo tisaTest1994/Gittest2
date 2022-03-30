@@ -84,32 +84,34 @@ class TestWebWithdraw:
             # 判断是是否输入成功
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'get_value') ==\
                    '', '错误：特殊字符输入成功'
-        with allure.step("BTC withdrawal address格式校验：无效地址"):
-            # 输入withdrawal address
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input', '123zxc')
-            # 输入提现金额
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.001')
-            # 点击Next：Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
-            with allure.step("调用接口获得数据"):
-                data1 = {
-                    "amount": "0.001",
-                    "code": "BTC",
-                    "address": "123zxc",
-                    "method": "BTC"
-                }
-                r = session.request('POST', url='{}/pay/withdraw/crypto/validate'.format(env_url),
-                                    data=json.dumps(data1), headers=headers)
-                time.sleep(2)
-                message = r.json()['message']
-                print(message)
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
+        # with allure.step("BTC withdrawal address格式校验：无效地址"):
+        #     # 输入withdrawal address
+        #     operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input', '123zxc')
+        #     # 输入提现金额
+        #     operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.001')
+        #     # 点击Next：Submit Withdrawal
+        #     operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
+        #     with allure.step("调用接口获得数据"):
+        #         data1 = {
+        #             "amount": "0.001",
+        #             "code": "BTC",
+        #             "address": "123zxc",
+        #             "method": "BTC"
+        #         }
+        #         r = session.request('POST', url='{}/pay/withdraw/crypto/validate'.format(env_url),
+        #                             data=json.dumps(data1), headers=headers)
+        #         time.sleep(2)
+        #         message = r.json()['message']
+        #         print(message)
+        #         assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
         with allure.step("BTC withdrawal address格式校验：有效地址"):
             # 清空withdrawal address
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'delete')
             # 输入withdrawal address
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
                                 'tb1qn8fymr49zljfkvgsuhg3572fnfkljuga550asm')
+            # 输入提现金额
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.001')
             # 点击Next：Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailcode-label', 'check'),\
@@ -131,32 +133,34 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
             # 选择ETH
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-ETH')
-        with allure.step("ETH withdrawal address格式校验：无效地址"):
-            # 输入withdrawal address
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
-                                '1111111111111111111111111111111111111111')
-            # 输入提现金额
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.02')
-            # 点击Next：Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
-            with allure.step("调用接口获得数据"):
-                data1 = {
-                    "amount": "0.02",
-                    "code": "ETH",
-                    "address": "1111111111111111111111111111111111111111",
-                    "method": "ERC20"
-                }
-                r = session.request('POST', url='{}/pay/withdraw/crypto/validate'.format(env_url),
-                                    data=json.dumps(data1), headers=headers)
-                message = r.json()['message']
-                print(message)
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
+        # with allure.step("ETH withdrawal address格式校验：无效地址"):
+        #     # 输入withdrawal address
+        #     operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
+        #                         '1111111111111111111111111111111111111111')
+        #     # 输入提现金额
+        #     operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.02')
+        #     # 点击Next：Submit Withdrawal
+        #     operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
+        #     with allure.step("调用接口获得数据"):
+        #         data1 = {
+        #             "amount": "0.02",
+        #             "code": "ETH",
+        #             "address": "1111111111111111111111111111111111111111",
+        #             "method": "ERC20"
+        #         }
+        #         r = session.request('POST', url='{}/pay/withdraw/crypto/validate'.format(env_url),
+        #                             data=json.dumps(data1), headers=headers)
+        #         message = r.json()['message']
+        #         print(message)
+        #         assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
         with allure.step("ETH withdrawal address格式校验：有效地址"):
             # 清空withdrawal address
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'delete')
             # 输入withdrawal address
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
                                 '0x0C5816f5a381209164861B57Ddd8B257a9fbC50a')
+            # 输入提现金额
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.02')
             # 点击Next：Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailcode-label', 'check'),\
@@ -178,33 +182,35 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-change-drop-btn-up')
             # 选择USDT
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-selector-option-USDT')
-        with allure.step("USDT withdrawal address格式校验：无效地址"):
-            # 输入withdrawal address
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
-                                '1111111111111111111111111111111111111111')
-            # 输入提现金额
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '40')
-            # 点击Next：Submit Withdrawal
-            operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
-            with allure.step("调用接口获得数据"):
-                data1 = {
-                    "amount": "40",
-                    "code": "USDT",
-                    "address": "1111111111111111111111111111111111111111",
-                    "method": "ERC20"
-                }
-                r = session.request('POST', url='{}/pay/withdraw/crypto/validate'.format(env_url),
-                                    data=json.dumps(data1), headers=headers)
-                time.sleep(2)
-                message = r.json()['message']
-                print(message)
-                assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
+        # with allure.step("USDT withdrawal address格式校验：无效地址"):
+        #     # 输入withdrawal address
+        #     operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
+        #                         '1111111111111111111111111111111111111111')
+        #     # 输入提现金额
+        #     operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '40')
+        #     # 点击Next：Submit Withdrawal
+        #     operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
+        #     with allure.step("调用接口获得数据"):
+        #         data1 = {
+        #             "amount": "40",
+        #             "code": "USDT",
+        #             "address": "1111111111111111111111111111111111111111",
+        #             "method": "ERC20"
+        #         }
+        #         r = session.request('POST', url='{}/pay/withdraw/crypto/validate'.format(env_url),
+        #                             data=json.dumps(data1), headers=headers)
+        #         time.sleep(2)
+        #         message = r.json()['message']
+        #         print(message)
+        #         assert operate_element_web(chrome_driver, '', message, type='check'), '未显示接口返回提示信息'
         with allure.step("USDTwithdrawal address格式校验：有效地址"):
             # 清空withdrawal address
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'delete')
             # 输入withdrawal address
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-address', 'input',
                                 '0x0C5816f5a381209164861B57Ddd8B257a9fbC50a')
+            # 输入提现金额
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '40')
             # 点击Next：Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailcode-label', 'check'),\
@@ -481,7 +487,7 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-amount', 'input', '0.001')
             # 点击Next：Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailbtn', 'check'),\
+            assert operate_element_web(chrome_driver, 'assetPage', 'dialog_withdrawconfirm_mfa_crypto', 'check'),\
                 '未弹出认证框'
 
     @allure.title('test_web_withdraw_crypto_011')
@@ -507,7 +513,7 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_crypto')
         # with allure.step("输入错误邮箱验证码"):
         #     # 输入错误邮箱验证码
-        #     operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailbtn')
+        #     operate_element_web(chrome_driver, 'assetPage', 'dialog_withdrawconfirm_mfa_crypto')
         #     operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailcode', 'input', '666663')
         #     # 输入google验证码
         #     with allure.step("通过接口获取google验证码"):
@@ -531,7 +537,7 @@ class TestWebWithdraw:
         #            'The Google Authenticator code was wrong.', 'google验证码错误提示信息未显示'
         with allure.step("输入正确邮箱验证码，正确google验证码"):
             with allure.step("申请邮箱验证码"):
-                operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailbtn')
+                operate_element_web(chrome_driver, 'assetPage', 'dialog_withdrawconfirm_mfa_crypto')
             with allure.step("通过email获取邮箱验证码"):
                 code = ApiFunction.get_email_code(type='MFA_EMAIL')
                 operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-crypto-mailcode', 'input', code)

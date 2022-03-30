@@ -67,6 +67,12 @@ class TestWebWithdraw:
             time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
+        with allure.step("切换至EUR"):
+            # 点击下拉框
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-change-drop-btn-up')
+            # 选择EUR
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-option-EUR')
+            assert chrome_driver.find_element_by_xpath('//div/img[@src="../images/coin/EUR.png"]'), '币种未切换至EUR'
         with allure.step("点击change按钮，并判断是否弹出更改信息框"):
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_namechange')
             time.sleep(2)
@@ -81,6 +87,12 @@ class TestWebWithdraw:
             time.sleep(2)
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
+        with allure.step("切换至EUR"):
+            # 点击下拉框
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-change-drop-btn-up')
+            # 选择EUR
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-option-EUR')
+            assert chrome_driver.find_element_by_xpath('//div/img[@src="../images/coin/EUR.png"]'), '币种未切换至EUR'
         with allure.step("点击change按钮"):
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_namechange')
         with allure.step("点击FAQ about Account Name文字"):
@@ -103,6 +115,12 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets_balanceaction_withdraw')
             assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector', 'check'), \
                 '页面未跳转至Withdraw-withdraw Cash页面'
+        with allure.step("切换至EUR"):
+            # 点击下拉框
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-change-drop-btn-up')
+            # 选择EUR
+            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-selector-option-EUR')
+            assert chrome_driver.find_element_by_xpath('//div/img[@src="../images/coin/EUR.png"]'), '币种未切换至EUR'
         with allure.step("点击cancel按钮"):
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_namechange')
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-modal-close')
@@ -154,7 +172,7 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-fiat-amount', 'input', '5')
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn', 'check'),\
+            assert operate_element_web(chrome_driver, 'assetPage', 'dialog_withdrawconfirm_mfa_fiat', 'check'),\
                 '未弹出withdrawal认证框'
 
     @allure.title('test_web_withdraw_cash_006')
@@ -200,7 +218,7 @@ class TestWebWithdraw:
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
             time.sleep(2)
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn', 'check'),\
+            assert operate_element_web(chrome_driver, 'assetPage', 'dialog_withdrawconfirm_mfa_fiat', 'check'),\
                 '未弹出withdrawal认证框'
 
 
@@ -248,7 +266,7 @@ class TestWebWithdraw:
             time.sleep(2)
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn', 'check'),\
+            assert operate_element_web(chrome_driver, 'assetPage', 'dialog_withdrawconfirm_mfa_fiat', 'check'),\
                 '未弹出withdrawal认证框'
 
     @allure.title('test_web_withdraw_cash_008')
@@ -291,7 +309,7 @@ class TestWebWithdraw:
             time.sleep(2)
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
-            assert operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn', 'check'), \
+            assert operate_element_web(chrome_driver, 'assetPage', 'dialog_withdrawconfirm_mfa_fiat', 'check'), \
                 '未弹出withdrawal认证框'
 
     @allure.title('test_web_withdraw_cash_009')
@@ -335,7 +353,6 @@ class TestWebWithdraw:
                 }
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data1),
                                     headers=headers)
-                time.sleep(2)
                 message = r.json()['message']
                 print(message)
                 assert operate_element_web(chrome_driver, '', message, type='check'), '提示信息错误'
@@ -560,7 +577,7 @@ class TestWebWithdraw:
             # 点击Next: Submit Withdrawal
             operate_element_web(chrome_driver, 'assetPage', 'withdraw_confirm_cash')
         with allure.step("申请邮箱验证码"):
-            operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailbtn')
+            operate_element_web(chrome_driver, 'assetPage', 'dialog_withdrawconfirm_mfa_fiat')
         with allure.step("通过email获取邮箱验证码"):
             code = ApiFunction.get_email_code(type='MFA_EMAIL')
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailcode', 'input', code)
