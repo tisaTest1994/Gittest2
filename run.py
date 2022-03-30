@@ -40,7 +40,7 @@ connect_headers = get_json()['connect'][get_json()['env']]['bybit']['Headers']
 
 class sessions(requests.Session):
     def request(self, *args, **kwargs):
-        kwargs.setdefault('timeout', 3)
+        kwargs.setdefault('timeout', 10)
         return super(sessions, self).request(*args, **kwargs)
 
 

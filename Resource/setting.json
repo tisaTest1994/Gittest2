@@ -1,4 +1,9 @@
 {
+  "2B": {
+    "fixed_product": "eaa5595d-745e-11ec-ae7e-0a3898443cb8",
+    "flexible_product": "eaa55390-745e-11ec-ae7e-0a3898443cb8",
+    "mirana_account": "5661da70-a84f-4d49-adf0-1e7aebcd2820"
+  },
   "PRIVATE-TOKEN": "tjkst4kHzfDPwyThPoX-",
   "app_package": {
     "pro": "com.cabital.cabital",
@@ -15,6 +20,11 @@
       "url": "https://test.salesforce.com"
     }
   },
+  "cash_list": [
+    "GBP",
+    "EUR",
+    "CHF"
+  ],
   "cfx_book": {
     "1": "BTC-USDT",
     "2": "BTC-ETH",
@@ -295,22 +305,13 @@
     "USDT",
     "ETH"
   ],
-  "cash_list": [
-    "GBP",
-    "EUR",
-    "CHF"
-  ],
-  "show_list": ["USD", "GBP", "EUR"],
-  "websocket": {
-    "url": "wss://api.latibac.com/api/v1/realtime/ws"
-  },
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
-    "email": "richard.wan@cabital.com",
-    "payout_email": "external.qa@cabital.com",
     "earn_email": "mrt1@cabital.com",
+    "email": "richard.wan@cabital.com",
     "host": "imap.gmail.com",
     "password": "Zcdsw123",
+    "payout_email": "external.qa@cabital.com",
     "port": "993",
     "secretKey": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY",
     "security_code": "xbbhjajvnhxckmre",
@@ -453,6 +454,11 @@
   "pro": "https://api.cabital.com/api/v1",
   "secretKey": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
   "secretKeyForTest": " ",
+  "show_list": [
+    "USD",
+    "GBP",
+    "EUR"
+  ],
   "slackUrl": "https://hooks.slack.com/services/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",
   "test": "https://api.latibac.com/api/v1",
   "transaction_type": {
@@ -472,14 +478,12 @@
     "test": {
       "account": "richard.wan@cabital.com",
       "account2": "yanting.huang@cabital.com",
+      "code": "666666",
       "password": "Zcdsw123",
-      "url": "https://portal.latibac.com/",
-      "code": "666666"
+      "url": "https://portal.latibac.com/"
     }
   },
-  "2B": {
-    "fixed_product": "eaa5595d-745e-11ec-ae7e-0a3898443cb8",
-    "flexible_product": "eaa55390-745e-11ec-ae7e-0a3898443cb8",
-    "mirana_account": "5661da70-a84f-4d49-adf0-1e7aebcd2820"
+  "websocket": {
+    "url": "wss://api.latibac.com/api/v1/realtime/ws"
   }
 }

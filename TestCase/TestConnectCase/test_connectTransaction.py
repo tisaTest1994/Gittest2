@@ -167,6 +167,7 @@ class TestConnectTransactionApi:
                 connect_headers['ACCESS-NONCE'] = nonce
             with allure.step("获取合作方的配置"):
                 r = session.request('GET', url='{}/config'.format(self.url), headers=connect_headers)
+                print(r.json())
                 for i in r.json()['currencies']:
                     if i['config']['debit']['allow']:
                         with allure.step("获得otp"):
@@ -181,6 +182,7 @@ class TestConnectTransactionApi:
                                 'direction': 'DEBIT',
                                 'external_id': generate_string(15)
                             }
+                            print(data)
                         with allure.step("验签"):
                             unix_time = int(time.time())
                             nonce = generate_string(30)

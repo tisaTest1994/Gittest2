@@ -589,7 +589,6 @@ class TestAccountApi:
             code = ApiFunction.get_verification_code('FORGET_PASSWORD', account)
         with allure.step("验证忘记密码邮件"):
             ApiFunction.verify_verification_code('FORGET_PASSWORD', account, code)
-        ApiFunction.add_headers()
 
     @allure.title('test_account_033')
     @allure.description('开启MFA且验证code')
@@ -600,7 +599,6 @@ class TestAccountApi:
             code = ApiFunction.get_verification_code('ENABLE_MFA', account)
         with allure.step("开启MFA且验证code"):
             ApiFunction.verify_verification_code('ENABLE_MFA', account, code)
-        ApiFunction.add_headers()
 
     @allure.title('test_account_034')
     @allure.description('关闭MFA且验证code')
@@ -611,7 +609,6 @@ class TestAccountApi:
             code = ApiFunction.get_verification_code('DISABLE_MFA', account)
         with allure.step("关闭MFA且验证code"):
             ApiFunction.verify_verification_code('DISABLE_MFA', account, code)
-        ApiFunction.add_headers()
 
     @allure.title('test_account_035')
     @allure.description('MFA且验证code')
@@ -622,7 +619,6 @@ class TestAccountApi:
             code = ApiFunction.get_verification_code('MFA_EMAIL', account)
         with allure.step("MFA且验证code"):
             ApiFunction.verify_verification_code('MFA_EMAIL', account, code)
-        ApiFunction.add_headers()
 
     @allure.title('test_account_036')
     @allure.description('多次referal注册用户')
