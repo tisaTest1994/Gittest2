@@ -79,7 +79,6 @@ class TestDepositApi:
                     if y in i:
                         with allure.step('换汇'):
                             transaction = ApiFunction.cfx_random(i, i.split('-')[0])
-                        sleep(3)
                         with allure.step("获得otp"):
                             secretKey = get_json()['email']['secretKey']
                             totp = pyotp.TOTP(secretKey)
@@ -93,7 +92,6 @@ class TestDepositApi:
                                 'external_id': generate_string(15),
                                 'conversion_id': transaction['returnJson']['transaction']['transaction_id']
                             }
-                            print(data)
                         with allure.step("验签"):
                             unix_time = int(time.time())
                             nonce = generate_string(30)
@@ -104,7 +102,7 @@ class TestDepositApi:
                             connect_headers['ACCESS-SIGN'] = sign
                             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                             connect_headers['ACCESS-NONCE'] = nonce
-                        with allure.step("把BTC从cabital转移到bybit账户并且关联C+T交易"):
+                        with allure.step("把数字货币从cabital转移到bybit账户并且关联C+T交易"):
                             r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                                 data=json.dumps(data), headers=connect_headers, timeout=10)
                         with allure.step("状态码和返回值"):
