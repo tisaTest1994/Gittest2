@@ -21,12 +21,12 @@ class TestAccountingApi:
             line_info = OperateExcel.get_excel_sheet_row('Cash Wallet', i)
             print(line_info)
             with allure.step("账户状态"):
-                if '正常' in str(line_info[16]).split(':')[1]:
+                if '正常' in str(line_info[16]):
                     status = 1
                 else:
                     status = 2
             with allure.step("是否可透支"):
-                if 'YES' in str(line_info[15]).split(':')[1]:
+                if 'Yes' in str(line_info[15]):
                     allow_overdraft = 1
                 else:
                     allow_overdraft = 2
