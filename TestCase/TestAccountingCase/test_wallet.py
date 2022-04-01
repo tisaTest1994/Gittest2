@@ -19,7 +19,7 @@ class TestAccountingApi:
     def test_accounting_002(self):
         for i in range(1, OperateExcel.get_excel_sheet_all_row_number('Cash Wallet')):
             line_info = OperateExcel.get_excel_sheet_row('Cash Wallet', i)
-            sql = "select * from wallet where wallet_name = {};".format(str(line_info[3]).split(':')[1])
+            sql = "select * from wallet where wallet_name = {} and code = {};".format(str(line_info[3]).split(':')[1], str(line_info[5]).split(':')[1])
             info = sqlFunction().connect_mysql('wallet', sql=sql)
             print(info[0])
             print(info[0]['code'])
