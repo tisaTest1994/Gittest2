@@ -39,7 +39,7 @@ class TestAccountingApi:
                     balance_direction = 2
                 else:
                     balance_direction = 1
-            sql = "select * from wallet where wallet_name = {} and code = {} and account_code = {} and status = {} and account_type = {} and allow_overdraft = {} and balance_direction = {};".format(str(line_info[3]).split(':')[1], str(line_info[5]).split(':')[1], int(str(line_info[9]).split(':')[1]), status, account_type, allow_overdraft, balance_direction)
+            sql = "select * from wallet where wallet_name = {} and code = {} and account_code = {} and status = {} and account_type = {} and allow_overdraft = {} and balance_direction = {};".format(str(line_info[3]).split(':')[1], str(line_info[5]).split(':')[1], int(float(str(line_info[9]).split(':')[1])), status, account_type, allow_overdraft, balance_direction)
             info = sqlFunction().connect_mysql('wallet', sql=sql)
             print(info[0])
             print(info[0]['code'])
