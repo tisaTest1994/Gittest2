@@ -20,7 +20,7 @@ class TestAccountApi:
                        ('ffa1b49e-46f6-47b3-8ea6-2c41bac6b6ed', 'CREATED'),
                        ('bacf2b3e-6599-44f4-adf6-c4c13ff40946', 'MATCHING'),
                        ('b7ff2c76-5dae-4ea3-bb42-4b355357072a', 'MISMATCHED'),
-                       ('3fde17f5f-f7a7-4230-8963-89c2303039e', 'UNLINKED'),
+                       ('3fde7f5f-f7a7-4230-8963-89c2303039e0', 'UNLINKED'),
                        ]
 
     case_title = ['test_accounts_matched 账户关联同名验证通过，完全开通同账户转账',
