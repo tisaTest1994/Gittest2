@@ -23,7 +23,8 @@
   "cash_list": [
     "GBP",
     "EUR",
-    "CHF"
+    "CHF",
+    "BRL"
   ],
   "cfx_book": {
     "1": "BTC-USDT",
