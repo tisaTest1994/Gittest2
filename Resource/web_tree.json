@@ -195,7 +195,8 @@
     "header-desktop-menu-item-CB284": "id",
     "mainpage_menu_account": "id",
     "account-nickname": "id",
-    "account_menu_connect_Bybit": "id"
+    "account_menu_connect_Bybit": "id",
+    "kyc_result_back": "id"
   },
 
   "BybitPage": {
@@ -224,7 +225,9 @@
     "EUR" : "data-value",
     "convert_buy_select" : "id",
     "convert_buy_input" : "id",
-    "convert_btn_submit" : "id",
-    "dialog_convert_max" : "id"
+    "dialog_convert_convert" : "id",
+    "dialog_convert_max" : "id",
+    "mainpage_menu_buysell" : "id",
+    "convert_check_myasset" : "id"
   }
 }

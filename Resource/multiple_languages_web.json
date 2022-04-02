@@ -152,6 +152,7 @@
   "CB424": "Bank Name",
   "CB425": "Bank Address",
   "CB426": "Successfully Copied",
+  "CB453": "The withdrawal address format is wrong. Please check the withdrawal address length and character content and try again.",
   "CB455": "Withdrawal Fee",
   "CB456": "Product",
   "CB457": "{0} Balance",
@@ -430,7 +431,7 @@
   "WE107": "You've 0 Settled Fixed Savings",
   "WE108": "Select deposit currency",
   "WE109": "Select payment method",
-  "WE110": "Select the deposit account and transfer {0} to the account for deposit",
+  "WE110": "Select the deposit account and transfer {0} to the account for deposit.",
   "WE111": "Confirm network",
   "WE112": "Send crypto to the address below",
   "WE113": "Please send ONLY {0} on network of {1} to this address.",
@@ -471,7 +472,7 @@
   "WE148": "Conversion Succeeded",
   "WE149": "Conversion Failed",
   "WE150": "Your wallet is empty, time to ",
-  "WE151": "verify your identity and win 10 USDT in rewards.",
+  "WE151": "verify your identity and win 10 USDT in rewards.\n",
   "WE152": "You have 0 Flexible Savings",
   "WE153": "You have 0 Fixed Savings",
   "WE154": "If your Status has been in the \"Connecting\" stage for more than 24 hours, please review your Verification Status on",
@@ -504,5 +505,6 @@
   "WE181": "or drop us a message at",
   "WE182": "if you have any questions or concerns. ",
   "WE183": "Buy & Sell",
-  "WE184": "Check My Assets"
+  "WE184": "Check My Assets",
+  "WE185": "Transfer {0} to your Cabital account below for deposit."
 }
