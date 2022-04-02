@@ -702,3 +702,39 @@ class TestPayoutApi:
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json()['code'] == '103036', "EUR法币提现使用不支持的国家错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_036')
+    @allure.description('BRL支持银行列表')
+    def test_payout_036(self):
+        with allure.step("开启法币提现画面"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+            params = {
+                'code': 'CHF'
+            }
+            r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
+            account_name = r.json()['name_list']
+        with allure.step("法币提现"):
+            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+            secretKey = get_json()['secretKey']
+            totp = pyotp.TOTP(secretKey)
+            mfaVerificationCode = totp.now()
+            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+            data = {
+                "code": "CHF",
+                "amount": "2.61",
+                "payment_method": "SEPA",
+                "account_name": account_name[0],
+                "iban": "BE09967206444557",
+                "bic": "ITHOMTM2"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['code'] == '103036', "EUR法币提现使用不支持的国家错误，返回值是{}".format(r.text)

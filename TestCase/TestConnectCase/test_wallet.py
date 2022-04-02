@@ -259,3 +259,6 @@ class TestWalletApi:
                                 bank_accounts_mobile = r.json()['bank_accounts'][0]
                                 del bank_accounts_mobile['header']
                                 assert bank_accounts_mobile == bank_accounts, "moblie接口一致性查询错误，返回值是{}".format(r.text)
+
+
+
