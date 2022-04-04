@@ -34,7 +34,7 @@ class TestAccountApi:
                   'test_accounts_unlinked 同用户/Cabital主动关闭与合作方的某账户关联',
                   ]
 
-    @allure.testcase('https://whimsical.com/connect-RvyvBQf9aZhV55KqNEALHy', name='点击，跳转对应测试用例的链接地址')
+    @allure.testcase('https://whimsical.com/connect-RvyvBQf9aZhV55KqNEALHy', name='点击，跳转测试用例的链接地址')
     @pytest.mark.flaky(reruns=2, reruns_delay=3)  # 遇到失败的用例重跑2次，每次间隔3s
     @pytest.mark.parametrize('account_id,expect_status', connect_account, ids=case_title)
     def test_connect_status_check(self, account_id, expect_status):
