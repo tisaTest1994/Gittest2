@@ -160,7 +160,7 @@ class TestPayInApi:
         with allure.step("Plaid 转出币种限制"):
             balance_list = get_json()['cash_list']
             for i in balance_list:
-                if i != 'CHF':
+                if i != 'CHF' and i != 'BRL':
                     r = session.request('GET', url='{}/pay/plaid/limit/{}'.format(env_url, i), headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))

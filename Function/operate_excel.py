@@ -4,7 +4,7 @@ import os
 
 class OperateExcel:
 
-    path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/Accounting_Route_Configuration.xlsx'
+    path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/Accounting Route Configuration.xlsx'
 
     # 获取excel sheet names
     @staticmethod
