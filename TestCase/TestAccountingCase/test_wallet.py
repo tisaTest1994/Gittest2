@@ -45,4 +45,4 @@ class TestAccountingApi:
                     print(list(info))
                     if not list(info):
                         error_list.append(sql)
-        print(list)
+        print(error_list)
