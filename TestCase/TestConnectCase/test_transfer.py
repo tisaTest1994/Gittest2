@@ -218,7 +218,7 @@ class TestConnectTransactionApi:
             assert r.json()['message'] == 'this account kyc is not passed'
 
     @allure.description('账户操作相关--获取账户可用余额列表')
-    @allure.title('test_wallet_balances_006 kyc状态CREATED-查询可用余额列表）')  # kyc状态CREATED-查询可用余额列表
+    @allure.title('test_wallet_balances_007 kyc状态CREATED-查询可用余额列表）')  # kyc状态CREATED-查询可用余额列表
     def test_wallet_balances_007(self):
         with allure.step("测试用户的account_id"):
             account_id = 'ffa1b49e-46f6-47b3-8ea6-2c41bac6b6ed'
@@ -241,7 +241,7 @@ class TestConnectTransactionApi:
             assert r.json()['balances'] is not None
 
     @allure.description('账户操作相关--获取账户可用余额列表')
-    @allure.title('test_wallet_balances_007 kyc状态MATCHING-查询可用余额列表）')  # kyc状态MATCHING-查询可用余额列表
+    @allure.title('test_wallet_balances_008 kyc状态MATCHING-查询可用余额列表）')  # kyc状态MATCHING-查询可用余额列表
     def test_wallet_balances_008(self):
         with allure.step("测试用户的account_id"):
             account_id = 'bacf2b3e-6599-44f4-adf6-c4c13ff40946'
@@ -264,7 +264,7 @@ class TestConnectTransactionApi:
             assert r.json()['balances'] is not None
 
     @allure.description('账户操作相关--获取账户可用余额列表')
-    @allure.title('test_wallet_balances_008 kyc状态MISMATCHED-查询可用余额列表）')  # kyc状态CREATED-查询可用余额列表
+    @allure.title('test_wallet_balances_009 kyc状态MISMATCHED-查询可用余额列表）')  # kyc状态CREATED-查询可用余额列表
     def test_wallet_balances_009(self):
         with allure.step("测试用户的account_id"):
             account_id = 'b7ff2c76-5dae-4ea3-bb42-4b355357072a'
@@ -287,7 +287,7 @@ class TestConnectTransactionApi:
             assert r.json()['balances'] is not None
 
     @allure.description('账户操作相关--获取账户可用余额列表')
-    @allure.title('test_wallet_balances_009 kyc状态UNLINKED-查询可用余额列表）')  # kyc状态CREATED-查询可用余额列表
+    @allure.title('test_wallet_balances_010 kyc状态UNLINKED-查询可用余额列表）')  # kyc状态CREATED-查询可用余额列表
     def test_wallet_balances_010(self):
         with allure.step("测试用户的account_id"):
             account_id = '3fde7f5f-f7a7-4230-8963-89c2303039e0'
@@ -311,7 +311,7 @@ class TestConnectTransactionApi:
             assert r.json()['message'] == 'this account kyc is not passed'
 
     @allure.description('账户操作相关--获取账户可用余额列表')
-    @allure.title('test_wallet_balances_010 检查cabital账户可用余额列表与bybit账户可用余额验证一致）')
+    @allure.title('test_wallet_balances_011 检查cabital账户可用余额列表与bybit账户可用余额验证一致）')
     def test_wallet_balances_011(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
@@ -345,11 +345,12 @@ class TestConnectTransactionApi:
 
     @allure.description('账户操作相关--获取账户可用余额列表')
     @allure.title('test_wallet_balances_012 获取账户可用余额单币(有资金）')
-    def test_wallet_balances_011(self):
+    def test_wallet_balances_012(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("获得balance list"):
             balance_list = ApiFunction.balance_list()
+            print(balance_list)
         with allure.step("循环获取单币种"):
             for i in balance_list:
                 print(i)
@@ -366,15 +367,22 @@ class TestConnectTransactionApi:
                     r = session.request('GET', url='{}/accounts/{}/balances/{}'.format(self.url, account_id, i),
                                         headers=connect_headers)
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                    if r.status_code == 200:
+                        assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                    else:
+                        raise Exception("查看币种list列表是否新增", balance_list)
                 with allure.step("校验返回值"):
-                    assert r.json()['balance'] is not None, "账户可用余额列表错误，返回值是{}".format(r.text)
+                    if r.json()['balance'] is None:
+                        print('接口返回值', r.json())
+                    else:
+                        assert r.json()['balance'] is not None, "账户可用余额列表错误，返回值是{}".format(r.text)
+
                 with allure.step("通过mobile接口获取金额"):
                     mobile_balance = ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_AVAILABLE',
                                                                    wallet_type='BALANCE')
                 with allure.step("获取的金额和通过mobile接口获取的金额对比"):
                     logger.info('balance接口返回值是{}'.format(str(r.text)))
-                    logger.info("balances=>> 期望结果:{}{},"
+                    logger.info("balances=>> 期望结果:{} {},"
                                 "实际结果:【币种{} 可用余额：{}】".format(i, mobile_balance, i, r.json()['balance']['balances']))
                 assert float(mobile_balance) == float(r.json()['balance'][
                                                           'balances'])
@@ -401,7 +409,10 @@ class TestConnectTransactionApi:
                                         url='{}/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id, i, ''),
                                         headers=connect_headers)
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                    if r.status_code == 200:
+                        assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                    else:
+                        raise Exception(("查看币种list列表是否新增", cash_list), ('接口返回', r.json()))
                 with allure.step("校验返回值"):
                     logger.info('接口返回值是{}'.format(str(r.text)))
                     if i == 'GBP':
@@ -847,6 +858,7 @@ class TestConnectTransactionApi:
                                                                                                r1.json()['message']))
                             assert r1.json()['code'] == 'PA003'
                         sleep(30)
+
     @allure.description('账户操作相关--划转')
     @allure.title('test_connect_transaction_002 划转金额amount字段检查（金额错误）')
     def test_connect_transaction_002(self):
@@ -1069,7 +1081,7 @@ class TestConnectTransactionApi:
                             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                         with allure.step("校验返回值"):
                             assert r.json()['code'] == 'PA999', "把{}从cabital转移到bybit账户错误，返回值是{}".format(i['symbol'],
-                                                                                      r.text)
+                                                                                                        r.text)
                         sleep(30)
 
     @allure.description('账户操作相关--划转')
@@ -1763,6 +1775,7 @@ class TestConnectTransactionApi:
                             balance_latest), "把{}从cabital转移到bybit账户错误，转移前balance是{},转移后balance是{}".format(i['symbol'],
                                                                                                           balance_old,
                                                                                                           balance_latest)
+
     @allure.description('账户操作相关--划转')
     @allure.title('test_connect_transaction_019 从cabital转移到bybit账户并且关联C+T交易')
     def test_connect_transaction_019(self):
