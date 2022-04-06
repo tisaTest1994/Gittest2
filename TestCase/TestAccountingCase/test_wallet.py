@@ -43,6 +43,7 @@ class TestAccountingApi:
                         str(line_info[3]).split(':')[1], str(line_info[5]).split(':')[1], int(float(str(line_info[9]).split(':')[1])), status, allow_overdraft, balance_direction, wallet_subType)
                     info = sqlFunction().connect_mysql('wallet', sql=sql)
                     print(info)
-                    if info is None:
+                    
+                    if info == '()':
                         list.append(sql)
         print(list)
