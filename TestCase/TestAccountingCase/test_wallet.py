@@ -42,7 +42,6 @@ class TestAccountingApi:
                                 int(float(str(line_info[9]).split(':')[1])), status, allow_overdraft, balance_direction,
                                 wallet_subType)
                             info = sqlFunction().connect_mysql('wallet', sql=sql)
-                            print(list(info))
                             if not list(info):
                                 error_list.append({y: sql})
-
+        print(error_list)
