@@ -44,3 +44,4 @@ class TestAccountingApi:
                     info = sqlFunction().connect_mysql('wallet', sql=sql)
                     if info is None:
                         list.append(sql)
+        print(list)
