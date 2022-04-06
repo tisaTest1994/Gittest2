@@ -172,25 +172,34 @@ class TestPayoutApi:
     @allure.title('test_payout_011 预校验法币提现')
     @allure.description('预校验法币提现')
     def test_payout_011(self):
-        with allure.step("法币提现获得信息"):
-            for i in get_json()['cash_list']:
+        cash_list = get_json()['cash_list']
+        for i in cash_list:
+            with allure.step("法币提现获得信息"):
                 data = {
                     "code": i,
-                    "amount": "5000"
+                    "amount": "5000",
+                    'method': 'LOCAL',
                 }
-                r = session.request('POST', url='{}/pay/withdraw/fiat/verification'.format(env_url), data=json.dumps(data), headers=headers)
+                r = session.request('POST', url='{}/pay/withdraw/fiat/verification'.format(env_url),
+                                    data=json.dumps(data),
+                                    headers=headers)
+                ApiFunction.add_headers()
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
+                logger.info('接口返回值是{}'.format(str(r.text)))
+                logger.info(" 期望结果:法币fee[GBP 2.5; EUR 2.5;CHF 4.5;BRL 3.6];实际结果:fee【{} {}】".format(i, r.json()['fee']['amount']))
                 assert r.json()['fee']['code'] == i, "预校验法币提现错误，返回值是{}".format(r.text)
-                if i == 'EUR':
+                if i not in cash_list:
+                    raise Exception(("查看法币列表是否新增", cash_list), ('接口返回', r.json()))
+                elif i == 'GBP':
                     assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
-                if i == 'EUR':
+                elif i == 'EUR':
                     assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
-                if i == 'EUR':
-                    assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
-                if i == 'EUR':
-                    assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
+                elif i == 'CHF':
+                    assert r.json()['fee']['amount'] == '4.5', "预校验法币提现错误，返回值是{}".format(r.text)
+                elif i == 'BRL':
+                    assert r.json()['fee']['amount'] == '3.6', "预校验法币提现错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_012 获得法币提现币种')
     @allure.description('获得法币提现币种')
