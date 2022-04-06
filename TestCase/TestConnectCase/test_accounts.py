@@ -34,7 +34,8 @@ class TestAccountApi:
                   'test_accounts_unlinked 同用户/Cabital主动关闭与合作方的某账户关联',
                   ]
 
-    @allure.testcase('https://whimsical.com/connect-RvyvBQf9aZhV55KqNEALHy', name='点击，跳转对应测试用例的链接地址')
+    @allure.description('账户关联相关--kyc状态检查')
+    @allure.testcase('https://whimsical.com/connect-RvyvBQf9aZhV55KqNEALHy', name='点击，跳转测试用例的链接地址')
     @pytest.mark.flaky(reruns=2, reruns_delay=3)  # 遇到失败的用例重跑2次，每次间隔3s
     @pytest.mark.parametrize('account_id,expect_status', connect_account, ids=case_title)
     def test_connect_status_check(self, account_id, expect_status):
@@ -61,6 +62,7 @@ class TestAccountApi:
             assert r.json()['account_status'] == expect_status
             logging.info("********************结束执行用例********************")
 
+    @allure.description('账户关联相关--otp状态检查')
     @allure.title('test_opt_check_001 同名账户关联成功，otp状态true检查')
     def test_otp_status_true(self):
         with allure.step("测试用户的account_id"):
@@ -83,6 +85,7 @@ class TestAccountApi:
             logger.info("otp_status ==>> 期望结果:True,实际结果:【{}】".format(r.json()['otp_ready']))
             assert r.json()['otp_ready'] is True
 
+    @allure.description('账户关联相关--otp状态检查')
     @allure.title('test_opt_check_002 同名账户关联成功，otp状态false检查')
     def test_otp_status_false(self):
         with allure.step("测试用户的account_id"):
@@ -105,6 +108,7 @@ class TestAccountApi:
             logger.info("otp_status ==>> 期望结果:False,实际结果:【{}】".format(r.json()['otp_ready']))
             assert r.json()['otp_ready'] is False
 
+    @allure.description('账户关联相关--同名验证')
     @allure.title('test_information_success_001关联同名账户验证匹配成功')
     # @pytest.mark.skip(reason='match只能一次')
     def test_information_match_check_success(self):
@@ -140,6 +144,7 @@ class TestAccountApi:
             else:
                 pass
 
+    @allure.description('账户关联相关--同名验证')
     @allure.title('test_information_match_fail_001关联同名账户信息MATCHED状态重复提交')
     @pytest.mark.skip(reason='待测试账号验证')
     def test_information_match_fail_001(self):
@@ -172,6 +177,7 @@ class TestAccountApi:
             logger.info("match_status==>> 期望结果:PA026 重复提交KYC信息,实际结果:【{}】".format(r.json()['code']))
             assert r.json()['code'] == 'PA026'
 
+    @allure.description('账户关联相关--同名验证')
     @allure.title('test_information_match_fail_002关联同名账户验证匹配失败，用户名字不合法')
     @pytest.mark.skip(reason='待测试账号验证')
     def test_information_match_fail_002(self):
@@ -204,6 +210,7 @@ class TestAccountApi:
             logger.info("match_status==>> 期望结果:PA023	用户名字不合法,实际结果:【{}】".format(r.json()['code']))
             assert r.json()['code'] == 'PA023'
 
+    @allure.description('账户关联相关--同名验证')
     @allure.title('test_information_match_fail_003关联同名账户验证失败，用户ID号码不合法')
     @pytest.mark.skip(reason='待测试账号验证')
     def test_information_match_fail_003(self):
@@ -236,6 +243,7 @@ class TestAccountApi:
             logger.info("match_status==>> 期望结果:A024 用户ID号码不合法,实际结果:【{}】".format(r.json()['code']))
             assert r.json()['code'] == 'PA024'
 
+    @allure.description('账户关联相关--同名验证')
     @allure.title('test_information_match_fail_004关联同名账户验证失败，IdDocument不合法')
     @pytest.mark.skip(reason='待测试账号验证')
     def test_information_match_fail_004(self):
@@ -268,6 +276,7 @@ class TestAccountApi:
             logger.info("match_status==>> 期望结果:PA016	IdDocument不合法,实际结果:【{}】".format(r.json()['code']))
             assert r.json()['code'] == 'PA016'
 
+    @allure.description('账户关联相关--同名验证')
     @allure.title('test_information_match_fail_005关联同名账户验证失败，CountryCode不合法')
     @pytest.mark.skip(reason='待测试账号验证')
     def test_information_match_fail_005(self):
@@ -300,6 +309,7 @@ class TestAccountApi:
             logger.info("match_status==>> 期望结果:PA017	CountryCode不合法,实际结果:【{}】".format(r.json()['code']))
             assert r.json()['code'] == ' PA017 '
 
+    @allure.description('账户关联相关--同名验证')
     @allure.title('test_information_match_fail_006关联同名账户验证失败，dob不合法')
     @pytest.mark.skip(reason='待测试账号验证')
     def test_information_match_fail_006(self):
