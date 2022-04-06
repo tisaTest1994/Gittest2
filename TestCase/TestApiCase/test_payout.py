@@ -95,22 +95,30 @@ class TestPayoutApi:
     @allure.title('test_payout_006')
     @allure.description('获取提现费率和提现限制')
     def test_payout_006(self):
-        with allure.step("获取提现费率和提现限制"):
-            data = {
-                "amount": "0.11",
-                "code": "ETH",
-                "address": "0x623089BFb1dc2d3023Ba4bd0f42F61d66826994eu",
-                "method": "ERC20"
-            }
-            r = session.request('POST', url='{}/pay/withdraw/verification'.format(env_url), data=json.dumps(data),
-                                headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['code'] == 'ETH', "获取提现费率和提现限制错误，返回值是{}".format(r.text)
+        crypto_list=get_json()['crypto_list']
+        for i in crypto_list:
+            with allure.step("获取提现费率和提现限制"):
+                data = {
+                    "amount": "0.11",
+                    "code": i,
+                    "address": "0x623089BFb1dc2d3023Ba4bd0f42F61d66826994eu",
+                    "method": "ERC20"
+                }
+                r = session.request('POST', url='{}/pay/withdraw/verification'.format(env_url), data=json.dumps(data),
+                                    headers=headers)
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                logger.info('接口返回值是{}'.format(str(r.text)))
+                logger.info(" 期望结果:数字货币fee[BTC 0.0006; USDT 12;ETH  0.004];实际结果:fee【{} {}】".format(i, r.json()['fee']))
+                if i not in crypto_list:
+                    raise Exception(("查看法币列表是否新增", crypto_list), ('接口返回', r.json()))
+                elif i == 'BTC':
+                    assert r.json()['fee'] == '0.0006'
+                elif i == 'USDT':
+                    assert r.json()['fee'] == '12'
+                elif i == 'ETH':
+                    assert r.json()['fee'] == '0.004'
 
     @allure.title('test_payout_008')
     @allure.description('查询提现详情')
@@ -189,17 +197,16 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 logger.info('接口返回值是{}'.format(str(r.text)))
                 logger.info(" 期望结果:法币fee[GBP 2.5; EUR 2.5;CHF 4.5;BRL 3.6];实际结果:fee【{} {}】".format(i, r.json()['fee']['amount']))
-                assert r.json()['fee']['code'] == i, "预校验法币提现错误，返回值是{}".format(r.text)
                 if i not in cash_list:
                     raise Exception(("查看法币列表是否新增", cash_list), ('接口返回', r.json()))
                 elif i == 'GBP':
-                    assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
+                    assert r.json()['fee']['amount'] == '2.5'
                 elif i == 'EUR':
-                    assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
+                    assert r.json()['fee']['amount'] == '2.5'
                 elif i == 'CHF':
-                    assert r.json()['fee']['amount'] == '4.5', "预校验法币提现错误，返回值是{}".format(r.text)
+                    assert r.json()['fee']['amount'] == '4.5'
                 elif i == 'BRL':
-                    assert r.json()['fee']['amount'] == '3.6', "预校验法币提现错误，返回值是{}".format(r.text)
+                    assert r.json()['fee']['amount'] == '3.6'
 
     @allure.title('test_payout_012 获得法币提现币种')
     @allure.description('获得法币提现币种')
