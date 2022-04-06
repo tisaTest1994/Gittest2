@@ -173,21 +173,24 @@ class TestPayoutApi:
     @allure.description('预校验法币提现')
     def test_payout_011(self):
         with allure.step("法币提现获得信息"):
-            data = {
-                "code": "EUR",
-                "amount": "5000"
-            }
-            r = session.request('POST', url='{}/pay/withdraw/fiat/verification'.format(env_url), data=json.dumps(data),
-                                headers=headers)
-            ApiFunction.add_headers()
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['fee']['code'] == 'EUR', "预校验法币提现错误，返回值是{}".format(r.text)
-            assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
+            for i in get_json()['cash_list']:
+                data = {
+                    "code": i,
+                    "amount": "5000"
+                }
+                r = session.request('POST', url='{}/pay/withdraw/fiat/verification'.format(env_url), data=json.dumps(data), headers=headers)
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['fee']['code'] == i, "预校验法币提现错误，返回值是{}".format(r.text)
+                if i == 'EUR':
+                    assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
+                if i == 'EUR':
+                    assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
+                if i == 'EUR':
+                    assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
+                if i == 'EUR':
+                    assert r.json()['fee']['amount'] == '2.5', "预校验法币提现错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_012 获得法币提现币种')
     @allure.description('获得法币提现币种')
@@ -706,35 +709,22 @@ class TestPayoutApi:
     @allure.title('test_payout_036')
     @allure.description('BRL支持银行列表')
     def test_payout_036(self):
-        with allure.step("开启法币提现画面"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
-            params = {
-                'code': 'CHF'
-            }
-            r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
-            account_name = r.json()['name_list']
-        with allure.step("法币提现"):
-            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
-            data = {
-                "code": "CHF",
-                "amount": "2.61",
-                "payment_method": "SEPA",
-                "account_name": account_name[0],
-                "iban": "BE09967206444557",
-                "bic": "ITHOMTM2"
-            }
-            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
-                                headers=headers)
-            with allure.step("状态码和返回值"):
-                logger.info('状态码是{}'.format(str(r.status_code)))
-                logger.info('返回值是{}'.format(str(r.text)))
-            with allure.step("校验状态码"):
-                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-            with allure.step("校验返回值"):
-                assert r.json()['code'] == '103036', "EUR法币提现使用不支持的国家错误，返回值是{}".format(r.text)
+        with allure.step("BRL支持银行列表"):
+            r = session.request('GET', url='{}/pay/banks/{}'.format(env_url, 'BRL'), headers=headers)
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['banks'] is not None, "BRL支持银行列表错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_037')
+    @allure.description('获取用户提现白名单')
+    def test_payout_037(self):
+        with allure.step("获取用户提现白名单"):
+            r = session.request('GET', url='{}/pay/user-whitelist'.format(env_url), headers=headers)
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['name_list'] is not None, "获取用户提现白名单错误，返回值是{}".format(r.text)
+
+
+
