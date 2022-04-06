@@ -117,8 +117,8 @@ class TestPayoutApi:
                     assert r.json()['fee'] == '0.0006'
                 elif i == 'USDT':
                     assert r.json()['fee'] == '12'
-                elif i == 'ETH':
-                    assert r.json()['fee'] == '0.004'
+                elif i == 'BRL':
+                    assert r.json()['ETH'] == '0.004'
 
     @allure.title('test_payout_008')
     @allure.description('查询提现详情')
