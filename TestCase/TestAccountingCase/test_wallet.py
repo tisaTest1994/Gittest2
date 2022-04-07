@@ -16,8 +16,8 @@ class TestAccountingApi:
         error_list = []
         for y in OperateExcel.get_excel_sheet_names():
             if 'Wallet' in y:
-                for i in range(1, OperateExcel.get_excel_sheet_all_row_number('Cash Wallet')):
-                    line_info = OperateExcel.get_excel_sheet_row('Cash Wallet', i)
+                for i in range(1, OperateExcel.get_excel_sheet_all_row_number(y)):
+                    line_info = OperateExcel.get_excel_sheet_row(y, i)
                     with allure.step("判断是否需要"):
                         if 'Yes' in str(line_info[17]):
                             with allure.step("账户状态"):
