@@ -537,18 +537,6 @@ class ApiFunction:
         r = session.request('GET', url='{}/txn/cfx/codes'.format(env_url))
         for i in ApiFunction.balance_list():
             for y in r.json()['codes'][i]:
-                cfx_list.append('{}-{}'.format(i, y))
-        for z in cfx_list:
-            cfx_list.remove('{}-{}'.format(z.split('-')[1], z.split('-')[0]))
-        return cfx_list
-
-    # 获得全部换汇币种对的list
-    @staticmethod
-    def get_cfx_list():
-        cfx_list = []
-        r = session.request('GET', url='{}/txn/cfx/codes'.format(env_url))
-        for i in ApiFunction.balance_list():
-            for y in r.json()['codes'][i]:
                 if y != 'BRL':
                     cfx_list.append('{}-{}'.format(i, y))
         for z in cfx_list:
