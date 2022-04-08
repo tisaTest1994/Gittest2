@@ -29,7 +29,7 @@ class TestAccountingApi:
                                 if 'Yes' in str(line_info[15]):
                                     allow_overdraft = 1
                                 else:
-                                    allow_overdraft = 2
+                                    allow_overdraft = 0
                             with allure.step("借贷关系"):
                                 if 'Debit' in str(line_info[13]).split(':')[1]:
                                     balance_direction = 2
