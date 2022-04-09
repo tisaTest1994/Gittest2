@@ -50,3 +50,44 @@ class TestKycApi:
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['code'] == '002012', "通过kyc的用户，获取kyc上传token错误，返回值是{}".format(r.text)
+
+    @allure.title('test_kyc_003')
+    @allure.description('获取用户补充信息, 补充信息为空')
+    def test_kyc_003(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei33@163.com')
+        with allure.step("获取用户必填的KYC数据，获取数据为空"):
+            r = session.request('GET', url='{}/account/additional/info'.format(env_url), headers=headers)
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['additionalInfos'] == {}, "获取用户补充信息, 补充信息为空失败，返回值是{}".format(r.text)
+
+    @allure.title('test_kyc_004')
+    @allure.description('获取用户补充信息, 补充信息不为空')
+    def test_kyc_004(self):
+        with allure.step("获取用户必填的KYC数据，获取数据为空"):
+            r = session.request('GET', url='{}/account/additional/info'.format(env_url), headers=headers)
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['additionalInfos']['PHONE'] == '+5512345678901', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(r.text)
+            assert r.json()['additionalInfos']['TAX_ID'] == '111.222.333-44', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(
+                r.text)
+            assert r.json()['additionalInfos']['CAPITUAL_ACCOUNT_NAME'] == 'Wan yilei', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(
+                r.text)
+
+    @allure.title('test_kyc_005')
+    @allure.description('获取用户补充信息, 补充信息为空')
+    def test_kyc_005(self):
+        with allure.step("获取用户必填的KYC数据，获取数据为空"):
+            r = session.request('GET', url='{}/account/additional/info'.format(env_url), headers=headers)
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['additionalInfos']['PHONE'] == '+5512345678901', "获取用户必填的KYC数据，获取数据为空失败，返回值是{}".format(r.text)
+            assert r.json()['additionalInfos']['TAX_ID'] == '111.222.333-44', "获取用户必填的KYC数据，获取数据为空失败，返回值是{}".format(
+                r.text)
+            assert r.json()['additionalInfos']['CAPITUAL_ACCOUNT_NAME'] == 'Wan yilei', "获取用户必填的KYC数据，获取数据为空失败，返回值是{}".format(
+                r.text)
+
+

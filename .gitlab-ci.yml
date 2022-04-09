@@ -65,16 +65,16 @@ AccountingTest:
       - Reports
     expire_in: 1 week
 
-# KycTest:
-#   stage: test5
-#   tags:
-#     - python
-#   script:
-#     - python run.py kyc test
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
+KycTest:
+  stage: test5
+  tags:
+    - python
+  script:
+    - python run.py kyc test
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
 
 
 # WebTest:

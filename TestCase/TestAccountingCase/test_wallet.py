@@ -12,6 +12,8 @@ class TestAccountingApi:
     def setup_method(self):
         pass
 
+    @allure.title('test_accounting_001')
+    @allure.description('wallet 验证')
     def test_accounting_001(self):
         error_list = []
         for y in OperateExcel.get_excel_sheet_names():
@@ -47,6 +49,5 @@ class TestAccountingApi:
                             info = sqlFunction().connect_mysql('wallet', sql=sql)
                             if not list(info):
                                 error_list.append({y: sql})
-        print(error_list)
-        if error_list is not None:
+        if not error_list:
             assert False, 'error list 是{}'.format(error_list)
