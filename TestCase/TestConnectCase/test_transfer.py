@@ -353,7 +353,6 @@ class TestConnectTransactionApi:
             print(balance_list)
         with allure.step("循环获取单币种"):
             for i in balance_list:
-                print(i)
                 with allure.step("验签"):
                     unix_time = int(time.time())
                     nonce = generate_string(30)
@@ -370,7 +369,8 @@ class TestConnectTransactionApi:
                     if r.status_code == 200:
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                     else:
-                        raise Exception("查看币种list列表是否新增", balance_list)
+                        assert r.status_code == 400
+                        raise Exception("查看币种list列表是否新增币种", i)
                 with allure.step("校验返回值"):
                     if r.json()['balance'] is None:
                         print('接口返回值', r.json())
@@ -408,11 +408,11 @@ class TestConnectTransactionApi:
                     r = session.request('GET',
                                         url='{}/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id, i, ''),
                                         headers=connect_headers)
+                if i not in cash_list:
+                    raise Exception(("查看币种list列表是否新增", i), ('接口返回', r.json()))
                 with allure.step("校验状态码"):
                     if r.status_code == 200:
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-                    else:
-                        raise Exception(("查看币种list列表是否新增", cash_list), ('接口返回', r.json()))
                 with allure.step("校验返回值"):
                     logger.info('接口返回值是{}'.format(str(r.text)))
                     if i == 'GBP':
@@ -424,6 +424,9 @@ class TestConnectTransactionApi:
                     elif i == 'CHF':
                         logger.info("期望结果:CHF SIC，实际结果:默认【{} {}】".format(i, r.json()['method']))
                         assert r.json()['method'] == 'SIC'
+                    # elif i == 'BRL':
+                    #     #BRL暂时不支持
+                    #     assert r.json()['code'] == 'PA019'
 
     @allure.description('账户操作相关--获取账户单币入账信息')
     @allure.title('test_deposit_method_002 获取账户单币入账信息, 入币方式SEPA')
