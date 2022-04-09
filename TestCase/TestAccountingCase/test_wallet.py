@@ -47,5 +47,6 @@ class TestAccountingApi:
                             info = sqlFunction().connect_mysql('wallet', sql=sql)
                             if not list(info):
                                 error_list.append({y: sql})
+        print(error_list)
         if error_list is not None:
             assert False, 'error list 是{}'.format(error_list)
