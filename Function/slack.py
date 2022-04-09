@@ -28,7 +28,7 @@ def get_test_result():
 
 # 和slack交互
 def slack_report(type):
-    sleep(2)
+    sleep(3)
     slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
     result = get_test_result()
     id = get_job_id(type)
@@ -88,6 +88,9 @@ def get_job_id(type):
                 id_list.append(i['id'])
         elif type == 'web':
             if i['name'] == 'WebTest':
+                id_list.append(i['id'])
+        elif type == 'accounting':
+            if i['name'] == 'AccountingTest':
                 id_list.append(i['id'])
     return id_list[0]
 
