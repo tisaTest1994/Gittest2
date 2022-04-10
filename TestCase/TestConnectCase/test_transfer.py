@@ -350,42 +350,37 @@ class TestConnectTransactionApi:
             account_id = get_json()['email']['accountId']
         with allure.step("获得balance list"):
             balance_list = ApiFunction.balance_list()
-            print(balance_list)
         with allure.step("循环获取单币种"):
             for i in balance_list:
-                with allure.step("验签"):
-                    unix_time = int(time.time())
-                    nonce = generate_string(30)
-                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
-                                                        url='/api/v1/accounts/{}/balances/{}'.format(account_id, i),
-                                                        nonce=nonce)
-                    connect_headers['ACCESS-SIGN'] = sign
-                    connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                    connect_headers['ACCESS-NONCE'] = nonce
-                with allure.step("账户可用余额列表"):
-                    r = session.request('GET', url='{}/accounts/{}/balances/{}'.format(self.url, account_id, i),
-                                        headers=connect_headers)
-                with allure.step("校验状态码"):
-                    if r.status_code == 200:
-                        assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-                    else:
-                        assert r.status_code == 400
-                        raise Exception("查看币种list列表是否新增币种", i)
-                with allure.step("校验返回值"):
-                    if r.json()['balance'] is None:
-                        print('接口返回值', r.json())
-                    else:
-                        assert r.json()['balance'] is not None, "账户可用余额列表错误，返回值是{}".format(r.text)
-
-                with allure.step("通过mobile接口获取金额"):
-                    mobile_balance = ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_AVAILABLE',
-                                                                   wallet_type='BALANCE')
-                with allure.step("获取的金额和通过mobile接口获取的金额对比"):
-                    logger.info('balance接口返回值是{}'.format(str(r.text)))
-                    logger.info("balances=>> 期望结果:{} {},"
-                                "实际结果:【币种{} 可用余额：{}】".format(i, mobile_balance, i, r.json()['balance']['balances']))
-                assert float(mobile_balance) == float(r.json()['balance'][
-                                                          'balances'])
+                if i != 'BRL':
+                    with allure.step("验签"):
+                        unix_time = int(time.time())
+                        nonce = generate_string(30)
+                        sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                            url='/api/v1/accounts/{}/balances/{}'.format(account_id, i),
+                                                            nonce=nonce)
+                        connect_headers['ACCESS-SIGN'] = sign
+                        connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                        connect_headers['ACCESS-NONCE'] = nonce
+                    with allure.step("账户可用余额列表"):
+                        r = session.request('GET', url='{}/accounts/{}/balances/{}'.format(self.url, account_id, i),
+                                            headers=connect_headers)
+                    with allure.step("校验状态码"):
+                        if r.status_code == 200:
+                            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                        else:
+                            assert r.status_code == 400
+                            assert r.json()['code'] == 'PA015'
+                            # raise Exception("查看币种list列表是否新增币种", i)
+                    with allure.step("通过mobile接口获取金额"):
+                        mobile_balance = ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_AVAILABLE',
+                                                                       wallet_type='BALANCE')
+                    with allure.step("获取的金额和通过mobile接口获取的金额对比"):
+                        logger.info('balance接口返回值是{}'.format(str(r.text)))
+                        logger.info("balances=>> 期望结果:{} {},"
+                                    "实际结果:【币种{} 可用余额：{}】".format(i, mobile_balance, i, r.json()['balance']['balances']))
+                        assert float(mobile_balance) == float(r.json()['balance'][
+                                                                  'balances'])
 
     @allure.description('账户操作相关--获取账户单币入账信息')
     @allure.title('test_deposit_method_001 获取账户单币入账信息, 入币方式缺失，使用默认')
@@ -802,6 +797,7 @@ class TestConnectTransactionApi:
             logger.info(" 期望结果: ,实际结果:【{}】".format(r.json()['transfer_id']))
             assert r.json()['transfer_id'] is not None
 
+    @pytest.mark.flaky(reruns=2, reruns_delay=3)  # 遇到失败的用例重跑2次，每次间隔3s
     @allure.description('账户操作相关--划转')
     @allure.title('test_connect_transaction_001 划转金额amount字段检查（小于单笔最小限额）')
     def test_connect_transaction_001(self):
@@ -862,6 +858,7 @@ class TestConnectTransactionApi:
                             assert r1.json()['code'] == 'PA003'
                         sleep(30)
 
+    @pytest.mark.flaky(reruns=2, reruns_delay=3)  # 遇到失败的用例重跑2次，每次间隔3s
     @allure.description('账户操作相关--划转')
     @allure.title('test_connect_transaction_002 划转金额amount字段检查（金额错误）')
     def test_connect_transaction_002(self):
@@ -1780,6 +1777,7 @@ class TestConnectTransactionApi:
                                                                                                           balance_latest)
 
     @allure.description('账户操作相关--划转')
+    @pytest.mark.flaky(reruns=2, reruns_delay=3)  # 遇到失败的用例重跑2次，每次间隔3s
     @allure.title('test_connect_transaction_019 从cabital转移到bybit账户并且关联C+T交易')
     def test_connect_transaction_019(self):
         with allure.step("测试用户的account_id"):
@@ -1820,12 +1818,20 @@ class TestConnectTransactionApi:
                             logger.info('状态码是{}'.format(str(r.status_code)))
                             logger.info('返回值是{}'.format(str(r.text)))
                         with allure.step("校验状态码"):
-                            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-                        with allure.step("校验返回值"):
-                            assert r.json()['status'] == 'SUCCESS', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(
-                                r.text)
-                            sleep(30)
+                            if r.status_code == 200:
+                                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                            else:
+                                assert r.status_code == 400
 
+                        with allure.step("校验返回值"):
+                            if r.status_code == 200:
+                                assert r.json()['status'] == 'SUCCESS', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(
+                                r.text)
+                            else:
+                                assert r.json()['code'] == 'PA031'
+                                sleep(30)
+
+    @pytest.mark.flaky(reruns=2, reruns_delay=3)  # 遇到失败的用例重跑2次，每次间隔3s
     @allure.description('账户操作相关--划转')
     @allure.title('test_connect_transaction_020从cabital转移到bybit账户并且关联C+T交易，Direct Debit的金额大于cfx交易的金额')
     def test_connect_transaction_020(self):

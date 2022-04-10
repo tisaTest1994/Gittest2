@@ -528,6 +528,7 @@ class ApiFunction:
     def balance_list():
         crypto_list = get_json()['crypto_list']
         cash_list = get_json()['cash_list']
+        # print(crypto_list + cash_list)
         return crypto_list + cash_list
 
     # 获得全部换汇币种对的list
@@ -537,11 +538,12 @@ class ApiFunction:
         r = session.request('GET', url='{}/txn/cfx/codes'.format(env_url))
         for i in ApiFunction.balance_list():
             for y in r.json()['codes'][i]:
-                # if y != 'BRL' and 'VND':
-                cfx_list.append('{}-{}'.format(i, y))
+                # if y != 'BRL' or 'VND':
+                    cfx_list.append('{}-{}'.format(i, y))
         for z in cfx_list:
             cfx_list.remove('{}-{}'.format(z.split('-')[1], z.split('-')[0]))
         return cfx_list
+
 
     # 换汇
     @staticmethod
