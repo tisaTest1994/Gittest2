@@ -1,3 +1,5 @@
+import uuid
+
 from Function.api_function import *
 from Function.operate_sql import *
 
@@ -118,11 +120,13 @@ class TestPayInApi:
     @allure.description('GBP法币充值账户信息')
     def test_pay_in_009(self):
         with allure.step("GBP法币充值账户"):
-            r = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'GBP', 'Faster Payments'), headers=headers)
+            r = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'GBP', 'Faster Payments'),
+                                headers=headers)
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['bank_accounts'][0]['account_name'] == 'Cabital Fintech (LT) UAB', "GBP法币充值账户信息错误，返回值是{}".format(r.text)
+                assert r.json()['bank_accounts'][0][
+                           'account_name'] == 'Cabital Fintech (LT) UAB', "GBP法币充值账户信息错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_010')
     @allure.description('EUR法币充值账户信息')
@@ -132,7 +136,8 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['bank_accounts'][0]['account_name'] == 'Cabital Fintech (LT) UAB', "EUR法币充值账户信息错误，返回值是{}".format(r.text)
+                assert r.json()['bank_accounts'][0][
+                           'account_name'] == 'Cabital Fintech (LT) UAB', "EUR法币充值账户信息错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_011')
     @allure.description('CHF法币充值账户信息')
@@ -142,7 +147,8 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['bank_accounts'][0]['account_name'] == 'Cabital Fintech (LT) UAB', "CHF法币充值账户信息错误，返回值是{}".format(r.text)
+                assert r.json()['bank_accounts'][0][
+                           'account_name'] == 'Cabital Fintech (LT) UAB', "CHF法币充值账户信息错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_012')
     @allure.description('BRL法币充值账户信息')
@@ -152,7 +158,8 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['bank_accounts'][0]['account_name'] == 'Cabital Fintech (LT) UAB', "BRL法币充值账户信息错误，返回值是{}".format(r.text)
+                assert r.json()['bank_accounts'][0][
+                           'account_name'] == 'Cabital Fintech (LT) UAB', "BRL法币充值账户信息错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_013')
     @allure.description('Plaid 转出币种限制')
@@ -170,3 +177,82 @@ class TestPayInApi:
                 with allure.step("校验返回值"):
                     assert r.json()['min'] == '1', "Plaid 转出币种限制最小值错误，返回值是{}".format(r.text)
                     assert r.json()['max'] == '5', "Plaid 转出币种限制最大值错误，返回值是{}".format(r.text)
+
+    @allure.title('test_pay_in_014')
+    @allure.description('BRL 创造pay in bank account数据')
+    def test_pay_in_014(self):
+        with allure.step("切换账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+        with allure.step("增加headers验证"):
+            order_id = uuid.uuid1()
+        with allure.step("BRL pay in数据"):
+            data = {
+                "currencyCode": "BRL",
+                "method": "BankAccount",
+                "orderType": "deposit",
+                "requisite": {
+                    "account": "101112345",
+                    "bankCompe": "033",
+                    "bankIspb": "90400888",
+                    "bankName": "Banco Santander (Brasil) S.A. (033)",
+                    "branch": "1234",
+                    "holderDocument": "976.111.142-99",
+                    "holderName": "Richard Wan",
+                    "isSavings": False
+                },
+                "userData": [
+                    {
+                        "birthday": "2022-03-10",
+                        "cpfCnpj": "976.111.142-99",
+                        "document": "976.111.142-99",
+                        "documentExpiry": "2025-01-01",
+                        "documentType": "passport",
+                        "fullName": "Richard Wan"
+                    }
+                ],
+                "userEmail": get_json()['email']['payout_email'],
+                "userPhone": "+5511987654311",
+                "userType": "personal",
+                "value": "12.00"
+            }
+            r = session.request('POST',
+                                url='{}/Partner/Orders/{}'.format(get_json()['sandbox']['BRL']['url'], order_id),
+                                data=(data), auth=(
+                get_json()['sandbox']['BRL']['username'], get_json()['sandbox']['BRL']['password']))
+            print(r.text)
+
+    @allure.title('test_pay_in_015')
+    @allure.description('BRL 创造pay in PixKey数据')
+    def test_pay_in_015(self):
+        with allure.step("切换账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+        with allure.step("增加headers验证"):
+            order_id = uuid.uuid1()
+        with allure.step("BRL pay in数据"):
+            data = {
+                "currencyCode": "BRL",
+                "method": "PixKey",
+                "requisite": {
+                    "keyType": "cpf",
+                    "key": "976.111.142-99"
+                },
+                "orderType": "deposit",
+                "userData": [
+                    {
+                        "cpfCnpj": "976.111.142-99",
+                        "fullName": "Richard Wan"
+                    }
+                ],
+                "userEmail": get_json()['email']['payout_email'],
+                "userNotify": False,
+                "userPhone": "+5511987654311",
+                "userType": "personal",
+                "value": "15.00"
+            }
+            r = session.request('POST',
+                                url='{}/Partner/Orders/{}'.format(get_json()['sandbox']['BRL']['url'], order_id),
+                                data=(data), auth=(
+                get_json()['sandbox']['BRL']['username'], get_json()['sandbox']['BRL']['password']))
+            print(r.text)

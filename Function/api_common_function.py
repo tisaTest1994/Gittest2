@@ -10,6 +10,7 @@ import email
 import chardet
 import logger
 import pyotp
+import base64
 
 
 # 获取当前时间
@@ -314,3 +315,12 @@ def get_mfa_code():
     totp = pyotp.TOTP(secretKey)
     return totp.now()
 
+
+# Basic Auth
+def get_basic_auth(username, password):
+    temp_str = username + ':' + password
+    # 转成bytes string
+    bytesString = temp_str.encode(encoding="utf-8")
+    # base64 编码
+    encode_str = base64.b64encode(bytesString)
+    return 'Basic ' + encode_str.decode()

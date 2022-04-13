@@ -80,7 +80,7 @@ class TestKycApi:
     @allure.description('获取用户补充信息, 补充信息为空')
     def test_kyc_005(self):
         with allure.step("获取用户必填的KYC数据，获取数据为空"):
-            r = session.request('GET', url='{}/account/additional/info'.format(env_url), headers=headers)
+            r = session.request('PUT', url='{}/account/info/kyc/required'.format(env_url), headers=headers)
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
