@@ -324,3 +324,4 @@ def get_basic_auth(username, password):
     # base64 编码
     encode_str = base64.b64encode(bytesString)
     return 'Basic ' + encode_str.decode()
+

@@ -24,8 +24,7 @@
     "GBP",
     "EUR",
     "CHF",
-    "BRL",
-    "VND"
+    "BRL"
   ],
   "cfx_book": {
     "1": "BTC-USDT",
