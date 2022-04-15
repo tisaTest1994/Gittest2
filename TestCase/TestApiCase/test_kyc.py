@@ -84,22 +84,22 @@ class TestKycApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             logger.info(r.text)
-            logger.info("additionalInfos==>> 期望结果:'PHONE'：'+5512345678901,'TAX_ID': '123.123.123-12'"
+            logger.info("additionalInfos==>> 期望结果:'PHONE'：'+5512345678901,'TAX_ID': '026.105.214-48'"
                         "实际结果:【'cpf'{}'PHONE'{}'name'{} 】".format(r.json()['additionalInfos']['TAX_ID'],
                                                                   r.json()['additionalInfos']['PHONE'],
                                                                   r.json()['additionalInfos']['CAPITUAL_ACCOUNT_NAME']))
             assert r.json()['additionalInfos']['PHONE'] == '+5512345678901', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(r.text)
-            assert r.json()['additionalInfos']['TAX_ID'] == '123.123.123-12', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(
+            assert r.json()['additionalInfos']['TAX_ID'] == '026.105.214-48', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(
                 r.text)
             assert r.json()['additionalInfos'][
                        'CAPITUAL_ACCOUNT_NAME'] == 'Wan yilei', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(
                 r.text)
 
-    @allure.title('test_kyc_006 获取用户补充信息，补充信息不为空检查')
+    @allure.title('test_kyc_006 巴西籍用户填写补充信息检查')
     @allure.description('用户kyc已过，补充信息已填写')
     def test_kyc_006(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='lrspg@163.com')
-        with allure.step("获取用户补充信息接口/additional/info"):
+        with allure.step("获取用户补充信息接口/account/additional/info/update"):
             data = {
                 "additionalInfos":
                     {
@@ -108,10 +108,10 @@ class TestKycApi:
                     }
             }
 
-            r = session.request('PUT', url='{}/account/info/kyc/required'.format(env_url), data=json.dumps(data),
+            r = session.request('PUT', url='{}/account/additional/info/update'.format(env_url), data=json.dumps(data),
                                 headers=headers)
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             logger.info(r.text)
-            # assert r.json()
+            assert r.json() == {}
