@@ -432,6 +432,7 @@ class TestConnectTransactionApi:
             cash_list = get_json()['cash_list']
         with allure.step("获取账户单币入账信息"):
             for i in cash_list:
+                print(cash_list)
                 with allure.step("验签"):
                     unix_time = int(time.time())
                     nonce = generate_string(30)
@@ -448,18 +449,18 @@ class TestConnectTransactionApi:
                                         headers=connect_headers)
                 with allure.step('校验返回值'):
                     logger.info('接口返回值是{}'.format(str(r.text)))
-                    if i == 'GBP':
-                        with allure.step("校验状态码"):
-                            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
-                        with allure.step("校验返回值"):
-                            logger.info(" 期望结果: GBP入币方式SEPA错误,错误码PA033，实际结果:【{} {} {}】".format(i, r.json()['code'],
-                                                                                               r.json()['message']))
-                            assert r.json()['code'] == 'PA033', "获取账户单币入账信息, 入币方式SEPA错误，返回值是{}".format(r.text)
-                    elif i == 'EUR':
+                    if i == 'EUR':
                         with allure.step("校验状态码"):
                             logger.info(" 期望结果: EUR SEPA，实际结果:【{}】".format(r.json()))
                             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                             assert r.json()['meta'] is not None
+                    elif i == 'GBP':
+                        with allure.step("校验状态码"):
+                            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+                        with allure.step("校验返回值"):
+                            logger.info(" 期望结果: GBP入币方式SEPA错误,错误码PA019，实际结果:【{} {} {}】".format(i, r.json()['code'],
+                                                                                               r.json()['message']))
+                            assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SEPA错误，返回值是{}".format(r.text)
 
     @allure.description('账户操作相关--获取账户单币入账信息')
     @allure.title('test_deposit_method_003 获取账户单币入账信息, 入币方式Faster Payments')
@@ -491,9 +492,9 @@ class TestConnectTransactionApi:
                             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                         with allure.step("校验返回值"):
                             logger.info(
-                                " 期望结果: EUR入币方式Faster Payments错误,错误码PA033，实际结果:【{} {} {}】".format(i, r.json()['code'],
+                                " 期望结果: EUR入币方式Faster Payments错误,错误码PA019，实际结果:【{} {} {}】".format(i, r.json()['code'],
                                                                                                   r.json()['message']))
-                            assert r.json()['code'] == 'PA033', "获取账户单币入账信息, 入币方式Faster Payments错误，返回值是{}".format(
+                            assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式Faster Payments错误，返回值是{}".format(
                                 r.text)
                     elif i == 'GBP':
                         with allure.step("校验状态码"):
@@ -527,15 +528,15 @@ class TestConnectTransactionApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值GBP"):
-                        logger.info(" 期望结果: GBP入币方式SIC错误,错误码PA033，"
+                        logger.info(" 期望结果: GBP入币方式SIC错误,错误码PA019，"
                                     "实际结果:【{} {} {}】".format(i, r.json()['code'], r.json()['message']))
-                        assert r.json()['code'] == 'PA033', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
+                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
                 elif i == 'EUR':
                     with allure.step("校验返回值EUR"):
-                        logger.info(" 期望结果: EUR入币方式SIC错误,错误码PA033，"
+                        logger.info(" 期望结果: EUR入币方式SIC错误,错误码PA019，"
                                     "实际结果:【{} {} {}】".format(i, r.json()['code'], r.json()['message']))
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
-                        assert r.json()['code'] == 'PA033', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
+                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
                 elif i == 'CHF':
                     with allure.step("校验状态码"):
                         logger.info(" 期望结果: CHF SIC，实际结果:【{}】".format(r.json()))
@@ -568,11 +569,11 @@ class TestConnectTransactionApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值GBP"):
-                        assert r.json()['code'] == 'PA033', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
+                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
                 elif i == 'EUR':
                     with allure.step("校验返回值EUR"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
-                        assert r.json()['code'] == 'PA033', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
+                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
                 elif i == 'CHF':
                     logger.info('返回值是{}'.format(str(r.text)))
                     with allure.step("校验状态码"):
@@ -1792,6 +1793,7 @@ class TestConnectTransactionApi:
                             secretKey = get_json()['email']['secretKey']
                             totp = pyotp.TOTP(secretKey)
                             mfaVerificationCode = totp.now()
+                            print( mfaVerificationCode )
                         with allure.step("获得data"):
                             data = {
                                 'amount': transaction['data']['buy_amount'],
@@ -1951,6 +1953,7 @@ class TestConnectTransactionApi:
             del cfx_book['3']
             for i in cfx_book.values():
                 pair_list = i.split('-')
+                print(i)
                 cfx_dict = {'buy': pair_list[0], 'sell': pair_list[1], 'major_ccy': pair_list[0]}
                 cfx_amount = ApiFunction.cfx_random_number(cfx_dict)
                 data = {
