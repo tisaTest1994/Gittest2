@@ -98,14 +98,14 @@ class TestKycApi:
     @allure.title('test_kyc_006 巴西籍用户填写补充信息检查')
     @allure.description('用户kyc已过，补充信息已填写')
     def test_kyc_006(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='lrspg@163.com')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='C8z5@163.com')
         with allure.step("获取用户补充信息接口/account/additional/info/update"):
             data = {
-                "additionalInfos":
-                    {
-                        "TAX_ID": "123.121.228-89",
-                        "PHONE": "+5510987654334"
-                    }
+                "additionalInfos": {
+                    "TAX_ID": "007.408.869-67",
+                    "PHONE": "+5565478928546",
+                    "CAPITUAL_ACCOUNT_NAME": "Eva zhu"
+                }
             }
 
             r = session.request('PUT', url='{}/account/additional/info/update'.format(env_url), data=json.dumps(data),
@@ -114,4 +114,3 @@ class TestKycApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             logger.info(r.text)
-            assert r.json() == {}
