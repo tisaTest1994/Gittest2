@@ -51,3 +51,11 @@ class TestAccountingApi:
                                 error_list.append({y: sql})
         if not error_list:
             assert False, 'error list 是{}'.format(error_list)
+
+    @allure.title('test_accounting_002')
+    @allure.description('ledge 测试')
+    def test_accounting_002(self):
+        error_list = []
+        for i in range(1, OperateExcel.get_excel_sheet_all_row_number('Accounting Subject')):
+            line_info = OperateExcel.get_excel_sheet_row('Accounting Subject', i)
+            print(line_info)
