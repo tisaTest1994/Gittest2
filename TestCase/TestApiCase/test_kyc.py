@@ -4,6 +4,7 @@ from Function.operate_sql import *
 
 @allure.feature("mobile api kyc 相关 testcases")
 class TestKycApi:
+
     # 初始化class
     def setup_method(self):
         ApiFunction.add_headers()
@@ -54,7 +55,6 @@ class TestKycApi:
     @allure.title('test_kyc_003')
     @allure.description('查询当前用户信息')
     def test_kyc_003(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='richard.wan@cabital.com')
         with allure.step("查询当前用户信息接口/account/info"):
             r = session.request('GET', url='{}/account/info'.format(env_url), headers=headers)
         with allure.step("校验状态码"):
@@ -66,7 +66,7 @@ class TestKycApi:
     @allure.title('test_kyc_004 获取用户补充信息，补充信息为空检查')
     @allure.description('用户kyc已过，补充信息未填写')
     def test_kyc_004(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+310@cabital.com')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+310@cabital.com', password='123456Hyt')
         with allure.step("获取用户补充信息接口/additional/info"):
             r = session.request('GET', url='{}/account/additional/info'.format(env_url), headers=headers)
         with allure.step("校验状态码"):

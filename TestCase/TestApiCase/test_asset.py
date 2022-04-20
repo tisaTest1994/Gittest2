@@ -10,7 +10,6 @@ class TestAssetApi:
         with allure.step("登录客户账户获得后续操作需要的token"):
             ApiFunction.add_headers()
 
-    @pytest.mark.flaky(reruns=2, reruns_delay=3)  # 遇到失败的用例重跑2次，每次间隔3s
     @allure.title('test_asset_001')
     @allure.description('查询每个币种当前资产市值')
     def test_asset_001(self):
@@ -28,7 +27,6 @@ class TestAssetApi:
                     if i == y['code']:
                         assert ApiFunction.get_crypto_abs_amount(i) == y['value'], '{}币种当前资产市值是{},接口返回值是{}.查询每个币种当前资产市值错误'.format(i, ApiFunction.get_crypto_abs_amount(i), y['value'])
 
-    @pytest.mark.flaky(reruns=2, reruns_delay=3)  # 遇到失败的用例重跑2次，每次间隔3s
     @allure.title('test_asset_002')
     @allure.description('获取账户资金状态')
     def test_asset_002(self):

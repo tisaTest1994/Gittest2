@@ -25,9 +25,9 @@ class ApiFunction:
             headers['X-Browser-Key'] = 'yilei_test'
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
         if r.text is None:
-            return "登录获得token错误，返回值是{}".format(r.text)
+            return "login is error, return is {}".format(r.text)
         elif 'accessToken' not in r.text:
-            return "登录获得token错误，返回值是{}".format(r.text)
+            return "login is error, return is {}".format(r.text)
         else:
             return r.json()['accessToken']
 
