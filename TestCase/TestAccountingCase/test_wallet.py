@@ -88,7 +88,7 @@ class TestAccountingApi:
                             parent_code = int(float(str(line_info[8]).split(':')[1]))
                     sql = "select * from accounting_subject where name = {} and code = {} and level = {} and status = {} and category = {} and direction = {} and parent_code = '{}';".format(str(line_info[1]).split(':')[1], int(float(str(line_info[0]).split(':')[1])), int(float(str(line_info[4]).split(':')[1])), status, category, balance_direction, parent_code)
                     info = sqlFunction().connect_mysql('ledger', sql=sql)
-                    print('11111111111111' + info)
+                    print(info)
                     if not list(info):
                         error_list.append(sql)
         print(error_list)
