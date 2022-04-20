@@ -89,4 +89,5 @@ class TestAccountingApi:
                     info = sqlFunction().connect_mysql('ledger', sql=sql)
                     if not list(info):
                         error_list.append(sql)
+        print(error_list)
         assert error_list == [], 'error list 是{}'.format(error_list)
