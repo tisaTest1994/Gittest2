@@ -47,7 +47,7 @@ class TestWebConvert:
                         assert operate_element_web(chrome_driver, '', 'Identity Verification', 'check'), "未跳转至kyc认证页面"
                     with allure.step("点击Back to My Account，返回acccount页面"):
                         operate_element_web(chrome_driver, 'AccountSetPage', 'kyc_result_back')
-                        assert operate_element_web(chrome_driver, '', 'Account Information', 'check'), '未返回account页面'
+                        assert operate_element_web(chrome_driver, '', 'Account Information', 'check'), '未返回acco unt页面'
                 elif i == 2:
                     with allure.step("检查页面提示信息"):
                         assert operate_element_web(chrome_driver, '', 'Verify your identity before convert',
