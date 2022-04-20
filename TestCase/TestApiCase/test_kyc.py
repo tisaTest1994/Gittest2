@@ -9,7 +9,8 @@ class TestKycApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.title('test_kyc_001 通过kyc的用户，获取kyc上传token失败')
+    @allure.title('test_kyc_001')
+    @allure.description('通过kyc的用户，获取kyc上传token失败')
     def test_kyc_001(self):
         with allure.step("随机获得国家代码"):
             citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
@@ -26,7 +27,8 @@ class TestKycApi:
         with allure.step("校验返回值"):
             assert 'Exist pass case.' in r.text, "通过kyc的用户，获取kyc上传token失败错误，返回值是{}".format(r.text)
 
-    @allure.title('test_kyc_002 未通过kyc的用户，获取kyc上传token')
+    @allure.title('test_kyc_002')
+    @allure.description('未通过kyc的用户，获取kyc上传token')
     def test_kyc_002(self):
         account = generate_email()
         password = 'Abc112233'
@@ -63,7 +65,7 @@ class TestKycApi:
             logger.info(r.text)
             assert r.json()['user'] is not None
 
-    @allure.title('test_kyc_004 获取用户补充信息，补充信息为空检查')
+    @allure.title('test_kyc_004')
     @allure.description('用户kyc已过，补充信息未填写')
     def test_kyc_004(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+310@cabital.com', password='123456Hyt')
@@ -75,7 +77,7 @@ class TestKycApi:
             logger.info(r.text)
             assert r.json()['additionalInfos'] == {}, "获取用户补充信息, 补充信息为空失败，返回值是{}".format(r.text)
 
-    @allure.title('test_kyc_005 获取用户补充信息，补充信息不为空检查')
+    @allure.title('test_kyc_005')
     @allure.description('用户kyc已过，补充信息已填写')
     def test_kyc_005(self):
         with allure.step("获取用户补充信息接口/additional/info"):
@@ -95,8 +97,8 @@ class TestKycApi:
                        'CAPITUAL_ACCOUNT_NAME'] == 'Wan yilei', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(
                 r.text)
 
-    @allure.title('test_kyc_006 巴西籍用户填写补充信息检查')
-    @allure.description('用户kyc已过，补充信息已填写')
+    @allure.title('test_kyc_006')
+    @allure.description('巴西籍用户填写补充信息检查，用户kyc已过，补充信息已填写')
     def test_kyc_006(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='C8z5@163.com')
         with allure.step("获取用户补充信息接口/account/additional/info/update"):

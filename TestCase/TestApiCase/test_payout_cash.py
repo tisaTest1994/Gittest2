@@ -207,12 +207,12 @@ class TestPayoutCashApi:
         with allure.step("校验返回值"):
             assert r.json()['txn_id'] is not None, "BRL Bank Transfer提现错误，返回值是{}".format(r.text)
 
-    @allure.title('test_payout_cash_008')
-    @allure.description('BRL withdraw create order - success')
-    def test_payout_cash_008(self):
-        order_id = '31393133-3634-3031-3665-646434393134'
-        status = 'Schedule'
-        status = 'Complete'
-        r = session.request('POST', url='{}/Simulator/{}/{}'.format(get_json()['sandbox']['BRL']['url'], order_id, status), auth=(get_json()['sandbox']['BRL']['username'], get_json()['sandbox']['BRL']['password']))
-        print(r.url)
-        print(r.text)
+    # @allure.title('test_payout_cash_008')
+    # @allure.description('BRL withdraw create order - success')
+    # def test_payout_cash_008(self):
+    #     order_id = '31393133-3634-3031-3665-646434393134'
+    #     status = 'Schedule'
+    #     status = 'Complete'
+    #     r = session.request('POST', url='{}/Simulator/{}/{}'.format(get_json()['sandbox']['BRL']['url'], order_id, status), auth=(get_json()['sandbox']['BRL']['username'], get_json()['sandbox']['BRL']['password']))
+    #     print(r.url)
+    #     print(r.text)
