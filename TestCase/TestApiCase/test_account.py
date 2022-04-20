@@ -857,7 +857,7 @@ class TestAccountApi:
     @allure.title('test_account_045')
     @allure.description('获取用户必填的KYC数据，获取数据为空')
     def test_account_045(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+301@cabital.com')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='KdNXYUK6YK@163.com')
         with allure.step("获取用户必填的KYC数据，获取数据为空"):
             r = session.request('GET', url='{}/account/info/kyc/required'.format(env_url), headers=headers)
         with allure.step("校验状态码"):
