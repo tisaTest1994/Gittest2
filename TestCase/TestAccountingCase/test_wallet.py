@@ -69,7 +69,7 @@ class TestAccountingApi:
                         elif 'PROFIT_AND_LOSS' in str(line_info[5]):
                             category = 4
                         else:
-                            category = 1
+                            category = 0
                     with allure.step("科目状态"):
                         if 'Enable' in str(line_info[6]):
                             status = 1
