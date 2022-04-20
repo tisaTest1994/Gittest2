@@ -49,8 +49,7 @@ class TestAccountingApi:
                             info = sqlFunction().connect_mysql('wallet', sql=sql)
                             if not list(info):
                                 error_list.append({y: sql})
-        if error_list is not None:
-            assert False, 'error list 是{}'.format(error_list)
+        assert error_list == [], 'error list 是{}'.format(error_list)
 
     @allure.title('test_accounting_002')
     @allure.description('ledge 测试')
@@ -88,10 +87,6 @@ class TestAccountingApi:
                             parent_code = int(float(str(line_info[8]).split(':')[1]))
                     sql = "select * from accounting_subject where name = {} and code = {} and level = {} and status = {} and category = {} and direction = {} and parent_code = '{}';".format(str(line_info[1]).split(':')[1], int(float(str(line_info[0]).split(':')[1])), int(float(str(line_info[4]).split(':')[1])), status, category, balance_direction, parent_code)
                     info = sqlFunction().connect_mysql('ledger', sql=sql)
-                    print(info)
-                    if list(info) == ():
-                        print(1232131231321)
+                    if not list(info):
                         error_list.append(sql)
-        print(error_list)
-        if error_list is not None:
-            assert False, 'error list 是{}'.format(error_list)
+        assert error_list == [], 'error list 是{}'.format(error_list)
