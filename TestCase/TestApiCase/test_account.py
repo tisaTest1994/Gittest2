@@ -857,12 +857,13 @@ class TestAccountApi:
     @allure.title('test_account_045')
     @allure.description('获取用户必填的KYC数据，获取数据为空')
     def test_account_045(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei33@163.com')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+301@cabital.com')
         with allure.step("获取用户必填的KYC数据，获取数据为空"):
             r = session.request('GET', url='{}/account/info/kyc/required'.format(env_url), headers=headers)
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
+            logger.info(r.text)
             assert '"registryPurpose":null,' in r.text, "获取用户必填的KYC数据，获取数据为空失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_046')
@@ -887,7 +888,8 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert set(r.json()['missing']) == set(["RESIDENT", "REGISTRY_PURPOSE"]), "获取用户必填的KYC数据，获取全部信息失败，返回值是{}".format(r.text)
+        #     assert r.json()['missing'] == set(["RESIDENT", "REGISTRY_PURPOSE"]), "获取用户必填的KYC数据，获取全部信息失败，返回值是{}".format(r.text)
+            assert r.json()['registryPurpose'][2] is not None, "获取用户必填的KYC数据，获取全部信息失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_048')
     @allure.description('普通referral推广code')

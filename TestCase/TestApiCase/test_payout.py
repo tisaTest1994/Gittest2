@@ -737,6 +737,6 @@ class TestPayoutApi:
             r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data), headers=headers)
             print(r.json())
         with allure.step("校验状态码"):
-            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json() == {}, "预校验BRL提现错误，返回值是{}".format(r.text)
