@@ -311,7 +311,7 @@ class TestAccountApi:
     @allure.title('test_connect_account_010 查询用户otp状态，otp未绑定')
     def test_connect_account_010(self):
         with allure.step("测试用户的account_id"):
-            account_id = 'e19a6fa7-1b7d-4396-a8cf-f641467a910b'
+            account_id = 'eb9659ea-0d95-4f0f-83a3-1152c5a90ee9'
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)

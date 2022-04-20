@@ -91,13 +91,13 @@ class TestWebLogin:
         password = get_json()['web'][get_json()['env']]['password']
         with allure.step("点击Log in with Bybit，跳转至bybit登录页面"):
             operate_element_web(chrome_driver, 'loginPage', 'login_partner')
-            assert operate_element_web(chrome_driver, 'BybitPage', 'log-newui-head-title', 'check')
+            assert operate_element_web(chrome_driver, 'BybitPage', 'bybit_uniframe_header', 'check')
         with allure.step("输入电子邮箱"):
-            operate_element_web(chrome_driver, 'BybitPage', 'username', 'input', account)
+            operate_element_web(chrome_driver, 'BybitPage', 'email', 'input', account)
         with allure.step("输入登录密码"):
             operate_element_web(chrome_driver, 'BybitPage', 'password', 'input', password)
         with allure.step("点击继续"):
-            operate_element_web(chrome_driver, 'BybitPage', 'log-newui-footer-submit')
+            operate_element_web(chrome_driver, 'BybitPage', 'submit')
             sleep(2)
         with allure.step("检查用bybit登录成功"):
             assert operate_element_web(chrome_driver, 'assetPage', 'Cabital Logo', 'check'), '未成功登录'

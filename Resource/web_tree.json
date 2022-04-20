@@ -200,11 +200,10 @@
   },
 
   "BybitPage": {
-    "log-newui-head-title" : "class",
-    "reg-newui-head-title" : "class",
-    "username": "autocomplete",
-    "password": "type",
-    "log-newui-footer-submit": "class",
+    "bybit_uniframe_header" : "class",
+    "email": "name",
+    "password": "name",
+    "submit": "type",
     "reg-newui-footer-submit": "class",
     "btn-default": "class",
     "password": "type",
@@ -229,5 +228,8 @@
     "dialog_convert_max" : "id",
     "mainpage_menu_buysell" : "id",
     "convert_check_myasset" : "id"
+  },
+  "LightMode": {
+    "header": "id"
   }
 }

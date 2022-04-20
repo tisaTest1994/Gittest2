@@ -24,7 +24,7 @@ class webFunction:
         options.add_experimental_option('useAutomationExtension', False)
         # 指定浏览器以无头模式运行
         # 无界面运行
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         if 'mac' in str(platform.platform()):
             driver = WebChrome(executable_path=path + "/../Resource/chromedriver_mac", chrome_options=options, desired_capabilities=DesiredCapabilities.CHROME)
         else:

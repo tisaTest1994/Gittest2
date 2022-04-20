@@ -221,7 +221,6 @@ class TestWebWithdraw:
             assert operate_element_web(chrome_driver, 'assetPage', 'dialog_withdrawconfirm_mfa_fiat', 'check'),\
                 '未弹出withdrawal认证框'
 
-
     @allure.title('test_web_withdraw_cash_007')
     @allure.description('account number规则校验')
     def test_withdraw_cash_007(self, chrome_driver):

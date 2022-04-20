@@ -121,6 +121,9 @@ def operate_element_web(driver, page, element_string, type='click', input_string
         except:
             flag = False
             return flag
+    elif type == 'new_tab':
+        driver.execute_script("window.open(arguments[0])", element_string)
+
     else:
         return driver.find_element_by_xpath('//*[@{}="{}"]'.format(element_type, element_string))
     sleep(1)
