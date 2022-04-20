@@ -64,7 +64,7 @@ class TestAccountingApi:
                             category = 1
                         elif 'LIABILITY' in str(line_info[5]):
                             category = 2
-                        elif 'LIABILITY' in str(line_info[5]):
+                        elif 'EQUITY' in str(line_info[5]):
                             category = 3
                         elif 'PROFIT_AND_LOSS' in str(line_info[5]):
                             category = 4
