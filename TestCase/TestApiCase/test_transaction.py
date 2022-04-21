@@ -66,10 +66,10 @@ class TestTransactionApi:
     @allure.title('test_transaction_004 查询指定Debit详情')
     def test_transaction_004(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-            account=get_json()['email']['payout_email'])
-        transaction_id = 'e18520dd-2853-4961-a323-2c179e8348fe'
+            account='5CDucWnrB@189.com')
+        transaction_id = 'cfe616da-4f1d-4e54-b826-50bc010b1b6a'
         params = {
-            'txn_sub_type': 6
+            'txn_sub_type': 1
         }
         r = session.request('GET', url='{}/txn/{}'.format(env_url, transaction_id), params=params, headers=headers)
         with allure.step("状态码和返回值"):

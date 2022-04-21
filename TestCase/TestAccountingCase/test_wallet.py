@@ -49,6 +49,7 @@ class TestAccountingApi:
                             info = sqlFunction().connect_mysql('wallet', sql=sql)
                             if not list(info):
                                 error_list.append({y: sql})
+        logger.info(error_list)
         assert error_list == [], 'error list 是{}'.format(error_list)
 
     @allure.title('test_accounting_002')
@@ -89,4 +90,5 @@ class TestAccountingApi:
                     info = sqlFunction().connect_mysql('ledger', sql=sql)
                     if not list(info):
                         error_list.append(sql)
+        logger.info(error_list)
         assert error_list == [], 'error list 是{}'.format(error_list)
