@@ -59,36 +59,41 @@ class TestAccountingApi:
         for i in range(1, OperateExcel.get_excel_sheet_all_row_number('Accounting Subject')):
             line_info = OperateExcel.get_excel_sheet_row('Accounting Subject', i)
             with allure.step("判断是否需要"):
-                if "empty:''" not in str(line_info[0]):
-                    with allure.step("科目类别"):
-                        if 'ASSET' in str(line_info[5]):
-                            category = 1
-                        elif 'LIABILITY' in str(line_info[5]):
-                            category = 2
-                        elif 'EQUITY' in str(line_info[5]):
-                            category = 3
-                        elif 'PROFIT_AND_LOSS' in str(line_info[5]):
-                            category = 4
-                        else:
-                            category = 0
-                    with allure.step("科目状态"):
-                        if 'Enable' in str(line_info[6]):
-                            status = 1
-                        else:
-                            status = 2
-                    with allure.step("借贷关系"):
-                        if 'Debit' in str(line_info[7]):
-                            balance_direction = 2
-                        else:
-                            balance_direction = 1
-                    with allure.step("parent_code"):
-                        if "empty:''" in str(line_info[8]):
-                            parent_code = ''
-                        else:
-                            parent_code = int(float(str(line_info[8]).split(':')[1]))
-                    sql = "select * from accounting_subject where name = {} and code = {} and level = {} and status = {} and category = {} and direction = {} and parent_code = '{}';".format(str(line_info[1]).split(':')[1], int(float(str(line_info[0]).split(':')[1])), int(float(str(line_info[4]).split(':')[1])), status, category, balance_direction, parent_code)
-                    info = sqlFunction().connect_mysql('ledger', sql=sql)
-                    if not list(info):
-                        error_list.append(sql)
+                with allure.step("判断是否需要"):
+                    if 'Yes' in str(line_info[9]):
+                        if "empty:''" not in str(line_info[0]):
+                            with allure.step("科目类别"):
+                                if 'ASSET' in str(line_info[5]):
+                                    category = 1
+                                elif 'LIABILITY' in str(line_info[5]):
+                                    category = 2
+                                elif 'EQUITY' in str(line_info[5]):
+                                    category = 3
+                                elif 'PROFIT_AND_LOSS' in str(line_info[5]):
+                                    category = 4
+                                else:
+                                    category = 0
+                            with allure.step("科目状态"):
+                                if 'Enable' in str(line_info[6]):
+                                    status = 1
+                                else:
+                                    status = 2
+                            with allure.step("借贷关系"):
+                                if 'Debit' in str(line_info[7]):
+                                    balance_direction = 2
+                                else:
+                                    balance_direction = 1
+                            with allure.step("parent_code"):
+                                if "empty:''" in str(line_info[8]):
+                                    parent_code = ''
+                                else:
+                                    parent_code = int(float(str(line_info[8]).split(':')[1]))
+                            sql = "select * from accounting_subject where name = {} and code = {} and level = {} and status = {} and category = {} and direction = {} and parent_code = '{}';".format(
+                                str(line_info[1]).split(':')[1], int(float(str(line_info[0]).split(':')[1])),
+                                int(float(str(line_info[4]).split(':')[1])), status, category, balance_direction,
+                                parent_code)
+                            info = sqlFunction().connect_mysql('ledger', sql=sql)
+                            if not list(info):
+                                error_list.append(sql)
         logger.info(error_list)
         assert error_list == [], 'error list 是{}'.format(error_list)
