@@ -701,9 +701,6 @@ class TestFixedApi:
                 'code': "USDT"
             }
             r = session.request('GET', url='{}/earn/fix/transactions'.format(env_url), params=params, headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -725,7 +722,7 @@ class TestFixedApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['update_result'] == True, '更新（打开）某笔交易的复投状态错误, 返回值是{}'.format(r.text)
+                assert r.json()['update_result'] is True, '更新（打开）某笔交易的复投状态错误, 返回值是{}'.format(r.text)
 
     @allure.title('test_fixed_014')
     @allure.description('更新（关闭）某笔交易的复投状态')
@@ -748,7 +745,7 @@ class TestFixedApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['update_result'] == True, '更新（关闭）某笔交易的复投状态错误, 返回值是{}'.format(r.text)
+            assert r.json()['update_result'] is True, '更新（关闭）某笔交易的复投状态错误, 返回值是{}'.format(r.text)
 
     @allure.title('test_fixed_015')
     @allure.description('更新错误交易id的复投状态')

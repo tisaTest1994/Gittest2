@@ -16,6 +16,8 @@ class TestAccountingPayOutOrderApi:
         with allure.step("生成一笔ETH payout订单"):
             transaction_id = ApiFunction.get_payout_transaction_id(amount='0.01', address='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C', code_type='ETH')
             print(transaction_id)
+        with allure.step("通过sql查询movement id"):
+            sql = "select movement_id from movement where transaction_id = {}".format(transaction_id)
 
 
 
