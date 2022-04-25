@@ -114,98 +114,98 @@ class TestPayoutCashApi:
         with allure.step("校验返回值"):
             assert r.json() == {}, "预校验BRL提现错误，返回值是{}".format(r.text)
 
-    @allure.title('test_payout_cash_005')
-    @allure.description('BRL PIX-Bank Account提现')
-    def test_payout_cash_005(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-            account=get_json()['email']['payout_email'])
-        with allure.step("headers信息"):
-            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            #code = '080210'
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
-        with allure.step("法币提现获得信息"):
-            data = {
-                "code": "BRL",
-                "amount": "11",
-                "payment_method": "PIX",
-                "pix_key_type": 2,
-                "cpf": "976.111.142-99",
-                "bank_name": "Banco Santander (Brasil) S.A. (033)",
-                "bank_code": "90400888",
-                "branch_code": "0123",
-                "account_type": 1,
-                "account_name": "Richard External QA",
-                "account_number": "1234567890"
-            }
-            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['txn_id'] is not None, "BRL PIX-Bank Account提现错误，返回值是{}".format(r.text)
-
-    @allure.title('test_payout_cash_006')
-    @allure.description('BRL PIX-CPF提现')
-    def test_payout_cash_006(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-            account=get_json()['email']['payout_email'])
-        with allure.step("headers信息"):
-            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            #code = '907027'
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
-        with allure.step("法币提现获得信息"):
-            data = {
-                "code": "BRL",
-                "amount": "11",
-                "payment_method": "PIX",
-                "pix_key_type": 1,
-                "cpf": "976.111.142-99",
-                "account_name": "Richard External QA",
-            }
-            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['txn_id'] is not None, "BRL PIX-CPF提现错误，返回值是{}".format(r.text)
-
-    @allure.title('test_payout_cash_007')
-    @allure.description('BRL Bank Transfer提现')
-    def test_payout_cash_007(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-            account=get_json()['email']['payout_email'])
-        with allure.step("headers信息"):
-            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            #code = '081375'
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
-        with allure.step("法币提现获得信息"):
-            data = {
-                "code": "BRL",
-                "amount": "12",
-                "payment_method": "Bank Transfer",
-                "cpf": "976.111.142-99",
-                "bank_name": "Banco Santander (Brasil) S.A. (033)",
-                "bank_code": "90400888",
-                "branch_code": "0123",
-                "account_type": 2,
-                "account_name": "Richard External QA",
-                "account_number": "1234567890"
-            }
-            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['txn_id'] is not None, "BRL Bank Transfer提现错误，返回值是{}".format(r.text)
+    # @allure.title('test_payout_cash_005')
+    # @allure.description('BRL PIX-Bank Account提现')
+    # def test_payout_cash_005(self):
+    #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+    #         account=get_json()['email']['payout_email'])
+    #     with allure.step("headers信息"):
+    #         code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+    #         #code = '080210'
+    #         secretKey = get_json()['secretKey']
+    #         totp = pyotp.TOTP(secretKey)
+    #         mfaVerificationCode = totp.now()
+    #         headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+    #         headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+    #     with allure.step("法币提现获得信息"):
+    #         data = {
+    #             "code": "BRL",
+    #             "amount": "11",
+    #             "payment_method": "PIX",
+    #             "pix_key_type": 2,
+    #             "cpf": "976.111.142-99",
+    #             "bank_name": "Banco Santander (Brasil) S.A. (033)",
+    #             "bank_code": "90400888",
+    #             "branch_code": "0123",
+    #             "account_type": 1,
+    #             "account_name": "Richard External QA",
+    #             "account_number": "1234567890"
+    #         }
+    #         r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data), headers=headers)
+    #     with allure.step("校验状态码"):
+    #         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+    #     with allure.step("校验返回值"):
+    #         assert r.json()['txn_id'] is not None, "BRL PIX-Bank Account提现错误，返回值是{}".format(r.text)
+    #
+    # @allure.title('test_payout_cash_006')
+    # @allure.description('BRL PIX-CPF提现')
+    # def test_payout_cash_006(self):
+    #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+    #         account=get_json()['email']['payout_email'])
+    #     with allure.step("headers信息"):
+    #         code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+    #         #code = '907027'
+    #         secretKey = get_json()['secretKey']
+    #         totp = pyotp.TOTP(secretKey)
+    #         mfaVerificationCode = totp.now()
+    #         headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+    #         headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+    #     with allure.step("法币提现获得信息"):
+    #         data = {
+    #             "code": "BRL",
+    #             "amount": "11",
+    #             "payment_method": "PIX",
+    #             "pix_key_type": 1,
+    #             "cpf": "976.111.142-99",
+    #             "account_name": "Richard External QA",
+    #         }
+    #         r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data), headers=headers)
+    #     with allure.step("校验状态码"):
+    #         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+    #     with allure.step("校验返回值"):
+    #         assert r.json()['txn_id'] is not None, "BRL PIX-CPF提现错误，返回值是{}".format(r.text)
+    #
+    # @allure.title('test_payout_cash_007')
+    # @allure.description('BRL Bank Transfer提现')
+    # def test_payout_cash_007(self):
+    #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+    #         account=get_json()['email']['payout_email'])
+    #     with allure.step("headers信息"):
+    #         code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+    #         #code = '081375'
+    #         secretKey = get_json()['secretKey']
+    #         totp = pyotp.TOTP(secretKey)
+    #         mfaVerificationCode = totp.now()
+    #         headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+    #         headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+    #     with allure.step("法币提现获得信息"):
+    #         data = {
+    #             "code": "BRL",
+    #             "amount": "12",
+    #             "payment_method": "Bank Transfer",
+    #             "cpf": "976.111.142-99",
+    #             "bank_name": "Banco Santander (Brasil) S.A. (033)",
+    #             "bank_code": "90400888",
+    #             "branch_code": "0123",
+    #             "account_type": 2,
+    #             "account_name": "Richard External QA",
+    #             "account_number": "1234567890"
+    #         }
+    #         r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data), headers=headers)
+    #     with allure.step("校验状态码"):
+    #         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+    #     with allure.step("校验返回值"):
+    #         assert r.json()['txn_id'] is not None, "BRL Bank Transfer提现错误，返回值是{}".format(r.text)
 
     # @allure.title('test_payout_cash_008')
     # @allure.description('BRL withdraw create order - success')

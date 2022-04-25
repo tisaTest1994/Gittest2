@@ -1,20 +1,18 @@
-import json
-
 from Function.api_function import *
 from Function.operate_excel import *
 from Function.operate_sql import *
 
 
 @allure.feature("accounting 相关 testcases")
-class TestAccountingApi:
+class TestAccountingWalletApi:
 
     # 初始化class
     def setup_method(self):
         pass
 
-    @allure.title('test_accounting_001')
+    @allure.title('test_accounting_wallet_001')
     @allure.description('wallet 验证')
-    def test_accounting_001(self):
+    def test_accounting_wallet_001(self):
         error_list = []
         for y in OperateExcel.get_excel_sheet_names():
             if 'Wallet' in y:
@@ -52,9 +50,9 @@ class TestAccountingApi:
         logger.info(error_list)
         assert error_list == [], 'error list 是{}'.format(error_list)
 
-    @allure.title('test_accounting_002')
-    @allure.description('ledge 测试')
-    def test_accounting_002(self):
+    @allure.title('test_accounting_wallet_002')
+    @allure.description('ledger 测试')
+    def test_accounting_wallet_002(self):
         error_list = []
         for i in range(1, OperateExcel.get_excel_sheet_all_row_number('Accounting Subject')):
             line_info = OperateExcel.get_excel_sheet_row('Accounting Subject', i)

@@ -107,12 +107,9 @@ class TestTransactionApi:
     def test_transaction_006(self):
         data = {
             "pagination_request": {
-                "page_no": 111113,
+                "page_no": 9113,
                 "page_size": 100
-            },
-            "user_txn_sub_types": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-            "statuses": [1, 2, 3, 4],
-            "codes": []
+            }
         }
         with allure.step("web查询很后面页面交易数据为空"):
             r = session.request('POST', url='{}/txn/query/web'.format(env_url), data=json.dumps(data), headers=headers)
