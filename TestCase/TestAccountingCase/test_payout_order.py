@@ -18,7 +18,7 @@ class TestAccountingPayOutOrderApi:
             sleep(10)
             transaction_id = 'f01f782f-b6ce-42be-b4bb-aa1f3504bf47'
         with allure.step("确认 PAYOUT_TXN_STATUS_CREATED 交易"):
-            sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_CREATED'".format(transaction_id)
+            sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN1_STATUS_CREATED'".format(transaction_id)
             movement_id_create = sqlFunction().connect_mysql('wallet', sql=sql)
             print(movement_id_create)
             print(type(movement_id_create))
