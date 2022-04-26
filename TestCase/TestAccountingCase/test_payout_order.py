@@ -18,13 +18,14 @@ class TestAccountingPayOutOrderApi:
             sleep(10)
             transaction_id = 'f01f782f-b6ce-42be-b4bb-aa1f3504bf47'
         with allure.step("确认 PAYOUT_TXN_STATUS_CREATED 交易"):
-            sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN1_STATUS_CREATED'".format(transaction_id)
+            sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_CREATED'".format(transaction_id)
             movement_id_create = sqlFunction().connect_mysql('wallet', sql=sql)
             print(movement_id_create)
-            assert movement_id_create is not None, 'PAYOUT_TXN_STATUS_CREATED冻账失败'
+            print(type(movement_id_create))
+            assert movement_id_create == (), 'PAYOUT_TXN_STATUS_CREATED冻账失败'
 
             #movement_id_list = [{'movement_id': '8e8a3336-bc9a-44a8-9445-e86ab9a5b96b'}, {'movement_id': 'fb547e8a-7f67-41a2-892f-d219d2cb1665'}, {'movement_id': '156db7aa-b244-4f39-a2fa-4e20e297fc23'}]
-        # with allure.step("确认有三个movement id"):
+        # with allure.step("确认有三个movement id"):'
         #     assert len(movement_id_list) == 3, "确认有三个movement id"
         #     for i in movement_id_list:
         #         print(i)
