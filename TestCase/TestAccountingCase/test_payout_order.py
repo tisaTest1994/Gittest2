@@ -24,8 +24,7 @@ class TestAccountingPayOutOrderApi:
         with allure.step("确认 PAYOUT_TXN_STATUS_EXECUTING 内部户"):
             sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_EXECUTING' and offset = 1;".format(transaction_id)
             movement_id = sqlFunction().connect_mysql('wallet', sql=sql)
-            print(movement_id[0]['movement_id'])
-            sql = "select * from internal_balance where movement_id = '{}';".format(movement_id)
+            sql = "select * from internal_balance where movement_id = '{}';".format(movement_id[0]['movement_id'])
             sda = sqlFunction().connect_mysql('wallet', sql=sql)
             print(sda)
 
