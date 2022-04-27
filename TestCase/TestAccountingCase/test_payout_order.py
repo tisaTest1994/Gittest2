@@ -21,13 +21,17 @@ class TestAccountingPayOutOrderApi:
             sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_CREATED';".format(transaction_id)
             movement_id_create = sqlFunction().connect_mysql('wallet', sql=sql)
             assert movement_id_create != (), 'PAYOUT_TXN_STATUS_CREATED冻账失败'
-        with allure.step("确认 PAYOUT_TXN_STATUS_EXECUTING 内部户"):
+        with allure.step("确认 PAYOUT_TXN_STATUS_EXECUTING 内部户转出"):
             sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_EXECUTING' and offset = 1;".format(transaction_id)
             movement_id = sqlFunction().connect_mysql('wallet', sql=sql)
             sql = "select * from internal_balance where movement_id = '{}';".format(movement_id[0]['movement_id'])
-            sda = sqlFunction().connect_mysql('wallet', sql=sql)
-            print(sda)
-
+            movement_id_internal_balance = sqlFunction().connect_mysql('wallet', sql=sql)
+            assert movement_id_internal_balance != (), 'PAYOUT_TXN_STATUS_EXECUTING 内部户转出失败'
+        with allure.step("确认 PAYOUT_TXN_STATUS_EXECUTING 外部户收到"):
+            sql = "select * from client_balance where movement_id = '{}';".format(movement_id[0]['movement_id'])
+            movement_id_client_balance = sqlFunction().connect_mysql('wallet', sql=sql)
+            print(movement_id_client_balance)
+            assert movement_id_client_balance != (), 'PAYOUT_TXN_STATUS_EXECUTING 外部户收到失败'
 
 
 
