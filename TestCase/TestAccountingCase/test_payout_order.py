@@ -14,9 +14,8 @@ class TestAccountingPayOutOrderApi:
     @allure.description('wallet 验证')
     def test_payout_order_001(self):
         with allure.step("生成一笔ETH payout订单"):
-            # transaction_id = ApiFunction.get_payout_transaction_id(amount='0.01', address='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C', code_type='ETH')
-            # sleep(10)
-            transaction_id = 'f01f782f-b6ce-42be-b4bb-aa1f3504bf47'
+            transaction_id = ApiFunction.get_payout_transaction_id(amount='0.01', address='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C', code_type='ETH')
+            sleep(10)
         with allure.step("确认 PAYOUT_TXN_STATUS_CREATED 冻账"):
             sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_CREATED';".format(transaction_id)
             movement_id_create = sqlFunction().connect_mysql('wallet', sql=sql)
@@ -36,8 +35,8 @@ class TestAccountingPayOutOrderApi:
             movement_id = sqlFunction().connect_mysql('wallet', sql=sql)
             sql = "select * from internal_balance where movement_id = '{}';".format(movement_id[0]['movement_id'])
             movement_id_service_charge = sqlFunction().connect_mysql('wallet', sql=sql)
-            print(movement_id_service_charge)
-            print(len(movement_id_service_charge))
+            assert movement_id_service_charge != (), '确认 PAYOUT_TXN_STATUS_EXECUTING 手续费失败'
+            assert len(movement_id_service_charge) == 2, '手续费一借一贷错误'
 
 
 
