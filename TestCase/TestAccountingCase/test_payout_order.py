@@ -30,8 +30,12 @@ class TestAccountingPayOutOrderApi:
         with allure.step("确认 PAYOUT_TXN_STATUS_EXECUTING 外部户收到"):
             sql = "select * from client_balance where movement_id = '{}';".format(movement_id[0]['movement_id'])
             movement_id_client_balance = sqlFunction().connect_mysql('wallet', sql=sql)
-            print(movement_id_client_balance)
             assert movement_id_client_balance != (), 'PAYOUT_TXN_STATUS_EXECUTING 外部户收到失败'
+        with allure.step("确认 PAYOUT_TXN_STATUS_EXECUTING 手续费"):
+            sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_EXECUTING' and offset = 2;".format(transaction_id)
+            movement_id_service_charge = sqlFunction().connect_mysql('wallet', sql=sql)
+            print(movement_id_service_charge)
+            print(len(movement_id_service_charge))
 
 
 
