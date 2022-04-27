@@ -15,7 +15,7 @@ class TestAccountingPayOutOrderApi:
     def test_payout_order_001(self):
         with allure.step("生成一笔ETH payout订单"):
             transaction_id = ApiFunction.get_payout_transaction_id(amount='0.01', address='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C', code_type='ETH')
-            sleep(10)
+            sleep(20)
         with allure.step("确认 PAYOUT_TXN_STATUS_CREATED 冻账"):
             sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_CREATED';".format(transaction_id)
             movement_id_create = sqlFunction().connect_mysql('wallet', sql=sql)
@@ -43,7 +43,7 @@ class TestAccountingPayOutOrderApi:
     def test_payout_order_002(self):
         with allure.step("生成一笔USDT payout订单"):
             transaction_id = ApiFunction.get_payout_transaction_id(amount='10.1', address='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C', code_type='USDT')
-            sleep(10)
+            sleep(20)
         with allure.step("确认 PAYOUT_TXN_STATUS_CREATED 冻账"):
             sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_CREATED';".format(transaction_id)
             movement_id_create = sqlFunction().connect_mysql('wallet', sql=sql)
@@ -71,7 +71,7 @@ class TestAccountingPayOutOrderApi:
     def test_payout_order_003(self):
         with allure.step("生成一笔BTC payout订单"):
             transaction_id = ApiFunction.get_payout_transaction_id(amount='0.01', address='tb1q3fhjd9f0th907cuym9dtyzpy3zu9tn6205jhwm', code_type='BTC')
-            sleep(10)
+            sleep(20)
         with allure.step("确认 PAYOUT_TXN_STATUS_CREATED 冻账"):
             sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_CREATED';".format(transaction_id)
             movement_id_create = sqlFunction().connect_mysql('wallet', sql=sql)
