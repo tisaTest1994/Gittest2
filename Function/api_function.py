@@ -76,7 +76,7 @@ class ApiFunction:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json()['transaction_id'] is not None, "payout币种是{}，金额是{}错误，返回值是{}".format(data['code'], data['amount'], r.text)
-        sleep(30)
+        sleep(60)
         return r.json()['transaction_id']
 
     # 获取下次清算金额
