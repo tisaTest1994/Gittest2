@@ -34,7 +34,7 @@ class TestWebLightMode:
             assert chrome_driver.current_url == 'https://portal.latibac.com/signin'
             webFunction.login_web(chrome_driver)
         with allure.step("判断是否跳转至Buy&Sell页面"):
-            assert chrome_driver.current_url == 'https://portal.latibac.com/convert'
+            assert chrome_driver.current_url == 'https://portal.latibac.com/convert?shortlink=cfjsygbr&launch_date=apr_2022&c=coinex&af_ad=website&pid=non-network&deep_link_value=https://cabital.com&af_channel=partner'
         chrome_driver.close()
         chrome_driver.switch_to.window(handle1)
 
@@ -49,7 +49,7 @@ class TestWebLightMode:
             handle2 = chrome_driver.window_handles[1]
             chrome_driver.switch_to.window(handle2)
         with allure.step("点击Go to Cabital"):
-            chrome_driver.find_element_by_xpath('//*[@id="root"]/div[1]/div[2]/div/button').click()
+            operate_element_web(chrome_driver, 'LightMode', 'header')
         with allure.step("判断是否跳转至Buy&Sell页面"):
             assert chrome_driver.current_url == 'https://portal.latibac.com/convert?shortlink=cfjsygbr&launch_date=apr_2022&c=coinex&af_ad=website&pid=non-network&deep_link_value=https://cabital.com&af_channel=partner'
         chrome_driver.close()
@@ -64,7 +64,7 @@ class TestWebLightMode:
             handle2 = chrome_driver.window_handles[1]
             chrome_driver.switch_to.window(handle2)
         with allure.step("点击Go to Cabital"):
-            chrome_driver.find_element_by_xpath('//*[@id="root"]/div[1]/div[2]/div/button').click()
+            operate_element_web(chrome_driver, 'LightMode', 'header')
         with allure.step("判断是否引导用户到登录页面，并进行登录"):
             assert chrome_driver.current_url == 'https://portal.latibac.com/signin'
             webFunction.login_web(chrome_driver)
@@ -84,7 +84,7 @@ class TestWebLightMode:
             handle2 = chrome_driver.window_handles[1]
             chrome_driver.switch_to.window(handle2)
         with allure.step("点击Go to Cabital"):
-            chrome_driver.find_element_by_xpath('//*[@id="root"]/div[1]/div[2]/div/button').click()
+            operate_element_web(chrome_driver, 'LightMode', 'header')
         with allure.step("判断是否跳转至Buy&Sell页面"):
             assert chrome_driver.current_url == 'https://portal.latibac.com/convert?shortlink=cfjsygbr&launch_date=apr_2022&c=coinex&af_ad=website&pid=non-network&deep_link_value=https://cabital.com&af_channel=partner'
         chrome_driver.close()

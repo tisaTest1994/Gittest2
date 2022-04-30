@@ -146,7 +146,7 @@ class webFunction:
         }
         return {'data': data}
 
-    # web生成随机convert金额
+    # web convert币种切换
     @staticmethod
     def web_convert_select_currency(chrome_driver,buy_currency, sell_currency):
         crypto_list = get_json()['crypto_list']

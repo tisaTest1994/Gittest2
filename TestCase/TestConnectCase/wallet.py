@@ -50,6 +50,14 @@ class TestWalletApi:
             account_id = get_json()['email']['accountId']
         with allure.step("获得balance list"):
             balance_list = ApiFunction.balance_list()
+        with allure.step("从metadata接口获取已开启的币种信息"):
+            fiat_metadata = session.request('GET', url='{}/core/metadata'.format(env_url), headers=headers)
+            fiat_list_metadata = fiat_metadata.json()['currencies']
+            fiat_all_metadata = fiat_list_metadata.keys()
+        with allure.step("如在metada中关闭，则去除"):
+            for i in range(0, len(balance_list)):
+                if balance_list[i] not in fiat_all_metadata:
+                    balance_list.remove(balance_list[i])
         with allure.step("循环获取单币种"):
             for i in balance_list:
                 with allure.step("验签"):
@@ -85,6 +93,14 @@ class TestWalletApi:
             account_id = get_json()['email']['accountId']
         with allure.step("获得法币list"):
             cash_list = get_json()['cash_list']
+        with allure.step("从metadata接口获取已开启的币种信息"):
+            fiat_metadata = session.request('GET', url='{}/core/metadata'.format(env_url), headers=headers)
+            fiat_list_metadata = fiat_metadata.json()['currencies']
+            fiat_all_metadata = fiat_list_metadata.keys()
+        with allure.step("如在metada中关闭，则去除"):
+            for i in range(0, len(cash_list)):
+                if cash_list[i] not in fiat_all_metadata:
+                    cash_list.remove(cash_list[i])
         with allure.step("获取账户单币入账信息"):
             for i in cash_list:
                 with allure.step("验签"):
@@ -117,6 +133,14 @@ class TestWalletApi:
             account_id = get_json()['email']['accountId']
         with allure.step("获得法币list"):
             cash_list = get_json()['cash_list']
+        with allure.step("从metadata接口获取已开启的币种信息"):
+            fiat_metadata = session.request('GET', url='{}/core/metadata'.format(env_url), headers=headers)
+            fiat_list_metadata = fiat_metadata.json()['currencies']
+            fiat_all_metadata = fiat_list_metadata.keys()
+        with allure.step("如在metada中关闭，则去除"):
+            for i in range(0, len(cash_list)):
+                if cash_list[i] not in fiat_all_metadata:
+                    cash_list.remove(cash_list[i])
         with allure.step("获取账户单币入账信息"):
             for i in cash_list:
                 with allure.step("验签"):
@@ -137,7 +161,7 @@ class TestWalletApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert r.json()['code'] == 'PA033', "获取账户单币入账信息, 入币方式SEPA错误，返回值是{}".format(r.text)
+                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SEPA错误，返回值是{}".format(r.text)
                 elif i == 'EUR':
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
@@ -233,12 +257,12 @@ class TestWalletApi:
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert r.json()['code'] == 'PA033', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
+                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
                 elif i == 'EUR':
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
-                        assert r.json()['code'] == 'PA033', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
+                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
                 elif i == 'CHF':
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)

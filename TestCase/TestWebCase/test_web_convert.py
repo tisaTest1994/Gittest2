@@ -99,7 +99,7 @@ class TestWebConvert:
                         operate_element_web(chrome_driver, 'convertPage', 'convert_buy_input', "input", transaction['data']['buy_amount'])
                         
                     with allure.step("点击convert按钮"):
-                        operate_element_web(chrome_driver, 'convertPage', 'convert_btn_submit')
+                        operate_element_web(chrome_driver, 'convertPage', 'dialog_convert_convert')
                         sleep(1)
                     with allure.step("获得换汇后buy币种balance金额"):
                         buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[0])
@@ -135,7 +135,7 @@ class TestWebConvert:
                         transaction = webFunction.web_cfx_random(i, i.split('-')[1])
                         operate_element_web(chrome_driver, 'convertPage', 'convert_sell_input', "input", transaction['data']['sell_amount'])
                     with allure.step("点击convert按钮"):
-                        operate_element_web(chrome_driver, 'convertPage', 'convert_btn_submit')
+                        operate_element_web(chrome_driver, 'convertPage', 'dialog_convert_convert')
                         sleep(1)
                     with allure.step("获得换汇后buy币种balance金额"):
                         buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[0])
@@ -171,7 +171,7 @@ class TestWebConvert:
                                                          i.split('-')[1])
                         operate_element_web(chrome_driver, 'convertPage', 'convert_buy_input', "input", transaction['data']['buy_amount'])
                     with allure.step("点击convert按钮"):
-                        operate_element_web(chrome_driver, 'convertPage', 'convert_btn_submit')
+                        operate_element_web(chrome_driver, 'convertPage', 'dialog_convert_convert')
                         sleep(3)
                     with allure.step("获得换汇后buy币种balance金额"):
                         buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[1])
@@ -207,7 +207,7 @@ class TestWebConvert:
                                                          i.split('-')[0])
                         operate_element_web(chrome_driver, 'convertPage', 'convert_sell_input', "input", transaction['data']['sell_amount'])
                     with allure.step("点击convert按钮"):
-                        operate_element_web(chrome_driver, 'convertPage', 'convert_btn_submit')
+                        operate_element_web(chrome_driver, 'convertPage', 'dialog_convert_convert')
                         sleep(3)
                     with allure.step("获得换汇后buy币种balance金额"):
                         buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[1])

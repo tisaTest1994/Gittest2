@@ -535,8 +535,26 @@ class ApiFunction:
     def get_cfx_list():
         cfx_list = []
         r = session.request('GET', url='{}/txn/cfx/codes'.format(env_url))
-        for i in ApiFunction.balance_list():
-            for y in r.json()['codes'][i]:
+        balance_list = ApiFunction.balance_list()
+        with allure.step("从metadata接口获取已开启的币种信息"):
+            fiat_metadata = session.request('GET', url='{}/core/metadata'.format(env_url), headers=headers)
+            fiat_list_metadata = fiat_metadata.json()['currencies']
+            fiat_all_metadata = fiat_list_metadata.keys()
+        with allure.step("如在metada中关闭，则去除"):
+            for m in range(0, len(balance_list)):
+                if balance_list[m] not in fiat_all_metadata:
+                    balance_list.remove(balance_list[m])
+        for i in balance_list:
+            balance_list2 = r.json()['codes'][i]
+            with allure.step("从metadata接口获取已开启的币种信息"):
+                fiat_metadata = session.request('GET', url='{}/core/metadata'.format(env_url), headers=headers)
+                fiat_list_metadata = fiat_metadata.json()['currencies']
+                fiat_all_metadata = fiat_list_metadata.keys()
+            with allure.step("如在metada中关闭，则去除"):
+                for m in range(0, len(balance_list2)-1):
+                    if balance_list2[m] not in fiat_all_metadata:
+                        balance_list2.remove(balance_list2[m])
+            for y in balance_list2:
                 if y != 'VND':
                     cfx_list.append('{}-{}'.format(i, y))
         for z in cfx_list:

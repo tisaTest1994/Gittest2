@@ -106,7 +106,9 @@ class TestConnectTransactionApi:
     @allure.title('test_connect_transaction_005 没有通过kyc的账户划转列表（不传默认参数）失败')
     def test_connect_transaction_005(self):
         with allure.step("测试用户的account_id"):
+            # richard.wan已过kyc不能用这个账号进行测试，已改成yanting.huang+2@cabital.com
             account_id = get_json()['email']['accountId']
+            account_id = "3ae68e02-ef7f-4a96-93e1-621c1fe8bbdf"
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
@@ -129,7 +131,9 @@ class TestConnectTransactionApi:
     @allure.title('test_connect_transaction_007 账户划转详情使用错误transfer_id')
     def test_connect_transaction_007(self):
         with allure.step("测试用户的account_id"):
-            account_id = 'cbb4568f-ee69-4701-83d4-a6975a852c58'
+            account_id = get_json()['email']['accountId']
+            # 原来的account id不能用（不知道为什么原来用这个account id）
+            # account_id = 'cbb4568f-ee69-4701-83d4-a6975a852c58'
             transfer_id = "f5346953-d422-4c56-846f-779fafd1c2b2"
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -329,6 +333,7 @@ class TestConnectTransactionApi:
                 with allure.step("账户可用余额列表"):
                     r = session.request('POST', url='{}/accounts/{}/conversions'.format(self.url, account_id),
                                         data=json.dumps(data), headers=connect_headers)
+                    logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
@@ -648,3 +653,59 @@ class TestConnectTransactionApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['transfer_id'] == 'f5946953-d422-4c54-846f-789fafd1c2b2', "对账 - 划转交易详情错误，返回值是{}".format(r.text)
+
+    @allure.description("从bybit资金转到cabital")
+    @allure.title('test_connect_transaction_019 direct credit')
+    def test_connect_transaction_019(self):
+        with allure.step("测试用户的account_id"):
+            account_id = get_json()['email']['accountId']
+        with allure.step("从配置接口获取可以划转的数据"):
+            with allure.step("验签"):
+                unix_time = int(time.time())
+                nonce = generate_string(30)
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
+                                                    nonce=nonce)
+                connect_headers['ACCESS-SIGN'] = sign
+                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                connect_headers['ACCESS-NONCE'] = nonce
+            with allure.step("获取合作方的配置"):
+                r = session.request('GET', url='{}/config'.format(self.url), headers=connect_headers)
+                for i in r.json()['currencies']:
+                    if i['config']['debit']['allow']:
+                        with allure.step("账户可用余额列表"):
+                            balance_old = ApiFunction.get_crypto_number(type=i['symbol'])
+                        with allure.step("获得data"):
+                            data = {
+                                'amount': str(Decimal(i['config']['debit']['min'])),
+                                'symbol': i['symbol'],
+                                'direction': 'CREDIT',
+                                'external_id': generate_string(15)
+                            }
+                        with allure.step("验签"):
+                            unix_time = int(time.time())
+                            nonce = generate_string(30)
+                            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                                url='/api/v1/accounts/{}/transfers'.format(account_id),
+                                                                nonce=nonce,
+                                                                body=json.dumps(data))
+                            connect_headers['ACCESS-SIGN'] = sign
+                            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                            connect_headers['ACCESS-NONCE'] = nonce
+                        with allure.step("把数字货币从bybit转移到cabital账户"):
+                            r = session.request('POST',
+                                                url='{}/accounts/{}/transfers'.format(self.url, account_id),
+                                                data=json.dumps(data), headers=connect_headers)
+                        with allure.step("状态码和返回值"):
+                            logger.info('状态码是{}'.format(str(r.status_code)))
+                            logger.info('返回值是{}'.format(str(r.text)))
+                        with allure.step("账户可用余额列表"):
+                            sleep(2)
+                            balance_new = ApiFunction.get_crypto_number(type=i['symbol'])
+                        with allure.step("账户可用余额是否更新"):
+                            assert Decimal(balance_new) == Decimal(balance_old) + Decimal(i['config']['debit']['min']),"金额未更新"
+                        with allure.step("校验状态码"):
+                            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                        with allure.step("校验返回值"):
+                            logger.info(" 期望结果: direction为CREDIT类型返回成功 实际结果:【status:{}】".format(r.json()['status']))
+                            assert r.json()['status'] == 'SUCCESS'
+                        sleep(30)
