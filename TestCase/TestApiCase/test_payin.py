@@ -1,5 +1,3 @@
-import uuid
-
 from Function.api_function import *
 from Function.operate_sql import *
 

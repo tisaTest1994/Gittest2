@@ -443,10 +443,10 @@
       "webhook": "dc_OLu6Edb"
     }
   },
-  "language": "en",
-  "language support": [
-    "zh",
-    "en"
+  "language": "zh-TW",
+  "language_list": [
+    "zh-TW",
+    ""
   ],
   "mysql": {
     "account": "testuser",
