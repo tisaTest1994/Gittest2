@@ -3,7 +3,7 @@ from Function.operate_sql import *
 
 
 @allure.feature("mobile api convert 相关 testcases")
-class TestConvertApi:
+class TestLightModeApi:
 
     # 初始化class
     def setup_method(self):

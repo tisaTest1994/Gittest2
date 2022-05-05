@@ -1,5 +1,3 @@
-import allure
-
 from Function.api_function import *
 from Function.operate_sql import *
 
