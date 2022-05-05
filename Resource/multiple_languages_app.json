@@ -1036,6 +1036,7 @@
   "RF038": "Join a Friend | Cabital",
   "RF039": "Enjoy your new user gift of 20 USDT Bonus and Yield Boost of 12% APY!",
   "WE014": "Connect",
+  "WE020": "Disable",
   "WE022": "Connecting",
   "WE023": "Failed to Connect",
   "WE024": "Connected",
@@ -1050,6 +1051,7 @@
   "WE094": "Transfer Amount",
   "WE095": "{0} Spot Account",
   "WE096": "Assets",
+  "WE106": "{0} Days",
   "WE152": "You have 0 Flexible Savings",
   "WE153": "You have 0 Fixed Savings"
 }

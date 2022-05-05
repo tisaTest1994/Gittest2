@@ -1823,7 +1823,7 @@ class TestConnectTransactionApi:
                                 assert r.json()['status'] == 'SUCCESS', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(
                                 r.text)
                             else:
-                                assert r.json()['code'] == 'PA031'
+                                assert r.json()['code'] == 'PA008'
                                 sleep(30)
 
     @pytest.mark.flaky(reruns=2, reruns_delay=3)  # 遇到失败的用例重跑2次，每次间隔3s

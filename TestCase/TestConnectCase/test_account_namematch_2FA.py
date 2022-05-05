@@ -82,7 +82,8 @@ class TestAccountApi:
                     assert i['status'] == expect_status, "获取partner信息错误，期望状态是{},返回值是{}".format(expect_status, r.text)
         logging.info("-------------------- 结束执行用例 --------------------")
 
-    @allure.title('test_connect_account_002 查询用户otp状态：otp未绑定（2fa disable）')
+    @allure.title('test_connect_account_002')
+    @allure.description('查询用户otp状态：otp未绑定（2fa disable）')
     def test_connect_account_002(self):
         with allure.step("测试用户的account_id"):
             account_id = 'eb9659ea-0d95-4f0f-83a3-1152c5a90ee9'
@@ -103,7 +104,8 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['otp_ready'] is False, "查询用户otp状态，otp未绑定错误，返回值是{}".format(r.text)
 
-    @allure.title('test_connect_account_003 查询用户otp状态：otp已经绑定（2fa enable）')
+    @allure.title('test_connect_account_003')
+    @allure.description('查询用户otp状态：otp已经绑定（2fa enable）')
     def test_connect_account_003(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
@@ -124,18 +126,19 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['otp_ready'] is True, "查询用户otp状态，otp已经绑定错误，返回值是{}".format(r.text)
 
-    @allure.title('test_connect_account_004 成功解绑+name match用户 pass')
+    @allure.title('test_connect_account_004')
+    @allure.description('成功解绑+name match用户 pass')
     @pytest.mark.skip(reason='match只能一次')
     def test_connect_account_04(self):
         with allure.step("准备参数"):
-            account_id = '3e5b1a67-bfd9-4670-a31b-26a47f371fb2'
+            account_id = 'b013327e-ae65-4197-acf6-806f03873f51'
         with allure.step("name match 数据"):
             data = {
-                'name': 'qq2',
-                'id': '1122',
+                'name': 'yanting22 huang33',
+                'id': '235766',
                 'id_document': 'PASSPORT',
                 'issued_by': 'HKG',
-                'dob': '19991111'
+                'dob': '19900201'
 
             }
         with allure.step("验签"):
