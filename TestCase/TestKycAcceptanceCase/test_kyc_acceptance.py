@@ -10,4 +10,4 @@ class TestKycAcceptanceApi:
     def test_e3g_mgt_001(self):
         a = random.random()
         print(a)
-        assert a > 0.3, 'error a={}'.format(a)
+        assert a > 0.9, 'error a={}'.format(a)
