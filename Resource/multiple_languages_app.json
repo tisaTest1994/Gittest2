@@ -913,7 +913,7 @@
   "CB928": "You can now check the cumulative interest earned from Flexible and Fixed Savings products.",
   "CB929": "PIX Supported",
   "CB930": "null",
-  "CB931": "中文 (繁體)",
+  "CB931": "繁體中文",
   "CB932": "Saving Account",
   "CB933": "Checking Account",
   "CB934": "Pull to refresh",
@@ -943,6 +943,7 @@
   "CB958": "We do not support transfers to your connected Bybit account for now. Please go to Bybit and initiate transfer there.",
   "CB959": "FAQ about Bybit transfers",
   "CB960": "SWIFT Code",
+  "CB961": "{0} Day",
   "E000001": "Bad request",
   "E000002": "Not found",
   "E000003": "Method not allowed",
@@ -1036,6 +1037,7 @@
   "RF038": "Join a Friend | Cabital",
   "RF039": "Enjoy your new user gift of 20 USDT Bonus and Yield Boost of 12% APY!",
   "WE014": "Connect",
+  "WE020": "Disable",
   "WE022": "Connecting",
   "WE023": "Failed to Connect",
   "WE024": "Connected",
@@ -1050,6 +1052,7 @@
   "WE094": "Transfer Amount",
   "WE095": "{0} Spot Account",
   "WE096": "Assets",
+  "WE106": "{0} Days",
   "WE152": "You have 0 Flexible Savings",
   "WE153": "You have 0 Fixed Savings"
 }
