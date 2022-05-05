@@ -1,5 +1,3 @@
-import uuid
-
 from Function.api_function import *
 from Function.operate_sql import *
 
@@ -28,15 +26,19 @@ class TestPayInApi:
     @allure.title('test_pay_in_002')
     @allure.description('使用错误币种查询数字货币转入地址')
     def test_pay_in_002(self):
-        with allure.step("查询不到转入记录"):
-            params = {
-                'code': 'US345'
-            }
-            r = session.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=params, headers=headers)
-            with allure.step("校验状态码"):
-                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-            with allure.step("校验返回值"):
-                assert r.json()['code'] == '103003', "使用错误币种查询数字货币转入地址错误，返回值是{}".format(r.text)
+        with allure.step("国际化"):
+            for i in get_json()['language_list']:
+                headers['locale'] = i
+                with allure.step("使用错误币种查询数字货币转入地址"):
+                    params = {
+                        'code': 'US345'
+                    }
+                    r = session.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=params,
+                                        headers=headers)
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    with allure.step("校验返回值"):
+                        assert r.json()['code'] == '103003', "使用错误币种查询数字货币转入地址错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_003')
     @allure.description('使用指定链查询数字货币转入地址')
@@ -65,6 +67,7 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
+                print(r.json())
                 assert r.json()['code'] == '103003', "查询不到转入地址记录（使用错误链查询）错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_005')

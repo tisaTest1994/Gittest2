@@ -444,9 +444,9 @@
     }
   },
   "language": "en",
-  "language support": [
-    "zh",
-    "en"
+  "language_list": [
+    "zh-TW",
+    ""
   ],
   "mysql": {
     "account": "testuser",

@@ -54,7 +54,7 @@ class ApiFunction:
 
     # 提现ETH获取交易id
     @staticmethod
-    def get_payout_transaction_id(amount='0.012', address='0x428DA40C585514022b2eB537950d5AB5C7365a07', code_type='ETH'):
+    def get_payout_transaction_id(amount='0.02', address='0x428DA40C585514022b2eB537950d5AB5C7365a07', code_type='ETH'):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
         code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
         secretKey = get_json()['secretKey']
@@ -62,12 +62,19 @@ class ApiFunction:
         mfaVerificationCode = totp.now()
         headers['X-Mfa-Otp'] = str(mfaVerificationCode)
         headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
-        data = {
-            "amount": amount,
-            "code": code_type,
-            "address": address,
-            "method": "ERC20"
-        }
+        if code_type == 'BTC':
+            data = {
+                "amount": amount,
+                "code": code_type,
+                "address": address,
+            }
+        else:
+            data = {
+                "amount": amount,
+                "code": code_type,
+                "address": address,
+                "method": "ERC20"
+            }
         r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
                             headers=headers)
         with allure.step("状态码和返回值"):
@@ -120,7 +127,6 @@ class ApiFunction:
     @staticmethod
     def get_crypto_abs_amount(type='BTC'):
         r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
-        print(r.json()['wallets'])
         for i in r.json()['wallets']:
             if i['code'] == type:
                 return i['abs_amount']
