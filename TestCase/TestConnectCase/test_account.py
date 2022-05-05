@@ -52,7 +52,6 @@ class TestAccountApi:
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取用户关联状况"):
             r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
-            print(r)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -156,5 +155,6 @@ class TestAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)
+
 
 
