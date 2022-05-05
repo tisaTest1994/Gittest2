@@ -71,7 +71,7 @@ Kyc Acceptance Test:
   tags:
     - python
   script:
-    - python run.py kyc acceptance
+    - python run.py acceptance
   artifacts:
     paths:
       - Reports

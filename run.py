@@ -66,7 +66,7 @@ if __name__ == '__main__':
         pytest.main(['./TestCase/TestWebCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "accounting":
         pytest.main(['./TestCase/TestAccountingCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
-    elif sys.argv[1] == "kyc acceptance":
+    elif sys.argv[1] == "acceptance":
         pytest.main(['./TestCase/TestKycAcceptanceCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     else:
         assert False, 'error 需要传入正确的参数'

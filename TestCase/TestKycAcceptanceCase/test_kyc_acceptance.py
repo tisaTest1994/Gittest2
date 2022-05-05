@@ -6,6 +6,6 @@ from Function.operate_sql import *
 class TestKycAcceptanceApi:
 
     @pytest.mark.flaky(reruns=5, reruns_delay=1)
-    def test_earning_mgt_001(self):
+    def test_e3g_mgt_001(self):
         a = random.random()
         assert a > 0.3, 'error a={}'.format(a)
