@@ -402,8 +402,6 @@ class ApiFunction:
             "type": type
         }
         r = session.request('POST', url='{}/account/verify-code/email'.format(env_url), data=json.dumps(data), headers=headers)
-        logger.info('状态码是{}'.format(str(r.status_code)))
-        logger.info('返回值是{}'.format(str(r.text)))
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json() == {}, "收取验证码失败，返回值是{}".format(r.text)
         sleep_time = 0

@@ -23,7 +23,8 @@
   "cash_list": [
     "GBP",
     "EUR",
-    "CHF"
+    "CHF",
+    "BRL"
   ],
   "cfx_book": {
     "1": "BTC-USDT",
@@ -442,10 +443,10 @@
       "webhook": "dc_OLu6Edb"
     }
   },
-  "language": "en",
+  "language": "en_US",
   "language_list": [
-    "zh-TW",
-    ""
+    "zh_TW",
+    "en_US"
   ],
   "mysql": {
     "account": "testuser",
