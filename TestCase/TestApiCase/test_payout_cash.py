@@ -97,7 +97,7 @@ class TestPayoutCashApi:
         with allure.step("法币提现获得信息"):
             data = {
                 "code": "BRL",
-                "amount": "11",
+                "amount": "21",
                 "payment_method": "PIX",
                 "pix_key_type": 2,
                 "cpf": "976.111.142-99",

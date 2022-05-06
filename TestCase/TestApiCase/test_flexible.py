@@ -296,7 +296,7 @@ class TestFlexibleApi:
                 assert 'Minimum: 0.001 BTC' in r.text, "投资金额小于最小投资BTC数量错误，返回值是{}".format(r.text)
 
     @allure.title('test_flexible_009')
-    @allure.description('投资金额小于最小投资ETH数量')
+    @allure.description('投资金额使用非常小的ETH数量判定无效')
     def test_flexible_009(self):
         with allure.step("获取产品product_id"):
             r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
@@ -321,7 +321,7 @@ class TestFlexibleApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['code'] == 'EARNINGTXN000009', "投资金额小于最小投资ETH数量错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == '104016', "投资金额小于最小投资ETH数量错误，返回值是{}".format(r.text)
 
     @allure.title('test_flexible_010')
     @allure.description('投资金额小于最小投资USDT数量')
@@ -932,7 +932,7 @@ class TestFlexibleApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['code'] == 'EARNINGTXN000042', "快速赎回使用错误product id错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == '104040', "快速赎回使用错误product id错误，返回值是{}".format(r.text)
 
     @allure.title('test_flexible_028')
     @allure.description('快速赎回赎回条件')

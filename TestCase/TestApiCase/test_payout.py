@@ -240,7 +240,7 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "EUR",
-                "amount": "2.61",
+                "amount": "25.61",
                 "payment_method": "SEPA",
                 "account_name": account_name[0],
                 "iban": "BE09967206444557",
@@ -276,7 +276,7 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "GBP",
-                "amount": "2.61",
+                "amount": "25.61",
                 "payment_method": "Faster Payments",
                 "account_name": account_name[0],
                 "account_number": "00003162",
@@ -299,7 +299,7 @@ class TestPayoutApi:
         with allure.step("确认法币提现交易"):
             data = {
                 "code": "EUR",
-                "amount": "2.51",
+                "amount": "26.51",
                 "payment_method": "SEPA",
                 "account_name": "yilei",
                 "iban": "AT234567891827364532",
@@ -405,7 +405,7 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "GBP",
-                "amount": "2.81",
+                "amount": "26.81",
                 "payment_method": "Faster Payments",
                 "account_name": account_name[3],
                 "account_number": "00003162",
@@ -443,7 +443,7 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "GBP",
-                "amount": "2.81",
+                "amount": "26.81",
                 "payment_method": "Faster Payments",
                 "account_name": account_name[0],
                 "account_number": "00003162",
@@ -522,7 +522,7 @@ class TestPayoutApi:
     @allure.title('test_payout_028')
     @allure.description('MFA认证提现ETH成功')
     def test_payout_028(self):
-        ApiFunction.get_payout_transaction_id(amount='0.01', address='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C',
+        ApiFunction.get_payout_transaction_id(amount='0.02', address='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C',
                                               code_type='ETH')
 
     @allure.title('test_payout_029')
@@ -543,7 +543,7 @@ class TestPayoutApi:
         with allure.step("确认法币提现交易"):
             data = {
                 "code": "EUR",
-                "amount": "2.51",
+                "amount": "27.51",
                 "payment_method": "SEPA",
                 "account_name": "yilei",
                 "iban": "AT234567891827364532",
@@ -579,7 +579,7 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "EUR",
-                "amount": "2.61",
+                "amount": "27.61",
                 "payment_method": "SEPA",
                 "account_name": account_name[0],
                 "iban": "BE09967206444557",
@@ -723,7 +723,7 @@ class TestPayoutApi:
         with allure.step("法币提现获得信息"):
             data = {
                 "code": "BRL",
-                "amount": "11",
+                "amount": "31",
                 "payment_method": "PIX",
                 "pix_key_type": 2,
                 "cpf": "976.111.142-99",
@@ -735,7 +735,6 @@ class TestPayoutApi:
                 "account_number": "1234567890"
             }
             r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data), headers=headers)
-            print(r.json())
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):

@@ -68,13 +68,12 @@ class TestKycApi:
     @allure.title('test_kyc_004')
     @allure.description('用户kyc已过，补充信息未填写')
     def test_kyc_004(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+310@cabital.com', password='123456Hyt')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei3@163.com')
         with allure.step("获取用户补充信息接口/additional/info"):
             r = session.request('GET', url='{}/account/additional/info'.format(env_url), headers=headers)
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            logger.info(r.text)
             assert r.json()['additionalInfos'] == {}, "获取用户补充信息, 补充信息为空失败，返回值是{}".format(r.text)
 
     @allure.title('test_kyc_005')

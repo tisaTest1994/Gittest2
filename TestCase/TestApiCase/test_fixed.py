@@ -761,7 +761,7 @@ class TestFixedApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['code'] == 'EARNINGTXN000036', '更新错误交易id的复投状态错误, 返回值是{}'.format(r.text)
+            assert r.json()['code'] == '104034', '更新错误交易id的复投状态错误, 返回值是{}'.format(r.text)
 
     @allure.title('test_fixed_016')
     @allure.description('申购定期时，直接打开复投开关')
