@@ -467,7 +467,6 @@ class TestPayoutApi:
                 "amount": "2",
                 "code": "BTC",
                 "address": "tb1q38mwu50xludgz4r52n2v0q6jwlysjgz4zkk3kl",
-                "method": "ERC20"
             }
             r = session.request('POST', url='{}/pay/withdraw/crypto/validate'.format(env_url), data=json.dumps(data),
                                 headers=headers)

@@ -215,7 +215,7 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['code'] == '000006', "用空的token刷新token错误，返回值是{}".format(r.text)
 
-    @allure.title('test_account_014 忘记密码')
+    @allure.title('test_account_014')
     @allure.description('忘记密码')
     def test_account_014(self):
         with allure.step("忘记密码"):
