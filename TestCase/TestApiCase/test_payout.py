@@ -533,7 +533,7 @@ class TestPayoutApi:
     @allure.title('test_payout_030')
     @allure.description('MFA认证提现USDT成功')
     def test_payout_030(self):
-        ApiFunction.get_payout_transaction_id(amount='30.01', address='0x0f841561A9e5c95926b234FC5fA12cDcf9BEB378',
+        ApiFunction.get_payout_transaction_id(amount='50.01', address='0x0f841561A9e5c95926b234FC5fA12cDcf9BEB378',
                                               code_type='USDT')
 
     @allure.title('test_payout_031')
@@ -626,7 +626,7 @@ class TestPayoutApi:
         with allure.step("确认法币提现交易"):
             data = {
                 "code": "CHF",
-                "amount": "2.51",
+                "amount": "35.51",
                 "payment_method": "SIC",
                 "account_name": "yilei",
                 "iban": "AT234567891827364532",
@@ -659,7 +659,7 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "CHF",
-                "amount": "2.61",
+                "amount": "35.61",
                 "payment_method": "SIC",
                 "account_name": account_name[0],
                 "iban": "BE09967206444557",

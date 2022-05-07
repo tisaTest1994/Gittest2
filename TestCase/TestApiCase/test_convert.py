@@ -86,6 +86,7 @@ class TestConvertApi:
     @allure.title('test_convert_005')
     @allure.description('超时换汇交易')
     def test_convert_005(self):
+        headers['Accept-Language'] = 'zh-TW'
         quote = ApiFunction.get_quote('BTC-USDT')
         sell_amount = str(float(0.01) * float(quote['quote']))
         sleep(30)
