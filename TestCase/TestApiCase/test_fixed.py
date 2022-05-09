@@ -604,7 +604,7 @@ class TestFixedApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json() == '100000', '项目不传预计派息金额错误, 返回值是{}'.format(r.text)
+                assert r.json()['code'] == '100000', '项目不传预计派息金额错误, 返回值是{}'.format(r.text)
 
     @allure.title('test_fixed_008')
     @allure.description('项目传入错误预计派息金额')
