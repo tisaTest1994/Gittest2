@@ -32,9 +32,7 @@ class TestKycAcceptanceApi:
             connect_headers['ACCESS-NONCE'] = nonce
             del connect_headers['Content-Type']
         with allure.step("获取kyc info"):
-            print(connect_headers)
             r = session.request('POST', url='{}/accounts/{}/kycinfo/submit'.format(self.url, account_id),
                                 headers=connect_headers, files=data)
-            print(r.url)
             print(r.status_code)
             print(r.json())
