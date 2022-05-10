@@ -3,6 +3,7 @@ from Function.web_common_function import *
 from Function.api_common_function import *
 
 
+
 @allure.feature("web ui log in 相关 testcases")
 class TestWebLogin:
     # 获取测试网站url
@@ -86,6 +87,7 @@ class TestWebLogin:
 
     @allure.title('test_web_login_003')
     @allure.description('Log in with Bybit')
+    @pytest.mark.skip(reason='bybit有机器人验证')
     def test_login_003(self, chrome_driver):
         account = get_json()['web'][get_json()['env']]['account']
         password = get_json()['web'][get_json()['env']]['password']

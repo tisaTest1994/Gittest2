@@ -1,10 +1,11 @@
+import pytest
+
 from Function.api_function import *
 from Function.operate_sql import *
 
 
-# Account相关cases
-class TestAccountApi:
-
+# Infinni game新增或修改相关cases
+class TestInfinniGameApi:
     url = get_json()['connect'][get_json()['env']]['url']
 
     # 初始化class
@@ -35,10 +36,10 @@ class TestAccountApi:
                   'test_accounts_unlinked 同用户/Cabital主动关闭与合作方的某账户关联',
                   ]
 
-    @allure.title('test_connect_account_001')
-    @allure.description('获取用户关联状况及partner信息')
+    @allure.title('test_partner_userinfo_001')
+    @allure.description('获取partner userinfo失败')
     @pytest.mark.parametrize('account_id, expect_status, account_email', connect_account, ids=case_title)
-    def test_connect_account_001(self, account_id, expect_status, account_email):
+    def test_partner_userinfo_001(self, account_id, expect_status, account_email):
         logging.info("-------------------- 开始执行用例 --------------------")
         with allure.step("测试用户的account_id"):
             account_id = account_id
@@ -52,6 +53,7 @@ class TestAccountApi:
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取用户关联状况"):
             r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            print(r)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -80,77 +82,3 @@ class TestAccountApi:
                     assert i['status'] == expect_status, "获取partner信息错误，期望状态是{},返回值是{}".format(expect_status, r.text)
         logging.info("-------------------- 结束执行用例 --------------------")
 
-    @allure.title('test_connect_account_002')
-    @allure.description('查询用户otp状态：otp未绑定（2fa disable）')
-    def test_connect_account_002(self):
-        with allure.step("测试用户的account_id"):
-            account_id = 'eb9659ea-0d95-4f0f-83a3-1152c5a90ee9'
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/accounts/{}/detail'.format(account_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
-        with allure.step("查询用户otp状态"):
-            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['otp_ready'] is False, "查询用户otp状态，otp未绑定错误，返回值是{}".format(r.text)
-
-    @allure.title('test_connect_account_003')
-    @allure.description('查询用户otp状态：otp已经绑定（2fa enable）')
-    def test_connect_account_003(self):
-        with allure.step("测试用户的account_id"):
-            account_id = get_json()['email']['accountId']
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/accounts/{}/detail'.format(account_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
-        with allure.step("查询用户otp状态"):
-            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['otp_ready'] is True, "查询用户otp状态，otp已经绑定错误，返回值是{}".format(r.text)
-
-    @allure.title('test_connect_account_004')
-    @allure.description('成功解绑+name match用户 pass')
-    @pytest.mark.skip(reason='match只能一次')
-    def test_connect_account_04(self):
-        with allure.step("准备参数"):
-            account_id = 'b013327e-ae65-4197-acf6-806f03873f51'
-        with allure.step("name match 数据"):
-            data = {
-                'name': 'yanting22 huang33',
-                'id': '235766',
-                'id_document': 'PASSPORT',
-                'issued_by': 'HKG',
-                'dob': '19900202'
-            }
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data))
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
-        with allure.step("name match"):
-            r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)

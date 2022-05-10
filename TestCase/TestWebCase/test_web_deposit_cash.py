@@ -94,7 +94,11 @@ class TestWebDeposit:
                     fiat_all.append(fiat_list[i]['name'])
         with allure.step("从接口获取Deposit信息"):
             for j in range(0, len(fiat_all)):
-                if fiat_all[j] == 'CHF':
+                if fiat_all[j] == 'BRL':
+                    operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
+                    operate_element_web(chrome_driver, 'assetPage', 'undefined-option-BRL')
+                    payment_method = 'PIX'
+                elif fiat_all[j] == 'CHF':
                     operate_element_web(chrome_driver, 'assetPage', 'assets-deposit-cash-drop-btn-up')
                     operate_element_web(chrome_driver, 'assetPage', 'undefined-option-CHF')
                     payment_method = 'SIC'
@@ -108,26 +112,43 @@ class TestWebDeposit:
                     payment_method = 'Faster%20Payments'
                 r = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, fiat_all[j], payment_method), headers=headers)
                 deposit_info = r.json()['bank_accounts'][0]
-                account_name = deposit_info['account_name']
+                account_name = deposit_info['account_name'] + " "
                 if fiat_all[j] == 'GBP':
-                    account_number = deposit_info['account_number']
-                    sort_code = deposit_info['sort_code']
+                    account_number = deposit_info['account_number'] + " "
+                    sort_code = deposit_info['sort_code'] + " "
+                elif fiat_all[j] == 'BRL':
+                    branch_code = deposit_info['branch_code'] + " "
+                    account_type_code = deposit_info['account_type']
+                    account_number = deposit_info['account_number'] + " "
+                    CNPJ_PIX = deposit_info['pix_key']['value'] + " "
                 else:
-                    iban = deposit_info['iban']
-                    bic = deposit_info['bic']
-                reference_code = deposit_info['ref_code']
+                    iban = deposit_info['iban'] + " "
+                    bic = deposit_info['bic'] + " "
+                if fiat_all[j] != 'BRL':
+                    reference_code = deposit_info['ref_code'] + " "
+                    bank_country = deposit_info['bank_country'] + " "
+                    bank_address = deposit_info['bank_address'] + " "
                 bank_name = deposit_info['bank_name']
-                bank_country = deposit_info['bank_country']
-                bank_address = deposit_info['bank_address']
+                if account_type_code == int(1):
+                    account_type = "Saving Account "
+                elif account_type_code == int(2):
+                    account_type = "Checking Account "
                 with allure.step("判断信息是否在页面上显示"):
+                    # assert chrome_driver.find_element_by_xpath('//*[text()="Cabital Fintech (LT) UAB "]')
                     assert operate_element_web(chrome_driver, '', account_name, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], account_name)
-                    if fiat_all[j] == 'GBP':
-                        assert operate_element_web(chrome_driver, '', account_number, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j],account_number)
-                        assert operate_element_web(chrome_driver, '', sort_code, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j],sort_code)
+                    if fiat_all[j] == 'BRL':
+                        assert operate_element_web(chrome_driver, '', branch_code, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], branch_code)
+                        assert operate_element_web(chrome_driver, '', account_type, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], account_type)
+                        assert operate_element_web(chrome_driver, '', account_number, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], account_number)
+                        assert operate_element_web(chrome_driver, '', CNPJ_PIX, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], CNPJ_PIX)
+                    elif fiat_all[j] == 'GBP':
+                        assert operate_element_web(chrome_driver, '', account_number, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], account_number)
+                        assert operate_element_web(chrome_driver, '', sort_code, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], sort_code)
                     else:
                         assert operate_element_web(chrome_driver, '', iban, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], iban)
                         assert operate_element_web(chrome_driver, '', bic, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], bic)
-                    assert operate_element_web(chrome_driver, '', reference_code, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], reference_code)
+                    if fiat_all[j] != 'BRL':
+                        assert operate_element_web(chrome_driver, '', reference_code, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], reference_code)
+                        assert operate_element_web(chrome_driver, '', bank_country, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], bank_country)
+                        assert operate_element_web(chrome_driver, '', bank_address, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], bank_address)
                     assert operate_element_web(chrome_driver, '', bank_name, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], bank_name)
-                    assert operate_element_web(chrome_driver, '', bank_country, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], bank_country)
-                    assert operate_element_web(chrome_driver, '', bank_address, 'check'), '当前币种是{}, {}显示的信息与接口返回信息不符'.format(fiat_all[j], bank_address)
