@@ -114,7 +114,6 @@ class TestTransferApi:
                                 'direction': 'DEBIT',
                                 'external_id': generate_string(15)
                             }
-                            print(data)
                         with allure.step("验签"):
                             unix_time = int(time.time())
                             nonce = generate_string(30)
