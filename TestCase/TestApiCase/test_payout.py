@@ -276,7 +276,7 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "GBP",
-                "amount": "25.61",
+                "amount": "5.61",
                 "payment_method": "Faster Payments",
                 "account_name": account_name[0],
                 "account_number": "00003162",
@@ -297,9 +297,10 @@ class TestPayoutApi:
     @allure.description('确认法币提现交易')
     def test_payout_018(self):
         with allure.step("确认法币提现交易"):
+            headers['Accept-Language'] = 'zh-TW'
             data = {
                 "code": "EUR",
-                "amount": "26.51",
+                "amount": "0.51",
                 "payment_method": "SEPA",
                 "account_name": "yilei",
                 "iban": "AT234567891827364532",
@@ -311,7 +312,7 @@ class TestPayoutApi:
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
-                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json() == {}, "开启法币提现画面错误，返回值是{}".format(r.text)
 
@@ -443,7 +444,7 @@ class TestPayoutApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "GBP",
-                "amount": "26.81",
+                "amount": "23.81",
                 "payment_method": "Faster Payments",
                 "account_name": account_name[0],
                 "account_number": "00003162",

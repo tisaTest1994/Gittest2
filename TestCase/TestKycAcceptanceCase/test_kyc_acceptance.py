@@ -8,7 +8,7 @@ class TestKycAcceptanceApi:
 
     def test_kyc_acceptance_001(self):
         with allure.step("测试用户的account_id"):
-            account_id = '9486e566-01f6-49db-9fe7-76f045683df9'
+            account_id = 'a1391259-1457-4efa-916c-e052dfcf0b59'
         with allure.step("测试data"):
             data = {
                 "metadata": (None, json.dumps({"idDocType": "PASSPORT",
@@ -19,7 +19,7 @@ class TestKycAcceptanceApi:
                                                })),
                 "a.png": ("id_doc_front.png",
                           open("/Users/richard.wan/Desktop/yilei/Test/TestCase/TestKycAcceptanceCase/a.png", "rb"),
-                          "image/png")
+                          "image/png"),
             }
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -32,7 +32,8 @@ class TestKycAcceptanceApi:
             connect_headers['ACCESS-NONCE'] = nonce
             del connect_headers['Content-Type']
         with allure.step("获取kyc info"):
+            print(connect_headers)
             r = session.request('POST', url='{}/accounts/{}/kycinfo/submit'.format(self.url, account_id),
                                 headers=connect_headers, files=data)
             print(r.status_code)
-            print(r.json())
+            print(r.text)
