@@ -963,6 +963,8 @@
   "CB978": "Invalid SWIFT Code",
   "CB979": "Enter SWIFT code",
   "CB980": "CHF",
+  "CB981": "Authentication Required",
+  "CB983": "Not recognized. Try again.",
   "E000001": "Bad request",
   "E000002": "Not found",
   "E000003": "Method not allowed",
