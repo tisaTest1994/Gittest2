@@ -5,6 +5,8 @@ from Function.operate_sql import *
 # kyc acceptance相关cases
 class TestKycAcceptanceApi:
     url = get_json()['connect'][get_json()['env']]['url']
+    with allure.step("登录客户账户获得后续操作需要的token"):
+        ApiFunction.add_headers()
 
     def test_kyc_acceptance_001(self):
         with allure.step("测试用户的account_id"):
@@ -37,3 +39,15 @@ class TestKycAcceptanceApi:
                                 headers=connect_headers, files=data)
             print(r.status_code)
             print(r.text)
+
+    def test_kyc_acceptance_002(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winnie.wang+050902@cabital.com', password='A!234sdfg')
+        with allure.step("获取kyc 预填信息"):
+            r = session.request('POST', url='{}/kyc/case/sync/user/prepare/data'.format(env_url), headers=headers)
+            print(r.json())
+
+    def test_kyc_acceptance_003(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='winnie.wang+050902@cabital.com', password='A!234sdfg')
+        with allure.step("获取kyc 信息"):
+            r = session.request('GET', url='{}/kyc/user/info/required'.format(env_url), headers=headers)
+            print(r.json())
