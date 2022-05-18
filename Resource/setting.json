@@ -453,7 +453,7 @@
     "email": "zhangsan@test.com",
     "password": "123456"
   },
-  "preference_currency": "CHF",
+  "preference_currency": "USD",
   "pro": "https://api.cabital.com/api/v1",
   "sandbox": {
     "BRL": {
@@ -467,7 +467,8 @@
   "show_list": [
     "USD",
     "GBP",
-    "EUR"
+    "EUR",
+    "CHF"
   ],
   "slackUrl": "https://hooks.slack.com/services/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",
   "test": "https://api.latibac.com/api/v1",
