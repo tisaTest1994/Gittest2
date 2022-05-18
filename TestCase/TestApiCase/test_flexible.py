@@ -715,6 +715,7 @@ class TestFlexibleApi:
             logger.info('项目id是{}'.format(id))
         with allure.step("获得项目当前持有中的赎回冻结金额"):
             r = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, id), headers=headers)
+
             redeeming_amount = r.json()['redeeming_amount']['amount']
             logger.info('获得项目当前持有中的赎回冻结金额是{}'.format(redeeming_amount))
         with allure.step("wallet中saving冻结金额"):

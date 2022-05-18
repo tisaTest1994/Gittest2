@@ -84,7 +84,6 @@ class TestAcquiringApi:
             with allure.step("校验返回值"):
                 assert r.json()['fee'] == {'code': 'VND', 'amount': '400'}, '收单费用计算错误，接口返回值是{}'.format(r.json()['fee'])
 
-
     @allure.title('test_convert_007')
     @allure.description('使用错误金额换汇交易')
     def test_convert_007(self):
