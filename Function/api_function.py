@@ -33,7 +33,7 @@ class ApiFunction:
 
     # 加headers，只能默认账户,使用usd
     @staticmethod
-    def add_headers(currency='USD'):
+    def add_headers(currency=get_json()['preference_currency']):
         headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
         headers['X-Browser-Key'] = 'yilei_test'
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token()

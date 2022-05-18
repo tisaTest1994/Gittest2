@@ -318,13 +318,6 @@
     "security_code": "hyuqzqrndocuxctv",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
   },
-  "sandbox": {
-    "BRL": {
-      "url": "https://sandbox18.capitual.io/api/v1.0",
-      "username": "249b4f13-ce40-412a-ac76-19aefdc89337",
-      "password": "31504b88-7c28-4c1b-968b-fa872cdb0c39"
-    }
-  },
   "env": "test",
   "headers": {
     "Content-Encoding": "deflate",
@@ -459,7 +452,15 @@
     "email": "zhangsan@test.com",
     "password": "123456"
   },
+  "preference_currency": "EUR",
   "pro": "https://api.cabital.com/api/v1",
+  "sandbox": {
+    "BRL": {
+      "password": "31504b88-7c28-4c1b-968b-fa872cdb0c39",
+      "url": "https://sandbox18.capitual.io/api/v1.0",
+      "username": "249b4f13-ce40-412a-ac76-19aefdc89337"
+    }
+  },
   "secretKey": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
   "secretKeyForTest": " ",
   "show_list": [

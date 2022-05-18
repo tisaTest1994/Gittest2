@@ -13,9 +13,10 @@ class TestAssetApi:
     @allure.title('test_asset_001')
     @allure.description('查询每个币种当前资产市值')
     def test_asset_001(self):
-        # with allure.step("切换账号"):
-        #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-        #         account=get_json()['email']['payout_email'])
+        with allure.step("切换账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+            headers['X-Currency'] = 'USD'
         with allure.step("获取币种列表"):
             crypto_list = get_json()['crypto_list']
         with allure.step("查询每个币种当前资产市值"):
