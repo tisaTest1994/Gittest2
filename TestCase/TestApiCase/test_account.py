@@ -29,7 +29,7 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             logger.info('email是{}'.format(data['emailAddress']))
             assert 'accessToken' in r.text, "注册新用户失败，返回值是{}".format(r.text)
-            assert r.json()['refreshExpiresTn'] == 86400, "token过期时间不是24小时，返回值是{}".format(r.text)
+            assert r.json()['refreshExpiresTn'] == 1209600, "token过期时间不是24小时，返回值是{}".format(r.text)
 
     @allure.title('test_account_002')
     @allure.description('注册用户时，用户已经存在')
@@ -174,6 +174,7 @@ class TestAccountApi:
             data = {
                 "refreshToken": refreshToken
             }
+            sleep(5)
             r = session.request('POST', url='{}/account/user/refreshToken'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
