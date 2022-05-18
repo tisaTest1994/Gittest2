@@ -11,14 +11,21 @@ class TestPayoutCashApi:
 
     @allure.title('test_payout_cash_001')
     @allure.description('法币获取提现费率和提现限制')
+    # 预交校验法币提现交易
     def test_payout_cash_001(self):
         with allure.step("获取法币列表"):
             for i in get_json()['cash_list']:
                 with allure.step("获取提现费率和提现限制"):
-                    data = {
-                        "code": i,
-                        "amount": "100"
-                    }
+                    if i == 'VND':
+                        data = {
+                            "code": i,
+                            "amount": "300000"
+                        }
+                    else:
+                        data = {
+                            "code": i,
+                            "amount": "100"
+                        }
                     r = session.request('POST', url='{}/pay/withdraw/fiat/verification'.format(env_url),
                                         data=json.dumps(data), headers=headers)
                     if i == 'GBP':
@@ -38,6 +45,11 @@ class TestPayoutCashApi:
                             r.json()['fee']['amount']), '获取提现费率和提现限制错误, 币种是{}'.format(i)
                     elif i == 'CHF':
                         assert r.json()['fee']['amount'] == '4.5', '获取提现费率和提现限制错误, 币种是{}'.format(i)
+                        assert r.json()['fee']['code'] == i, '获取提现费率和提现限制错误, 币种是{}'.format(i)
+                        assert float(r.json()['receivable_amount']) == float(data['amount']) - float(
+                            r.json()['fee']['amount']), '获取提现费率和提现限制错误, 币种是{}'.format(i)
+                    elif i == 'VND':
+                        assert r.json()['fee']['amount'] == '6000', '获取提现费率和提现限制错误, 币种是{}'.format(i)
                         assert r.json()['fee']['code'] == i, '获取提现费率和提现限制错误, 币种是{}'.format(i)
                         assert float(r.json()['receivable_amount']) == float(data['amount']) - float(
                             r.json()['fee']['amount']), '获取提现费率和提现限制错误, 币种是{}'.format(i)
@@ -88,6 +100,15 @@ class TestPayoutCashApi:
                                 i, r.json())
                             assert r.json()['payment_methods']['PIX'] == {'min': '20', 'max': '300000', 'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
+                        elif i == 'VND':
+                            assert r.json()[
+                                       'supported_payment_methods'] == 'Bank Transfer', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                                i, r.json())
+                            assert r.json()['payment_methods']['Bank Transfer'] == {'min': '600000', 'max': '300000000',
+                                                                                    'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                                i, r.json())
+                            assert r.json()['fee_rule']['percentage_charge_rule']['percentage'] == '2', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                                i, r.json())
 
     @allure.title('test_payout_cash_004')
     @allure.description('确认BRL 提现')
@@ -114,6 +135,80 @@ class TestPayoutCashApi:
         with allure.step("校验返回值"):
             assert r.json() == {}, "预校验BRL提现错误，返回值是{}".format(r.text)
 
+    @allure.title('test_payout_cash_005')
+    @allure.description('创建Payme VND法币提现交易')
+    def test_payout_cash_005(self):
+        with allure.step("开启法币提现画面"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+            params = {
+                'code': 'VND'
+            }
+            # r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
+            # account_name = r.json()['name_list']
+        with allure.step("法币提现"):
+            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+            secretKey = get_json()['secretKey']
+            totp = pyotp.TOTP(secretKey)
+            mfaVerificationCode = totp.now()
+            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+            data = {
+                "code": "VND",
+                "amount": "600000",
+                "payment_method": "Bank Transfer",
+                "account_name": "Richard External QA",
+                "account_number": "9704000000000018",
+                "bic": "SBITVNVX"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'txn_id' in r.text, "创建Payme VND法币提现交易失败，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_006')
+    @allure.description('确认Payme VND法币提现交易')
+    def test_payout_cash_006(self):
+        with allure.step("确认法币提现交易"):
+            headers['Accept-Language'] = 'zh-TW'
+            data = {
+                "code": "VND",
+                "amount": "600000",
+                "payment_method": "Bank Transfer",
+                "account_name": "Richard External QA",
+                "account_number": "12345678",
+                "bic": "ABCDCH12345"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json() == {}, "确认Payme VND法币提现交易错误，返回值是{}".format(r.text)
+
+    @allure.title('test_convert_007')
+    @allure.description('使用错误金额换汇交易')
+    def test_convert_007(self):
+        quote = ApiFunction.get_quote('BTC-USDT')
+        data = {
+            "quote_id": quote['quote_id'],
+            "quote": quote['quote'],
+            "pair": 'BTC-USDT',
+            "buy_amount": '0.01',
+            "sell_amount": "11",
+            "major_ccy": 'BTC'
+        }
+        r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
+        logger.info('申请换汇参数{}'.format(data))
+        assert 'amount calculation error' in r.text, '使用错误金额换汇交易错误,返回值是{}'.format(r.text)
     # @allure.title('test_payout_cash_005')
     # @allure.description('BRL PIX-Bank Account提现')
     # def test_payout_cash_005(self):

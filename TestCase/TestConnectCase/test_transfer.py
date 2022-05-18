@@ -550,3 +550,59 @@ class TestTransferApi:
                         with allure.step("校验返回值"):
                             logger.info(" 期望结果: direction为CREDIT类型返回成功 实际结果:【status:{}】".format(r.json()['status']))
                             assert r.json()['status'] == 'SUCCESS'
+
+
+
+
+
+    @allure.title('test_transfer_020')
+    @allure.description('把数字货币从cabital转移到bybit账户（小于单比最小限额）')
+    def test_transfer_020(self):
+        with allure.step("测试用户的account_id"):
+            account_id = get_json()['email']['accountId']
+            # account_id = '700dca34-1e6f-408b-903d-e37d0fcfd615'
+        with allure.step("从配置接口获取可以划转的数据"):
+            with allure.step("验签"):
+                unix_time = int(time.time())
+                nonce = generate_string(30)
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
+                                                    nonce=nonce)
+                connect_headers['ACCESS-SIGN'] = sign
+                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                connect_headers['ACCESS-NONCE'] = nonce
+            with allure.step("获取合作方的配置"):
+                r = session.request('GET', url='{}/config'.format(self.url), headers=connect_headers)
+                for i in r.json()['currencies']:
+                    if i['config']['debit']['allow'] and i['symbol'] == 'BTC':
+                        with allure.step("获得otp"):
+                            secretKey = get_json()['email']['secretKey']
+                            totp = pyotp.TOTP(secretKey)
+                            mfaVerificationCode = totp.now()
+                        with allure.step("获得data"):
+                            data = {
+                                'amount': str(float(i['config']['debit']['min'])),
+                                'symbol': i['symbol'],
+                                'otp': str(mfaVerificationCode),
+                                'direction': 'DEBIT',
+                                'external_id': generate_string(15)
+                            }
+                        with allure.step("验签"):
+                            unix_time = int(time.time())
+                            nonce = generate_string(30)
+                            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                                url='/api/v1/accounts/{}/transfers'.format(account_id),
+                                                                nonce=nonce,
+                                                                body=json.dumps(data))
+                            connect_headers['ACCESS-SIGN'] = sign
+                            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                            connect_headers['ACCESS-NONCE'] = nonce
+                        with allure.step("把数字货币从cabital转移到bybit账户"):
+                            r = session.request('POST',
+                                                url='{}/accounts/{}/transfers'.format(self.url, account_id),
+                                                data=json.dumps(data), headers=connect_headers)
+                        with allure.step("状态码和返回值"):
+                            logger.info('当币种为{},状态码是{}'.format(i['symbol'], r.status_code))
+                            logger.info('返回值是{}'.format(str(r.text)))
+                        with allure.step("校验状态码"):
+                            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+
