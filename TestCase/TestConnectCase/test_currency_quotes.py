@@ -11,12 +11,13 @@ class TestCurrencyQuoteApi:
         ApiFunction.add_headers()
 
     @allure.title('test_currency_quotes_001')
-    @allure.description('获取报价')
+    @allure.description('获取报价最新的报价')
     def test_currency_quotes_001(self):
-        with allure.step("获取报价"):
+        with allure.step("获取最新的报价"):
             for i in get_json()['cfx_book'].values():
                 with allure.step("获取正向报价"):
                     r = session.request('GET', url='{}/quotes/{}'.format(self.url, i), headers=connect_headers)
+                    logger.info('币种对为{}'.format(i))
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
@@ -28,6 +29,7 @@ class TestCurrencyQuoteApi:
                     new_pair = '{}{}{}'.format(i.split('-')[1], '-', i.split('-')[0])
                     r = session.request('GET', url='{}/quotes/{}'.format(self.url, new_pair),
                                         headers=connect_headers)
+                    logger.info('币种对为{}'.format(new_pair))
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))

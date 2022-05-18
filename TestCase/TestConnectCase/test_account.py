@@ -126,17 +126,17 @@ class TestAccountApi:
 
     @allure.title('test_connect_account_004')
     @allure.description('成功解绑+name match用户 pass')
-    @pytest.mark.skip(reason='match只能一次')
+    # @pytest.mark.skip(reason='match只能一次')
     def test_connect_account_04(self):
         with allure.step("准备参数"):
-            account_id = 'b013327e-ae65-4197-acf6-806f03873f51'
+            account_id = 'ced61c30-859b-4c99-91fe-d0d56107e665'
         with allure.step("name match 数据"):
             data = {
-                'name': 'yanting22 huang33',
-                'id': '235766',
+                'name': 'neo+5 ding+5',
+                'id': '123421231',
                 'id_document': 'PASSPORT',
                 'issued_by': 'HKG',
-                'dob': '19900202'
+                'dob': '19950528'
             }
         with allure.step("验签"):
             unix_time = int(time.time())
