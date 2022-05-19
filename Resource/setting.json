@@ -453,7 +453,7 @@
     "email": "zhangsan@test.com",
     "password": "123456"
   },
-  "preference_currency": "USD",
+  "preference_currency": "CHF",
   "pro": "https://api.cabital.com/api/v1",
   "sandbox": {
     "BRL": {
