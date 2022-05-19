@@ -341,9 +341,6 @@ class TestPayoutApi:
                 'payment_method': 'Faster Payments'
             }
             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=data, headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert "Faster Payments" in r.text, "法币提现英镑获得信息，白名单排序错误，返回值是{}".format(r.text)
