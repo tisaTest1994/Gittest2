@@ -11,7 +11,6 @@ class TestPayoutCashApi:
 
     @allure.title('test_payout_cash_001')
     @allure.description('法币获取提现费率和提现限制')
-    # 预交校验法币提现交易
     def test_payout_cash_001(self):
         with allure.step("获取法币列表"):
             for i in get_json()['cash_list']:
