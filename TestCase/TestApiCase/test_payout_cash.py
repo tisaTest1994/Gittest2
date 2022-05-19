@@ -140,11 +140,6 @@ class TestPayoutCashApi:
         with allure.step("开启法币提现画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
-            params = {
-                'code': 'VND'
-            }
-            # r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
-            # account_name = r.json()['name_list']
         with allure.step("法币提现"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
             secretKey = get_json()['secretKey']
@@ -154,9 +149,9 @@ class TestPayoutCashApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "VND",
-                "amount": "600000",
+                "amount": "300000",
                 "payment_method": "Bank Transfer",
-                "account_name": "Richard External QA",
+                "account_name": "NGUYEN VAN A",
                 "account_number": "9704000000000018",
                 "bic": "SBITVNVX"
             }
@@ -175,6 +170,8 @@ class TestPayoutCashApi:
     def test_payout_cash_006(self):
         with allure.step("确认法币提现交易"):
             headers['Accept-Language'] = 'zh-TW'
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
             data = {
                 "code": "VND",
                 "amount": "600000",
@@ -189,7 +186,7 @@ class TestPayoutCashApi:
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
-                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json() == {}, "确认Payme VND法币提现交易错误，返回值是{}".format(r.text)
 
