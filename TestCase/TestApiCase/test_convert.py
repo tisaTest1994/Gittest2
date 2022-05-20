@@ -11,64 +11,95 @@ class TestConvertApi:
             ApiFunction.add_headers()
 
     @allure.title('test_convert_001')
-    @allure.description('根据id编号查询单笔交易')
-    def test_convert_001(self):
-        with allure.step("获得交易transaction_id"):
-            transaction_id = ApiFunction.get_payout_transaction_id()
-            logger.info('transaction_id 是{}'.format(transaction_id))
-        with allure.step("查询单笔交易"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
-            params = {
-                "txn_sub_type": 6
-            }
-            r = session.request('GET', url='{}/txn/{}'.format(env_url, transaction_id), params=params, headers=headers)
-            with allure.step("状态码和返回值"):
-                logger.info('状态码是{}'.format(str(r.status_code)))
-                logger.info('返回值是{}'.format(str(r.text)))
-            with allure.step("校验状态码"):
-                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-            with allure.step("校验返回值"):
-                assert 'product_id' in r.text, "根据id编号查询单笔交易错误，返回值是{}".format(r.text)
-
-    @allure.title('test_convert_002')
-    @allure.description('查询特定条件的交易')
-    def test_convert_002(self):
-        data = {
-            "pagination_request": {
-                "cursor": "0",
-                "page_size": 100
-            },
-            "user_txn_sub_types": [1, 2, 3, 4, 5, 6],
-            "statuses": [1, 2, 3, 4],
-            "codes": ["ETH"]
-        }
-        with allure.step("查询特定条件的交易"):
-            r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers)
-            with allure.step("状态码和返回值"):
-                logger.info('状态码是{}'.format(str(r.status_code)))
-                logger.info('返回值是{}'.format(str(r.text)))
-            with allure.step("校验状态码"):
-                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-            with allure.step("校验返回值"):
-                assert 'product_id' in r.text, "获取产品列表错误，返回值是{}".format(r.text)
-
-    @allure.title('test_convert_003')
     @allure.description('查询换汇交易限制')
-    def test_convert_003(self):
+    def test_convert_001(self):
         with allure.step("查询换汇交易限制"):
             r = session.request('GET', url='{}/txn/cfx/restriction'.format(env_url), headers=headers)
-            with allure.step("状态码和返回值"):
-                logger.info('状态码是{}'.format(str(r.status_code)))
-                logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert '"BTC":{"min":"0.0002"' in r.text, "获取产品列表错误，返回值是{}".format(r.text)
+                for i in ApiFunction.balance_list():
+                    if i == 'BTC':
+                        assert r.json()['restrictions'][i]['min'] == '0.0002', '{}币种换汇最小金额验证失败，返回值是{}'.format(i, r.json()['restrictions'][i]['min'])
+                        assert r.json()['restrictions'][i]['max'] == '5', '{}币种换汇最小金额验证失败，返回值是{}'.format(i, r.json()['restrictions'][i]['max'])
+                    elif i == "USDT":
+                        assert r.json()['restrictions'][i]['min'] == '10', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                              r.json()[
+                                                                                                                  'restrictions'][
+                                                                                                                  i][
+                                                                                                                  'min'])
+                        assert r.json()['restrictions'][i]['max'] == '200000', '{}币种换汇最小金额验证失败，返回值是{}'.format(i, r.json()[
+                            'restrictions'][i]['max'])
+                    elif i == "ETH":
+                        assert r.json()['restrictions'][i]['min'] == '0.002', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                          r.json()[
+                                                                                                              'restrictions'][
+                                                                                                              i][
+                                                                                                              'min'])
+                        assert r.json()['restrictions'][i]['max'] == '100', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                              r.json()[
+                                                                                                                  'restrictions'][
+                                                                                                                  i][
+                                                                                                                  'max'])
+                    elif i == "GBP":
+                        assert r.json()['restrictions'][i]['min'] == '10', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                          r.json()[
+                                                                                                              'restrictions'][
+                                                                                                              i][
+                                                                                                              'min'])
+                        assert r.json()['restrictions'][i]['max'] == '200000', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                              r.json()[
+                                                                                                                  'restrictions'][
+                                                                                                                  i][
+                                                                                                                  'max'])
+                    elif i == "EUR":
+                        assert r.json()['restrictions'][i]['min'] == '10', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                          r.json()[
+                                                                                                              'restrictions'][
+                                                                                                              i][
+                                                                                                              'min'])
+                        assert r.json()['restrictions'][i]['max'] == '200000', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                              r.json()[
+                                                                                                                  'restrictions'][
+                                                                                                                  i][
+                                                                                                                  'max'])
+                    elif i == "CHF":
+                        assert r.json()['restrictions'][i]['min'] == '10', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                          r.json()[
+                                                                                                              'restrictions'][
+                                                                                                              i][
+                                                                                                              'min'])
+                        assert r.json()['restrictions'][i]['max'] == '200000', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                              r.json()[
+                                                                                                                  'restrictions'][
+                                                                                                                  i][
+                                                                                                                  'max'])
+                    elif i == "BRL":
+                        assert r.json()['restrictions'][i]['min'] == '50', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                          r.json()[
+                                                                                                              'restrictions'][
+                                                                                                              i][
+                                                                                                              'min'])
+                        assert r.json()['restrictions'][i]['max'] == '1000000', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                              r.json()[
+                                                                                                                  'restrictions'][
+                                                                                                                  i][
+                                                                                                                  'max'])
+                    elif i == "VND":
+                        assert r.json()['restrictions'][i]['min'] == '250000', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                          r.json()[
+                                                                                                              'restrictions'][
+                                                                                                              i][
+                                                                                                              'min'])
+                        assert r.json()['restrictions'][i]['max'] == '5000000000', '{}币种换汇最小金额验证失败，返回值是{}'.format(i,
+                                                                                                              r.json()[
+                                                                                                                  'restrictions'][
+                                                                                                                  i][
+                                                                                                                  'max'])
 
-    @allure.title('test_convert_004')
+    @allure.title('test_convert_002')
     @allure.description('换汇存在汇率差（手续费）')
-    def test_convert_004(self):
+    def test_convert_002(self):
         with allure.step("获取汇率对"):
             for i in ApiFunction.get_cfx_list():
                 cryptos = i.split('-')
@@ -83,9 +114,9 @@ class TestConvertApi:
                 assert float(str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]) <= float(
                     r1.json()['quote']), "{}汇率对出现了问题".format(i)
 
-    @allure.title('test_convert_005')
+    @allure.title('test_convert_003')
     @allure.description('超时换汇交易')
-    def test_convert_005(self):
+    def test_convert_003(self):
         headers['Accept-Language'] = 'zh-TW'
         quote = ApiFunction.get_quote('BTC-USDT')
         sell_amount = str(float(0.01) * float(quote['quote']))
@@ -99,13 +130,11 @@ class TestConvertApi:
             "major_ccy": 'BTC'
         }
         r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
-        logger.info('申请换汇参数{}'.format(data))
-        logger.info('超时换汇交易返回值是{}'.format(r.text))
         assert r.json()['code'] == '106001', '超时换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
 
-    @allure.title('test_convert_006')
+    @allure.title('test_convert_004')
     @allure.description('小于接受的最小值换汇交易')
-    def test_convert_006(self):
+    def test_convert_004(self):
         with allure.step("获取汇率对"):
             cfx_dict = ApiFunction.get_cfx_list()
             # 获取换汇值
@@ -280,9 +309,9 @@ class TestConvertApi:
                     logger.info('申请换汇参数{}'.format(data))
                     assert 'invalid Amount' in r3.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
 
-    @allure.title('test_convert_007')
+    @allure.title('test_convert_005')
     @allure.description('使用错误金额换汇交易')
-    def test_convert_007(self):
+    def test_convert_005(self):
         quote = ApiFunction.get_quote('BTC-USDT')
         data = {
             "quote_id": quote['quote_id'],
@@ -293,16 +322,12 @@ class TestConvertApi:
             "major_ccy": 'BTC'
         }
         r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
-        logger.info('申请换汇参数{}'.format(data))
-        assert 'amount calculation error' in r.text, '使用错误金额换汇交易错误,返回值是{}'.format(r.text)
+        assert r.json()['code'] == '106019', '使用错误金额换汇交易错误,返回值是{}'.format(r.text)
 
-    @allure.title('test_convert_008')
+    @allure.title('test_convert_006')
     @allure.description('获取换汇汇率对')
-    def test_convert_008(self):
+    def test_convert_006(self):
         r = session.request('GET', url='{}/txn/cfx/codes'.format(env_url))
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
