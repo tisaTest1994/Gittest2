@@ -126,7 +126,7 @@ class TestAccountApi:
 
     @allure.title('test_connect_account_004')
     @allure.description('成功解绑+name match用户 pass')
-    # @pytest.mark.skip(reason='match只能一次')
+    @pytest.mark.skip(reason='match只能一次')
     def test_connect_account_04(self):
         with allure.step("准备参数"):
             account_id = 'ced61c30-859b-4c99-91fe-d0d56107e665'

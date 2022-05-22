@@ -21,10 +21,6 @@ class TestMarketApi:
                 }
                 r = session.request('GET', url='{}/marketstat/public/quote-chart'.format(env_url), params=params,
                                      headers=headers)
-                logger.info('货币{}的{}时间的曲线{}'.format(i, y, r.text))
-                with allure.step("状态码和返回值"):
-                    logger.info('状态码是{}'.format(str(r.status_code)))
-                    logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
@@ -38,11 +34,7 @@ class TestMarketApi:
                 params = {
                     "code": i
                 }
-                r = session.request('GET', url='{}/marketstat/public/ticker'.format(env_url), params=params,
-                                 headers=headers)
-                with allure.step("状态码和返回值"):
-                    logger.info('状态码是{}'.format(str(r.status_code)))
-                    logger.info('返回值是{}'.format(str(r.text)))
+                r = session.request('GET', url='{}/marketstat/public/ticker'.format(env_url), params=params, headers=headers)
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):

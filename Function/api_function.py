@@ -559,8 +559,7 @@ class ApiFunction:
                     if balance_list2[m] not in fiat_all_metadata:
                         balance_list2.remove(balance_list2[m])
             for y in balance_list2:
-                if y != 'VND':
-                    cfx_list.append('{}-{}'.format(i, y))
+                cfx_list.append('{}-{}'.format(i, y))
         for z in cfx_list:
             cfx_list.remove('{}-{}'.format(z.split('-')[1], z.split('-')[0]))
         return cfx_list

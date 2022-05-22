@@ -79,7 +79,7 @@ class TestWalletBalancesApi:
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                     with allure.step("校验状态码"):
-                        assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                        assert r.status_code == 200, "当币种为{},http状态码不对，目前状态码是{}".format(i, r.status_code)
                     with allure.step("校验返回值"):
                         assert r.json()['balance'] is not None, "账户可用余额列表错误，返回值是{}".format(r.text)
                     with allure.step("通过mobile接口获取金额"):

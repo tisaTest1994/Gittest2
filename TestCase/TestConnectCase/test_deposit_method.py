@@ -27,7 +27,7 @@ class TestDepositMethodApi:
                     cash_list.remove(cash_list[i])
         with allure.step("获取账户单币入账信息"):
             for i in cash_list:
-                if i != 'BRL':
+                if i != 'BRL' and i != 'VND':
                     with allure.step("验签"):
                         unix_time = int(time.time())
                         nonce = generate_string(30)
