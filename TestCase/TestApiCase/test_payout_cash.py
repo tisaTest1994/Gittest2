@@ -149,7 +149,7 @@ class TestPayoutCashApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "VND",
-                "amount": "300000",
+                "amount": "600000",
                 "payment_method": "Bank Transfer",
                 "account_name": "NGUYEN VAN A",
                 "account_number": "9704000000000018",
@@ -189,3 +189,103 @@ class TestPayoutCashApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json() == {}, "确认Payme VND法币提现交易错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_007')
+    @allure.description('确认Payme VND法币提现交易-错误account name')
+    def test_payout_cash_007(self):
+        with allure.step("确认法币提现交易"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+            data = {
+                "code": "VND",
+                "amount": "600000",
+                "payment_method": "Bank Transfer",
+                "account_name": "wrong name",
+                "account_number": "12345678",
+                "bic": "ABCDCH12345"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['message'] == 'Invalid account name',\
+                    "确认Payme VND法币提现交易-错误account name返回值错误，接口返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_008')
+    @allure.description('确认Payme VND法币提现交易-错误Account number')
+    def test_payout_cash_008(self):
+        with allure.step("确认法币提现交易"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+            data = {
+                "code": "VND",
+                "amount": "600000",
+                "payment_method": "Bank Transfer",
+                "account_name": "Richard External QA",
+                "account_number": "12345678  ",
+                "bic": "ABCDCH12345"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['message'] == 'Invalid account number', \
+                    "确认Payme VND法币提现交易-错误account number返回值错误，接口返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_009')
+    @allure.description('确认Payme VND法币提现交易-错误Swift code')
+    def test_payout_cash_009(self):
+        with allure.step("确认法币提现交易"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+            data = {
+                "code": "VND",
+                "amount": "600000",
+                "payment_method": "Bank Transfer",
+                "account_name": "Richard External QA",
+                "account_number": "12345678",
+                "bic": "ABCDCH1234"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['message'] == 'Invalid bic (swift)', \
+                    "确认Payme VND法币提现交易-错误Swift code返回值错误，接口返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_010')
+    @allure.description('确认Payme VND法币提现交易-错误Payment method')
+    def test_payout_cash_009(self):
+        with allure.step("确认法币提现交易"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+            data = {
+                "code": "VND",
+                "amount": "600000",
+                "payment_method": "SIC",
+                "account_name": "Richard External QA",
+                "account_number": "12345678",
+                "bic": "ABCDCH1234"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['message'] == 'Invalid beneficiary', \
+                    "确认Payme VND法币提现交易-错误Payment method返回值错误，接口返回值是{}".format(r.text)
