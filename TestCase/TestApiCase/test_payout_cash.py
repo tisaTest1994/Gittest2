@@ -103,7 +103,8 @@ class TestPayoutCashApi:
                             assert r.json()[
                                        'supported_payment_methods'] == 'Bank Transfer', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
-                            assert r.json()['payment_methods']['Bank Transfer'] == {'min': '600000', 'max': '300000000',
+                            # vnd提现最小限额是600000，但是为了方便测试，测试环境配的是20000
+                            assert r.json()['payment_methods']['Bank Transfer'] == {'min': '20000', 'max': '300000000',
                                                                                     'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
                             assert r.json()['fee_rule']['percentage_charge_rule']['percentage'] == '2', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
@@ -132,7 +133,7 @@ class TestPayoutCashApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json() == {}, "预校验BRL提现错误，返回值是{}".format(r.text)
+            assert r.json()['message'] == 'BRL withdraw currently is disabled to you.', "预校验BRL提现错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_cash_005')
     @allure.description('创建Payme VND法币提现交易')
@@ -194,6 +195,7 @@ class TestPayoutCashApi:
     @allure.description('确认Payme VND法币提现交易-错误account name')
     def test_payout_cash_007(self):
         with allure.step("确认法币提现交易"):
+            headers['Accept-Language'] = 'en-US'
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
             data = {
@@ -243,6 +245,7 @@ class TestPayoutCashApi:
     @allure.title('test_payout_cash_009')
     @allure.description('确认Payme VND法币提现交易-错误Swift code')
     def test_payout_cash_009(self):
+        headers['Accept-Language'] = 'en-US'
         with allure.step("确认法币提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
@@ -269,6 +272,7 @@ class TestPayoutCashApi:
     @allure.description('确认Payme VND法币提现交易-错误Payment method')
     def test_payout_cash_009(self):
         with allure.step("确认法币提现交易"):
+            headers['Accept-Language'] = 'en-US'
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
             data = {
