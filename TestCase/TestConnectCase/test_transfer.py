@@ -169,7 +169,7 @@ class TestTransferApi:
         with allure.step("校验返回值"):
             assert r.json()['code'] == 'PA008', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
 
-    @allure.title('test_connect_transaction_006')
+    @allure.title('test_transfer_006')
     @allure.description('从cabital转移到bybit账户并且关联C+T交易，Direct Debit的金额大于cfx交易的金额')
     def test_transfer_006(self):
         with allure.step("测试用户的account_id"):
@@ -215,7 +215,7 @@ class TestTransferApi:
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
                     assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
-                    assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
+                    assert r.json()['status'] == 'SUCCESS', "换汇错误，返回值是{}".format(r.text)
                     cfx_transaction_id = r.json()['transaction_id']
                 sleep(5)
                 with allure.step("获得换汇后buy币种balance金额"):
@@ -277,9 +277,9 @@ class TestTransferApi:
                 assert r.json()['code'] == 'PA032', "Direct Debit的金额大于cfx交易的金额错误，返回值是{}".format(r.text)
                 sleep(30)
 
-    @allure.title('test_connect_transaction_007')
+    @allure.title('test_transfer_007')
     @allure.description('从cabital转移到bybit账户并且关联C+T交易，Direct Debit的金额 必须小于等于 cfx交易的金额')
-    def test_connect_transaction_007(self):
+    def test_transfer_007(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("换汇"):
@@ -322,7 +322,7 @@ class TestTransferApi:
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
                     assert r.json()['transaction_id'] is not None, "换汇错误，返回值是{}".format(r.text)
-                    assert r.json()['status'] == 'Success', "换汇错误，返回值是{}".format(r.text)
+                    assert r.json()['status'] == 'SUCCESS', "换汇错误，返回值是{}".format(r.text)
                     cfx_transaction_id = r.json()['transaction_id']
                 sleep(5)
                 with allure.step("获得换汇后buy币种balance金额"):
@@ -495,9 +495,9 @@ class TestTransferApi:
                             balance_latest), "把{}从bybit转移到cabital账户错误，转移前balance是{},转移后balance是{}".\
                             format(i['symbol'], balance_old, balance_latest)
 
-    @allure.title('test_connect_transaction_010')
+    @allure.title('test_transfer_010')
     @allure.description("从bybit资金转到cabital direct credit")
-    def test_connect_transaction_010(self):
+    def test_transfer_010(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("从配置接口获取可以划转的数据"):
@@ -551,13 +551,9 @@ class TestTransferApi:
                             logger.info(" 期望结果: direction为CREDIT类型返回成功 实际结果:【status:{}】".format(r.json()['status']))
                             assert r.json()['status'] == 'SUCCESS'
 
-
-
-
-
-    @allure.title('test_transfer_020')
+    @allure.title('test_transfer_011')
     @allure.description('把数字货币从cabital转移到bybit账户（小于单比最小限额）')
-    def test_transfer_020(self):
+    def test_transfer_011(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
             # account_id = '700dca34-1e6f-408b-903d-e37d0fcfd615'
