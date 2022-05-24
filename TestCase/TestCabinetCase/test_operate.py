@@ -671,8 +671,9 @@ class TestOperateApi:
     def test_operate_029(self):
         data = {
             "debit_wallet_id": "77c65bcc-d40b-11eb-8e66-0a3898443cb8",
-            "credit_wallet_id": "e37e7c9e-95f6-11eb-84c0-067d526cf950",
+            "credit_wallet_id": "c51f1e79-3e86-436d-987a-6dccb8205d08",
             "amount": "0.5",
+            "reason": "request by finance",
             "txn_type": "adjustment",
             "txn_subtype": "yilei_test001"
         }
@@ -815,8 +816,8 @@ class TestOperateApi:
         with allure.step("给客户添加白名单"):
             name = generate_string(16)
             data = {
-                    "account_id": get_json()['email']['accountId'],
-                    "whitelisted_name": name,
+                    "account_id": '15232ec3-170d-4714-93ca-8f093d3b0da6',
+                    "whitelisted_name": 'NGUYEN VAN A',
                     "account_name": "yilei20",
                     "order_id": "",
                     "bank_account_number": "",

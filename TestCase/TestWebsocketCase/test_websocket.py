@@ -17,5 +17,5 @@ class TestCoreApi:
     def test_websocket_001(self):
         for i in ApiFunction.get_cfx_list():
             pair = i.split('-')
-            asyncio.get_event_loop().run_until_complete(main_logic(params=["quote@{}{}".format(pair[0], pair[1])]))
-            sleep(30)
+            asyncio.get_event_loop().run_until_complete(main_logic(params=["cfx_quote@{}{}".format(pair[0], pair[1])]))
+            sleep(10)

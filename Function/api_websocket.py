@@ -23,6 +23,8 @@ async def auth_system(websocket):
 async def send_msg(websocket, params):
     data = {
         "op": "subscribe",
+        "device_id": "",
+        "token": "1",
         "params": params,
         "seq": 1
     }
