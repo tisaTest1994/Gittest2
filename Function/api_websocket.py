@@ -9,7 +9,7 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
 
 
-# 向服务器端认证，用户名密码通过才能退出循环
+# 向服务器端认证，用户名密码通过才能退出循环，暂时不用
 async def auth_system(websocket):
     while True:
         cred_text = input("please enter your username and password: ")
@@ -38,6 +38,6 @@ async def send_msg(websocket, params):
 # 客户端主逻辑
 async def main_logic(params):
     async with websockets.connect(get_json()['websocket']['url']) as websocket:
-        #await auth_system(websocket)
+        # await auth_system(websocket)
         await send_msg(websocket, params)
 
