@@ -50,7 +50,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'Registration failed. Please contact our customer service if the problem persists.' in r.text, "用户已经存在错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001003', "用户已经存在错误，返回值是{}".format(r.text)
 
     @allure.title('test_account_003')
     @allure.description('注册时输入错误验证码导致注册失败')
