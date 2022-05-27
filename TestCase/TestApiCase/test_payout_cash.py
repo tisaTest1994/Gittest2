@@ -138,7 +138,7 @@ class TestPayoutCashApi:
     @allure.title('test_payout_cash_005')
     @allure.description('创建Payme VND法币提现交易')
     def test_payout_cash_005(self):
-        with allure.step("开启法币提现画面"):
+        with allure.step("创建法币提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
         with allure.step("法币提现"):

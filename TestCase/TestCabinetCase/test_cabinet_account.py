@@ -11,7 +11,8 @@ class TestCabinetAccountApi:
             account=get_json()['operate_admin_account']['email'],
             password=get_json()['operate_admin_account']['password'], type='operate')
 
-    @allure.title('test_cabinet_account_001 用户修改邮箱')
+    @allure.title('test_cabinet_account_001')
+    @allure.description('用户修改邮箱')
     def test_cabinet_account_001(self):
         with allure.step("用户修改邮箱"):
             user_id = "a4d5006b-c036-42dc-8f77-b8d7baedd442"
@@ -31,7 +32,8 @@ class TestCabinetAccountApi:
         with allure.step("校验返回值"):
             assert {} == r.json(), "用户修改邮箱错误，返回值是{}".format(r.text)
 
-    @allure.title('test_cabinet_account_002 用户使用已经注册的邮箱修改邮箱')
+    @allure.title('test_cabinet_account_002')
+    @allure.description('用户使用已经注册的邮箱修改邮箱')
     def test_cabinet_account_002(self):
         with allure.step("用户修改邮箱"):
             user_id = "a4d5006b-c036-42dc-8f77-b8d7baedd442"
@@ -50,7 +52,8 @@ class TestCabinetAccountApi:
             assert 'BAD_REQUEST' == r.json()['code'], "用户使用已经注册的邮箱修改邮箱错误，返回值是{}".format(r.text)
             assert 'The email address has been registered.' == r.json()['message'], "用户使用已经注册的邮箱修改邮箱错误，返回值是{}".format(r.text)
 
-    @allure.title('test_cabinet_account_003 用户使用未找到的user_id修改绑定邮箱')
+    @allure.title('test_cabinet_account_003')
+    @allure.description('用户使用未找到的user_id修改绑定邮箱')
     def test_cabinet_account_003(self):
         with allure.step("用户修改邮箱"):
             user_id = "a4d5006b-c036-42dc-8f77-b8d7baedd44212"
@@ -67,9 +70,10 @@ class TestCabinetAccountApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'BAD_REQUEST' == r.json()['code'], "用户使用未找到的user_id修改绑定邮箱错误，返回值是{}".format(r.text)
-            assert 'User not exist.' == r.json()['message'], "用户使用未找到的user_id修改绑定邮箱错误，返回值是{}".format(r.text)
+            assert r.json()['message'] == 'User not exist', "用户使用未找到的user_id修改绑定邮箱错误，返回值是{}".format(r.text)
 
-    @allure.title('test_cabinet_account_004 未找到关闭用户otp')
+    @allure.title('test_cabinet_account_004')
+    @allure.description('未找到关闭用户otp')
     def test_cabinet_account_004(self):
         with allure.step("未找到关闭用户otp"):
             user_id = "a4d5006b-c036-42dc-8f77-b8d7baedd44212"
@@ -85,10 +89,11 @@ class TestCabinetAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'BAD_REQUEST' == r.json()['code'], "未找到关闭用户otp错误，返回值是{}".format(r.text)
-            assert 'To protect your account, you have to enable Two-Factor Authentication(2FA).' == r.json()['message'], "未找到关闭用户otp错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == 'BAD_REQUEST', "未找到关闭用户otp错误，返回值是{}".format(r.text)
+            assert r.json()['message'] == 'To protect your account, you have to enable two-factor authentication(2fa)', "未找到关闭用户otp错误，返回值是{}".format(r.text)
 
     @allure.title('test_cabinet_account_005 关闭用户otp')
+    @allure.description('关闭用户otp')
     def test_cabinet_account_005(self):
         with allure.step("用户修改邮箱"):
             user_id = "a4d5006b-c036-42dc-8f77-b8d7baedd442"

@@ -3,7 +3,6 @@ from Function.operate_sql import *
 import webbrowser
 
 
-
 @allure.feature("VND Acquiring相关的api")
 class TestAcquiringApi:
 
