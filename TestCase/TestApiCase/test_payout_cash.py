@@ -133,7 +133,7 @@ class TestPayoutCashApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['message'] == 'BRL withdraw currently is disabled to you.', "预校验BRL提现错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '103038', "预校验BRL提现错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_cash_005')
     @allure.description('创建Payme VND法币提现交易')
@@ -170,7 +170,6 @@ class TestPayoutCashApi:
     @allure.description('确认Payme VND法币提现交易')
     def test_payout_cash_006(self):
         with allure.step("确认法币提现交易"):
-            headers['Accept-Language'] = 'zh-TW'
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
             data = {
@@ -195,7 +194,6 @@ class TestPayoutCashApi:
     @allure.description('确认Payme VND法币提现交易-错误account name')
     def test_payout_cash_007(self):
         with allure.step("确认法币提现交易"):
-            headers['Accept-Language'] = 'en-US'
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
             data = {
@@ -214,7 +212,7 @@ class TestPayoutCashApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['message'] == 'Invalid account name',\
+                assert r.json()['code'] == '103015',\
                     "确认Payme VND法币提现交易-错误account name返回值错误，接口返回值是{}".format(r.text)
 
     @allure.title('test_payout_cash_008')
@@ -239,13 +237,12 @@ class TestPayoutCashApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['message'] == 'Invalid account number', \
+                assert r.json()['code'] == '103024', \
                     "确认Payme VND法币提现交易-错误account number返回值错误，接口返回值是{}".format(r.text)
 
     @allure.title('test_payout_cash_009')
     @allure.description('确认Payme VND法币提现交易-错误Swift code')
     def test_payout_cash_009(self):
-        headers['Accept-Language'] = 'en-US'
         with allure.step("确认法币提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
@@ -265,7 +262,7 @@ class TestPayoutCashApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['message'] == 'Invalid bic (swift)', \
+                assert r.json()['code'] == '103028', \
                     "确认Payme VND法币提现交易-错误Swift code返回值错误，接口返回值是{}".format(r.text)
 
     @allure.title('test_payout_cash_010')
@@ -291,5 +288,5 @@ class TestPayoutCashApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['message'] == 'Invalid beneficiary', \
+                assert r.json()['code'] == '103022', \
                     "确认Payme VND法币提现交易-错误Payment method返回值错误，接口返回值是{}".format(r.text)
