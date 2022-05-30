@@ -9,6 +9,8 @@ class TestAssetApi:
     def setup_method(self):
         with allure.step("登录客户账户获得后续操作需要的token"):
             ApiFunction.add_headers()
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['earn_email'])
 
     @allure.title('test_asset_001')
     @allure.description('查询每个币种当前资产市值')

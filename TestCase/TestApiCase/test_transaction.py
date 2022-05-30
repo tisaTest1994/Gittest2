@@ -84,9 +84,10 @@ class TestTransactionApi:
     @allure.title('test_transaction_005')
     @allure.description('web查询很后面页面交易数据为空')
     def test_transaction_005(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['earn_email'])
         data = {
             "pagination_request": {
-                "page_no": 9113,
+                "page_no": 1113,
                 "page_size": 100
             }
         }
