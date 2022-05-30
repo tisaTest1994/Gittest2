@@ -113,9 +113,9 @@ class TestWalletBalancesApi:
             assert r.json()['message'] == 'this account kyc is not passed', '错误信息错误，当前错误信息为{}'.format(
                 r.json()['message'])
 
-    @allure.title('test_wallet_balances_004')
+    @allure.title('test_wallet_004')
     @allure.description('kyc状态为：PENDING--查询可用余额列表）')
-    def test_wallet_balances_004(self):
+    def test_wallet_004(self):
         with allure.step("测试用户的account_id"):
             account_id = '358ff717-ea3c-40d4-86da-d73b4a2dce37'
         with allure.step("验签"):
@@ -136,9 +136,9 @@ class TestWalletBalancesApi:
             assert r.json()['message'] == 'this account kyc is not passed', '错误信息错误，当前错误信息为{}'.format(
                 r.json()['message'])
 
-    @allure.title('test_wallet_balances_005')
+    @allure.title('test_wallet_005')
     @allure.description('kyc状态为：temporary_rejected--查询可用余额列表）')
-    def test_wallet_balances_005(self):
+    def test_wallet_005(self):
         with allure.step("测试用户的account_id"):
             account_id = '146aa112-2fd7-4cb5-a8ff-bb2fc45f55ed'
         with allure.step("验签"):
@@ -159,9 +159,9 @@ class TestWalletBalancesApi:
             assert r.json()['message'] == 'this account kyc is not passed', '错误信息错误，当前错误信息为{}'.format(
                 r.json()['message'])
 
-    @allure.title('test_wallet_balances_006')
+    @allure.title('test_wallet_006')
     @allure.description('kyc状态为：FINAL_REJECTED-查询可用余额列表）')
-    def test_wallet_balances_006(self):
+    def test_wallet_006(self):
         with allure.step("测试用户的account_id"):
             account_id = '1799875b-5749-4056-9cc9-6fba16f0f1e0'
         with allure.step("验签"):
