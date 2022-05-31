@@ -858,12 +858,10 @@ class TestAccountApi:
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='KdNXYUK6YK@163.com')
         with allure.step("获取用户必填的KYC数据，获取数据为空"):
             r = session.request('GET', url='{}/account/info/kyc/required'.format(env_url), headers=headers)
-            print('{}/account/info/kyc/required'.format(env_url))
-            print(r.url)
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert '"registryPurpose":null,' in r.text, "获取用户必填的KYC数据，获取数据为空失败，返回值是{}".format(r.text)
+            assert r.json()['registryPurpose'] != [], "获取用户必填的KYC数据，获取数据为空失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_046')
     @allure.description('获取用户必填的KYC数据，获取全部信息')
