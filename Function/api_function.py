@@ -286,6 +286,17 @@ class ApiFunction:
         sign = str(sign, 'utf-8')
         return sign
 
+    # 验签
+    @staticmethod
+    def infinni_games_access_sign(url):
+        key = get_json()['infinni_games']['secretKey']
+        key = key.encode('utf-8')
+        message = url.encode('utf-8')
+        sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
+        sign = str(sign, 'utf-8')
+        return sign
+
+
     # 获得webhook
     @staticmethod
     def get_webhook(type='kyc'):
