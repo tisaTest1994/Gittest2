@@ -43,7 +43,7 @@ class TestAccountApi:
                 assert r.json()['link_status'] == 2, "link新用户失败，返回值是{}".format(r.text)
                 assert r.json()['connect_status'] == 3, "link新用户失败，返回值是{}".format(r.text)
         with allure.step("删除数据库link信息"):
-            sql = "delete from partner.account_link where user_ref_id = '{}';".format(params['user_ext_ref'])
+            sql = "delete from account_link where user_ref_id = '{}';".format(params['user_ext_ref'])
             logger.info('sql命令是{}'.format(sql))
             sqlFunction().connect_mysql('partner', sql=sql)
 
