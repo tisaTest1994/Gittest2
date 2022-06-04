@@ -104,7 +104,7 @@ class TestPayoutCashApi:
                                        'supported_payment_methods'] == 'Bank Transfer', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
                             # vnd提现最小限额是600000，但是为了方便测试，测试环境配的是20000
-                            assert r.json()['payment_methods']['Bank Transfer'] == {'min': '20000', 'max': '300000000',
+                            assert r.json()['payment_methods']['Bank Transfer'] == {'min': '600000', 'max': '300000000',
                                                                                     'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
                             assert r.json()['fee_rule']['percentage_charge_rule']['percentage'] == '2', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(

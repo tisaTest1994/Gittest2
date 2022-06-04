@@ -106,7 +106,7 @@ class TestPayInApi:
                     assert i in str(r.json()['fiat']), "获得法币充值币种错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_008')
-    @allure.description('显示充值法币账户的充值信息')
+    @allure.description('显示充值法币账户的充值信息-已废弃')
     def test_pay_in_008(self):
         with allure.step("充值币种"):
             for i in get_json()['cash_list']:

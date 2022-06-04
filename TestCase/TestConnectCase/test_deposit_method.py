@@ -82,7 +82,10 @@ class TestDepositMethodApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 if i == 'BRL':
-                    break
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+                    with allure.step("校验返回值"):
+                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SEPA错误，返回值是{}".format(r.text)
                 elif i == 'CHF':
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
@@ -143,7 +146,10 @@ class TestDepositMethodApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 if i == 'BRL':
-                    break
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+                    with allure.step("校验返回值"):
+                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式Faster Payments错误，返回值是{}".format(r.text)
                 elif i == 'CHF':
                     with allure.step("校验状态码"):
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
@@ -199,23 +205,16 @@ class TestDepositMethodApi:
                     r = session.request('GET',
                                         url='{}/accounts/{}/balances/{}/deposit/{}'.
                                         format(self.url, account_id, i, 'SIC'), headers=connect_headers)
-                if i == 'BRL':
-                    break
+                if i == 'BRL' or i == 'EUR' or i == 'GBP':
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+                    with allure.step("校验返回值"):
+                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
                 elif i == 'CHF':
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
                         assert r.json()['meta'] is not None, "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
-                elif i == 'EUR':
-                    with allure.step("校验状态码"):
-                        assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
-                    with allure.step("校验返回值"):
-                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
-                elif i == 'GBP':
-                    with allure.step("校验状态码"):
-                        assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
-                    with allure.step("校验返回值"):
-                        assert r.json()['code'] == 'PA019', "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
                         # bank_accounts = r.json()['meta']
                     # with allure.step("moblie接口一致性查询"):
                     #     with allure.step("CHF法币充值账户"):
@@ -231,3 +230,5 @@ class TestDepositMethodApi:
                     #             bank_accounts_mobile = r.json()['bank_accounts'][0]
                     #             del bank_accounts_mobile['header']
                     #             assert bank_accounts_mobile == bank_accounts, "moblie接口一致性查询错误，返回值是{}".format(r.text)
+
+
