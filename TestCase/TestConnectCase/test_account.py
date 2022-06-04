@@ -35,10 +35,10 @@ class TestAccountApi:
                   'test_accounts_unlinked 同用户/Cabital主动关闭与合作方的某账户关联',
                   ]
 
-    @allure.title('test_connect_account_001')
+    @allure.title('test_account_001')
     @allure.description('获取用户关联状况及partner信息')
     @pytest.mark.parametrize('account_id, expect_status, account_email', connect_account, ids=case_title)
-    def test_connect_account_001(self, account_id, expect_status, account_email):
+    def test_account_001(self, account_id, expect_status, account_email):
         logging.info("-------------------- 开始执行用例 --------------------")
         with allure.step("测试用户的account_id"):
             account_id = account_id

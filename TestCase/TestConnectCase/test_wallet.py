@@ -91,7 +91,7 @@ class TestWalletBalancesApi:
                             i, mobile_balance, r.json()['balance']['balances'])
 
     @allure.title('test_wallet_003')
-    @allure.description('kyc状态为：INITIALIZED--查询可用余额列表）')
+    @allure.description('kyc状态为：INITIALIZED--查询可用余额列表')
     def test_wallet_003(self):
         with allure.step("测试用户的account_id"):
             account_id = 'eb9659ea-0d95-4f0f-83a3-1152c5a90ee9'
@@ -114,7 +114,7 @@ class TestWalletBalancesApi:
                 r.json()['message'])
 
     @allure.title('test_wallet_004')
-    @allure.description('kyc状态为：PENDING--查询可用余额列表）')
+    @allure.description('kyc状态为：PENDING--查询可用余额列表')
     def test_wallet_004(self):
         with allure.step("测试用户的account_id"):
             account_id = '358ff717-ea3c-40d4-86da-d73b4a2dce37'

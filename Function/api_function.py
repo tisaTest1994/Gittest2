@@ -575,6 +575,16 @@ class ApiFunction:
             cfx_list.remove('{}-{}'.format(z.split('-')[1], z.split('-')[0]))
         return cfx_list
 
+    # 获得bybit换汇币种对的list
+    @staticmethod
+    def get_fiat_cfx_list():
+        cfx_list = ApiFunction.get_cfx_list()
+        cfx_list.remove('BTC-ETH')
+        cfx_list.remove('BTC-USDT')
+        cfx_list.remove('BTC-EUR')
+        cfx_list.remove('ETH-USDT')
+        return cfx_list
+
     # 换汇
     @staticmethod
     def cfx_random(pair, major_ccy):
@@ -622,5 +632,3 @@ class ApiFunction:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         return {'data': data, 'returnJson': r.json()}
-
-

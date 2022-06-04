@@ -46,7 +46,7 @@ def slack_report(type):
         title = "Web Test Report"
     elif type == 'accounting':
         title = "Accounting Test Report"
-    elif type == 'acceptance':
+    elif type == 'infinni':
         title = "Infinni Games Test Report"
     else:
         title = "Test Report"
