@@ -583,6 +583,12 @@ class ApiFunction:
         cfx_list.remove('BTC-USDT')
         cfx_list.remove('BTC-EUR')
         cfx_list.remove('ETH-USDT')
+        cfx_list.remove('BTC-BRL')
+        cfx_list.remove('ETH-BRL')
+        cfx_list.remove('USDT-BRL')
+        cfx_list.remove('BTC-VND')
+        cfx_list.remove('ETH-VND')
+        cfx_list.remove('USDT-VND')
         return cfx_list
 
     # 换汇
