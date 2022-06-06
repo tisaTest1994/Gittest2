@@ -765,7 +765,7 @@ class TestFixedApi:
             params = {
                 'tx_type': "1",
                 'cursor': 0,
-                'size': 900,
+                'size': 50,
                 'order': "1",
                 'code': "ETH"
             }
