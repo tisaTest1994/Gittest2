@@ -11,14 +11,11 @@ class TestAssetApi:
             ApiFunction.add_headers()
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['earn_email'])
+            headers['X-Currency'] = 'USD'
 
     @allure.title('test_asset_001')
     @allure.description('查询每个币种当前资产市值')
     def test_asset_001(self):
-        with allure.step("切换账号"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
-            headers['X-Currency'] = 'USD'
         with allure.step("获取币种列表"):
             crypto_list = get_json()['crypto_list']
         with allure.step("查询每个币种当前资产市值"):
@@ -36,9 +33,6 @@ class TestAssetApi:
     @allure.title('test_asset_002')
     @allure.description('获取账户资金状态')
     def test_asset_002(self):
-        with allure.step("切换账号"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
         with allure.step("获取账户资金状态"):
             r = session.request('GET', url='{}/assetstatapi/assetstat'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
@@ -52,9 +46,6 @@ class TestAssetApi:
     @allure.title('test_asset_003')
     @allure.description('获取账户详细损益')
     def test_asset_003(self):
-        with allure.step("切换账号"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
         with allure.step("获取账户资金状态"):
             r = session.request('GET', url='{}/assetstatapi/asset_pl_detail'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):

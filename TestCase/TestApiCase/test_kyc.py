@@ -85,7 +85,7 @@ class TestKycApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['additionalInfos']['PHONE'] == '+5512345678901', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(r.text)
-            assert r.json()['additionalInfos']['TAX_ID'] == '026.105.214-48', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(
+            assert r.json()['additionalInfos']['TAX_ID'] == '540.265.205-87', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(
                 r.text)
             assert r.json()['additionalInfos'][
                        'CAPITUAL_ACCOUNT_NAME'] == 'Wan yilei', "获取用户补充信息, 补充信息不为空失败，返回值是{}".format(

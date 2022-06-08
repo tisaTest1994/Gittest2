@@ -682,4 +682,3 @@ class ApiFunction:
                     support_list.append(i['symbol'])
         return support_list
 
-

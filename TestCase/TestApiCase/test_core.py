@@ -51,7 +51,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert r.json()['id'] is not None, "查询钱包某个币种的详细信息错误,返回值是{}".format(r.text)
 
-    @allure.title('test_core_004 查询货币兑换比例')
+    @allure.title('test_core_004')
     @allure.description('查询货币兑换比例')
     def test_core_004(self):
         with allure.step("获取汇率对"):
@@ -163,7 +163,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert 'wallets' in r.text, "查询钱包所有币种详细金额以及报价,以欧元价格返回错误,返回值是{}".format(r.text)
 
-    @allure.title('test_core_011 查询客户状态')
+    @allure.title('test_core_011')
     @allure.description('查询客户状态')
     def test_core_011(self):
         with allure.step("查询客户状态"):
