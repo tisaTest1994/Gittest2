@@ -11,7 +11,7 @@ class TestPartnerConfigApi:
         ApiFunction.add_headers()
 
     @allure.title('test_partner_config')
-    @allure.description('账户操作相关')
+    @allure.description('config相关')
     def test_partner_config_001(self):
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -26,9 +26,4 @@ class TestPartnerConfigApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            logger.info('connect_config接口返回值是{}'.format(str(r.text)))
-            logger.info("获取合作方的配置结果检查 ==>> 期望结果:currencies is not None,实际结果:【{}】".format(r.json()['currencies']))
-            if r.json()['currencies'] is not None:
-                assert r.json()['currencies'] is not None
-            else:
-                raise Exception("currencies is None")
+            assert r.json()['currencies'] is not None, 'config相关配置错误, 返回值是{}'.format(r.text)

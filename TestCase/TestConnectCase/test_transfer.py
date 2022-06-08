@@ -223,47 +223,48 @@ class TestTransferApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("换汇"):
-            for i in ApiFunction.get_fiat_cfx_list():
-                for y in get_json()['cash_list']:
-                    if y in i:
-                        with allure.step('换汇'):
-                            transaction = ApiFunction.cfx_random(i, i.split('-')[0])
-                            cfx_transaction_id = transaction['returnJson']['transaction']['transaction_id']
-                        with allure.step("获得otp"):
-                            secretKey = get_json()['email']['secretKey_richard']
-                            totp = pyotp.TOTP(secretKey)
-                            mfaVerificationCode = totp.now()
-                        with allure.step("获得data"):
-                            data = {
-                                'amount': transaction['data']['buy_amount'],
-                                'symbol': i.split('-')[0],
-                                'otp': str(mfaVerificationCode),
-                                'direction': 'DEBIT',
-                                'external_id': generate_string(15),
-                                'conversion_id': cfx_transaction_id
-                            }
-                        with allure.step("验签"):
-                            unix_time = int(time.time())
-                            nonce = generate_string(30)
-                            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                                url='/api/v1/accounts/{}/transfers'.format(
-                                                                    account_id),
-                                                                nonce=nonce,
-                                                                body=json.dumps(data))
-                            connect_headers['ACCESS-SIGN'] = sign
-                            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                            connect_headers['ACCESS-NONCE'] = nonce
-                        with allure.step("把BTC从cabital转移到bybit账户并且关联C+T交易"):
-                            r = session.request('POST',
-                                                url='{}/accounts/{}/transfers'.format(self.url, account_id),
-                                                data=json.dumps(data), headers=connect_headers)
-                        with allure.step("状态码和返回值"):
-                            logger.info('状态码是{}'.format(str(r.status_code)))
-                            logger.info('返回值是{}'.format(str(r.text)))
-                        with allure.step("校验状态码"):
-                            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-                        with allure.step("校验返回值"):
-                            assert r.json()['status'] == 'SUCCESS', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
-                        with allure.step("mfa 30 秒使用"):
-                            sleep(30)
-
+            for i in ApiFunction.get_connect_cfx_list(self.url, connect_headers):
+                with allure.step('换汇'):
+                    transaction = ApiFunction.cfx_random(i, i.split('-')[0])
+                    cfx_transaction_id = transaction['returnJson']['transaction']['transaction_id']
+                with allure.step("获得otp"):
+                    secretKey = get_json()['email']['secretKey_richard']
+                    totp = pyotp.TOTP(secretKey)
+                    mfaVerificationCode = totp.now()
+                with allure.step("获得data"):
+                    if i.split('-')[0] in get_json()['crypto_list']:
+                        symbol = i.split('-')[0]
+                    else:
+                        symbol = i.split('-')[1]
+                    data = {
+                        'amount': transaction['data']['buy_amount'],
+                        'symbol': symbol,
+                        'otp': str(mfaVerificationCode),
+                        'direction': 'DEBIT',
+                        'external_id': generate_string(15),
+                        'conversion_id': cfx_transaction_id
+                    }
+                with allure.step("验签"):
+                    unix_time = int(time.time())
+                    nonce = generate_string(30)
+                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                        url='/api/v1/accounts/{}/transfers'.format(
+                                                            account_id),
+                                                        nonce=nonce,
+                                                        body=json.dumps(data))
+                    connect_headers['ACCESS-SIGN'] = sign
+                    connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                    connect_headers['ACCESS-NONCE'] = nonce
+                with allure.step("把BTC从cabital转移到bybit账户并且关联C+T交易"):
+                    r = session.request('POST',
+                                        url='{}/accounts/{}/transfers'.format(self.url, account_id),
+                                        data=json.dumps(data), headers=connect_headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验返回值"):
+                    assert r.json()['status'] == 'SUCCESS', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
+                with allure.step("mfa 30 秒使用"):
+                    sleep(30)

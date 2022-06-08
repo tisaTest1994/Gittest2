@@ -42,6 +42,7 @@ class TestAccountApi:
         logging.info("-------------------- 开始执行用例 --------------------")
         with allure.step("测试用户的account_id"):
             account_id = account_id
+            print(account_id)
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
@@ -58,10 +59,14 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             if expect_status == "NONE":
                 assert r.status_code == 403, "http状态码不对，目前状态码是{}".format(r.status_code)
+            elif expect_status == "MISMATCHED" or expect_status == "UNLINKED":
+                assert r.status_code == 403, "http状态码不对，目前状态码是{}".format(r.status_code)
             else:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             if expect_status == "NONE":
+                assert r.text == '', "获取未关联用户状况错误，返回值是{}".format(r.text)
+            elif expect_status == "MISMATCHED" or expect_status == "UNLINKED":
                 assert r.text == '', "获取未关联用户状况错误，返回值是{}".format(r.text)
             else:
                 assert r.json()['account_status'] == expect_status, "获取关联用户状况,期望状态是{}，返回值是{}".format(expect_status, r.text)

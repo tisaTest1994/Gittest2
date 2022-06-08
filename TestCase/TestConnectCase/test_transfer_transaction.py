@@ -12,12 +12,12 @@ class TestTransactionApi:
 
     @allure.title('test_transaction_001')
     @allure.description('先进行一笔交易后，查询转账记录')
-    def test_connect_transaction_006(self):
+    def test_transaction_001(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("获得otp"):
             sleep(30)
-            secretKey = get_json()['email']['secretKey']
+            secretKey = get_json()['email']['secretKey_richard']
             totp = pyotp.TOTP(secretKey)
             mfaVerificationCode = totp.now()
         with allure.step("获得data"):

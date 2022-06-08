@@ -579,20 +579,22 @@ class ApiFunction:
             cfx_list.remove('{}-{}'.format(z.split('-')[1], z.split('-')[0]))
         return cfx_list
 
-    # 获得bybit换汇币种对的list
+    # 获得connect cfx list
     @staticmethod
-    def get_fiat_cfx_list():
-        cfx_list = ApiFunction.get_cfx_list()
-        cfx_list.remove('BTC-ETH')
-        cfx_list.remove('BTC-USDT')
-        cfx_list.remove('BTC-EUR')
-        cfx_list.remove('ETH-USDT')
-        cfx_list.remove('BTC-BRL')
-        cfx_list.remove('ETH-BRL')
-        cfx_list.remove('USDT-BRL')
-        cfx_list.remove('BTC-VND')
-        cfx_list.remove('ETH-VND')
-        cfx_list.remove('USDT-VND')
+    def get_connect_cfx_list(url, headers):
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
+                                                nonce=nonce)
+            connect_headers['ACCESS-SIGN'] = sign
+            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_headers['ACCESS-NONCE'] = nonce
+        with allure.step("获取合作方的配置"):
+            r = session.request('GET', url='{}/config'.format(url), headers=headers)
+            cfx_list = []
+            for i in r.json()['pairs']:
+                cfx_list.append(i['pair'])
         return cfx_list
 
     # 换汇
@@ -642,3 +644,42 @@ class ApiFunction:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         return {'data': data, 'returnJson': r.json()}
+
+    # 获得connect支持币种
+    @staticmethod
+    def get_connect_support(url, headers):
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
+                                                nonce=nonce)
+            connect_headers['ACCESS-SIGN'] = sign
+            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_headers['ACCESS-NONCE'] = nonce
+        with allure.step("获取合作方的配置"):
+            r = session.request('GET', url='{}/config'.format(url), headers=headers)
+            support_list = []
+            for i in r.json()['currencies']:
+                support_list.append(i['symbol'])
+        return support_list
+
+    # 获得connect支持cash币种
+    @staticmethod
+    def get_connect_support_cash(url, headers):
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
+                                                nonce=nonce)
+            connect_headers['ACCESS-SIGN'] = sign
+            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_headers['ACCESS-NONCE'] = nonce
+        with allure.step("获取合作方的配置"):
+            r = session.request('GET', url='{}/config'.format(url), headers=headers)
+            support_list = []
+            for i in r.json()['currencies']:
+                if i['type'] == 1:
+                    support_list.append(i['symbol'])
+        return support_list
+
+
