@@ -29,8 +29,7 @@ class TestMarketApi:
     @allure.title('test_market_002 获得行情信息')
     def test_market_002(self):
         with allure.step("获得行情信息"):
-            List = ["BTC", "ETH", "USDT"]
-            for i in List:
+            for i in get_json()['crypto_list']:
                 params = {
                     "code": i
                 }

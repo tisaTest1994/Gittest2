@@ -269,6 +269,8 @@ class ApiFunction:
         if nonce == '':
             if key == '':
                 key = get_json()['kyc'][get_json()['env']]['kycSecretKey']
+            elif key == 'infinni games':
+                key = get_json()['infinni_games']['secretKey']
             if body == '':
                 data = '{}{}{}'.format(unix_time, method, url)
             else:
@@ -276,6 +278,9 @@ class ApiFunction:
         else:
             if key == '':
                 key = get_json()['connect'][get_json()['env']]['bybit']['secretKey']
+            elif key == 'infinni games':
+                key = get_json()['infinni_games']['secretKey']
+                print(key)
             if body == '':
                 data = '{}{}{}{}'.format(unix_time, method, nonce, url)
             else:
@@ -295,7 +300,6 @@ class ApiFunction:
         sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
         sign = str(sign, 'utf-8')
         return sign
-
 
     # 获得webhook
     @staticmethod

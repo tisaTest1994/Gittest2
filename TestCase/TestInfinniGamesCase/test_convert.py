@@ -12,24 +12,9 @@ class TestConvertApi:
             ApiFunction.add_headers()
         with allure.step("多语言支持"):
             headers['locale'] = 'zh-TW'
+        with allure.step("ACCESS-KEY"):
+            headers['ACCESS-KEY'] = get_json()['infinni_games']['partner_id']
 
-    @allure.title('test_partner_config')
-    @allure.description('账户操作相关')
-    def test_partner_config_001(self):
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
-                                                nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
-        with allure.step("获取合作方的配置"):
-            r = session.request('GET', url='{}/config'.format(self.url), headers=connect_headers)
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['currencies'] is not None
 
     @allure.title('test_currency_quotes_001')
     @allure.description('获取报价最新的报价')
