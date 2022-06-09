@@ -79,7 +79,7 @@ class TestTransferApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['code'] == 'PA009', "没有通过kyc的账户划转列表（不传默认参数）失败错误，返回值是{}".format(r.text)
+            assert r.json()['transfers'] is None, "没有通过kyc的账户划转列表（不传默认参数）失败错误，返回值是{}".format(r.text)
 
     @allure.title('test_transfer_004')
     @allure.description('把数字货币从cabital转移到bybit账户（小于单比最小限额）')

@@ -1,209 +1,209 @@
-# from Function.api_function import *
-# from Function.operate_sql import *
-#
-#
-# @allure.feature("mobile api payout 相关 testcases")
-# class TestPayoutApi:
-#
-#     # 初始化class
-#     def setup_method(self):
-#         ApiFunction.add_headers()
-#
-#     @allure.title('test_payout_001')
-#     @allure.description('没有Kyc用户添加常用收款地址失败')
-#     def test_payout_001(self):
-#         account = generate_email()
-#         password = get_json()['email']['password']
-#         with allure.step("提前先注册好"):
-#             ApiFunction.sign_up(account, password)
-#         with allure.step("把token写入headers"):
-#             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account, password=password)
-#         with allure.step("没有Kyc用户添加常用收款地址失败"):
-#             data = {
-#                 "nickName": "alan EUR ERC20",
-#                 "currency": "USDT",
-#                 "method": "ERC20",
-#                 "address": "0xf4af4d6dfcba0844d78bf091070d33c0e378cc88"
-#             }
-#             r = session.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
-#                                 headers=headers)
-#         ApiFunction.add_headers()
-#         with allure.step("状态码和返回值"):
-#             logger.info('状态码是{}'.format(str(r.status_code)))
-#             logger.info('返回值是{}'.format(str(r.text)))
-#         with allure.step("校验状态码"):
-#             assert r.status_code == 403, "http 状态码不对，目前状态码是{}".format(r.status_code)
-#         with allure.step("校验返回值"):
-#             assert r.json()['code'] == 'ACC_FORBIDDEN', "没有Kyc用户添加常用收款地址失败错误，返回值是{}".format(r.text)
-#
-#     @allure.title('test_payout_002 获取存储的常用收款地址list')
-#     @allure.description('获取存储的常用收款地址list')
-#     def test_payout_002(self):
-#         with allure.step("获取存储的常用收款地址list"):
-#             r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
-#         with allure.step("状态码和返回值"):
-#             logger.info('状态码是{}'.format(str(r.status_code)))
-#             logger.info('返回值是{}'.format(str(r.text)))
-#         with allure.step("校验状态码"):
-#             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-#         with allure.step("校验返回值"):
-#             assert r.json()['payeeList'] is not None, "获取存储的常用收款地址list错误，返回值是{}".format(r.text)
-#
-#     @allure.title('test_payout_003')
-#     @allure.description('获取某个常用收款地址')
-#     def test_payout_003(self):
-#         with allure.step("获取收款地址list"):
-#             r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
-#         with allure.step("获取单个收款地址id"):
-#             id = r.json()['payeeList'][0]['id']
-#         with allure.step("获取某个常用收款地址"):
-#             r = session.request('GET', url='{}/account/myPayee/{}'.format(env_url, id), headers=headers)
-#         with allure.step("状态码和返回值"):
-#             logger.info('状态码是{}'.format(str(r.status_code)))
-#             logger.info('返回值是{}'.format(str(r.text)))
-#         with allure.step("校验状态码"):
-#             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-#         with allure.step("校验返回值"):
-#             assert r.json()['payeeList'] is not None, "获取某个常用收款地址错误，返回值是{}".format(r.text)
-#
-#     @allure.title('test_payout_004')
-#     @allure.description('使用不存在id获取常用收款地址')
-#     def test_payout_004(self):
-#         with allure.step("使用不存在id获取常用收款地址"):
-#             r = session.request('GET', url='{}/account/myPayee/{}'.format(env_url, '1111300'), headers=headers)
-#         with allure.step("状态码和返回值"):
-#             logger.info('状态码是{}'.format(str(r.status_code)))
-#             logger.info('返回值是{}'.format(str(r.text)))
-#         with allure.step("校验状态码"):
-#             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-#         with allure.step("校验返回值"):
-#             assert r.json()['code'] == '001015', "使用不存在id获取常用收款地址错误，返回值是{}".format(r.text)
-#
-#     @allure.title('test_payout_005')
-#     @allure.description('删除不存在的收款地址')
-#     def test_payout_005(self):
-#         with allure.step("凭借空id号删除地址"):
-#             r = session.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, '123131300'), headers=headers)
-#         with allure.step("状态码和返回值"):
-#             logger.info('状态码是{}'.format(str(r.status_code)))
-#             logger.info('返回值是{}'.format(str(r.text)))
-#         with allure.step("校验状态码"):
-#             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-#         with allure.step("校验返回值"):
-#             assert r.json()['code'] == '001015', "删除收款地址错误，返回值是{}".format(r.text)
-#
-#     @allure.title('test_payout_006')
-#     @allure.description('获取提现费率和提现限制')
-#     def test_payout_006(self):
-#         crypto_list = get_json()['crypto_list']
-#         for i in crypto_list:
-#             with allure.step("获取提现费率和提现限制"):
-#                 data = {
-#                     "amount": "0.11",
-#                     "code": i,
-#                     "address": "0x623089BFb1dc2d3023Ba4bd0f42F61d66826994eu",
-#                     "method": "ERC20"
-#                 }
-#                 r = session.request('POST', url='{}/pay/withdraw/verification'.format(env_url), data=json.dumps(data),
-#                                     headers=headers)
-#             with allure.step("校验状态码"):
-#                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-#             with allure.step("校验返回值"):
-#                 logger.info('接口返回值是{}'.format(str(r.text)))
-#                 logger.info(" 期望结果:数字货币fee[BTC 0.0006; USDT 12;ETH  0.004];实际结果:fee【{} {}】".format(i, r.json()['fee']))
-#                 if i not in crypto_list:
-#                     raise Exception(("查看法币列表是否新增", crypto_list), ('接口返回', r.json()))
-#                 elif i == 'BTC':
-#                     assert r.json()['fee'] == '0.0006'
-#                 elif i == 'USDT':
-#                     assert r.json()['fee'] == '12'
-#                 elif i == 'BRL':
-#                     assert r.json()['ETH'] == '0.004'
-#
-#     @allure.title('test_payout_008')
-#     @allure.description('查询提现详情')
-#     def test_payout_008(self):
-#         with allure.step("获得交易transaction_id"):
-#             transaction_id = ApiFunction.get_payout_transaction_id()
-#             logger.info('transaction_id是{}'.format(transaction_id))
-#             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token()
-#         with allure.step("查询提现详情"):
-#             r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id),
-#                                 headers=headers)
-#             ApiFunction.add_headers()
-#         with allure.step("状态码和返回值"):
-#             logger.info('状态码是{}'.format(str(r.status_code)))
-#             logger.info('返回值是{}'.format(str(r.text)))
-#         with allure.step("校验状态码"):
-#             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-#         with allure.step("校验返回值"):
-#             assert 'status' in r.text, "查询提现详情错误，返回值是{}".format(r.text)
-#
-#     @allure.title('test_payout_009')
-#     @allure.description('使用错误id查询提现详情')
-#     def test_payout_009(self):
-#         with allure.step("查询提现详情"):
-#             r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url,
-#                                                                                     '4684225231310-3fa0-4bd1-9d46-4467dfa9ce52'),
-#                                 headers=headers)
-#         with allure.step("状态码和返回值"):
-#             logger.info('状态码是{}'.format(str(r.status_code)))
-#             logger.info('返回值是{}'.format(str(r.text)))
-#         with allure.step("校验状态码"):
-#             assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-#         with allure.step("校验返回值"):
-#             assert 'no rows in result set' in r.text, "使用错误id查询提现详情错误，返回值是{}".format(r.text)
-#
-#     @allure.title('test_payout_010')
-#     @allure.description('法币提现获得信息，白名单排序')
-#     def test_payout_010(self):
-#         with allure.step("法币提现获得信息"):
-#             data = {
-#                 'code': 'EUR',
-#                 'payment_method': 'SEPA'
-#             }
-#             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=data, headers=headers)
-#         with allure.step("状态码和返回值"):
-#             logger.info('状态码是{}'.format(str(r.status_code)))
-#             logger.info('返回值是{}'.format(str(r.text)))
-#         with allure.step("校验状态码"):
-#             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-#         a = 1
-#         with allure.step("确保1在前，0在后"):
-#             for i in r.json()['account_names']:
-#                 if a == 1:
-#                     if i['status'] == 0:
-#                         a = 0
-#                 elif a == 0:
-#                     assert i['status'] == 0, '白名单排序问题，没1在前0在后。'
-#
-#     @allure.title('test_payout_013')
-#     @allure.description('获得数字货币提现币种')
-#     def test_payout_013(self):
-#         with allure.step("提现币种"):
-#             r = session.request('GET', url='{}/pay/withdraw/ccy/{}'.format(env_url, 'crypto'), headers=headers)
-#             with allure.step("状态码和返回值"):
-#                 logger.info('状态码是{}'.format(str(r.status_code)))
-#                 logger.info('返回值是{}'.format(str(r.text)))
-#             with allure.step("校验状态码"):
-#                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-#             with allure.step("校验返回值"):
-#                 assert 'crypto' in r.text, "获得数字货币提现币种错误，返回值是{}".format(r.text)
-#
-#     @allure.title('test_payout_014')
-#     @allure.description('获得全部提现币种')
-#     def test_payout_014(self):
-#         with allure.step("提现币种"):
-#             r = session.request('GET', url='{}/pay/withdraw/ccy/{}'.format(env_url, ''), headers=headers)
-#             with allure.step("状态码和返回值"):
-#                 logger.info('状态码是{}'.format(str(r.status_code)))
-#                 logger.info('返回值是{}'.format(str(r.text)))
-#             with allure.step("校验状态码"):
-#                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-#             with allure.step("校验返回值"):
-#                 assert 'fiat' in r.text, "获得全部提现币种错误，返回值是{}".format(r.text)
-#                 assert 'crypto' in r.text, "获得全部提现币种错误，返回值是{}".format(r.text)
-#
+from Function.api_function import *
+from Function.operate_sql import *
+
+
+@allure.feature("mobile api payout 相关 testcases")
+class TestPayoutApi:
+
+    # 初始化class
+    def setup_method(self):
+        ApiFunction.add_headers()
+
+    @allure.title('test_payout_001')
+    @allure.description('没有Kyc用户添加常用收款地址失败')
+    def test_payout_001(self):
+        account = generate_email()
+        password = get_json()['email']['password']
+        with allure.step("提前先注册好"):
+            ApiFunction.sign_up(account, password)
+        with allure.step("把token写入headers"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account, password=password)
+        with allure.step("没有Kyc用户添加常用收款地址失败"):
+            data = {
+                "nickName": "alan EUR ERC20",
+                "currency": "USDT",
+                "method": "ERC20",
+                "address": "0xf4af4d6dfcba0844d78bf091070d33c0e378cc88"
+            }
+            r = session.request('POST', url='{}/account/myPayee/create'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+        ApiFunction.add_headers()
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 403, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['code'] == 'ACC_FORBIDDEN', "没有Kyc用户添加常用收款地址失败错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_002 获取存储的常用收款地址list')
+    @allure.description('获取存储的常用收款地址list')
+    def test_payout_002(self):
+        with allure.step("获取存储的常用收款地址list"):
+            r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['payeeList'] is not None, "获取存储的常用收款地址list错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_003')
+    @allure.description('获取某个常用收款地址')
+    def test_payout_003(self):
+        with allure.step("获取收款地址list"):
+            r = session.request('GET', url='{}/account/myPayee/list'.format(env_url), headers=headers)
+        with allure.step("获取单个收款地址id"):
+            id = r.json()['payeeList'][0]['id']
+        with allure.step("获取某个常用收款地址"):
+            r = session.request('GET', url='{}/account/myPayee/{}'.format(env_url, id), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['payeeList'] is not None, "获取某个常用收款地址错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_004')
+    @allure.description('使用不存在id获取常用收款地址')
+    def test_payout_004(self):
+        with allure.step("使用不存在id获取常用收款地址"):
+            r = session.request('GET', url='{}/account/myPayee/{}'.format(env_url, '1111300'), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['code'] == '001015', "使用不存在id获取常用收款地址错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_005')
+    @allure.description('删除不存在的收款地址')
+    def test_payout_005(self):
+        with allure.step("凭借空id号删除地址"):
+            r = session.request('DELETE', url='{}/account/myPayee/{}'.format(env_url, '123131300'), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['code'] == '001015', "删除收款地址错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_006')
+    @allure.description('获取提现费率和提现限制')
+    def test_payout_006(self):
+        crypto_list = get_json()['crypto_list']
+        for i in crypto_list:
+            with allure.step("获取提现费率和提现限制"):
+                data = {
+                    "amount": "0.11",
+                    "code": i,
+                    "address": "0x623089BFb1dc2d3023Ba4bd0f42F61d66826994eu",
+                    "method": "ERC20"
+                }
+                r = session.request('POST', url='{}/pay/withdraw/verification'.format(env_url), data=json.dumps(data),
+                                    headers=headers)
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                logger.info('接口返回值是{}'.format(str(r.text)))
+                logger.info(" 期望结果:数字货币fee[BTC 0.0006; USDT 12;ETH  0.004];实际结果:fee【{} {}】".format(i, r.json()['fee']))
+                if i not in crypto_list:
+                    raise Exception(("查看法币列表是否新增", crypto_list), ('接口返回', r.json()))
+                elif i == 'BTC':
+                    assert r.json()['fee'] == '0.0006'
+                elif i == 'USDT':
+                    assert r.json()['fee'] == '12'
+                elif i == 'BRL':
+                    assert r.json()['ETH'] == '0.004'
+
+    @allure.title('test_payout_008')
+    @allure.description('查询提现详情')
+    def test_payout_008(self):
+        with allure.step("获得交易transaction_id"):
+            transaction_id = ApiFunction.get_payout_transaction_id()
+            logger.info('transaction_id是{}'.format(transaction_id))
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token()
+        with allure.step("查询提现详情"):
+            r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url, transaction_id),
+                                headers=headers)
+            ApiFunction.add_headers()
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'status' in r.text, "查询提现详情错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_009')
+    @allure.description('使用错误id查询提现详情')
+    def test_payout_009(self):
+        with allure.step("查询提现详情"):
+            r = session.request('GET', url='{}/pay/withdraw/transactions/{}'.format(env_url,
+                                                                                    '4684225231310-3fa0-4bd1-9d46-4467dfa9ce52'),
+                                headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'no rows in result set' in r.text, "使用错误id查询提现详情错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_010')
+    @allure.description('法币提现获得信息，白名单排序')
+    def test_payout_010(self):
+        with allure.step("法币提现获得信息"):
+            data = {
+                'code': 'EUR',
+                'payment_method': 'SEPA'
+            }
+            r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=data, headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        a = 1
+        with allure.step("确保1在前，0在后"):
+            for i in r.json()['account_names']:
+                if a == 1:
+                    if i['status'] == 0:
+                        a = 0
+                elif a == 0:
+                    assert i['status'] == 0, '白名单排序问题，没1在前0在后。'
+
+    @allure.title('test_payout_011')
+    @allure.description('获得数字货币提现币种')
+    def test_payout_011(self):
+        with allure.step("提现币种"):
+            r = session.request('GET', url='{}/pay/withdraw/ccy/{}'.format(env_url, 'crypto'), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'crypto' in r.text, "获得数字货币提现币种错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_012')
+    @allure.description('获得全部提现币种')
+    def test_payout_012(self):
+        with allure.step("提现币种"):
+            r = session.request('GET', url='{}/pay/withdraw/ccy/{}'.format(env_url, ''), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'fiat' in r.text, "获得全部提现币种错误，返回值是{}".format(r.text)
+                assert 'crypto' in r.text, "获得全部提现币种错误，返回值是{}".format(r.text)
+
 #     @allure.title('test_payout_016')
 #     @allure.description('BCB EUR法币提现')
 #     def test_payout_016(self):

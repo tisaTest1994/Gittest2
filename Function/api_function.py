@@ -280,7 +280,6 @@ class ApiFunction:
                 key = get_json()['connect'][get_json()['env']]['bybit']['secretKey']
             elif key == 'infinni games':
                 key = get_json()['infinni_games']['secretKey']
-                print(key)
             if body == '':
                 data = '{}{}{}{}'.format(unix_time, method, nonce, url)
             else:
@@ -681,4 +680,7 @@ class ApiFunction:
                 if i['type'] == 1:
                     support_list.append(i['symbol'])
         return support_list
+
+
+
 

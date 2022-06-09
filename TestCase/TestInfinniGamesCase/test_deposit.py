@@ -22,12 +22,17 @@ class TestDepositApi:
             with allure.step("验签"):
                 unix_time = int(time.time())
                 nonce = generate_string(30)
-                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
-                                                    url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(account_id, i, ),
-                                                    key='infinni games', nonce=nonce)
-                headers['ACCESS-SIGN'] = sign
-                headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                headers['ACCESS-NONCE'] = nonce
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
+                                                    nonce=nonce)
+                connect_headers['ACCESS-SIGN'] = sign
+                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                connect_headers['ACCESS-NONCE'] = nonce
+            with allure.step("获取合作方的配置"):
+                r = session.request('GET', url='{}/config'.format(self.url), headers=headers)
+                support_list = []
+                for i in r.json()['currencies']:
+                    if i['type'] == 1:
+                        support_list.append(i['symbol'])
 
 
 

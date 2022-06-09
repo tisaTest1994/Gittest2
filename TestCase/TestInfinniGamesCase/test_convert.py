@@ -15,7 +15,6 @@ class TestConvertApi:
         with allure.step("ACCESS-KEY"):
             headers['ACCESS-KEY'] = get_json()['infinni_games']['partner_id']
 
-
     @allure.title('test_currency_quotes_001')
     @allure.description('获取报价最新的报价')
     def test_currency_quotes_001(self):
