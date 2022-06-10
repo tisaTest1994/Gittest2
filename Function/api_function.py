@@ -578,24 +578,6 @@ class ApiFunction:
             cfx_list.remove('{}-{}'.format(z.split('-')[1], z.split('-')[0]))
         return cfx_list
 
-    # 获得connect cfx list
-    @staticmethod
-    def get_connect_cfx_list(url, headers):
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
-                                                nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
-        with allure.step("获取合作方的配置"):
-            r = session.request('GET', url='{}/config'.format(url), headers=headers)
-            cfx_list = []
-            for i in r.json()['pairs']:
-                cfx_list.append(i['pair'])
-        return cfx_list
-
     # 换汇
     @staticmethod
     def cfx_random(pair, major_ccy):
@@ -644,14 +626,16 @@ class ApiFunction:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         return {'data': data, 'returnJson': r.json()}
 
-    # 获得connect支持币种
+    # 根据config 获得支持币种，支持bybit，infinni games
     @staticmethod
-    def get_connect_support(url, headers):
+    def get_connect_support(url, headers, key=''):
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
-                                                nonce=nonce)
+            if key == 'infinni games':
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', key='infinni games', nonce=nonce)
+            else:
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', nonce=nonce)
             connect_headers['ACCESS-SIGN'] = sign
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
@@ -662,14 +646,16 @@ class ApiFunction:
                 support_list.append(i['symbol'])
         return support_list
 
-    # 获得connect支持cash币种
+    # 根据config 获得支持cash币种，支持bybit，infinni games
     @staticmethod
-    def get_connect_support_cash(url, headers):
+    def get_connect_support_cash(url, headers, key=''):
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
-                                                nonce=nonce)
+            if key == 'infinni games':
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', key='infinni games', nonce=nonce)
+            else:
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', nonce=nonce)
             connect_headers['ACCESS-SIGN'] = sign
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
@@ -681,6 +667,25 @@ class ApiFunction:
                     support_list.append(i['symbol'])
         return support_list
 
+    # 根据config 获得cfx list，支持bybit，infinni games
+    @staticmethod
+    def get_connect_cfx_list(url, headers, key=''):
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            if key == 'infinni games':
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', key='infinni games', nonce=nonce)
+            else:
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', nonce=nonce)
+            headers['ACCESS-SIGN'] = sign
+            headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            headers['ACCESS-NONCE'] = nonce
+        with allure.step("获取合作方的配置"):
+            r = session.request('GET', url='{}/config'.format(url), headers=headers)
+            cfx_list = []
+            for i in r.json()['pairs']:
+                cfx_list.append(i['pair'])
+        return cfx_list
 
 
 

@@ -17,32 +17,36 @@ class TestDepositApi:
     @allure.title('test_deposit_001')
     @allure.description('获取入账显示')
     def test_deposit_001(self):
-        with allure.step("获取用户的所有账户余额"):
+        with allure.step("获取入账显示"):
             account_id = get_json()['infinni_games']['account_vid']
             with allure.step("验签"):
                 unix_time = int(time.time())
                 nonce = generate_string(30)
-                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', key='infinni games',
                                                     nonce=nonce)
-                connect_headers['ACCESS-SIGN'] = sign
-                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                connect_headers['ACCESS-NONCE'] = nonce
+                headers['ACCESS-SIGN'] = sign
+                headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                headers['ACCESS-NONCE'] = nonce
             with allure.step("获取合作方的配置"):
                 r = session.request('GET', url='{}/config'.format(self.url), headers=headers)
-                support_list = []
                 for i in r.json()['currencies']:
                     if i['type'] == 1:
-                        support_list.append(i['symbol'])
+                        for y in i['deposit_methods']:
+                            with allure.step("获取入账显示"):
+                                with allure.step("验签"):
+                                    unix_time = int(time.time())
+                                    nonce = generate_string(30)
+                                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                                        url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(account_id, i['symbol'], y), key='infinni games',
+                                                                        nonce=nonce)
+                                    headers['ACCESS-SIGN'] = sign
+                                    headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                                    headers['ACCESS-NONCE'] = nonce
+                                with allure.step("获取入账显示"):
+                                    r = session.request('GET', url='{}/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id, i['symbol'], y), headers=headers)
+                                with allure.step("校验状态码"):
+                                    assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                                with allure.step("校验返回值"):
+                                    assert r.json()['symbol'] == i['symbol'], "获取入账显示错误，返回值是{}".format(r.text)
 
 
-
-
-        # with allure.step("账户可用余额列表"):
-        #     r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id), headers=headers)
-        # with allure.step("状态码和返回值"):
-        #     logger.info('状态码是{}'.format(str(r.status_code)))
-        #     logger.info('返回值是{}'.format(str(r.text)))
-        # with allure.step("校验状态码"):
-        #     assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        # with allure.step("校验返回值"):
-        #     assert r.json()['balances'] is not None, "账户可用余额列表错误，返回值是{}".format(r.text)
