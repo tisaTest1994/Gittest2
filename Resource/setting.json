@@ -300,6 +300,13 @@
         },
         "secretKey": "d7277081-3edd-47b6-b016-114f44f19320"
       },
+      "gcp": {
+        "Headers": {
+          "ACCESS-KEY": "e1059392-d694-11ec-ae7e-0a3898443cb8",
+          "Content-Type": "application/json"
+        },
+        "secretKey": "0d5e13da-d695-11ec-ae7e-0a3898443cb8"
+      },
       "google": {
         "Headers": {
           "ACCESS-KEY": "75db0a63-51a2-11ec-b90b-ae07b6f1ed79",
