@@ -772,9 +772,6 @@ class TestCoreApi:
                 with allure.step("获取所有Saving产品的收益详情数字货币活期已派发利息的数量和金额"):
                     r = session.request('GET', url='{}/earn/saving/return'.format(env_url),
                                         headers=headers)
-                with allure.step("状态码和返回值"):
-                    logger.info('状态码是{}'.format(str(r.status_code)))
-                    logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("flexible_earning_map"):

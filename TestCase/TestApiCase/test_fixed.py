@@ -898,7 +898,7 @@ class TestFixedApi:
             params = {
                 'tx_type': "1",
                 'cursor': 0,
-                'size': 900,
+                'size': 30,
                 'order': "1",
                 'code': product_list['code']
             }
