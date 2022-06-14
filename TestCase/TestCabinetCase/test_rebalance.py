@@ -73,33 +73,33 @@ class TestRebalanceApi:
                             "value_date": "2021-12-12",
                             "order_type_enum": 1,
                             "counterparty_txn_id": generate_string(16),
-                            "money_house_id": "MoneyHouseTypeFireBlocksDGTLT",
-                            "currency": "ETH",
-                            "principal": "100",
+                            "money_house_id": "MoneyHouseTypeLedger1DGTLT",
+                            "currency": "CHESS",
+                            "principal": "45",
                             "fee_detail": {
-                                "amount": "10",
+                                "amount": "5",
                                 "cost_type": 1,
-                                "currency": "ETH"
+                                "currency": "CHESS"
                             },
                             "operator": "system",
                             "txn_hash": txn_hash,
-                            "money_house_account_id": "3a3b729d-f04e-11eb-9e63-ba224deb3be4",
+                            "money_house_account_id": "dfe0bdd9-9abe-11ec-ae7e-0a3898443cb8",
                             "order_id": ""
                         },
                         {
                             "value_date": "2021-12-23",
                             "order_type_enum": 2,
                             "counterparty_txn_id": generate_string(16),
-                            "money_house_id": "MoneyHouseTypeFTXDGTLT",
-                            "currency": "ETH",
-                            "principal": "110",
+                            "money_house_id": "MoneyHouseTypeLedger2DGTLT",
+                            "currency": "CHESS",
+                            "principal": "50",
                             "fee_detail": {
                                 "cost_type": 0,
                                 "amount": "0"
                             },
                             "operator": "system",
                             "txn_hash": txn_hash,
-                            "money_house_account_id": "3a3b81da-f04e-11eb-9e63-ba224deb3be4",
+                            "money_house_account_id": "dfe0c274-9abe-11ec-ae7e-0a3898443cb8",
                             "order_id": ""
                         }
                     ]

@@ -66,12 +66,12 @@ AccountingTest:
       - Reports
     expire_in: 1 week
 
-Kyc Acceptance Test:
+Infinni Games Test:
   stage: test5
   tags:
     - python
   script:
-    - python run.py acceptance
+    - python run.py infinni
   artifacts:
     paths:
       - Reports
@@ -87,17 +87,3 @@ KycTest:
     paths:
       - Reports
     expire_in: 1 week
-
-
-# WebTest:
-#   stage: test5
-#   tags:
-#     - python
-#   services:
-#     - selenium/standalone-chrome:latest
-#   script:
-#     - python run.py web test
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week

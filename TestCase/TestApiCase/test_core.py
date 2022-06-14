@@ -51,7 +51,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert r.json()['id'] is not None, "查询钱包某个币种的详细信息错误,返回值是{}".format(r.text)
 
-    @allure.title('test_core_004 查询货币兑换比例')
+    @allure.title('test_core_004')
     @allure.description('查询货币兑换比例')
     def test_core_004(self):
         with allure.step("获取汇率对"):
@@ -163,7 +163,7 @@ class TestCoreApi:
         with allure.step("校验返回值"):
             assert 'wallets' in r.text, "查询钱包所有币种详细金额以及报价,以欧元价格返回错误,返回值是{}".format(r.text)
 
-    @allure.title('test_core_011 查询客户状态')
+    @allure.title('test_core_011')
     @allure.description('查询客户状态')
     def test_core_011(self):
         with allure.step("查询客户状态"):
@@ -772,9 +772,6 @@ class TestCoreApi:
                 with allure.step("获取所有Saving产品的收益详情数字货币活期已派发利息的数量和金额"):
                     r = session.request('GET', url='{}/earn/saving/return'.format(env_url),
                                         headers=headers)
-                with allure.step("状态码和返回值"):
-                    logger.info('状态码是{}'.format(str(r.status_code)))
-                    logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
                 with allure.step("flexible_earning_map"):

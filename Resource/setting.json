@@ -4,6 +4,14 @@
     "flexible_product": "eaa55390-745e-11ec-ae7e-0a3898443cb8",
     "mirana_account": "5661da70-a84f-4d49-adf0-1e7aebcd2820"
   },
+  "infinni_games": {
+    "url": "https://connect.latibac.com/api/v1",
+    "partner_id": "07c9297b-65f1-4e16-a0bd-ff6889e386de",
+    "secretKey": "d9ddad41-b713-4b0f-9f31-9a9ea9430555",
+    "uid_A": "979698088019091456",
+    "uid_B": "975832859451428864",
+    "account_vid": "a9c631b5-7f7a-4f31-83e2-47a1c01a7837"
+  },
   "PRIVATE-TOKEN": "tjkst4kHzfDPwyThPoX-",
   "app_package": {
     "pro": "com.cabital.cabital",
@@ -24,7 +32,8 @@
     "GBP",
     "EUR",
     "CHF",
-    "BRL"
+    "BRL",
+    "VND"
   ],
   "cfx_book": {
     "1": "BTC-USDT",
@@ -291,6 +300,13 @@
         },
         "secretKey": "d7277081-3edd-47b6-b016-114f44f19320"
       },
+      "gcp": {
+        "Headers": {
+          "ACCESS-KEY": "e1059392-d694-11ec-ae7e-0a3898443cb8",
+          "Content-Type": "application/json"
+        },
+        "secretKey": "0d5e13da-d695-11ec-ae7e-0a3898443cb8"
+      },
       "google": {
         "Headers": {
           "ACCESS-KEY": "75db0a63-51a2-11ec-b90b-ae07b6f1ed79",
@@ -303,8 +319,8 @@
   },
   "crypto_list": [
     "BTC",
-    "USDT",
-    "ETH"
+    "ETH",
+    "USDT"
   ],
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
@@ -315,15 +331,9 @@
     "payout_email": "external.qa@cabital.com",
     "port": "993",
     "secretKey": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY",
-    "security_code": "hyuqzqrndocuxctv",
+    "secretKey_richard": "NFCECYTRO54TOZRRJZXGKOKFOFRXSTDN",
+    "security_code": "acsfdvixcvcfnowu",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
-  },
-  "sandbox": {
-    "BRL": {
-      "url": "https://sandbox18.capitual.io/api/v1.0",
-      "username": "249b4f13-ce40-412a-ac76-19aefdc89337",
-      "password": "31504b88-7c28-4c1b-968b-fa872cdb0c39"
-    }
   },
   "env": "test",
   "headers": {
@@ -459,13 +469,22 @@
     "email": "zhangsan@test.com",
     "password": "123456"
   },
+  "preference_currency": "USD",
   "pro": "https://api.cabital.com/api/v1",
+  "sandbox": {
+    "BRL": {
+      "password": "31504b88-7c28-4c1b-968b-fa872cdb0c39",
+      "url": "https://sandbox18.capitual.io/api/v1.0",
+      "username": "249b4f13-ce40-412a-ac76-19aefdc89337"
+    }
+  },
   "secretKey": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
   "secretKeyForTest": " ",
   "show_list": [
     "USD",
     "GBP",
-    "EUR"
+    "EUR",
+    "CHF"
   ],
   "slackUrl": "https://hooks.slack.com/services/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",
   "test": "https://api.latibac.com/api/v1",

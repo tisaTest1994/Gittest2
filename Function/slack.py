@@ -46,8 +46,8 @@ def slack_report(type):
         title = "Web Test Report"
     elif type == 'accounting':
         title = "Accounting Test Report"
-    elif type == 'acceptance':
-        title = "Kyc Acceptance Test Report"
+    elif type == 'infinni':
+        title = "Infinni Games Test Report"
     else:
         title = "Test Report"
     attachment = [
@@ -94,8 +94,8 @@ def get_job_id(type):
         elif type == 'accounting':
             if i['name'] == 'AccountingTest':
                 id_list.append(i['id'])
-        elif type == 'acceptance':
-            if i['name'] == 'Kyc Acceptance Test':
+        elif type == 'infinni':
+            if i['name'] == 'Infinni Games Test':
                 id_list.append(i['id'])
     return id_list[0]
 

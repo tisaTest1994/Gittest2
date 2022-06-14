@@ -71,7 +71,7 @@ class TestFlexibleApi:
             with allure.step("校验返回值"):
                 assert 'items' in r.text, "获取今日之后的利息列表错误，返回值是{}".format(r.text)
 
-    @allure.title('test_flexible_004 获取交易记录')
+    @allure.title('test_flexible_004')
     @allure.description('获取交易记录')
     def test_flexible_004(self):
         with allure.step("获取产品product_id"):
@@ -715,6 +715,7 @@ class TestFlexibleApi:
             logger.info('项目id是{}'.format(id))
         with allure.step("获得项目当前持有中的赎回冻结金额"):
             r = session.request('GET', url='{}/earn/products/{}/summary'.format(env_url, id), headers=headers)
+
             redeeming_amount = r.json()['redeeming_amount']['amount']
             logger.info('获得项目当前持有中的赎回冻结金额是{}'.format(redeeming_amount))
         with allure.step("wallet中saving冻结金额"):
@@ -727,7 +728,7 @@ class TestFlexibleApi:
                             logger.info('wallet中saving冻结金额是{}'.format(frozen_amount))
         assert redeeming_amount == frozen_amount, "获得项目当前持有中的赎回冻结金额不等于不wallet中saving冻结金额"
 
-    @allure.title('test_flexible_019 校验明日计息金额')
+    @allure.title('test_flexible_019')
     @allure.description('校验明日计息金额')
     def test_flexible_019(self):
         sleep(10)
@@ -810,7 +811,7 @@ class TestFlexibleApi:
             assert int(now_time) <= int(earning_start_time), '确定利息派发日期是T+1错误'
             assert int(now_time) + 86400 >= int(earning_start_time), '确定利息派发日期是T+1错误'
 
-    @allure.title('test_flexible_022 确定赎回日期是D+1')
+    @allure.title('test_flexible_022')
     @allure.description('确定赎回日期是D+1')
     def test_flexible_022(self):
         with allure.step("获取产品product_id"):

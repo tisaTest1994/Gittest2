@@ -35,10 +35,10 @@ class TestAccountApi:
                   'test_accounts_unlinked 同用户/Cabital主动关闭与合作方的某账户关联',
                   ]
 
-    @allure.title('test_connect_account_001')
+    @allure.title('test_account_001')
     @allure.description('获取用户关联状况及partner信息')
     @pytest.mark.parametrize('account_id, expect_status, account_email', connect_account, ids=case_title)
-    def test_connect_account_001(self, account_id, expect_status, account_email):
+    def test_account_001(self, account_id, expect_status, account_email):
         logging.info("-------------------- 开始执行用例 --------------------")
         with allure.step("测试用户的account_id"):
             account_id = account_id
@@ -57,11 +57,15 @@ class TestAccountApi:
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             if expect_status == "NONE":
+                assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+            elif expect_status == "MISMATCHED" or expect_status == "UNLINKED":
                 assert r.status_code == 403, "http状态码不对，目前状态码是{}".format(r.status_code)
             else:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             if expect_status == "NONE":
+                assert r.json()['code'] == 'PA001', "获取未关联用户状况错误，返回值是{}".format(r.text)
+            elif expect_status == "MISMATCHED" or expect_status == "UNLINKED":
                 assert r.text == '', "获取未关联用户状况错误，返回值是{}".format(r.text)
             else:
                 assert r.json()['account_status'] == expect_status, "获取关联用户状况,期望状态是{}，返回值是{}".format(expect_status, r.text)
@@ -129,15 +133,14 @@ class TestAccountApi:
     @pytest.mark.skip(reason='match只能一次')
     def test_connect_account_04(self):
         with allure.step("准备参数"):
-            account_id = 'b013327e-ae65-4197-acf6-806f03873f51'
+            account_id = 'ced61c30-859b-4c99-91fe-d0d56107e665'
         with allure.step("name match 数据"):
             data = {
-                'name': 'yanting22 huang33',
-                'id': '235766',
+                'name': 'neo+5 ding+5',
+                'id': '123421231',
                 'id_document': 'PASSPORT',
                 'issued_by': 'HKG',
-                'dob': '19900201'
-
+                'dob': '19950528'
             }
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -155,6 +158,3 @@ class TestAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)
-
-
-

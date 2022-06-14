@@ -11,7 +11,7 @@ class TestAccountApi:
             ApiFunction.add_headers()
 
     @allure.title('test_account_001')
-    @allure.description('注册新用户')
+    @allure.description('注册新用户,用户未被注册')
     def test_account_001(self):
         with allure.step("注册账户"):
             headers['X-Device'] = ''
@@ -29,7 +29,7 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             logger.info('email是{}'.format(data['emailAddress']))
             assert 'accessToken' in r.text, "注册新用户失败，返回值是{}".format(r.text)
-            assert r.json()['refreshExpiresTn'] == 86400, "token过期时间不是24小时，返回值是{}".format(r.text)
+            assert r.json()['refreshExpiresTn'] == 1209600, "token过期时间不是24小时，返回值是{}".format(r.text)
 
     @allure.title('test_account_002')
     @allure.description('注册用户时，用户已经存在')
@@ -50,7 +50,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert 'Registration failed. Please contact our customer service if the problem persists.' in r.text, "用户已经存在错误，返回值是{}".format(r.text)
+            assert r.json()['code'] == '001003', "用户已经存在错误，返回值是{}".format(r.text)
 
     @allure.title('test_account_003')
     @allure.description('注册时输入错误验证码导致注册失败')
@@ -174,6 +174,7 @@ class TestAccountApi:
             data = {
                 "refreshToken": refreshToken
             }
+            sleep(5)
             r = session.request('POST', url='{}/account/user/refreshToken'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
@@ -532,9 +533,6 @@ class TestAccountApi:
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
             sleep(2)
             logger.info('邮箱是{}'.format(data['emailAddress']))
-            with allure.step("状态码和返回值"):
-                logger.info('状态码是{}'.format(str(r.status_code)))
-                logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
@@ -823,7 +821,7 @@ class TestAccountApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert 'accessToken' in r.text, "成功注册新用户不传国家地区码失败，返回值是{}".format(r.text)
-            assert r.json()['refreshExpiresTn'] == 86400, "token过期时间不是24小时，返回值是{}".format(r.text)
+            assert r.json()['refreshExpiresTn'] == 1209600, "token过期时间14天，返回值是{}".format(r.text)
 
     @allure.title('test_account_043')
     @allure.description('获取已经设置密码用户的必填系统级数据')
@@ -863,8 +861,7 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            logger.info(r.text)
-            assert '"registryPurpose":null,' in r.text, "获取用户必填的KYC数据，获取数据为空失败，返回值是{}".format(r.text)
+            assert r.json()['registryPurpose'] != [], "获取用户必填的KYC数据，获取数据为空失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_046')
     @allure.description('获取用户必填的KYC数据，获取全部信息')
@@ -888,7 +885,6 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-        #     assert r.json()['missing'] == set(["RESIDENT", "REGISTRY_PURPOSE"]), "获取用户必填的KYC数据，获取全部信息失败，返回值是{}".format(r.text)
             assert r.json()['registryPurpose'][2] is not None, "获取用户必填的KYC数据，获取全部信息失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_048')
