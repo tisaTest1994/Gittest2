@@ -106,7 +106,7 @@ class TestPayInApi:
                     assert i in str(r.json()['fiat']), "获得法币充值币种错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_008')
-    @allure.description('显示充值法币账户的充值信息-已废弃')
+    @allure.description('显示充值法币账户的充值信息')
     def test_pay_in_008(self):
         with allure.step("充值币种"):
             for i in get_json()['cash_list']:
@@ -118,8 +118,12 @@ class TestPayInApi:
                                         headers=headers)
                     with allure.step("校验状态码"):
                         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                    with allure.step("校验返回值"):
-                        assert 'Cabital Fintech (LT) UAB' in r.text, "显示充值法币账户的充值信息错误，返回值是{}".format(r.text)
+                    if i == 'BRL':
+                        with allure.step("校验返回值"):
+                            assert '3RZ SERVICOS DIGITAIS' in r.text, "显示充值法币账户的充值信息错误，返回值是{}".format(r.text)
+                    else:
+                        with allure.step("校验返回值"):
+                            assert 'Cabital Fintech (LT) UAB' in r.text, "显示充值法币账户的充值信息错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_009')
     @allure.description('GBP法币充值账户信息')
@@ -163,8 +167,9 @@ class TestPayInApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
+                logger.info(r.json())
                 assert r.json()['bank_accounts'][0][
-                           'account_name'] == 'Cabital Fintech (LT) UAB', "BRL法币充值账户信息错误，返回值是{}".format(r.text)
+                           'account_name'] == '3RZ SERVICOS DIGITAIS LTDA', "BRL法币充值账户信息错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_013')
     @allure.description('Plaid 转出币种限制')

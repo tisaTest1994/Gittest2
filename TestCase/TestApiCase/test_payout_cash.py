@@ -111,33 +111,8 @@ class TestPayoutCashApi:
                                 i, r.json())
 
     @allure.title('test_payout_cash_004')
-    @allure.description('确认BRL 提现')
-    def test_payout_cash_004(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-            account=get_json()['email']['payout_email'])
-        with allure.step("法币提现获得信息"):
-            data = {
-                "code": "BRL",
-                "amount": "21",
-                "payment_method": "PIX",
-                "pix_key_type": 2,
-                "cpf": "976.111.142-99",
-                "bank_name": "Banco Santander (Brasil) S.A. (033)",
-                "bank_code": "90400888",
-                "branch_code": "0123",
-                "account_type": 1,
-                "account_name": "Richard External QA",
-                "account_number": "1234567890"
-            }
-            r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("校验状态码"):
-            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['code'] == '103038', "预校验BRL提现错误，返回值是{}".format(r.text)
-
-    @allure.title('test_payout_cash_005')
     @allure.description('创建Payme VND法币提现交易')
-    def test_payout_cash_005(self):
+    def test_payout_cash_004(self):
         with allure.step("创建法币提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
@@ -166,9 +141,9 @@ class TestPayoutCashApi:
             with allure.step("校验返回值"):
                 assert 'txn_id' in r.text, "创建Payme VND法币提现交易失败，返回值是{}".format(r.text)
 
-    @allure.title('test_payout_cash_006')
+    @allure.title('test_payout_cash_005')
     @allure.description('确认Payme VND法币提现交易')
-    def test_payout_cash_006(self):
+    def test_payout_cash_005(self):
         with allure.step("确认法币提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
@@ -190,9 +165,9 @@ class TestPayoutCashApi:
             with allure.step("校验返回值"):
                 assert r.json() == {}, "确认Payme VND法币提现交易错误，返回值是{}".format(r.text)
 
-    @allure.title('test_payout_cash_007')
+    @allure.title('test_payout_cash_006')
     @allure.description('确认Payme VND法币提现交易-错误account name')
-    def test_payout_cash_007(self):
+    def test_payout_cash_006(self):
         with allure.step("确认法币提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
@@ -215,9 +190,9 @@ class TestPayoutCashApi:
                 assert r.json()['code'] == '103015',\
                     "确认Payme VND法币提现交易-错误account name返回值错误，接口返回值是{}".format(r.text)
 
-    @allure.title('test_payout_cash_008')
+    @allure.title('test_payout_cash_007')
     @allure.description('确认Payme VND法币提现交易-错误Account number')
-    def test_payout_cash_008(self):
+    def test_payout_cash_007(self):
         with allure.step("确认法币提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
@@ -240,9 +215,9 @@ class TestPayoutCashApi:
                 assert r.json()['code'] == '103024', \
                     "确认Payme VND法币提现交易-错误account number返回值错误，接口返回值是{}".format(r.text)
 
-    @allure.title('test_payout_cash_009')
+    @allure.title('test_payout_cash_008')
     @allure.description('确认Payme VND法币提现交易-错误Swift code')
-    def test_payout_cash_009(self):
+    def test_payout_cash_008(self):
         with allure.step("确认法币提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
@@ -265,7 +240,7 @@ class TestPayoutCashApi:
                 assert r.json()['code'] == '103028', \
                     "确认Payme VND法币提现交易-错误Swift code返回值错误，接口返回值是{}".format(r.text)
 
-    @allure.title('test_payout_cash_010')
+    @allure.title('test_payout_cash_009')
     @allure.description('确认Payme VND法币提现交易-错误Payment method')
     def test_payout_cash_009(self):
         with allure.step("确认法币提现交易"):
@@ -290,3 +265,127 @@ class TestPayoutCashApi:
             with allure.step("校验返回值"):
                 assert r.json()['code'] == '103022', \
                     "确认Payme VND法币提现交易-错误Payment method返回值错误，接口返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_010')
+    @allure.description('创建BRL提现提现交易，BRL-PIX—CPF，cpf状态为5，能够提现成功')
+    def test_payout_cash_010(self):
+        with allure.step("创建法币提现交易"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+        with allure.step("法币提现"):
+            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+            secretKey = get_json()['secretKey']
+            totp = pyotp.TOTP(secretKey)
+            mfaVerificationCode = totp.now()
+            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+            data = {
+                "code": "BRL",
+                "amount": "5000",
+                "payment_method": "PIX",
+                "pix_key_type": 1,
+                "cpf": "267.162.729-76",
+                "account_name": "Richard External QA"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'txn_id' in r.text, "创建BRL提现提现交易，提现-BRL-PIX—CPF失败，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_011')
+    @allure.description('创建BRL提现提现交易，BRL-Ted cpf状态为5，能够提现成功')
+    def test_payout_cash_011(self):
+        with allure.step("创建法币提现交易"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+        with allure.step("法币提现"):
+            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+            secretKey = get_json()['secretKey']
+            totp = pyotp.TOTP(secretKey)
+            mfaVerificationCode = totp.now()
+            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+            data = {
+                "code": "BRL",
+                "amount": "1200",
+                "payment_method": "Bank Transfer",
+                "cpf": "267.162.729-76",
+                "bank_name": "Banco Santander (Brasil) S.A. (033)",
+                "bank_code": "90400888",
+                "branch_code": "0123",
+                "account_type": 2,
+                "account_name": "Richard External QA",
+                "account_number": "1234567890"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert 'txn_id' in r.text, "创建BRL提现提现交易，提现-BRL-PIX—CPF失败，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_012')
+    @allure.description('确认BRL提现-不成功')
+    def test_payout_cash_012(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+            account=get_json()['email']['payout_email'])
+        with allure.step("法币提现获得信息"):
+            data = {
+                "code": "BRL",
+                "amount": "21",
+                "payment_method": "PIX",
+                "pix_key_type": 2,
+                "cpf": "976.111.142-99",
+                "bank_name": "Banco Santander (Brasil) S.A. (033)",
+                "bank_code": "90400888",
+                "branch_code": "0123",
+                "account_type": 1,
+                "account_name": "Richard External QA",
+                "account_number": "1234567890"
+            }
+            r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
+                                headers=headers)
+        with allure.step("校验状态码"):
+            assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['code'] == '103041', "预校验BRL提现错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_013')
+    @allure.description('webhook模拟brl提现')
+    @pytest.mark.skip(reason='webhook模拟brl提现，transaction id必须唯一，不唯一就会报错')
+    def test_payout_cash_13(self):
+        cpf_info = [('yanting.huang+184@cabital.com', 5)]
+        for i in cpf_info:
+            cpf_account = i[0]
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=cpf_account)
+            with allure.step("请求数据"):
+                data = {
+                    "PaymentGroupId": "a042ae9d-ca53-44e9-8342-ae46572d87f5",
+                    "TaxIdCountry": "BRA",
+                    "AccountId": "341",
+                    "PaymentId": "f4c362ca-d1c5-4834-9d15-9ae2fb1401e5",
+                    "Amount": 1009,
+                    "AmountNet": 1009,
+                    "ExternalId": "d9afd9a6-ac05-424c-8d19-b909f7f0028f",
+                    "Currency": "BRL",
+                    "Name": "Ting DP184",
+                    "TaxId": "173.942.850-14",
+                    "BankAccount": "123",
+                    "BankBranch": "132",
+                    "BankCode": "256",
+                    "PaymentStatus": "CompletedWithError",
+                    "ReasonsForPaymentRejection": "Invalid TaxId"
+                }
+            r = session.request('POST', url='https://webhook.latibac.com/mh/transfero/payment_status_changed',
+                                data=json.dumps(data),
+                                headers=headers)
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
