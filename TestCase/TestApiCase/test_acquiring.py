@@ -29,10 +29,8 @@ class TestAcquiringApi:
     @allure.description('VND建收单交易')
     def test_acquiring_002(self):
         with allure.step("VND创建收单交易"):
-            # headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-            #     account=get_json()['email']['payout_email'])
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account='yanting.huang+154@cabital.com')
+                account=get_json()['email']['payout_email'])
             with allure.step("VND法币acquiring信息"):
                 data = {
                     "amount": "20000",
@@ -61,7 +59,6 @@ class TestAcquiringApi:
                 sleep(6)
             with allure.step("刷新获取收单交易"):
                 r3 = session.request('GET', url='{}/acquiring/{}'.format(env_url, r.json()['txn_id']), headers=headers)
-                print(r3.url)
             with allure.step("校验返回值"):
                 assert r3.status_code == 200, "http 状态码不对，目前状`态码是{}".format(r.status_code)
             with allure.step("返回的redirect需要报存在html文件里打开操作一下,需要5分钟之内拿到payme给我们返回信息"):
