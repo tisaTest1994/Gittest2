@@ -133,15 +133,30 @@ class TestTransferApi:
     def test_transfer_007(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['infinni_games']['account_vid']
+            print(account_id)
+        with allure.step("获得otp"):
+            secretKey = get_json()['email']['secretKey_richard']
+            totp = pyotp.TOTP(secretKey)
+            mfaVerificationCode = totp.now()
+        with allure.step("获得data"):
+            external_id = generate_string(25)
+            data = {
+                'amount': '100',
+                'symbol': 'USDT',
+                'otp': str(mfaVerificationCode),
+                'direction': 'DEBIT',
+                'external_id': external_id
+            }
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/transfers/{}'.format(transfer_id), key='infinni games', nonce=nonce)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/accounts/{}/transfers'.format(account_id), key='infinni games', nonce=nonce, body=json.dumps(data))
             headers['ACCESS-SIGN'] = sign
             headers['ACCESS-TIMESTAMP'] = str(unix_time)
             headers['ACCESS-NONCE'] = nonce
-        with allure.step("把数字货币从cabital转移到bybit账户"):
-            r = session.request('GET', url='{}/transfers/{}'.format(self.url, transfer_id), headers=headers)
+        with allure.step("transfer"):
+            r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
+                                data=json.dumps(data), headers=headers)
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):

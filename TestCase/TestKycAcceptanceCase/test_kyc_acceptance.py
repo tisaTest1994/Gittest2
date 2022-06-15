@@ -28,10 +28,10 @@ class TestKycAcceptanceApi:
                                                    "streetLine1": "line1",
                                                    "streetLine2": "line2"
                                                },
-                                               })),
-                "a.png": ("id_doc_front.png",
-                          open("/Users/Winnie/Desktop/a.JPG", "rb"),
-                          "image/png"),
+                                               }))
+                # "a.png": ("id_doc_front.png",
+                #           open("a.JPG", "rb"),
+                #           "image/png"),
             }
         with allure.step("验签"):
             unix_time = int(time.time())
