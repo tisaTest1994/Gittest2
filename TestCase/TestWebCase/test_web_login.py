@@ -43,7 +43,7 @@ class TestWebLogin:
     @allure.description('重置密码')
     def test_login_002(self, chrome_driver):
         account = "yanting.huang@cabital.com"
-        password = "123456Hyt"
+        password = "Zcdsw123"
         email_code = get_json()['web'][get_json()['env']]['code']
         new_pword = '123456Test'
         with allure.step("确认弹出重置密码框"):
