@@ -708,7 +708,7 @@ class TestCoreApi:
                                                                                                      r.json()[
                                                                                                          'fixed_earning_map'][
                                                                                                          x]['amount']))
-                            assert Decimal(sum(fixed_all_interest_amount_list)) == Decimal(
+                            assert Decimal(sum(fixed_all_interest_amount_list)).quantize(Decimal('0.00000000')) == Decimal(
                                 r.json()['fixed_earning_map'][x][
                                     'amount']), '显示币种是{}, 数字货币是{}, 计算获取累计利息数量总和是{}, 接口返回的累计利息数量总和是{}'.format(i, x,
                                                                                                              sum(fixed_all_interest_amount_list),
