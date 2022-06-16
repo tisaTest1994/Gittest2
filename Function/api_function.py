@@ -590,7 +590,7 @@ class ApiFunction:
                 elif buy_type == 'USDT':
                     buy_amount = random.uniform(10, 500.999999)
                 elif buy_type == 'VND':
-                    buy_amount = random.uniform(250000, 300000)
+                    buy_amount = random.randint(250000, 300000)
                 else:
                     buy_amount = random.uniform(10, 500.99)
                 quote = ApiFunction.get_quote(pair)
