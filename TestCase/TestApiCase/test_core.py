@@ -54,10 +54,10 @@ class TestCoreApi:
     @allure.title('test_core_004')
     @allure.description('查询货币兑换比例')
     def test_core_004(self):
-        with allure.step("获取汇率对"):
-            cfx_dict = get_json()['cfx_book']
+        with allure.step("获取汇率兑"):
+            cfx_dict = ApiFunction.get_cfx_list()
         with allure.step("查询货币兑换比例"):
-            for i in cfx_dict.values():
+            for i in cfx_dict:
                 with allure.step("查询{}兑换比例".format(i)):
                     r = session.request('GET', url='{}/core/quotes/{}'.format(env_url, i), headers=headers)
                 with allure.step("状态码和返回值"):
@@ -708,7 +708,7 @@ class TestCoreApi:
                                                                                                      r.json()[
                                                                                                          'fixed_earning_map'][
                                                                                                          x]['amount']))
-                            assert Decimal(sum(fixed_all_interest_amount_list)).quantize(Decimal('0.00000000')) == Decimal(
+                            assert Decimal(sum(fixed_all_interest_amount_list)).quantize(Decimal('0.00000000'), ROUND_DOWN) == Decimal(
                                 r.json()['fixed_earning_map'][x][
                                     'amount']), '显示币种是{}, 数字货币是{}, 计算获取累计利息数量总和是{}, 接口返回的累计利息数量总和是{}'.format(i, x,
                                                                                                              sum(fixed_all_interest_amount_list),

@@ -592,7 +592,7 @@ class ApiFunction:
                 elif buy_type == 'VND':
                     buy_amount = random.uniform(250000, 300000)
                 else:
-                    buy_amount = random.uniform(10, 500.99)
+                    buy_amount = random.uniform(20, 500.99)
                 quote = ApiFunction.get_quote(pair)
                 buy_amount = crypto_len(number=str(buy_amount), type=buy_type)
                 sell_amount = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
@@ -605,7 +605,7 @@ class ApiFunction:
                 elif sell_type == 'VND':
                     sell_amount = random.uniform(250000, 300000)
                 else:
-                    sell_amount = random.uniform(10, 500.99)
+                    sell_amount = random.uniform(20, 500.99)
                 quote = ApiFunction.get_quote(pair)
                 sell_amount = crypto_len(number=str(sell_amount), type=sell_type)
                 buy_amount = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
