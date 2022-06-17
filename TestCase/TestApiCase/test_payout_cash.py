@@ -116,6 +116,7 @@ class TestPayoutCashApi:
         with allure.step("创建法币提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
+            headers['language'] = "en_US"
         with allure.step("法币提现"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
             secretKey = get_json()['secretKey']
@@ -281,7 +282,7 @@ class TestPayoutCashApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "BRL",
-                "amount": "5000",
+                "amount": "20",
                 "payment_method": "PIX",
                 "pix_key_type": 1,
                 "cpf": "718.638.715-27",
@@ -312,11 +313,11 @@ class TestPayoutCashApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "BRL",
-                "amount": "1200",
+                "amount": "20",
                 "payment_method": "Bank Transfer",
                 "cpf": "718.638.715-27",
-                "bank_name": "Banco Santander (Brasil) S.A. (033)",
-                "bank_code": "90240",
+                "bank_name": "Banco BMG S.A.",
+                "bank_code": "318",
                 "branch_code": "0123",
                 "account_type": 2,
                 "account_name": "Richard External QA",
