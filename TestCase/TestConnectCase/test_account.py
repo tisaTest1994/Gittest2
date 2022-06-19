@@ -58,15 +58,11 @@ class TestAccountApi:
         with allure.step("校验状态码"):
             if expect_status == "NONE":
                 assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
-            elif expect_status == "MISMATCHED" or expect_status == "UNLINKED":
-                assert r.status_code == 403, "http状态码不对，目前状态码是{}".format(r.status_code)
             else:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             if expect_status == "NONE":
                 assert r.json()['code'] == 'PA001', "获取未关联用户状况错误，返回值是{}".format(r.text)
-            elif expect_status == "MISMATCHED" or expect_status == "UNLINKED":
-                assert r.text == '', "获取未关联用户状况错误，返回值是{}".format(r.text)
             else:
                 assert r.json()['account_status'] == expect_status, "获取关联用户状况,期望状态是{}，返回值是{}".format(expect_status, r.text)
         with allure.step("获取partner信息"):

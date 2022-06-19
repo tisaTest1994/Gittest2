@@ -57,7 +57,7 @@ def slack_report(type):
                     "\n Pass Test Cases number: _{}_,"
                     "\n Failed Test Cases number: _{}_,"
                     "\n Broken Test Cases number: _{}_,"
-                    "\n Detailed report address is https://cabital.gitlab.io/-/Test/-/jobs/{"
+                    "\n Detailed report address is https://cabital.gitlab.io/-/team_qa/Test/-/jobs/{"
                     "}/artifacts/Reports/html/index.html".format(result["Total"], result["PASSED"], result["FAILED"], result['BROKEN'],id),
             "ts": time.time()
         }

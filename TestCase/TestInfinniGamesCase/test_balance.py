@@ -38,7 +38,7 @@ class TestBalanceApi:
         with allure.step("校验返回值"):
             assert r.json()['balances'] is not None, "账户可用余额列表错误，返回值是{}".format(r.text)
         with allure.step("判断提供给bybit的和我们自用的值一致"):
-            balance_list = ApiFunction.balance_list()
+            balance_list = ApiFunction.get_connect_support(self.url, headers, key='infinni games')
             for i in balance_list:
                 mobile_balance = ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
                 for y in r.json()['balances']:
@@ -51,15 +51,7 @@ class TestBalanceApi:
         with allure.step("获取用户的所有账户余额"):
             account_id = get_json()['infinni_games']['account_vid']
         with allure.step("获得balance list"):
-            balance_list = ApiFunction.balance_list()
-        with allure.step("从metadata接口获取已开启的币种信息"):
-            fiat_metadata = session.request('GET', url='{}/core/metadata'.format(env_url), headers=headers)
-            fiat_list_metadata = fiat_metadata.json()['currencies']
-            fiat_all_metadata = fiat_list_metadata.keys()
-        with allure.step("如在metada中关闭，则去除"):
-            for i in range(0, len(balance_list)):
-                if balance_list[i] not in fiat_all_metadata:
-                    balance_list.remove(balance_list[i])
+            balance_list = ApiFunction.get_connect_support(self.url, headers, key='infinni games')
         with allure.step("循环获取单币种"):
             for i in balance_list:
                 with allure.step("验签"):

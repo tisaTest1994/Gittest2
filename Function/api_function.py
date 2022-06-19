@@ -590,9 +590,9 @@ class ApiFunction:
                 elif buy_type == 'USDT':
                     buy_amount = random.uniform(10, 500.999999)
                 elif buy_type == 'VND':
-                    buy_amount = random.uniform(250000, 300000)
+                    buy_amount = random.randint(250000, 300000)
                 else:
-                    buy_amount = random.uniform(10, 500.99)
+                    buy_amount = random.uniform(20, 500.99)
                 quote = ApiFunction.get_quote(pair)
                 buy_amount = crypto_len(number=str(buy_amount), type=buy_type)
                 sell_amount = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
@@ -605,7 +605,7 @@ class ApiFunction:
                 elif sell_type == 'VND':
                     sell_amount = random.uniform(250000, 300000)
                 else:
-                    sell_amount = random.uniform(10, 500.99)
+                    sell_amount = random.uniform(20, 500.99)
                 quote = ApiFunction.get_quote(pair)
                 sell_amount = crypto_len(number=str(sell_amount), type=sell_type)
                 buy_amount = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
@@ -636,9 +636,9 @@ class ApiFunction:
                 sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', key='infinni games', nonce=nonce)
             else:
                 sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            headers['ACCESS-SIGN'] = sign
+            headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            headers['ACCESS-NONCE'] = nonce
         with allure.step("获取合作方的配置"):
             r = session.request('GET', url='{}/config'.format(url), headers=headers)
             support_list = []
