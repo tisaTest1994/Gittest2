@@ -74,10 +74,10 @@ class TestFixedApi:
                                 assert z['apy'] == '12', 'USDT 1d利率出错，利率是{}'.format(z['apy'])
                         elif i['code'] == 'USDT' and y['tenor'] == 7:
                             for z in r.json()['items']:
-                                assert z['apy'] == '3.5', 'USDT 7d利率出错，利率是{}'.format(z['apy'])
+                                assert z['apy'] == '2.5', 'USDT 7d利率出错，利率是{}'.format(z['apy'])
                         elif i['code'] == 'USDT' and y['tenor'] == 14:
                             for z in r.json()['items']:
-                                assert z['apy'] == '4', 'USDT 14d利率出错，利率是{}'.format(z['apy'])
+                                assert z['apy'] == '3', 'USDT 14d利率出错，利率是{}'.format(z['apy'])
                         elif i['code'] == 'BTC' and y['tenor'] == 1:
                             for z in r.json()['items']:
                                 assert z['apy'] == '1', 'BTC 1d利率出错，利率是{}'.format(z['apy'])

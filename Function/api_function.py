@@ -591,11 +591,18 @@ class ApiFunction:
                     buy_amount = random.uniform(10, 500.999999)
                 elif buy_type == 'VND':
                     buy_amount = random.randint(250000, 300000)
+                elif buy_type == 'BRL':
+                    buy_amount = random.uniform(50, 100.00)
                 else:
                     buy_amount = random.uniform(20, 500.99)
                 quote = ApiFunction.get_quote(pair)
                 buy_amount = crypto_len(number=str(buy_amount), type=buy_type)
-                sell_amount = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
+                if sell_type == 'VND':
+                    sell_amount_temporary = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
+                    if '.' in str(sell_amount_temporary):
+                        sell_amount = sell_amount_temporary.split('.')[0]
+                else:
+                    sell_amount = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
         else:
             with allure.step("major_ccy 是sell值"):
                 if sell_type == 'BTC' or sell_type == 'ETH':
@@ -603,12 +610,19 @@ class ApiFunction:
                 elif sell_type == 'USDT':
                     sell_amount = random.uniform(10, 500.999999)
                 elif sell_type == 'VND':
-                    sell_amount = random.uniform(250000, 300000)
+                    sell_amount = random.randint(250000, 300000)
+                elif sell_type == 'BRL':
+                    sell_amount = random.uniform(50, 100.99)
                 else:
                     sell_amount = random.uniform(20, 500.99)
                 quote = ApiFunction.get_quote(pair)
                 sell_amount = crypto_len(number=str(sell_amount), type=sell_type)
-                buy_amount = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
+                if buy_type == 'VND':
+                    buy_amount_temporary = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
+                    if '.' in str(buy_amount_temporary):
+                        buy_amount = buy_amount_temporary.split('.')[0]
+                else:
+                    buy_amount = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
         data = {
             "quote_id": quote['quote_id'],
             "quote": quote['quote'],
