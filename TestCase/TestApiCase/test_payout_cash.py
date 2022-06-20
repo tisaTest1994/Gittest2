@@ -116,7 +116,6 @@ class TestPayoutCashApi:
         with allure.step("创建法币提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
-            headers['language'] = "en_US"
         with allure.step("法币提现"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
             secretKey = get_json()['secretKey']
