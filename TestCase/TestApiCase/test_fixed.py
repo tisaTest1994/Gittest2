@@ -999,7 +999,7 @@ class TestFixedApi:
             params = {
                 'tx_type': "1",
                 'cursor': 0,
-                'size': 900,
+                'size': 50,
                 'order': "1",
                 'code': ""
             }
@@ -1016,7 +1016,7 @@ class TestFixedApi:
             params = {
                 'tx_type': "1",
                 'cursor': 0,
-                'size': 900,
+                'size': 50,
                 'order': "1",
                 'code': "",
                 'created_at_from': '1626249600',
@@ -1037,7 +1037,7 @@ class TestFixedApi:
             params = {
                 'tx_type': "1",
                 'cursor': 0,
-                'size': 900,
+                'size': 50,
                 'order': "1",
                 'code': "",
                 'created_at_from': '1626249600',
