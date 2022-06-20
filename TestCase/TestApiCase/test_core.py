@@ -708,14 +708,36 @@ class TestCoreApi:
                                                                                                      r.json()[
                                                                                                          'fixed_earning_map'][
                                                                                                          x]['amount']))
-                            assert Decimal(sum(fixed_all_interest_amount_list)).quantize(Decimal('0.00000000'), ROUND_DOWN) == Decimal(
-                                r.json()['fixed_earning_map'][x][
-                                    'amount']), '显示币种是{}, 数字货币是{}, 计算获取累计利息数量总和是{}, 接口返回的累计利息数量总和是{}'.format(i, x,
-                                                                                                             sum(fixed_all_interest_amount_list),
-                                                                                                             r.json()[
-                                                                                                                 'fixed_earning_map'][
-                                                                                                                 x][
-                                                                                                                 'amount'])
+                            if x == 'BTC' or x == 'ETH':
+                                assert Decimal(sum(fixed_all_interest_amount_list)).quantize(Decimal('0.00000000'),
+                                                                                             ROUND_DOWN) == Decimal(
+                                    r.json()['fixed_earning_map'][x][
+                                        'amount']), '显示币种是{}, 数字货币是{}, 计算获取累计利息数量总和是{}, 接口返回的累计利息数量总和是{}'.format(i, x,
+                                                                                                                 sum(fixed_all_interest_amount_list),
+                                                                                                                 r.json()[
+                                                                                                                     'fixed_earning_map'][
+                                                                                                                     x][
+                                                                                                                     'amount'])
+                            elif x == 'USDT':
+                                assert Decimal(sum(fixed_all_interest_amount_list)).quantize(Decimal('0.000000'),
+                                                                                             ROUND_DOWN) == Decimal(
+                                    r.json()['fixed_earning_map'][x][
+                                        'amount']), '显示币种是{}, 数字货币是{}, 计算获取累计利息数量总和是{}, 接口返回的累计利息数量总和是{}'.format(i, x,
+                                                                                                                 sum(fixed_all_interest_amount_list),
+                                                                                                                 r.json()[
+                                                                                                                     'fixed_earning_map'][
+                                                                                                                     x][
+                                                                                                                     'amount'])
+                            else:
+                                assert Decimal(sum(fixed_all_interest_amount_list)).quantize(Decimal('0.00'),
+                                                                                             ROUND_DOWN) == Decimal(
+                                    r.json()['fixed_earning_map'][x][
+                                        'amount']), '显示币种是{}, 数字货币是{}, 计算获取累计利息数量总和是{}, 接口返回的累计利息数量总和是{}'.format(i, x,
+                                                                                                                 sum(fixed_all_interest_amount_list),
+                                                                                                                 r.json()[
+                                                                                                                     'fixed_earning_map'][
+                                                                                                                     x][
+                                                                                                                     'amount'])
                             logger.info('显示币种是{}, 数字货币是{}, 计算获取累计利息金额总和是{}, 接口返回的累计利息金额总和是{}'.format(i, x, crypto_len(
                                 Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i), r.json()[
                                                                                                          'fixed_earning_map'][

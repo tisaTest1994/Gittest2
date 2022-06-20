@@ -143,4 +143,3 @@ class TestTransactionApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert 'product_id' in r.text, "获取产品列表错误，返回值是{}".format(r.text)
-
