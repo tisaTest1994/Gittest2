@@ -95,9 +95,9 @@ class TestPayoutCashApi:
                                 i, r.json())
                         elif i == 'BRL':
                             assert r.json()['supported_payment_methods'] == 'PIX or Bank Transfer', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(i, r.json())
-                            assert r.json()['payment_methods']['Bank Transfer'] == {'min': '20', 'max': '300000', 'order': 1}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                            assert r.json()['payment_methods']['Bank Transfer'] == {'min': '130', 'max': '300000', 'order': 1}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
-                            assert r.json()['payment_methods']['PIX'] == {'min': '20', 'max': '300000', 'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                            assert r.json()['payment_methods']['PIX'] == {'min': '130', 'max': '300000', 'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
                         elif i == 'VND':
                             assert r.json()[
@@ -281,7 +281,7 @@ class TestPayoutCashApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "BRL",
-                "amount": "20",
+                "amount": "130",
                 "payment_method": "PIX",
                 "pix_key_type": 1,
                 "cpf": "718.638.715-27",
@@ -312,7 +312,7 @@ class TestPayoutCashApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "BRL",
-                "amount": "20",
+                "amount": "130",
                 "payment_method": "Bank Transfer",
                 "cpf": "718.638.715-27",
                 "bank_name": "Banco BMG S.A.",
@@ -347,7 +347,7 @@ class TestPayoutCashApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "BRL",
-                "amount": "19",
+                "amount": "129",
                 "payment_method": "PIX",
                 "pix_key_type": 1,
                 "cpf": "718.638.715-27",
@@ -409,7 +409,7 @@ class TestPayoutCashApi:
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "BRL",
-                "amount": "19",
+                "amount": "129",
                 "payment_method": "Bank Transfer",
                 "cpf": "718.638.715-27",
                 "bank_name": "Banco Santander (Brasil) S.A. (033)",
@@ -472,7 +472,7 @@ class TestPayoutCashApi:
         with allure.step("法币提现获得信息"):
             data = {
                 "code": "BRL",
-                "amount": "21",
+                "amount": "130",
                 "payment_method": "PIX",
                 "pix_key_type": 2,
                 "cpf": "976.111.142-99",
