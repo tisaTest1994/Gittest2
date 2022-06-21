@@ -113,6 +113,7 @@ class TestConvertApi:
     @allure.description('小于接受的最小值换汇交易')
     def test_convert_006(self):
         with allure.step("获取汇率对"):
+            headers['Accept-Language'] = 'en_US'
             cfx_dict = ApiFunction.get_cfx_list()
             # 获取换汇值
             for i in cfx_dict:
