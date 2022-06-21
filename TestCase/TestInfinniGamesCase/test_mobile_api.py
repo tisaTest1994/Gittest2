@@ -135,7 +135,7 @@ class TestMobileApi:
                 with allure.step("验签"):
                     unix_time = int(time.time())
                     nonce = generate_string(30)
-                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/transfers/{}'.format('700dca34-1e6f-408b-903d-e37d0fcfd615', transfer_id), key='infinni games', nonce=nonce, body=json.dumps(data))
+                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/transfers/{}'.format('700dca34-1e6f-408b-903d-e37d0fcfd615', transfer_id), key='infinni games', nonce=nonce, body=data)
                     headers['ACCESS-SIGN'] = sign
                     headers['ACCESS-TIMESTAMP'] = str(unix_time)
                     headers['ACCESS-NONCE'] = nonce

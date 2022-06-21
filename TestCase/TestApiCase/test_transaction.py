@@ -15,7 +15,7 @@ class TestTransactionApi:
         data = {
             "pagination_request": {
                 "cursor": "0",
-                "page_size": 100
+                "page_size": 50
             },
             "user_txn_sub_types": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
             "statuses": [1, 2, 3, 4],
