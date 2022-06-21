@@ -10,7 +10,9 @@
     "secretKey": "d9ddad41-b713-4b0f-9f31-9a9ea9430555",
     "uid_A": "979698088019091456",
     "uid_B": "975832859451428864",
-    "account_vid": "8feaa69e-08f7-4d35-b7c9-abcf04879d59"
+    "uid_C": "988518746672869376",
+    "account_vid": "8feaa69e-08f7-4d35-b7c9-abcf04879d59",
+    "account_vid_c": "125831ca-a068-46fe-b5a9-bfc610f915dc"
   },
   "PRIVATE-TOKEN": "tjkst4kHzfDPwyThPoX-",
   "app_package": {
@@ -324,6 +326,7 @@
   ],
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
+    "payout_email_accountId": "700dca34-1e6f-408b-903d-e37d0fcfd615",
     "earn_email": "mrt1@cabital.com",
     "email": "richard.wan@cabital.com",
     "host": "imap.gmail.com",

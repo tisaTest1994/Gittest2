@@ -284,6 +284,7 @@ class ApiFunction:
                 data = '{}{}{}{}'.format(unix_time, method, nonce, url)
             else:
                 data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
+                print(data)
         key = key.encode('utf-8')
         message = data.encode('utf-8')
         sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())

@@ -19,7 +19,7 @@ class TestAccountApi:
         print('等待第二期api unlink')
         # with allure.step("获得用户信息"):
         #     params = {
-        #         'user_ext_ref': get_json()['infinni_games']['uid_A'],
+        #         'user_ext_ref': get_json()['infinni_games']['uid_C'],
         #         'partner_key': '07c9297b-65f1-4e16-a0bd-ff6889e386de'
         #     }
         #     with allure.step("验签"):
@@ -57,7 +57,8 @@ class TestAccountApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['list'][0]['name'] == 'Yeeha Games', "获取cabital账号link infinni games账号错误，返回值是{}".format(r.text)
+                assert r.json()['list'][0]['partner_id'] == params['partner_ids'], "获取cabital账号link infinni games账号错误，返回值是{}".format(r.text)
+                assert r.json()['list'][0]['account_links'][2]['user_ext_ref'] == get_json()['infinni_games']['uid_A'], "获取cabital账号link infinni games账号错误，返回值是{}".format(r.text)
 
     @allure.title('test_account_003')
     @allure.description('获取cabital账号link infinni games账号 旧接口')
