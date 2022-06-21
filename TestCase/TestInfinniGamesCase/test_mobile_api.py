@@ -10,6 +10,7 @@ class TestMobileApi:
     def setup_method(self):
         with allure.step("登录客户账户获得后续操作需要的token"):
             ApiFunction.add_headers()
+            headers['ACCESS-KEY'] = get_json()['infinni_games']['partner_id']
 
     @allure.title('test_mobile_001')
     @allure.description('获取合作方配置')
@@ -135,14 +136,16 @@ class TestMobileApi:
                 with allure.step("验签"):
                     unix_time = int(time.time())
                     nonce = generate_string(30)
-                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/transfers/{}'.format('700dca34-1e6f-408b-903d-e37d0fcfd615', transfer_id), key='infinni games', nonce=nonce, body=data)
+                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/transfers/{}'.format('700dca34-1e6f-408b-903d-e37d0fcfd615', transfer_id), key='infinni games', nonce=nonce, body=json.dumps(data))
                     headers['ACCESS-SIGN'] = sign
                     headers['ACCESS-TIMESTAMP'] = str(unix_time)
                     headers['ACCESS-NONCE'] = nonce
                 r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url, '700dca34-1e6f-408b-903d-e37d0fcfd615', transfer_id), data=json.dumps(data), headers=headers)
-                print(r.url)
-                print(r.status_code)
-                print(r.text)
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验返回值"):
+                    assert r.json() == {}, "确认划转交易错误，返回值是{}".format(r.text)
+
 
     # @allure.title('test_mobile_006')
     # @allure.description('划转交易使用自己绑定的account_idv')
