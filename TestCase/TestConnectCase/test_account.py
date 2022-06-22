@@ -124,33 +124,32 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['otp_ready'] is True, "查询用户otp状态，otp已经绑定错误，返回值是{}".format(r.text)
 
-    @allure.title('test_connect_account_004')
-    @allure.description('成功解绑+name match用户 pass')
-    @pytest.mark.skip(reason='match只能一次')
-    def test_connect_account_04(self):
-        with allure.step("准备参数"):
-            account_id = 'ced61c30-859b-4c99-91fe-d0d56107e665'
-        with allure.step("name match 数据"):
-            data = {
-                'name': 'neo+5 ding+5',
-                'id': '123421231',
-                'id_document': 'PASSPORT',
-                'issued_by': 'HKG',
-                'dob': '19950528'
-            }
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data))
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
-        with allure.step("name match"):
-            r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)
+    # @allure.title('test_connect_account_004')
+    # @allure.description('成功解绑+name match用户 pass')
+    # def test_connect_account_04(self):
+    #     with allure.step("准备参数"):
+    #         account_id = 'ced61c30-859b-4c99-91fe-d0d56107e665'
+    #     with allure.step("name match 数据"):
+    #         data = {
+    #             'name': 'neo+5 ding+5',
+    #             'id': '123421231',
+    #             'id_document': 'PASSPORT',
+    #             'issued_by': 'HKG',
+    #             'dob': '19950528'
+    #         }
+    #     with allure.step("验签"):
+    #         unix_time = int(time.time())
+    #         nonce = generate_string(30)
+    #         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data))
+    #         connect_headers['ACCESS-SIGN'] = sign
+    #         connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+    #         connect_headers['ACCESS-NONCE'] = nonce
+    #     with allure.step("name match"):
+    #         r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
+    #     with allure.step("状态码和返回值"):
+    #         logger.info('状态码是{}'.format(str(r.status_code)))
+    #         logger.info('返回值是{}'.format(str(r.text)))
+    #     with allure.step("校验状态码"):
+    #         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+    #     with allure.step("校验返回值"):
+    #         assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)

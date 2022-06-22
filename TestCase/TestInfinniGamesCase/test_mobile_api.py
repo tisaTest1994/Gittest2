@@ -128,19 +128,21 @@ class TestMobileApi:
             sleep(2)
         with allure.step("确认划转"):
             if r.json()['status'] == 1:
+                external_id = generate_string(25)
                 data = {
                     "status": "SUCCESS",
                     "message": "ok",
-                    "handle_time": int(time.time())
+                    "handle_time": int(time.time()),
+                    "external_id": external_id
                 }
                 with allure.step("验签"):
                     unix_time = int(time.time())
                     nonce = generate_string(30)
-                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/transfers/{}'.format('700dca34-1e6f-408b-903d-e37d0fcfd615', transfer_id), key='infinni games', nonce=nonce, body=json.dumps(data))
+                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/transfers/{}'.format(get_json()['infinni_games']['account_vid_c'], transfer_id), key='infinni games', nonce=nonce, body=json.dumps(data))
                     headers['ACCESS-SIGN'] = sign
                     headers['ACCESS-TIMESTAMP'] = str(unix_time)
                     headers['ACCESS-NONCE'] = nonce
-                r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url, '700dca34-1e6f-408b-903d-e37d0fcfd615', transfer_id), data=json.dumps(data), headers=headers)
+                r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url, get_json()['infinni_games']['account_vid_c'], transfer_id), data=json.dumps(data), headers=headers)
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
