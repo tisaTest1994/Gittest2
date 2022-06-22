@@ -193,7 +193,6 @@ class TestTransferApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['transfer_id'] is not None, '划转失败，返回值是{}'.format(r.text)
-            print(r.json()['transfer_id'])
 
     @allure.title('test_transfer_009')
     @allure.description('infinni games申请，先做C+T，把资金从cabital划转到infinni games')
