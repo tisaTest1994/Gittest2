@@ -21,6 +21,6 @@ class TestMoneyHouseApi:
             line_info = OperateExcel.get_excel_sheet_row(sheet_name, i, path=self.money_house_path)
             sql = "select * from money_house_account where code = {} and address = {} and nick_name = {};".format(str(line_info[2]).split(':')[1], str(line_info[5]).split(':')[1], str(line_info[4]).split(':')[1])
             info = sqlFunction().connect_mysql('moneyhouse', sql=sql)
-            print(info)
             if not list(info):
                 error_list.append(sql)
+        assert error_list == [], 'money house 错误, 错误list是{}'.format(error_list)
