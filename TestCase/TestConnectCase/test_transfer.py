@@ -194,6 +194,7 @@ class TestTransferApi:
             r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                 data=json.dumps(data), headers=connect_headers)
         with allure.step("校验状态码"):
+            print(r.json())
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("验签"):
             unix_time = int(time.time())

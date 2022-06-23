@@ -140,7 +140,7 @@ class TestTransferApi:
         with allure.step("获得data"):
             external_id = generate_string(25)
             data = {
-                'amount': '100',
+                'amount': '120',
                 'symbol': 'USDT',
                 'otp': str(mfaVerificationCode),
                 'direction': 'DEBIT',
@@ -173,7 +173,7 @@ class TestTransferApi:
         with allure.step("获得data"):
             external_id = generate_string(25)
             data = {
-                'amount': '101',
+                'amount': '100',
                 'symbol': 'USDT',
                 'otp': str(mfaVerificationCode),
                 'direction': 'CREDIT',
