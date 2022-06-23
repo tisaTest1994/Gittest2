@@ -78,7 +78,7 @@ class TestPayinCpfApi:
     @allure.title('test_payin_cpf_003')
     @allure.description('webhook模拟brl充值（cpf status=3），充值成功后状态变为5')
     @pytest.mark.skip(reason='cpf状态从3变为5只能测试一次')
-    # 每次执行修改email，account id，和transaction id即可
+    # 每次执行修改email，account id，tax id 和transaction id(和之前不同即可)
     def test_payin_cpf_003(self):
         cpf_info = [('yanting.huang+188@cabital.com', 3)]
         for i in cpf_info:
