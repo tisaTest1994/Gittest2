@@ -148,3 +148,18 @@ class TestMobileApi:
                 with allure.step("校验返回值"):
                     assert r.json() == {}, "确认划转交易错误，返回值是{}".format(r.text)
 
+    @allure.title('test_mobile_006')
+    @allure.description('用户通过mobile link infinni games')
+    def test_mobile_006(self):
+        with allure.step("参数"):
+            data = {
+                "user_ext_ref": "1112313123"
+            }
+        r = session.request('POST', url='{}/connect/account/{}/link'.format(env_url, get_json()['infinni_games']['partner_id']), data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['partner_id'] == get_json()['infinni_games']['partner_id'], "用户通过mobile link infinni games错误，返回值是{}".format(r.text)
