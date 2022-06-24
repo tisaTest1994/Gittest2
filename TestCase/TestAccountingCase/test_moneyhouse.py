@@ -48,6 +48,7 @@ class TestMoneyHouseApi:
             else:
                 type = 0
             sql = "select money_house_id from money_house where id = (select id from moneyhouse.money_house_account where nick_name = {};".format(str(line_info[4]).split(':')[1])
+            print(sql)
             info = sqlFunction().connect_mysql('moneyhouse', sql=sql)
             print(info)
             print(type(info))
