@@ -39,10 +39,9 @@ class TestMoneyHouseApi:
         sheet_name = 'Crypto'
         for i in range(1, OperateExcel.get_excel_sheet_all_row_number(sheet_name, path=self.money_house_path)):
             line_info = OperateExcel.get_excel_sheet_row(sheet_name, i, path=self.money_house_path)
-            sql = "select money_house_id from money_house where id = (select id from moneyhouse.money_house_account where nick_name = {});".format(str(line_info[4]).split(':')[1])
-            print(11111111111)
-            print(sql)
+            sql = "select money_house_id from money_house where id = (select money_house_id from moneyhouse.money_house_account where nick_name = {});".format(str(line_info[4]).split(':')[1])
             info = sqlFunction().connect_mysql('moneyhouse', sql=sql)
-            print(info)
+            money_house_id = info()['0']['money_house_id']
+            print(money_house_id)
 
 
