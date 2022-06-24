@@ -47,7 +47,7 @@ class TestMoneyHouseApi:
                 type = 3
             else:
                 type = 0
-            sql = "select money_house_id from money_house where id = '(select id from money_house_account where code = {} and address = {} and nick_name = {} and network = {} and type = {})';".format(
+            sql = "select money_house_id from money_house where id = '(select id from moneyhouse.money_house_account where code = {} and address = {} and nick_name = {} and network = {} and type = {})';".format(
                 str(line_info[2]).split(':')[1], str(line_info[5]).split(':')[1], str(line_info[4]).split(':')[1],
                 str(line_info[0]).split(':')[1], type)
             info = sqlFunction().connect_mysql('moneyhouse', sql=sql)
