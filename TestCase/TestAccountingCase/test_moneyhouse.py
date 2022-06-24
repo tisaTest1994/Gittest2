@@ -41,6 +41,7 @@ class TestMoneyHouseApi:
             line_info = OperateExcel.get_excel_sheet_row(sheet_name, i, path=self.money_house_path)
             sql = "select money_house_id from money_house where id = (select money_house_id from moneyhouse.money_house_account where nick_name = {});".format(str(line_info[4]).split(':')[1])
             info = sqlFunction().connect_mysql('moneyhouse', sql=sql)
+            print(info)
             money_house_id = info[0]['money_house_id']
             print(money_house_id)
 
