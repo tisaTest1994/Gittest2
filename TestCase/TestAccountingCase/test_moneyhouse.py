@@ -36,12 +36,13 @@ class TestMoneyHouseApi:
     @allure.title('test_money_house_002')
     @allure.description('money_house_id 验证')
     def test_money_house_002(self):
+        error_list = []
         sheet_name = 'Crypto'
         for i in range(1, OperateExcel.get_excel_sheet_all_row_number(sheet_name, path=self.money_house_path)):
             line_info = OperateExcel.get_excel_sheet_row(sheet_name, i, path=self.money_house_path)
             sql = "select money_house_id from money_house where id = (select money_house_id from moneyhouse.money_house_account where nick_name = {});".format(str(line_info[4]).split(':')[1])
             info = sqlFunction().connect_mysql('moneyhouse', sql=sql)
             money_house_id = info[0]['money_house_id']
-            assert str(line_info[1]).split(':')[1] in money_house_id, 'money_house_id验证失败，sql返回值是{}'.format(sql)
-
-
+            if str(line_info[1]).split(':')[1].strip("'") not in money_house_id:
+                error_list.append(sql)
+        assert error_list == [], 'money_house_id 错误, 错误list是{}'.format(error_list)
