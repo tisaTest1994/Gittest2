@@ -111,18 +111,11 @@ class TestPayoutCashNormalApi:
                                 i, r.json())
 
     @allure.title('test_payout_cash_normal_004')
-    @allure.description('Payme VND法币提现交易')
+    @allure.description('确认&创建Payme VND法币提现交易')
     def test_payout_cash_normal_004(self):
         with allure.step("VND法币提现"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
-        with allure.step("VND法币提现"):
-            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "VND",
                 "amount": "600000",
@@ -142,6 +135,12 @@ class TestPayoutCashNormalApi:
                 with allure.step("校验返回值"):
                     assert r.json() == {}, "确认Payme VND法币提现交易错误，返回值是{}".format(r.text)
             with allure.step("创建VND法币提现交易"):
+                code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+                secretKey = get_json()['secretKey']
+                totp = pyotp.TOTP(secretKey)
+                mfaVerificationCode = totp.now()
+                headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+                headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                      headers=headers)
                 with allure.step("状态码和返回值"):
@@ -153,18 +152,11 @@ class TestPayoutCashNormalApi:
                     assert 'txn_id' in r2.text, "创建Payme VND法币提现交易失败，返回值是{}".format(r2.text)
 
     @allure.title('test_payout_cash_normal_005')
-    @allure.description('BRL法币提现交易，BRL-PIX—CPF，cpf状态为5')
+    @allure.description('确认&创建BRL法币提现交易，BRL-PIX—CPF，cpf状态为5')
     def test_payout_cash_normal_005(self):
-        with allure.step("创建法币提现交易"):
+        with allure.step("创建BRL法币提现，BRL-PIX—CPF提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
-        with allure.step("BRL法币提现，BRL-PIX—CPF"):
-            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "BRL",
                 "amount": "130",
@@ -181,6 +173,12 @@ class TestPayoutCashNormalApi:
                 with allure.step("校验返回值"):
                     assert r.json() == {}, "确认BRL法币提现交易错误，返回值是{}".format(r.text)
             with allure.step("创建BRL法币提现，BRL-PIX—CPF"):
+                code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+                secretKey = get_json()['secretKey']
+                totp = pyotp.TOTP(secretKey)
+                mfaVerificationCode = totp.now()
+                headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+                headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                      headers=headers)
                 with allure.step("状态码和返回值"):
@@ -192,18 +190,11 @@ class TestPayoutCashNormalApi:
                     assert 'txn_id' in r2.text, "创建BRL提现提现交易，BRL-PIX—CPF失败，返回值是{}".format(r2.text)
 
     @allure.title('test_payout_cash_normal_006')
-    @allure.description('BRL法币提现交易，BRL-TED，cpf状态为5')
+    @allure.description('确认&创建BRL法币提现交易，BRL-TED，cpf状态为5')
     def test_payout_cash_normal_006(self):
-        with allure.step("创建法币提现交易"):
+        with allure.step("创建BRL法币提现，BRL-TED提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
-        with allure.step("BRL法币提现，BRL-TED"):
-            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "BRL",
                 "amount": "130",
@@ -217,6 +208,12 @@ class TestPayoutCashNormalApi:
                 "account_number": "1234567890"
             }
             with allure.step("确认BRL法币提现，BRL-TED"):
+                code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+                secretKey = get_json()['secretKey']
+                totp = pyotp.TOTP(secretKey)
+                mfaVerificationCode = totp.now()
+                headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+                headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
                                     headers=headers)
                 with allure.step("校验状态码"):
@@ -277,7 +274,7 @@ class TestPayoutCashNormalApi:
             assert r.json()['banks'] is not None, "BRL支持银行列表错误，返回值是{}".format(r.text)
 
     @allure.title('test_payout_cash_normal_009')
-    @allure.description('BCB EUR法币提现交易')
+    @allure.description('确认&创建EUR法币提现交易')
     def test_payout_cash_normal_009(self):
         with allure.step("从开启法币提现画面接口获取name list"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -287,13 +284,7 @@ class TestPayoutCashNormalApi:
             }
             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
             account_name = r.json()['name_list']
-        with allure.step("法币BCB EUR提现"):
-            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+        with allure.step("法币EUR提现"):
             data = {
                 "code": "EUR",
                 "amount": "25.61",
@@ -302,15 +293,21 @@ class TestPayoutCashNormalApi:
                 "iban": "BE09967206444557",
                 "bic": "TRWIBEB1XXX"
             }
-            with allure.step("确认BCB EUR法币提现交易"):
+            with allure.step("确认EUR法币提现交易"):
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url),
                                     data=json.dumps(data),
                                     headers=headers)
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
-                    assert r.json() == {}, "确认BCB EUR法币提现交易错误，返回值是{}".format(r.text)
-            with allure.step("创建BCB EUR法币提现交易"):
+                    assert r.json() == {}, "确认EUR法币提现交易错误，返回值是{}".format(r.text)
+            with allure.step("创建EUR法币提现交易"):
+                code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+                secretKey = get_json()['secretKey']
+                totp = pyotp.TOTP(secretKey)
+                mfaVerificationCode = totp.now()
+                headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+                headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                      headers=headers)
                 with allure.step("状态码和返回值"):
@@ -319,10 +316,10 @@ class TestPayoutCashNormalApi:
                 with allure.step("校验状态码"):
                     assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
-                    assert 'txn_id' in r2.text, "创建BCB EUR法币提现交易失败，返回值是{}".format(r2.text)
+                    assert 'txn_id' in r2.text, "创建EUR法币提现交易失败，返回值是{}".format(r2.text)
 
     @allure.title('test_payout_cash_normal_010')
-    @allure.description('BCB GBP法币提现交易')
+    @allure.description('确认&创建GBP法币提现交易')
     def test_payout_cash_normal_010(self):
         with allure.step("从开启法币提现画面接口获取name list"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -332,13 +329,7 @@ class TestPayoutCashNormalApi:
             }
             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
             account_name = r.json()['name_list']
-        with allure.step("法币BCB GBP提现"):
-            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+        with allure.step("法币GBP提现"):
             data = {
                 "code": "GBP",
                 "amount": "25",
@@ -347,15 +338,21 @@ class TestPayoutCashNormalApi:
                 "account_number": "00003162",
                 "sort_code": "040541"
             }
-            with allure.step("确认BCB GBP法币提现交易"):
+            with allure.step("确认GBP法币提现交易"):
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url),
                                     data=json.dumps(data),
                                     headers=headers)
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
-                    assert r.json() == {}, "确认BCB GBP法币提现交易错误，返回值是{}".format(r.text)
-            with allure.step("创建BCB GBP法币提现交易"):
+                    assert r.json() == {}, "确认GBP法币提现交易错误，返回值是{}".format(r.text)
+            with allure.step("创建GBP法币提现交易"):
+                code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+                secretKey = get_json()['secretKey']
+                totp = pyotp.TOTP(secretKey)
+                mfaVerificationCode = totp.now()
+                headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+                headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                      headers=headers)
                 with allure.step("状态码和返回值"):
@@ -364,10 +361,10 @@ class TestPayoutCashNormalApi:
                 with allure.step("校验状态码"):
                     assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
-                    assert 'txn_id' in r2.text, "创建BCB GBP法币提现交易失败，返回值是{}".format(r2.text)
+                    assert 'txn_id' in r2.text, "创建GBP法币提现交易失败，返回值是{}".format(r2.text)
 
     @allure.title('test_payout_cash_normal_011')
-    @allure.description('BCB CHF法币提现交易')
+    @allure.description('确认&创建CHF法币提现交易')
     def test_payout_cash_normal_011(self):
         with allure.step("从开启法币提现画面接口获取name list"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -377,13 +374,7 @@ class TestPayoutCashNormalApi:
             }
             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
             account_name = r.json()['name_list']
-        with allure.step("法币BCB GBP提现"):
-            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+        with allure.step("法币GBP提现"):
             data = {
                 "code": "CHF",
                 "amount": "35.51",
@@ -392,15 +383,21 @@ class TestPayoutCashNormalApi:
                 "iban": "AT234567891827364532",
                 "bic": "bkauatwwxxx"
             }
-            with allure.step("确认BCB CHF法币提现交易"):
+            with allure.step("确认CHF法币提现交易"):
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url),
                                     data=json.dumps(data),
                                     headers=headers)
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
-                    assert r.json() == {}, "确认BCB CHF法币提现交易错误，返回值是{}".format(r.text)
-            with allure.step("创建BCB CHF法币提现交易"):
+                    assert r.json() == {}, "确认CHF法币提现交易错误，返回值是{}".format(r.text)
+            with allure.step("创建CHF法币提现交易"):
+                code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+                secretKey = get_json()['secretKey']
+                totp = pyotp.TOTP(secretKey)
+                mfaVerificationCode = totp.now()
+                headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+                headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                      headers=headers)
                 with allure.step("状态码和返回值"):
@@ -409,7 +406,7 @@ class TestPayoutCashNormalApi:
                 with allure.step("校验状态码"):
                     assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
-                    assert 'txn_id' in r2.text, "创建BCB CHF法币提现交易失败，返回值是{}".format(r2.text)
+                    assert 'txn_id' in r2.text, "创建CHF法币提现交易失败，返回值是{}".format(r2.text)
 
     @allure.title('test_payout_cash_normal_012')
     @allure.description('法币提现获得信息，白名单排序(有效的在前面，无效的在后面)')
