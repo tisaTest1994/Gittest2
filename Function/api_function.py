@@ -39,6 +39,39 @@ class ApiFunction:
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token()
         headers['X-Currency'] = currency
 
+    # 获取user_id
+    @staticmethod
+    def get_user_id(account_id=None, email=None):
+        data = {
+            "accountId": account_id,
+            "email": email
+        }
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+            account=get_json()['operate_admin_account']['email'],
+            password=get_json()['operate_admin_account']['password'], type='operate')
+        r = session.request('POST', url='{}/operator/operator/users/search'.format(operateUrl), data=json.dumps(data),
+                            headers=headers)
+        assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        assert 'accounts' in r.text, "查找user_id错误，返回值是{}".format(r.text)
+        return r.json()['accounts'][0]['userId']
+
+    # 获取用户状态
+    @staticmethod
+    def get_account_status(account_id=None, user_id=None, email=None):
+        data = {
+            "accountId": account_id,
+            "userId": user_id,
+            "email": email
+        }
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+            account=get_json()['operate_admin_account']['email'],
+            password=get_json()['operate_admin_account']['password'], type='operate')
+        r = session.request('POST', url='{}/operator/operator/users/search'.format(operateUrl), data=json.dumps(data),
+                            headers=headers)
+        assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        assert 'accounts' in r.text, "查找user_id错误，返回值是{}".format(r.text)
+        return r.json()['accounts'][0]['status']
+    
     # 注册
     @staticmethod
     def sign_up(account=generate_email(), password=get_json()['email']['password']):
