@@ -19,15 +19,18 @@ class TestAccountApi:
         print('等待第二期api unlink')
         with allure.step("获得用户信息"):
             params = {
-                'user_ext_ref': '111111111',
-                'partner_key': '07c9297b-65f1-4e16-a0bd-ff6889e386de'
+                'user_ext_ref': '988518746672869376',
+                'partner_key': '07c9297b-65f1-4e16-a0bd-ff6889e386de',
+                'feature': '2fa',
+                'device_type': 'app'
             }
             with allure.step("验签"):
-                sign = ApiFunction.infinni_games_access_sign(url='{}/partner/link?user_ext_ref={}&partner_key={}'.format(self.url, params['user_ext_ref'], params['partner_key']))
+                sign = ApiFunction.infinni_games_access_sign(url='{}/partner/link?user_ext_ref={}&partner_key={}&feature={}&device_type={}'.format(self.url, params['user_ext_ref'], params['partner_key'], params['feature'], params['device_type']))
             params['signature'] = sign
             r = session.request('GET', url='{}/partner/link'.format(self.url), params=params, headers=headers)
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                print(r.url)
                 print(r.text)
         # with allure.step("注册账户"):
         #     data = {
