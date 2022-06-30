@@ -102,7 +102,7 @@ class TestPayoutCryptoNormalApi:
             data = {
                 "amount": '0.02',
                 "code": 'ETH',
-                "address": '0x1145c02268E90a7EA4FD438c67EB499DcA9B1F87',
+                "address": '0x17b9798852E4d4c24a38fb56Ba4080BC39E5279d',
                 "method": "ERC20"
             }
         with allure.step("确认ETH虚拟货币提现交易"):
@@ -142,7 +142,7 @@ class TestPayoutCryptoNormalApi:
             data = {
                 "amount": '40',
                 "code": 'USDT',
-                "address": '0x1145c02268E90a7EA4FD438c67EB499DcA9B1F87',
+                "address": '0xA7185FBEE96B605709D9659894066dF21cc87f05',
                 "method": "ERC20"
             }
         with allure.step("确认USDT虚拟货币提现交易"):

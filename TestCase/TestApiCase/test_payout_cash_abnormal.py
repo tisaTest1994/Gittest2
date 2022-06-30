@@ -11,6 +11,7 @@ class TestPayoutCashAbnormalApi:
 
     @allure.title('test_payout_cash_abnormal_001')
     @allure.description('确认&创建Payme VND法币提现交易-(提现金额小于最小金额or大于最大金额)')
+    @pytest.mark.skip(reason='提现现在未开放vnd，先不管')
     def test_payout_cash_abnormal_001(self):
         with allure.step("创建法币提现交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -76,6 +77,7 @@ class TestPayoutCashAbnormalApi:
 
     @allure.title('test_payout_cash_abnormal_002')
     @allure.description('确认&创建Payme VND法币提现交易-错误account name')
+    @pytest.mark.skip(reason='提现现在未开放vnd，先不管')
     def test_payout_cash_abnormal_002(self):
         with allure.step("法币提现交易-错误account name"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -122,6 +124,7 @@ class TestPayoutCashAbnormalApi:
 
     @allure.title('test_payout_cash_abnormal_003')
     @allure.description('确认&创建Payme VND法币提现交易-错误Account number')
+    @pytest.mark.skip(reason='提现现在未开放vnd，先不管')
     def test_payout_cash_abnormal_003(self):
         with allure.step("法币提现交易-错误Account number"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -131,7 +134,7 @@ class TestPayoutCashAbnormalApi:
                 "amount": "600000",
                 "payment_method": "Bank Transfer",
                 "account_name": "NGUYEN VAN A",
-                "account_number": "123456",
+                "account_number": "abc",
                 "bic": "SBITVNVX"
             }
             with allure.step("确认Payme VND法币提现交易-错误Account number"):
@@ -169,6 +172,7 @@ class TestPayoutCashAbnormalApi:
 
     @allure.title('test_payout_cash_abnormal_004')
     @allure.description('创建&确认Payme VND法币提现交易-Invalid bic (swift)')
+    @pytest.mark.skip(reason='提现现在未开放vnd，先不管')
     def test_payout_cash_abnormal_004(self):
         with allure.step("法币提现交易-错误Swift code"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -218,6 +222,7 @@ class TestPayoutCashAbnormalApi:
 
     @allure.title('test_payout_cash_abnormal_005')
     @allure.description('确认&创建Payme VND法币提现交易-错误Payment method')
+    @pytest.mark.skip(reason='提现现在未开放vnd，先不管')
     def test_payout_cash_abnormal_005(self):
         with allure.step("法币提现交易-错误Payment method"):
             headers['Accept-Language'] = 'en-US'
@@ -547,6 +552,7 @@ class TestPayoutCashAbnormalApi:
                 with allure.step("校验返回值"):
                     assert r2.json()['code'] == '103015', \
                         "创建BRL-PIX_CPF法币提现交易-错误account name返回值错误，接口返回值是{}".format(r2.text)
+            sleep(30)
 
     @allure.title('test_payout_cash_abnormal_011')
     @allure.description('确认&创建BRL-Ted提现交易-(输入错误account name)')
@@ -597,6 +603,7 @@ class TestPayoutCashAbnormalApi:
                 with allure.step("校验返回值"):
                     assert r2.json()['code'] == '103015', \
                         "创建BRL-Ted法币提现交易-错误account name返回值错误，接口返回值是{}".format(r2.text)
+            sleep(30)
 
     @allure.title('test_payout_cash_abnormal_012')
     @allure.description('确认&创建EUR法币提现交易-(提现金额小于最小金额or大于最大金额)')
@@ -662,6 +669,7 @@ class TestPayoutCashAbnormalApi:
                         assert r2.json()['code'] == '103001', "创建EUR法币提现交易-(提现金额小于最小金额)返回值错误，当前返回值是{}".format(r2.text)
                     else:
                         assert r2.json()['code'] == '103002', "创建EUR法币提现交易-(提现金额大于最大金额)返回值错误，当前返回值是{}".format(r2.text)
+            sleep(30)
 
     @allure.title('test_payout_cash_abnormal_013')
     @allure.description('确认&创建EUR法币提现交易-错误account name')
@@ -707,6 +715,7 @@ class TestPayoutCashAbnormalApi:
                 with allure.step("校验返回值"):
                     assert r2.json()['code'] == '103015',\
                         "创建EUR法币提现交易-错误account name返回值错误，接口返回值是{}".format(r2.text)
+            sleep(30)
 
     @allure.title('test_payout_cash_abnormal_014')
     @allure.description('确认&创建EUR法币提现交易-错误payment method')
@@ -752,6 +761,7 @@ class TestPayoutCashAbnormalApi:
                 with allure.step("校验返回值"):
                     assert r2.json()['code'] == '103022',\
                         "创建EUR法币提现交易-错误payment method返回值错误，接口返回值是{}".format(r2.text)
+            sleep(30)
 
     @allure.title('test_payout_cash_abnormal_015')
     @allure.description('确认&创建EUR法币提现交易-iban和bic不匹配')
@@ -798,6 +808,7 @@ class TestPayoutCashAbnormalApi:
                 with allure.step("校验返回值"):
                     assert r2.json()['code'] == '103037', \
                         "创建EUR法币提现交易-iban和bic不匹配，返回值错误，接口返回值是{}".format(r2.text)
+            sleep(30)
 
     @allure.title('test_payout_cash_abnormal_016')
     @allure.description('确认&创建EUR法币提现交易-使用非SEPA地区iban')
@@ -1297,7 +1308,7 @@ class TestPayoutCashAbnormalApi:
                         "创建CHF法币提现交易-错误payment method返回值错误，接口返回值是{}".format(r2.text)
 
     @allure.title('test_payout_cash_abnormal_026')
-    @allure.description('确认&创建CHF法币提现交易-CHF的iban没有校验规则【现在接口会校验和UER一样是有问题的】')
+    @allure.description('确认&创建CHF法币提现交易-CHF的iban前两位非sepa地区')
     def test_payout_cash_abnormal_026(self):
         with allure.step("法币提现交易-CHF的iban没有校验规则"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -1307,23 +1318,23 @@ class TestPayoutCashAbnormalApi:
                 "amount": "25",
                 "payment_method": "SIC",
                 "account_name": "Richard External QA",
-                "iban": "1234567890",
-                "bic": "ZXCVBG12"
+                "iban": "BB12345678901234567890",
+                "bic": "ZXCVBB12"
             }
-            with allure.step("确认CHF法币提现交易-CHF的iban没有校验规则"):
+            with allure.step("确认CHF法币提现交易-CHF的iban前两位非sepa地区"):
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
                                     headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验返回值"):
-                    assert r.json() == {},\
-                        "确认CHF法币提现交易-CHF的iban没有校验规则返回值错误，接口返回值是{}".format(r.text)
+                    assert r.json()['code'] == '103055',\
+                        "确认CHF法币提现交易-CHF的iban前两位非sepa地区，接口返回值是{}".format(r.text)
             with allure.step("创建CHF法币提现交易-CHF的iban没有校验规则"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
                 secretKey = get_json()['secretKey']
@@ -1338,11 +1349,12 @@ class TestPayoutCashAbnormalApi:
                 with allure.step("校验状态码"):
                     assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
-                    assert r2.json()['code'] == '103036',\
-                        "创建CHF法币提现交易-CHF的iban没有校验规则返回值错误，接口返回值是{}".format(r2.text)
+                    assert r2.json()['code'] == '103055',\
+                        "创建CHF法币提现交易-CHF的iban前两位非sepa地区，接口返回值是{}".format(r2.text)
+            sleep(30)
 
     @allure.title('test_payout_cash_abnormal_027')
-    @allure.description('确认&创建CHF法币提现交易-正确BIC(第五第六位是国家代码但不是sepa国家)【现在接口会校验和UER一样是有问题的】')
+    @allure.description('确认&创建CHF法币提现交易-使用account number(bic格式错误)')
     def test_payout_cash_abnormal_027(self):
         with allure.step("法币提现交易-错误bic"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -1352,56 +1364,10 @@ class TestPayoutCashAbnormalApi:
                 "amount": "25",
                 "payment_method": "SIC",
                 "account_name": "Richard External QA",
-                "iban": "AO1234567890",
-                "bic": "ZXCVAO12"
+                "iban": "12345678",
+                "bic": "ZX"
             }
-            with allure.step("确认CHF法币提现交易-正确BIC(第五第六位是国家代码但不是sepa国家)"):
-                r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
-                                    headers=headers)
-                with allure.step("状态码和返回值"):
-                    logger.info('状态码是{}'.format(str(r.status_code)))
-                    logger.info('返回值是{}'.format(str(r.text)))
-                with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                with allure.step("状态码和返回值"):
-                    logger.info('状态码是{}'.format(str(r.status_code)))
-                    logger.info('返回值是{}'.format(str(r.text)))
-                with allure.step("校验返回值"):
-                    assert r.json() == {},\
-                        "确认CHF法币提现交易-正确BIC(第五第六位是国家代码但不是sepa国家)返回值错误，接口返回值是{}".format(r.text)
-            with allure.step("创建CHF法币提现交易-正确BIC(第五第六位是国家代码但不是sepa国家)"):
-                code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-                secretKey = get_json()['secretKey']
-                totp = pyotp.TOTP(secretKey)
-                mfaVerificationCode = totp.now()
-                headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-                headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
-                r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
-                                     headers=headers)
-                with allure.step("状态码和返回值"):
-                    logger.info('状态码是{}'.format(str(r2.status_code)))
-                    logger.info('返回值是{}'.format(str(r2.text)))
-                with allure.step("校验状态码"):
-                    assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r2.status_code)
-                with allure.step("校验返回值"):
-                    assert r2.json() == {},\
-                        "创建CHF法币提现交易-正确BIC(第五第六位是国家代码但不是sepa国家)返回值错误，接口返回值是{}".format(r2.text)
-
-    @allure.title('test_payout_cash_abnormal_028')
-    @allure.description('确认&创建CHF法币提现交易-错误格式BIC(前6非字母)')
-    def test_payout_cash_abnormal_027(self):
-        with allure.step("法币提现交易-错误格式BIC(前6非字母)"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
-            data = {
-                "code": "CHF",
-                "amount": "25",
-                "payment_method": "SIC",
-                "account_name": "Richard External QA",
-                "iban": "BG12345678901234567890",
-                "bic": "123VBG12"
-            }
-            with allure.step("确认CHF法币提现交易-错误格式BIC(前6非字母)"):
+            with allure.step("确认CHF法币提现交易-使用account number(bic格式错误)"):
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
                                     headers=headers)
                 with allure.step("状态码和返回值"):
@@ -1413,9 +1379,9 @@ class TestPayoutCashAbnormalApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验返回值"):
-                    assert r.json()['code'] == '103028', \
-                        "确认CHF法币提现交易-错误格式BIC(前6非字母)返回值错误，接口返回值是{}".format(r.text)
-            with allure.step("创建CHF法币提现交易-错误格式BIC(前6非字母)"):
+                    assert r.json() == {},\
+                        "确认CHF法币提现交易-使用account number(bic格式错误)返回值错误，接口返回值是{}".format(r.text)
+            with allure.step("创建CHF法币提现交易-使用account number(bic格式错误)"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
                 secretKey = get_json()['secretKey']
                 totp = pyotp.TOTP(secretKey)
@@ -1430,8 +1396,56 @@ class TestPayoutCashAbnormalApi:
                 with allure.step("校验状态码"):
                     assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
-                    assert r2.json()['code'] == '103028', \
-                        "创建CHF法币提现交易-错误格式BIC(前6非字母)返回值错误，接口返回值是{}".format(r2.text)
+                    assert r2.json() == {},\
+                        "创建CHF法币提现交易-使用account number(bic格式错误)返回值错误，接口返回值是{}".format(r2.text)
+            sleep(30)
+
+    @allure.title('test_payout_cash_abnormal_028')
+    @allure.description('确认&创建CHF法币提现交易-使用无效iban(非iban也非account number)')
+    def test_payout_cash_abnormal_027(self):
+        with allure.step("法币提现交易-使用无效iban"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+            data = {
+                "code": "CHF",
+                "amount": "25",
+                "payment_method": "SIC",
+                "account_name": "Richard External QA",
+                "iban": "BG123",
+                "bic": "123VBG12"
+            }
+            with allure.step("确认CHF法币提现交易-使用无效iban"):
+                r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
+                                    headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验返回值"):
+                    assert r.json()['code'] == '103055', \
+                        "确认CHF法币提现交易-使用无效iban，接口返回值是{}".format(r.text)
+            with allure.step("创建CHF法币提现交易-使用无效iban"):
+                code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+                secretKey = get_json()['secretKey']
+                totp = pyotp.TOTP(secretKey)
+                mfaVerificationCode = totp.now()
+                headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+                headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+                r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
+                                     headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r2.status_code)))
+                    logger.info('返回值是{}'.format(str(r2.text)))
+                with allure.step("校验状态码"):
+                    assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
+                with allure.step("校验返回值"):
+                    assert r2.json()['code'] == '103055', \
+                        "创建CHF法币提现交易-使用无效iban返回值错误，接口返回值是{}".format(r2.text)
+            sleep(30)
 
     @allure.title('test_payout_cash_abnormal_029')
     @allure.description('开启法币提现画面，不传code')

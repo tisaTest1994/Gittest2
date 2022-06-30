@@ -181,7 +181,7 @@ class TestPayoutCryptoAbnormalApi:
             data = {
                 "amount": '39.9',
                 "code": 'USDT',
-                "address": '0x1145c02268E90a7EA4FD438c67EB499DcA9B1F87',
+                "address": '0xA7185FBEE96B605709D9659894066dF21cc87f05',
                 "method": "ERC20"
             }
         with allure.step("确认USDT虚拟货币提现交易-(提现金额小于最小金额)"):
