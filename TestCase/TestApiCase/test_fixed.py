@@ -123,7 +123,7 @@ class TestFixedApi:
                     data = {
                         "subscribe_amount": {
                             "code": i["code"],
-                            "amount": "0.13"
+                            "amount": "1"
                         },
                         "maturity_interest": {
                             "code": i["code"],
@@ -185,7 +185,7 @@ class TestFixedApi:
                     data = {
                         "subscribe_amount": {
                             "code": i["code"],
-                            "amount": "0.13"
+                            "amount": "1"
                         },
                         "maturity_interest": {
                             "code": i["code"],
@@ -247,7 +247,7 @@ class TestFixedApi:
                     data = {
                         "subscribe_amount": {
                             "code": i["code"],
-                            "amount": "50"
+                            "amount": "1050"
                         },
                         "maturity_interest": {
                             "code": i["code"],
@@ -703,7 +703,7 @@ class TestFixedApi:
             data = {
                 "subscribe_amount": {
                     "code": product_info['code'],
-                    "amount": "0.021"
+                    "amount": "1"
                 },
                 "maturity_interest": {
                     "code": product_info['code'],
@@ -711,7 +711,7 @@ class TestFixedApi:
                 }
             }
             if product_info['code'] == 'USDT':
-                data['subscribe_amount']['amount'] = '30'
+                data['subscribe_amount']['amount'] = '1130'
             r = session.request('POST',
                                 url='{}/earn/fix/products/{}/transactions'.format(env_url, product_info['product_id']),
                                 data=json.dumps(data), headers=headers)
@@ -957,9 +957,9 @@ class TestFixedApi:
             code = product_list['code']
             product_id = product_list['product_id']
             if code == 'USDT':
-                amount = '20'
+                amount = '1120'
             else:
-                amount = "0.01327"
+                amount = "1.01327"
             data = {
                 "subscribe_amount": {
                     "code": code,
