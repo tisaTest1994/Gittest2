@@ -310,8 +310,7 @@ def add_comma_number(number):
 
 
 # 获取2fa google code
-def get_mfa_code():
-    secretKey = get_json()['secretKey']
+def get_mfa_code(secretKey=get_json()['secretKey']):
     totp = pyotp.TOTP(secretKey)
     return totp.now()
 

@@ -582,7 +582,7 @@ class TestWebWithdraw:
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-mailcode', 'input', code)
         # 输入google验证码
         with allure.step("通过接口获取google验证码"):
-            mfaVerificationCode = get_mfa_code()
+            mfaVerificationCode = get_mfa_code(get_json()['secretKey'])
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-googlecode', 'input', mfaVerificationCode)
         with allure.step("点击 confirm withdrawal"):
             operate_element_web(chrome_driver, 'assetPage', 'assets-withdraw-cash-submit')
