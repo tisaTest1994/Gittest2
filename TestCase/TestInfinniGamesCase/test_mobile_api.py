@@ -91,9 +91,9 @@ class TestMobileApi:
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
-                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json() == {}, "合作方划转交易错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == 'PA013', "合作方划转交易错误，返回值是{}".format(r.text)
 
     @allure.title('test_mobile_005')
     @allure.description('cabital申请，把资金从cabital划转到infinni games')

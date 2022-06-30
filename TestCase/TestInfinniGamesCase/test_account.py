@@ -30,8 +30,6 @@ class TestAccountApi:
             r = session.request('GET', url='{}/partner/link'.format(self.url), params=params, headers=headers)
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-                print(r.url)
-                print(r.text)
         # with allure.step("注册账户"):
         #     data = {
         #         'user_ext_ref': params['user_ext_ref']
@@ -84,7 +82,6 @@ class TestAccountApi:
             params = {
                 'partner_id': get_json()['infinni_games']['partner_id'],
                 'user_ext_ref': get_json()['infinni_games']['uid_A']
-
             }
             r = session.request('GET', url='{}/connect/partner/user/info'.format(self.url), params=params, headers=headers)
             with allure.step("校验状态码"):
