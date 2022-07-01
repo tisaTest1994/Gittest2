@@ -5,7 +5,7 @@ from Function.operate_sql import *
 
 
 @allure.feature("mobile api account 相关 testcases")
-class TestAccountApi:
+class TestAccountDeletionApi:
 
     # 初始化class
     @staticmethod
@@ -15,7 +15,7 @@ class TestAccountApi:
 
     @allure.title('test_account_deletion_001')
     @allure.description('注册新账户，并查看销户申请状态为NOT_INIT')
-    def test_account_001(self):
+    def test_account_deletion_001(self):
         account = generate_email()
         with allure.step("注册一个新账户"):
             ApiFunction.sign_up(account)
@@ -35,7 +35,7 @@ class TestAccountApi:
 
     @allure.title('test_account_deletion_002')
     @allure.description('提交注销申请，并查看销户申请状态为PENDING，用户状态为SUSPEND')
-    def test_account_002(self):
+    def test_account_deletion_002(self):
         account = generate_email()
         with allure.step("注册一个新账户"):
             ApiFunction.sign_up(account)
@@ -67,7 +67,7 @@ class TestAccountApi:
 
     @allure.title('test_account_deletion_003')
     @allure.description('重复提交注销申请报错，并查看销户申请状态为PENDING，用户状态为SUSPEND')
-    def test_account_003(self):
+    def test_account_deletion_003(self):
         with allure.step("提交销户申请"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account="winnie.wang+121@cabital.com",
                                                                                  password="A!234sdfg")
@@ -88,7 +88,7 @@ class TestAccountApi:
 
     @allure.title('test_account_deletion_004')
     @allure.description('提交销户申请后审批通过，查看用户状态为CLOSED')
-    def test_account_004(self):
+    def test_account_deletion_004(self):
         account = generate_email()
         with allure.step("注册一个新账户"):
             ApiFunction.sign_up(account)
@@ -148,7 +148,7 @@ class TestAccountApi:
 
     @allure.title('test_account_deletion_005')
     @allure.description('新用户提交销户申请后审批拒绝，查看用户状态为NEW')
-    def test_account_005(self):
+    def test_account_deletion_005(self):
         account = generate_email()
         with allure.step("注册一个新账户"):
             ApiFunction.sign_up(account)
@@ -189,7 +189,7 @@ class TestAccountApi:
 
     @allure.title('test_account_deletion_006')
     @allure.description('ACTIVE用户提交销户申请后审批拒绝，查看用户状态为ACTIVE')
-    def test_account_006(self):
+    def test_account_deletion_006(self):
         with allure.step("提交销户申请，并查看销户申请状态为PENDING"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account="winnie.wang+125@cabital.comm",
                                                                                  password="A!234sdfg")
