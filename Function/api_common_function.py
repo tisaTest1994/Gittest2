@@ -73,8 +73,8 @@ def get_photo():
 
 
 # 修改资源里面的配置参数
-def write_json(key, value):
-    path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/setting.json'
+def write_json(key, value, file='setting.json'):
+    path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/{}'.format(file)
     with open(path, "rb+") as f:
         js = json.load(f)
     for i in js:
@@ -311,10 +311,19 @@ def add_comma_number(number):
 
 # 获取2fa google code
 def get_mfa_code(secretKey=get_json()['secretKey']):
+    old_2fa = get_json(file='latest_2fa.json')['2fa']
     totp = pyotp.TOTP(secretKey)
-    return totp.now()
+    new_2fa = totp.now()
+    if old_2fa == new_2fa:
+        time.sleep(30)
+        totp = pyotp.TOTP(secretKey)
+        new_2fa = totp.now()
+        write_json('2fa', new_2fa, file='latest_2fa.json')
+    else:
+        write_json('2fa', new_2fa, file='latest_2fa.json')
+    return new_2fa
 
-
+get_mfa_code()
 # Basic Auth
 def get_basic_auth(username, password):
     temp_str = username + ':' + password

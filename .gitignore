@@ -4,6 +4,7 @@ Screenshot/App/*.png
 Screenshot/Web/*.png
 src/
 *.pyc
+Resource/latest_2fa.json
 Resource/multiple_languages_web.json
 Resource/multiple_languages_app.json
 TestCase/TestWebCase/temp.jpg
