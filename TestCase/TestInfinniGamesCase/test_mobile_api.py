@@ -57,7 +57,6 @@ class TestMobileApi:
             }
             r = session.request('POST', url='{}/connect/{}/transfer/confirm'.format(env_url, get_json()['infinni_games'][
                 'partner_id']), data=json.dumps(data), headers=headers)
-            print(r.json())
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
