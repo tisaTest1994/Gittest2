@@ -37,7 +37,6 @@ class TestMobileApi:
             }
             r = session.request('POST', url='{}/connect/{}/transfer/fee'.format(env_url, get_json()['infinni_games'][
                 'partner_id']), data=json.dumps(data), headers=headers)
-            print(r.json())
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
@@ -47,13 +46,14 @@ class TestMobileApi:
     @allure.title('test_mobile_003')
     @allure.description('合作方划转交易 预校验')
     def test_mobile_003(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice.wang@cabital.com', password='Zcdsw123')
         with allure.step("合作方划转交易 预校验"):
             data = {
                 "amount": "50",
                 "code": "USDT",
                 "direction": "DEBIT",
-                "account_vid": "d9f35f7c-ec94-425d-9f66-95585457bb7d",
-                "user_ext_ref": "james.lee@cabital.com"
+                "account_vid": "cb3f7670-a5c5-4bde-a588-441c20ea59de",
+                "user_ext_ref": "991292615343214592"
             }
             r = session.request('POST', url='{}/connect/{}/transfer/confirm'.format(env_url, get_json()['infinni_games'][
                 'partner_id']), data=json.dumps(data), headers=headers)
@@ -164,3 +164,25 @@ class TestMobileApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['partner_id'] == get_json()['infinni_games']['partner_id'], "用户通过mobile link infinni games错误，返回值是{}".format(r.text)
+
+    @allure.title('test_mobile_007')
+    @allure.description('合作方划转交易 预校验异常场景，两边没有link关系')
+    def test_mobile_007(self):
+        with allure.step(" 没有link关系合作方划转交易 预校验"):
+            data = {
+                "amount": "50",
+                "code": "USDT",
+                "direction": "DEBIT",
+                "account_vid": "d9f35f7c-ec94-425d-9f66-95585457bb7d",
+                "user_ext_ref": "james.lee@cabital.com"
+            }
+            r = session.request('POST',
+                                url='{}/connect/{}/transfer/confirm'.format(env_url, get_json()['infinni_games'][
+                                    'partner_id']), data=json.dumps(data), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['code'] == "PA013", "合作方划转交易 预校验错误，返回值是{}".format(r.text)
