@@ -32,11 +32,12 @@ class TestMobileApi:
         with allure.step("合作方划转交易费用"):
             data = {
                 "amount": "50",
-                "symbol": "USDT",
+                "code": "USDT",
                 "direction": "DEBIT"
             }
             r = session.request('POST', url='{}/connect/{}/transfer/fee'.format(env_url, get_json()['infinni_games'][
                 'partner_id']), data=json.dumps(data), headers=headers)
+            print(r.json())
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
@@ -49,13 +50,14 @@ class TestMobileApi:
         with allure.step("合作方划转交易 预校验"):
             data = {
                 "amount": "50",
-                "symbol": "USDT",
+                "code": "USDT",
                 "direction": "DEBIT",
                 "account_vid": "d9f35f7c-ec94-425d-9f66-95585457bb7d",
                 "user_ext_ref": "james.lee@cabital.com"
             }
             r = session.request('POST', url='{}/connect/{}/transfer/confirm'.format(env_url, get_json()['infinni_games'][
                 'partner_id']), data=json.dumps(data), headers=headers)
+            print(r.json())
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -80,7 +82,7 @@ class TestMobileApi:
         with allure.step("参数"):
             data = {
                 "amount": "50",
-                "symbol": "USDT",
+                "code": "USDT",
                 "direction": "DEBIT",
                 "account_vid": "d9f35f7c-ec94-425d-9f66-95585457bb7d",
                 "user_ext_ref": get_json()['infinni_games']['uid_B']
@@ -111,7 +113,7 @@ class TestMobileApi:
         with allure.step("参数"):
             data = {
                 "amount": "70",
-                "symbol": "USDT",
+                "code": "USDT",
                 "direction": "DEBIT",
                 "account_vid": get_json()['infinni_games']['account_vid_c'],
                 "user_ext_ref": get_json()['infinni_games']['uid_C']
