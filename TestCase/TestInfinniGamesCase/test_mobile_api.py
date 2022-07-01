@@ -49,10 +49,10 @@ class TestMobileApi:
         with allure.step("合作方划转交易 预校验"):
             data = {
                 "amount": "50",
-                "symbol": "USDT",
+                "code": "USDT",
                 "direction": "DEBIT",
                 "account_vid": "d9f35f7c-ec94-425d-9f66-95585457bb7d",
-                "user_ext_ref": "james.lee@cabital.com"
+                "user_ext_ref": "988518746672869376"
             }
             r = session.request('POST', url='{}/connect/{}/transfer/confirm'.format(env_url, get_json()['infinni_games'][
                 'partner_id']), data=json.dumps(data), headers=headers)

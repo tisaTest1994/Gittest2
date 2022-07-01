@@ -479,13 +479,14 @@ class ApiFunction:
         code = str(email_info['body']).split('"code":')[1].split('"')[1]
         return code
 
-    # 收取邮箱验证码只收
+    # 收取邮箱验证码，只收取
     @staticmethod
     def get_email_code(type):
-        sleep(30)
+        #sleep(30)
         sleep_time = 0
         while sleep_time < 60:
             email_info = get_email()
+            print(email_info)
             if type == 'REGISTRY':
                 if '[Cabital] Verify Your Email' in email_info['title']:
                     break
@@ -736,4 +737,4 @@ class ApiFunction:
 
 
 
-
+#ApiFunction.get_email_code('MFA_EMAIL')
