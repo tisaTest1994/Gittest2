@@ -68,6 +68,8 @@ if __name__ == '__main__':
         pytest.main(['./TestCase/TestAccountingCase/test_moneyhouse.py', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "infinni":
         pytest.main(['./TestCase/TestInfinniGamesCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
+    elif sys.argv[1] == "widget":
+        pytest.main(['./TestCase/TestWidgetCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     else:
         assert False, 'error 需要传入正确的参数'
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
