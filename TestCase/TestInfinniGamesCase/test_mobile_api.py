@@ -44,7 +44,7 @@ class TestMobileApi:
                 assert r.json()['fee']['amount'] == '0', "合作方划转交易费用错误，返回值是{}".format(r.text)
 
     @allure.title('test_mobile_003')
-    @allure.description('合作方划转交易 预校验')
+    @allure.description('合作方划转交易 预校验link关系存在')
     def test_mobile_003(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice.wang@cabital.com', password='Zcdsw123')
         with allure.step("合作方划转交易 预校验"):
@@ -166,7 +166,7 @@ class TestMobileApi:
             assert r.json()['partner_id'] == get_json()['infinni_games']['partner_id'], "用户通过mobile link infinni games错误，返回值是{}".format(r.text)
 
     @allure.title('test_mobile_007')
-    @allure.description('合作方划转交易 预校验异常场景，两边没有link关系')
+    @allure.description('合作方划转交易 预校验link关系不存在异常场景')
     def test_mobile_007(self):
         with allure.step(" 没有link关系合作方划转交易 预校验"):
             data = {
