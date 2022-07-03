@@ -117,12 +117,20 @@ class TestMobileApi:
                 "account_vid": get_json()['infinni_games']['account_vid_c'],
                 "user_ext_ref": get_json()['infinni_games']['uid_C']
             }
+        with allure.step('获得transfer前币种可用balance数量'):
+            transfer_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=data['code'])
+            logger.info('transfer_amount_wallet_balance_old的值是{}'.format(transfer_amount_wallet_balance_old))
         r = session.request('POST', url='{}/connect/{}/transfer'.format(env_url, get_json()['infinni_games']['partner_id']), data=json.dumps(data), headers=headers)
+        with allure.step('获得transfer后币种可用balance数量'):
+            transfer_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=data['code'])
+            logger.info('transfer_amount_wallet_balance_latest的值是{}'.format(transfer_amount_wallet_balance_latest))
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验transfer前后的可用balance数量"):
+            assert Decimal(transfer_amount_wallet_balance_old) - Decimal(data['amount']) == Decimal(transfer_amount_wallet_balance_latest), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest)
         with allure.step("校验返回值"):
             assert r.json()['amount'] == data['amount'], "合作方划转交易错误，返回值是{}".format(r.text)
             transfer_id = r.json()['txn_id']
