@@ -1,6 +1,5 @@
 from Function.api_function import *
 from Function.operate_sql import *
-import webbrowser
 
 
 @allure.feature("VND Acquiring相关的testcases")
@@ -46,15 +45,19 @@ class TestAcquiringApi:
                     },
                     "Nonce": "JamesTest"
                 }
-            r = session.request('POST', url='{}/acquiring/{}'.format(env_url, 'VND'), data=json.dumps(data), headers=headers)
+            r = session.request('POST', url='{}/acquiring/{}'.format(env_url, 'VND'), data=json.dumps(data),
+                                headers=headers)
             r2 = session.request('GET', url='{}/acquiring/prepare/{}'.format(env_url, 'VND'), headers=headers)
-            fee = float(r2.json()['payment_controls'][0]['fee_rule']['percentage_charge_rule']['percentage'])*0.01*(float(data['amount']))
+            fee = float(r2.json()['payment_controls'][0]['fee_rule']['percentage_charge_rule']
+                        ['percentage'])*0.01*(float(data['amount']))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 logger.info('txn_id:{}'.format(r.json()['txn_id']))
-                assert r.json()['instructed_amount'] == data['amount'], 'acquiring扣除fee前的金额错误，接口返回值{}'.format(r.json['instructed_amount'])
-                assert float(r.json()['actual_amount']) == float(data['amount']) - fee, 'acquiring实际金额错误，接口返回值{}'.format(r.json['actual_amount'])
+                assert r.json()['instructed_amount'] == data['amount'],\
+                    'acquiring扣除fee前的金额错误，接口返回值{}'.format(r.json['instructed_amount'])
+                assert float(r.json()['actual_amount']) == float(data['amount']) - fee,\
+                    'acquiring实际金额错误，接口返回值{}'.format(r.json['actual_amount'])
                 assert r.json()['fee']['amount'] == '400', 'fee错误，接口返回值{}'.format(r.json()['fee'])
                 sleep(6)
             with allure.step("刷新获取收单交易"):
@@ -90,55 +93,44 @@ class TestAcquiringApi:
                 assert r.json()['fee'] == {'code': 'VND', 'amount': '400'}, '收单费用计算错误，接口返回值是{}'.format(r.json()['fee'])
 
     @allure.title('test_acquiring_004')
-    @allure.description('VND建收单交易-金额小于最小限额')
+    @allure.description('创建VND收单交易-失败(金额小于最小金额or大于最大金额)')
     def test_acquiring_004(self):
-        with allure.step("VND创建收单交易"):
+        with allure.step("创建VND收单交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
-            with allure.step("VND法币acquiring信息"):
-                data = {
-                    "amount": "19999",
-                    "payment_method": {
-                        "type": 1,
-                        "sub_type": 1
-                    },
-                    "txn_type": 1,
-                    "card": {
-                        "card_no": "9704001933454934",
-                        "issue_date": "03/07",
-                        "holder_name": "NGUYEN VAN A"
-                    },
-                    "Nonce": "JamesTest"
-                }
-            r = session.request('POST', url='{}/acquiring/{}'.format(env_url, 'VND'), data=json.dumps(data), headers=headers)
+        with allure.step('获取VND法币最小和最大提现金额'):
+            r = session.request('GET', url='{}/acquiring/prepare/{}'.format(env_url, 'VND'), headers=headers)
+            amount_min = r.json()['payment_controls'][0]['constraint']['min']
+            amount_max = r.json()['payment_controls'][0]['constraint']['max']
+            amount_list = [str(int(amount_min) - 1), str(int(amount_max) + 1)]
+        for i in amount_list:
+            data = {
+                "amount": i,
+                "payment_method": {
+                    "type": 1,
+                    "sub_type": 1
+                },
+                "txn_type": 1,
+                "card": {
+                    "card_no": "9704001933454934",
+                    "issue_date": "03/07",
+                    "holder_name": "NGUYEN VAN A"
+                },
+                "Nonce": "JamesTest"
+            }
+            with allure.step("创建VND收单交易-失败(金额小于最小金额or大于最大金额)"):
+                r = session.request('POST', url='{}/acquiring/{}'.format(env_url, 'VND'),
+                                    data=json.dumps(data), headers=headers)
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验返回值"):
-                assert r.json()['message'] == "Minimum: 20000 VND", '收单交易小于最小限额提示信息错误，接口返回值为：{}'.format(r.text)
-
-    @allure.title('test_acquiring_005')
-    @allure.description('VND建收单交易-金额大于最大限额')
-    def test_acquiring_005(self):
-        with allure.step("VND创建收单交易"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
-            with allure.step("VND法币acquiring信息"):
-                data = {
-                    "amount": "500000000",
-                    "payment_method": {
-                        "type": 1,
-                        "sub_type": 1
-                    },
-                    "txn_type": 1,
-                    "card": {
-                        "card_no": "9704001933454934",
-                        "issue_date": "03/07",
-                        "holder_name": "NGUYEN VAN A"
-                    },
-                    "Nonce": "JamesTest"
-                }
-            r = session.request('POST', url='{}/acquiring/{}'.format(env_url, 'VND'), data=json.dumps(data), headers=headers)
-            with allure.step("校验状态码"):
-                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-            with allure.step("校验返回值"):
-                assert r.json()['message'] == "Maximum: 499999999 VND", '收单交易小于最小限额提示信息错误，接口返回值为：{}'.format(r.text)
+                if i == amount_list[0]:
+                    assert r.json()[
+                               'message'] == "Minimum: 20000 VND",\
+                        '创建VND收单交易-失败(金额小于最小金额or大于最大金额)提示信息错误，接口返回值为：{}'.format(r.text)
+                else:
+                    assert r.json()['message'] == "Maximum: 499999999 VND",\
+                        '创建VND收单交易-失败(金额小于最小金额or大于最大金额)提示信息错误，接口返回值为：{}'.format(r.text)

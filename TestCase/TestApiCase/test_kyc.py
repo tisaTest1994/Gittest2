@@ -74,7 +74,7 @@ class TestKycApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['additionalInfos'] == {}, "获取用户补充信息, 补充信息为空失败，返回值是{}".format(r.text)
+            assert r.json()['additionalInfos'] == None, "获取用户补充信息, 补充信息为空失败，返回值是{}".format(r.text)
 
     @allure.title('test_kyc_005')
     @allure.description('用户kyc已过，补充信息已填写')
@@ -94,7 +94,7 @@ class TestKycApi:
     @allure.title('test_kyc_006')
     @allure.description('巴西籍用户填写补充信息检查，用户kyc已过，补充信息已填写，修改cpf name')
     def test_kyc_006(self):
-        cpf_name = 'test' + str(range(1, 100))
+        cpf_name = 'test' + str(random.randint(1, 100))
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+174@cabital.com')
         with allure.step("获取用户补充信息接口/account/additional/info/update"):
             data = {
@@ -103,8 +103,11 @@ class TestKycApi:
                 }
             }
 
-            r = session.request('PUT', url='{}/account/additional/info/update'.format(env_url), data=json.dumps(data),
+            r = session.request('PUT', url='{}/kyc/user/info/additional/update'.format(env_url), data=json.dumps(data),
                                 headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("获取用户补充信息"):

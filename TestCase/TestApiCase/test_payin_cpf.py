@@ -33,7 +33,7 @@ class TestPayinCpfApi:
 
     @allure.title('test_payin_cpf_002')
     @allure.description('webhook模拟brl充值（cpf status=5）')
-    @pytest.mark.skip(reason='transaction id必须唯一，不唯一就会报错')
+    # @pytest.mark.skip(reason='transaction id必须唯一，不唯一就会报错')
     def test_payin_cpf_002(self):
         cpf_info = [('yanting.huang+161@cabital.com', 5)]
         for i in cpf_info:
@@ -59,7 +59,7 @@ class TestPayinCpfApi:
                     "date": "2022-06-04",
                     "dateDetailed": "0001-01-01T00:00:00+00:00",
                     "type": "Credit",
-                    "transactionId": "c21cf84a-0ff5-4973-a010-00c6ee07004",
+                    "transactionId": "c213f84a-0ff5-4973-a010-00c6ee07004",
                     "counterpart": {
                         "name": "Yan Ting161",
                         "taxId": "123.322.238-98",
@@ -72,6 +72,9 @@ class TestPayinCpfApi:
             r = session.request('POST', url='https://webhook.latibac.com/mh/transfero/credit_transaction_status_changed',
                                 data=json.dumps(data),
                                 headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
 
