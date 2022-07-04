@@ -36,7 +36,7 @@ class TestPayoutApi:
         with allure.step("校验返回值"):
             assert r.json()['code'] == 'ACC_FORBIDDEN', "没有Kyc用户添加常用收款地址失败错误，返回值是{}".format(r.text)
 
-    @allure.title('test_payout_002 获取存储的常用收款地址list')
+    @allure.title('test_payout_002')
     @allure.description('获取存储的常用收款地址list')
     def test_payout_002(self):
         with allure.step("获取存储的常用收款地址list"):
