@@ -696,6 +696,3 @@ class ApiFunction:
                 cfx_list.append(i['pair'])
         return cfx_list
 
-
-
-ApiFunction.get_email_code('MFA_EMAIL')
