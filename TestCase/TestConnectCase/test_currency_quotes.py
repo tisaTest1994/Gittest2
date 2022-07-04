@@ -13,8 +13,21 @@ class TestCurrencyQuoteApi:
     @allure.title('test_currency_quotes_001')
     @allure.description('获取报价最新的报价')
     def test_currency_quotes_001(self):
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
+                                                nonce=nonce)
+            connect_headers['ACCESS-SIGN'] = sign
+            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_headers['ACCESS-NONCE'] = nonce
+        with allure.step("获取合作方的配置"):
+            r = session.request('GET', url='{}/config'.format(self.url), headers=connect_headers)
+            list = []
+            for i in r.json()['pairs']:
+                list.append(i['pair'])
         with allure.step("获取最新的报价"):
-            for i in get_json()['cfx_book'].values():
+            for i in list:
                 with allure.step("获取正向报价"):
                     r = session.request('GET', url='{}/quotes/{}'.format(self.url, i), headers=connect_headers)
                     logger.info('币种对为{}'.format(i))

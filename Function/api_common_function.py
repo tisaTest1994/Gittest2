@@ -323,7 +323,7 @@ def get_mfa_code(secretKey=get_json()['secretKey']):
         write_json('2fa', new_2fa, file='latest_2fa.json')
     return new_2fa
 
-get_mfa_code()
+
 # Basic Auth
 def get_basic_auth(username, password):
     temp_str = username + ':' + password
