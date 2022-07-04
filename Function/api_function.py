@@ -33,10 +33,10 @@ class ApiFunction:
 
     # 加headers，只能默认账户,使用usd
     @staticmethod
-    def add_headers(currency=get_json()['preference_currency']):
+    def add_headers(account=get_json()['email']['email'], password=get_json()['email']['password'], currency=get_json()['preference_currency']):
         headers['User-Agent'] = 'iOS;1.0.0;1;14.4;14.4;iPhone;iPhone 12 Pro Max;'
-        headers['X-Browser-Key'] = 'yilei_test'
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token()
+        headers['X-Browser-Key'] = 'yilei_api_test'
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account, password=password)
         headers['X-Currency'] = currency
 
     # 获取user_id
@@ -450,68 +450,30 @@ class ApiFunction:
         r = session.request('POST', url='{}/account/verify-code/email'.format(env_url), data=json.dumps(data), headers=headers)
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json() == {}, "收取验证码失败，返回值是{}".format(r.text)
-        sleep_time = 0
-        while sleep_time < 60:
-            email_info = get_email()
-            if type == 'REGISTRY':
-                if '[Cabital] Verify Your Email' in email_info['title']:
-                    break
-                    sleep_time == 81
-            elif type == 'FORGET_PASSWORD':
-                if 'Reset Password Request' in email_info['title']:
-                    break
-                    sleep_time == 81
-            elif type == 'ENABLE_MFA':
-                if 'Enable Google Authenticator' in email_info['title']:
-                    break
-                    sleep_time == 81
-            elif type == 'DISABLE_MFA':
-                if 'Disable Google Authenticator' in email_info['title']:
-                    break
-                    sleep_time == 81
-            elif type == 'MFA_EMAIL':
-                sleep(20)
-                if 'Withdrawal Request' in email_info['title']:
-                    break
-                    sleep_time == 81
-            sleep_time = sleep_time + 5
-            sleep(5)
-        code = str(email_info['body']).split('"code":')[1].split('"')[1]
+        code = ApiFunction.get_email_code(type)
         return code
 
-    # 收取邮箱验证码只收
+    # 收取邮箱验证码，只收取
     @staticmethod
     def get_email_code(type):
-        sleep(30)
         sleep_time = 0
-        while sleep_time < 60:
+        while sleep_time < 10:
             email_info = get_email()
             if type == 'REGISTRY':
-                if '[Cabital] Verify Your Email' in email_info['title']:
-                    break
-                    sleep_time == 81
+                if get_json(file='multiple_languages_email.json')['EM001'] in email_info['title']:
+                    sleep_time == 20
             elif type == 'FORGET_PASSWORD':
-                if 'Reset Password Request' in email_info['title']:
-                    break
-                    sleep_time == 81
+                if get_json(file='multiple_languages_email.json')['EM007'] in email_info['title']:
+                    sleep_time == 20
             elif type == 'ENABLE_MFA':
-                if 'Enable Google Authenticator' in email_info['title']:
-                    break
-                    sleep_time == 81
+                if get_json(file='multiple_languages_email.json')['EM014'] in email_info['title']:
+                    sleep_time == 20
             elif type == 'DISABLE_MFA':
-                if 'Disable Google Authenticator' in email_info['title']:
-                    break
-                    sleep_time == 81
+                if get_json(file='multiple_languages_email.json')['EM016'] in email_info['title']:
+                    sleep_time == 20
             elif type == 'MFA_EMAIL':
-                sleep(20)
-                if 'Withdrawal Request' in email_info['title']:
-                    break
-                    sleep_time == 81
-            elif type == "REGISTRY_BYBIT":
-                sleep(20)
-                if 'Testnet-Bybit' in email_info['title']:
-                    break
-                    sleep_time == 81
+                if get_json(file='multiple_languages_email.json')['EM011'] in email_info['title']:
+                    sleep_time == 20
             sleep_time = sleep_time + 5
             sleep(5)
         code = str(email_info['body']).split('"code":')[1].split('"')[1]
@@ -733,7 +695,4 @@ class ApiFunction:
             for i in r.json()['pairs']:
                 cfx_list.append(i['pair'])
         return cfx_list
-
-
-
 

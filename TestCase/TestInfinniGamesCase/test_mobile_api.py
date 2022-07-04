@@ -52,8 +52,13 @@ class TestMobileApi:
                 "amount": "50",
                 "code": "USDT",
                 "direction": "DEBIT",
+<<<<<<< HEAD
+                "account_vid": "d9f35f7c-ec94-425d-9f66-95585457bb7d",
+                "user_ext_ref": "988518746672869376"
+=======
                 "account_vid": "cb3f7670-a5c5-4bde-a588-441c20ea59de",
                 "user_ext_ref": "991292615343214592"
+>>>>>>> 4148c1ce119c7b11935694b3a94c53c22d36efb3
             }
             r = session.request('POST', url='{}/connect/{}/transfer/confirm'.format(env_url, get_json()['infinni_games'][
                 'partner_id']), data=json.dumps(data), headers=headers)

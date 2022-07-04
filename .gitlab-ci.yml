@@ -27,7 +27,7 @@ ApiTest:
   tags:
     - python
   script:
-    - python run.py api test
+    - python run.py api en_US
   artifacts:
     paths:
       - Reports
@@ -38,7 +38,7 @@ CabinetTest:
   tags:
     - python
   script:
-    - python run.py cabinet test
+    - python run.py cabinet en_US
   artifacts:
     paths:
       - Reports
@@ -49,7 +49,7 @@ ConnectTest:
   tags:
     - python
   script:
-    - python run.py connect test
+    - python run.py connect en_US
   artifacts:
     paths:
       - Reports
@@ -60,7 +60,7 @@ AccountingTest:
   tags:
     - python
   script:
-    - python run.py accounting test
+    - python run.py accounting en_US
   artifacts:
     paths:
       - Reports
@@ -71,12 +71,12 @@ Infinni Games Test:
   tags:
     - python
   script:
-    - python run.py infinni
+    - python run.py infinni en_US
   artifacts:
     paths:
       - Reports
     expire_in: 1 week
-#
+
 # KycTest:
 #   stage: test6
 #   tags:

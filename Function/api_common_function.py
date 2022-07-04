@@ -127,25 +127,25 @@ def get_email():
                                   "%Y-%m-%d %H:%M:%S"))
                 if int(email_time) + int(30) >= int(utc_now_time):
                     break
-        sleep_time = sleep_time + 10
-        time.sleep(10)
+        sleep_time = sleep_time + 5
+        time.sleep(5)
     assert data[0] is not None, 'email原始数据获取为空'
     return {"title": title, "body": data[0][1].decode(encoding['encoding'])}
 
 
 # 获取翻译码
-def get_language_map(type='app'):
+def get_language_map(type='app', language_type=get_json()['language']):
     if type == 'app':
-        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(
-            get_json()['language']), timeout=20)
+        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(language_type), timeout=20)
         path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages_app.json'
     elif type == 'web':
-        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_web/{}/latest'.format(
-            get_json()['language']), timeout=20)
+        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_web/{}/latest'.format(language_type), timeout=20)
         path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages_web.json'
+    elif type == 'email':
+        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_email/{}/latest'.format(language_type), timeout=20)
+        path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages_email.json'
     else:
-        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(
-            get_json()['language']), timeout=20)
+        r = requests.request('GET', url='https://mms.cabital.io/deploycodefile/cabital_app/{}/latest'.format(language_type), timeout=20)
         path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/multiple_languages_app.json'
     with open(path, "w+", encoding='utf8') as f:
         json.dump(r.json()['data'], f, sort_keys=True, indent=2, ensure_ascii=False)
@@ -323,7 +323,7 @@ def get_mfa_code(secretKey=get_json()['secretKey']):
         write_json('2fa', new_2fa, file='latest_2fa.json')
     return new_2fa
 
-get_mfa_code()
+
 # Basic Auth
 def get_basic_auth(username, password):
     temp_str = username + ':' + password
@@ -332,4 +332,3 @@ def get_basic_auth(username, password):
     # base64 编码
     encode_str = base64.b64encode(bytesString)
     return 'Basic ' + encode_str.decode()
-

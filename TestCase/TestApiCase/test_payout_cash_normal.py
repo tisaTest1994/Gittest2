@@ -139,9 +139,7 @@ class TestPayoutCashNormalApi:
                     assert r.json() == {}, "确认Payme VND法币提现交易错误，返回值是{}".format(r.text)
             with allure.step("创建VND法币提现交易"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-                secretKey = get_json()['secretKey']
-                totp = pyotp.TOTP(secretKey)
-                mfaVerificationCode = totp.now()
+                mfaVerificationCode = get_mfa_code()
                 headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
@@ -177,9 +175,7 @@ class TestPayoutCashNormalApi:
                     assert r.json() == {}, "确认BRL法币提现交易错误，返回值是{}".format(r.text)
             with allure.step("创建BRL法币提现，BRL-PIX—CPF"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-                secretKey = get_json()['secretKey']
-                totp = pyotp.TOTP(secretKey)
-                mfaVerificationCode = totp.now()
+                mfaVerificationCode = get_mfa_code()
                 headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
@@ -212,9 +208,7 @@ class TestPayoutCashNormalApi:
             }
             with allure.step("确认BRL法币提现，BRL-TED"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-                secretKey = get_json()['secretKey']
-                totp = pyotp.TOTP(secretKey)
-                mfaVerificationCode = totp.now()
+                mfaVerificationCode = get_mfa_code()
                 headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
@@ -306,9 +300,7 @@ class TestPayoutCashNormalApi:
                     assert r.json() == {}, "确认EUR法币提现交易错误，返回值是{}".format(r.text)
             with allure.step("创建EUR法币提现交易"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-                secretKey = get_json()['secretKey']
-                totp = pyotp.TOTP(secretKey)
-                mfaVerificationCode = totp.now()
+                mfaVerificationCode = get_mfa_code()
                 headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
@@ -351,9 +343,7 @@ class TestPayoutCashNormalApi:
                     assert r.json() == {}, "确认GBP法币提现交易错误，返回值是{}".format(r.text)
             with allure.step("创建GBP法币提现交易"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-                secretKey = get_json()['secretKey']
-                totp = pyotp.TOTP(secretKey)
-                mfaVerificationCode = totp.now()
+                mfaVerificationCode = get_mfa_code()
                 headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
@@ -397,9 +387,7 @@ class TestPayoutCashNormalApi:
                     assert r.json() == {}, "确认CHF法币提现交易错误，返回值是{}".format(r.text)
             with allure.step("创建CHF法币提现交易"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-                secretKey = get_json()['secretKey']
-                totp = pyotp.TOTP(secretKey)
-                mfaVerificationCode = totp.now()
+                mfaVerificationCode = get_mfa_code()
                 headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
@@ -443,9 +431,7 @@ class TestPayoutCashNormalApi:
                     assert r.json() == {}, "确认CHF法币提现交易错误，返回值是{}".format(r.text)
             with allure.step("创建CHF法币提现交易"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-                secretKey = get_json()['secretKey']
-                totp = pyotp.TOTP(secretKey)
-                mfaVerificationCode = totp.now()
+                mfaVerificationCode = get_mfa_code()
                 headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
@@ -489,9 +475,7 @@ class TestPayoutCashNormalApi:
                     assert r.json() == {}, "确认CHF法币提现交易错误，返回值是{}".format(r.text)
             with allure.step("创建CHF法币提现交易"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-                secretKey = get_json()['secretKey']
-                totp = pyotp.TOTP(secretKey)
-                mfaVerificationCode = totp.now()
+                mfaVerificationCode = get_mfa_code()
                 headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
