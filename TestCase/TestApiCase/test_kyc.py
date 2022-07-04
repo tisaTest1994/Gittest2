@@ -102,7 +102,6 @@ class TestKycApi:
                     "IDENTITY_NAME": cpf_name
                 }
             }
-
             r = session.request('PUT', url='{}/account/additional/info/update'.format(env_url), data=json.dumps(data),
                                 headers=headers)
         with allure.step("校验状态码"):

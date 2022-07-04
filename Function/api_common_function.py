@@ -125,7 +125,7 @@ def get_email():
                 utc_now_time = time.mktime(
                     time.strptime(datetime.now(tz=pytz.timezone('UTC')).strftime("%Y-%m-%d %H:%M:%S"),
                                   "%Y-%m-%d %H:%M:%S"))
-                if int(email_time) + int(30) >= int(utc_now_time):
+                if int(email_time) + int(60) >= int(utc_now_time):
                     break
         sleep_time = sleep_time + 5
         time.sleep(5)

@@ -74,10 +74,10 @@ class TestFixedApi:
                                 assert z['apy'] == '12', 'USDT 1d利率出错，利率是{}'.format(z['apy'])
                         elif i['code'] == 'USDT' and y['tenor'] == 7:
                             for z in r.json()['items']:
-                                assert z['apy'] == '2.5', 'USDT 7d利率出错，利率是{}'.format(z['apy'])
+                                assert z['apy'] == '1', 'USDT 7d利率出错，利率是{}'.format(z['apy'])
                         elif i['code'] == 'USDT' and y['tenor'] == 14:
                             for z in r.json()['items']:
-                                assert z['apy'] == '3', 'USDT 14d利率出错，利率是{}'.format(z['apy'])
+                                assert z['apy'] == '2', 'USDT 14d利率出错，利率是{}'.format(z['apy'])
                         elif i['code'] == 'BTC' and y['tenor'] == 1:
                             for z in r.json()['items']:
                                 assert z['apy'] == '1', 'BTC 1d利率出错，利率是{}'.format(z['apy'])
@@ -945,7 +945,7 @@ class TestFixedApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['auto_renew'] == True, "查询包含复投的交易记录错误，返回值是{}".format(r.json())
+            assert r.json()['auto_renew'] is True, "查询包含复投的交易记录错误，返回值是{}".format(r.json())
             assert r.json()['time_line']['renew_subscription_id'] == '', "查询包含复投的交易记录详情信息错误，返回值是{}".format(r.json())
 
     @allure.title('test_fixed_020')

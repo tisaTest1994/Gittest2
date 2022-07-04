@@ -864,3 +864,4 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['promotion_details'] is not None, "promo_code推广code失败，返回值是{}".format(r.text)
 
+
