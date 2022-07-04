@@ -103,6 +103,7 @@ class TestKycApi:
                 }
             }
             r = session.request('PUT', url='{}/kyc/user/info/additional/update'.format(env_url), data=json.dumps(data),
+                                headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
