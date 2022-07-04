@@ -34,9 +34,7 @@ class TestPayoutCryptoAbnormalApi:
                 assert r.json()['code'] == '103001', "确认BTC虚拟货币提现交易-(提现金额小于最小金额)，返回值是{}".format(r.text)
         with allure.step("创建BTC虚拟货币提现交易"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code()
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             r2 = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
@@ -49,7 +47,6 @@ class TestPayoutCryptoAbnormalApi:
             with allure.step("校验返回值"):
                 assert r2.json()['code'] == '103001', \
                     "创建BTC虚拟货币提现交易-(提现金额小于最小数量)返回值错误，接口返回值是{}".format(r2.text)
-        sleep(30)
             
     @allure.title('test_payout_crypto_abnormal_002')
     @allure.description('确认&创建BTC虚拟货币提现交易-错误地址（带有特殊字符的地址）')
@@ -76,9 +73,7 @@ class TestPayoutCryptoAbnormalApi:
                 assert r.json()['code'] == '103035', "确认BTC虚拟货币提现交易-错误地址（带有特殊字符的地址），返回值是{}".format(r.text)
         with allure.step("创建BTC虚拟货币提现交易"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code()
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             r2 = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
@@ -115,9 +110,7 @@ class TestPayoutCryptoAbnormalApi:
                 assert r.json()['code'] == '103001', "确认ETH虚拟货币提现交易-(提现金额小于最小金额)，返回值是{}".format(r.text)
         with allure.step("创建ETH虚拟货币提现交易"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code()
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             r2 = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
@@ -130,7 +123,6 @@ class TestPayoutCryptoAbnormalApi:
             with allure.step("校验返回值"):
                 assert r2.json()['code'] == '103001', \
                     "创建ETH虚拟货币提现交易-(提现金额小于最小金额)返回值错误，接口返回值是{}".format(r2.text)
-        sleep(30)
 
     @allure.title('test_payout_crypto_abnormal_004')
     @allure.description('确认&创建ETH虚拟货币提现交易-错误地址（带有特殊字符的地址）')
@@ -157,9 +149,7 @@ class TestPayoutCryptoAbnormalApi:
                 assert r.json()['code'] == '103035', "确认ETH虚拟货币提现交易-错误地址（带有特殊字符的地址），返回值是{}".format(r.text)
         with allure.step("创建ETH虚拟货币提现交易"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code()
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             r2 = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
@@ -170,7 +160,6 @@ class TestPayoutCryptoAbnormalApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             assert r.json()['code'] == '103035',  "ETH使用带有特殊字符的地址提现结果非预期，返回值为{}".format(r.text)
-        sleep(30)
 
     @allure.title('test_payout_crypto_bnormal_005')
     @allure.description('确认&创建USDT虚拟货币提现交易-(提现金额小于最小金额)')
@@ -197,9 +186,7 @@ class TestPayoutCryptoAbnormalApi:
                 assert r.json()['code'] == '103001', "确认USDT虚拟货币提现交易-(提现金额小于最小金额)，返回值是{}".format(r.text)
         with allure.step("创建ETH虚拟货币提现交易"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code()
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             r2 = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
@@ -212,7 +199,6 @@ class TestPayoutCryptoAbnormalApi:
             with allure.step("校验返回值"):
                 assert r2.json()['code'] == '103001', \
                     "创建USDT虚拟货币提现交易-(提现金额小于最小金额)返回值错误，接口返回值是{}".format(r2.text)
-        sleep(30)
 
     @allure.title('test_payout_crypto_abnormal_006')
     @allure.description('确认&创建USDT虚拟货币提现交易-错误地址（带有特殊字符的地址）')
@@ -239,9 +225,7 @@ class TestPayoutCryptoAbnormalApi:
                 assert r.json()['code'] == '103035', "确认USDT虚拟货币提现交易-错误地址（带有特殊字符的地址），返回值是{}".format(r.text)
         with allure.step("创建USDT虚拟货币提现交易"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code()
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             r2 = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
@@ -252,4 +236,3 @@ class TestPayoutCryptoAbnormalApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             assert r.json()['code'] == '103035',  "USDT使用带有特殊字符的地址提现结果非预期，返回值为{}".format(r.text)
-        sleep(30)

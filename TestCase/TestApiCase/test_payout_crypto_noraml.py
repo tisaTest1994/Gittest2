@@ -78,9 +78,7 @@ class TestPayoutCryptoNormalApi:
                 assert r.json() == {}, "确认BTC虚拟货币提现交易错误，返回值是{}".format(r.text)
         with allure.step("创建ETH虚拟货币提现交易"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code()
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             r2 = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
@@ -91,7 +89,6 @@ class TestPayoutCryptoNormalApi:
             with allure.step("校验状态码"):
                 assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             return r2.json()['transaction_id']
-            sleep(30)
 
     @allure.title('test_payout_crypto_normal_004')
     @allure.description('确认&创建ETH虚拟货币提现交易')
@@ -118,9 +115,7 @@ class TestPayoutCryptoNormalApi:
                 assert r.json() == {}, "确认ETH虚拟货币提现交易错误，返回值是{}".format(r.text)
         with allure.step("创建ETH虚拟货币提现交易"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code()
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             r2 = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
@@ -131,7 +126,6 @@ class TestPayoutCryptoNormalApi:
             with allure.step("校验状态码"):
                 assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             return r2.json()['transaction_id']
-            sleep(30)
 
     @allure.title('test_payout_crypto_normal_005')
     @allure.description('确认&创建USDT虚拟货币提现交易')
@@ -158,9 +152,7 @@ class TestPayoutCryptoNormalApi:
                 assert r.json() == {}, "确认USDT虚拟货币提现交易错误，返回值是{}".format(r.text)
         with allure.step("创建USDT虚拟货币提现交易"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code()
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             r2 = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
@@ -171,7 +163,6 @@ class TestPayoutCryptoNormalApi:
             with allure.step("校验状态码"):
                 assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             return r2.json()['transaction_id']
-            sleep(30)
 
     @allure.title('test_payout_crypto_normal_006')
     @allure.description('BTC确认Crypto提现交易超过每日限额')
