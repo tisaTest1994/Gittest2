@@ -37,7 +37,6 @@ class TestMobileApi:
             }
             r = session.request('POST', url='{}/connect/{}/transfer/fee'.format(env_url, get_json()['infinni_games'][
                 'partner_id']), data=json.dumps(data), headers=headers)
-            print(r.json())
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):

@@ -48,10 +48,17 @@ class sessions(requests.Session):
 session = sessions()
 
 if __name__ == '__main__':
-    get_language_map()
+    '''
+    更新mms
+    '''
+    get_language_map(type='app')
     get_language_map(type='web')
+    get_language_map(type='email')
     if not os.path.exists('Reports'):
         os.makedirs('Reports')
+    # 修改默认语言
+    write_json('language', sys.argv[2])
+    # run
     if sys.argv[1] == 'api':
         pytest.main(['./TestCase/TestApiCase/', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == 'kyc':

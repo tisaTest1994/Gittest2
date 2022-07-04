@@ -578,45 +578,6 @@ class TestAccountApi:
             with allure.step("校验返回值"):
                 assert r.json()['version'] == 20220228, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
 
-    @allure.title('test_account_032')
-    @allure.description('忘记密码并且验证code')
-    def test_account_032(self):
-        with allure.step("改变测试账号"):
-            account = get_json()['email']['payout_email']
-        with allure.step("发忘记密码邮件"):
-            code = ApiFunction.get_verification_code('FORGET_PASSWORD', account)
-        with allure.step("验证忘记密码邮件"):
-            ApiFunction.verify_verification_code('FORGET_PASSWORD', account, code)
-
-    @allure.title('test_account_033')
-    @allure.description('开启MFA且验证code')
-    def test_account_033(self):
-        with allure.step("改变测试账号"):
-            account = get_json()['email']['payout_email']
-        with allure.step("开启MFA且验证code"):
-            code = ApiFunction.get_verification_code('ENABLE_MFA', account)
-        with allure.step("开启MFA且验证code"):
-            ApiFunction.verify_verification_code('ENABLE_MFA', account, code)
-
-    @allure.title('test_account_034')
-    @allure.description('关闭MFA且验证code')
-    def test_account_034(self):
-        with allure.step("改变测试账号"):
-            account = get_json()['email']['payout_email']
-        with allure.step("关闭MFA且验证code"):
-            code = ApiFunction.get_verification_code('DISABLE_MFA', account)
-        with allure.step("关闭MFA且验证code"):
-            ApiFunction.verify_verification_code('DISABLE_MFA', account, code)
-
-    @allure.title('test_account_035')
-    @allure.description('MFA且验证code')
-    def test_account_035(self):
-        with allure.step("改变测试账号"):
-            account = get_json()['email']['payout_email']
-        with allure.step("MFA且验证code"):
-            code = ApiFunction.get_verification_code('MFA_EMAIL', account)
-        with allure.step("MFA且验证code"):
-            ApiFunction.verify_verification_code('MFA_EMAIL', account, code)
 
     @allure.title('test_account_036')
     @allure.description('多次referal注册用户')
