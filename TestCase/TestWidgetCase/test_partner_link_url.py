@@ -14,25 +14,26 @@ class TestWidgetApi:
             headers['locale'] = 'zh-TW'
 
     linked = [('link', 'https://widget.latibac.com/wallet'),
-               ('kyc', 'https://widget.latibac.com/onboarding/identity'),
-               ('2fa', 'https://widget.latibac.com/account/gauth'),
-               ('wallet', 'https://widget.latibac.com/wallet'),
-               ('deposit', 'https://widget.latibac.com/deposit'),
-               ('withdraw', 'https://widget.latibac.com/withdraw'),
-               ('conversion', 'https://widget.latibac.com/convert'),
-               ('transfer', 'https://widget.latibac.com/transfer'),
-               ('transactions', 'https://widget.latibac.com/wallet//transaction'),
-                       ]
+              ('kyc', 'https://widget.latibac.com/onboarding/identity'),
+              ('2fa', 'https://widget.latibac.com/account/gauth'),
+              ('wallet', 'https://widget.latibac.com/wallet'),
+              ('deposit', 'https://widget.latibac.com/deposit'),
+              ('withdraw', 'https://widget.latibac.com/withdraw'),
+              ('conversion', 'https://widget.latibac.com/convert'),
+              ('transfer', 'https://widget.latibac.com/transfer'),
+              ('transactions', 'https://widget.latibac.com/wallet//transaction'),
+              ]
     linked_case_title = ['feature:link参数跳转检查',
-                  'feature:kyc参数跳转检查',
-                  'feature:2fa参数跳转检查',
-                  'feature:wallet参数跳转检查',
-                  'feature:deposit参数跳转检查',
-                  'feature:withdraw参数跳转检查',
-                  'feature:conversion参数跳转检查',
-                  'feature:transfer参数跳转检查',
-                  'feature:transactions参数跳转检查',
-                  ]
+                         'feature:kyc参数跳转检查',
+                         'feature:2fa参数跳转检查',
+                         'feature:wallet参数跳转检查',
+                         'feature:deposit参数跳转检查',
+                         'feature:withdraw参数跳转检查',
+                         'feature:conversion参数跳转检查',
+                         'feature:transfer参数跳转检查',
+                         'feature:transactions参数跳转检查',
+                         ]
+
     @allure.title('test_link_001')
     @allure.description('partner linked用户link时根据参数跳转对应地址')
     @pytest.mark.parametrize('feature, expect_url', linked, ids=linked_case_title)
@@ -45,7 +46,16 @@ class TestWidgetApi:
                 'device_type': 'app'
             }
             with allure.step("验签"):
-                sign = ApiFunction.infinni_games_access_sign(url='{}/partner/link?user_ext_ref={}&partner_key={}&feature={}&device_type={}'.format(self.url, params['user_ext_ref'], params['partner_key'], params['feature'], params['device_type']))
+                sign = ApiFunction.infinni_games_access_sign(
+                    url='{}/partner/link?user_ext_ref={}&partner_key={}&feature={}&device_type={}'.format(self.url,
+                                                                                                          params[
+                                                                                                              'user_ext_ref'],
+                                                                                                          params[
+                                                                                                              'partner_key'],
+                                                                                                          params[
+                                                                                                              'feature'],
+                                                                                                          params[
+                                                                                                              'device_type']))
             params['signature'] = sign
             r = session.request('GET', url='{}/partner/link'.format(self.url), params=params, headers=headers)
             with allure.step("状态码和返回值"):
@@ -69,7 +79,16 @@ class TestWidgetApi:
                 'device_type': 'app'
             }
             with allure.step("验签"):
-                sign = ApiFunction.infinni_games_access_sign(url='{}/partner/link?user_ext_ref={}&partner_key={}&feature={}&device_type={}'.format(self.url, params['user_ext_ref'], params['partner_key'], params['feature'], params['device_type']))
+                sign = ApiFunction.infinni_games_access_sign(
+                    url='{}/partner/link?user_ext_ref={}&partner_key={}&feature={}&device_type={}'.format(self.url,
+                                                                                                          params[
+                                                                                                              'user_ext_ref'],
+                                                                                                          params[
+                                                                                                              'partner_key'],
+                                                                                                          params[
+                                                                                                              'feature'],
+                                                                                                          params[
+                                                                                                              'device_type']))
             params['signature'] = sign
             r = session.request('GET', url='{}/partner/link'.format(self.url), params=params, headers=headers)
             with allure.step("状态码和返回值"):
