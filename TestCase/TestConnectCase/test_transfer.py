@@ -100,9 +100,7 @@ class TestTransferApi:
                 for i in r.json()['currencies']:
                     if i['config']['debit']['allow']:
                         with allure.step("获得otp"):
-                            secretKey = get_json()['email']['secretKey_richard']
-                            totp = pyotp.TOTP(secretKey)
-                            mfaVerificationCode = totp.now()
+                            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
                         with allure.step("获得data"):
                             data = {
                                 'amount': str(float(i['config']['debit']['min']) - float(0.0001)),
@@ -169,9 +167,7 @@ class TestTransferApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("获得otp"):
-            secretKey = get_json()['email']['secretKey_richard']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
         with allure.step("获得data"):
             external_id = generate_string(25)
             data = {
@@ -194,7 +190,6 @@ class TestTransferApi:
             r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                 data=json.dumps(data), headers=connect_headers)
         with allure.step("校验状态码"):
-            print(r.json())
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -215,8 +210,6 @@ class TestTransferApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['external_id'] == external_id, "查询转账记录错误，返回值是{}".format(r.text)
-        with allure.step("mfa 30 秒使用"):
-            sleep(30)
 
     @allure.title('test_transfer_007')
     @allure.description('从cabital转移到bybit账户并且关联C+T交易')
@@ -229,9 +222,7 @@ class TestTransferApi:
                     transaction = ApiFunction.cfx_random(i, i.split('-')[0])
                     cfx_transaction_id = transaction['returnJson']['transaction']['transaction_id']
                 with allure.step("获得otp"):
-                    secretKey = get_json()['email']['secretKey_richard']
-                    totp = pyotp.TOTP(secretKey)
-                    mfaVerificationCode = totp.now()
+                    mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
                 with allure.step("获得data"):
                     if i.split('-')[0] in get_json()['crypto_list']:
                         symbol = i.split('-')[0]
@@ -267,5 +258,3 @@ class TestTransferApi:
                     assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
                     assert r.json()['status'] == 'SUCCESS', "把BTC从cabital转移到bybit账户并且关联C+T交易错误，返回值是{}".format(r.text)
-                with allure.step("mfa 30 秒使用"):
-                    sleep(30)

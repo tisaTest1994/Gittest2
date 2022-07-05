@@ -83,19 +83,19 @@ class TestFixedApi:
                                 assert z['apy'] == '1', 'BTC 1d利率出错，利率是{}'.format(z['apy'])
                         elif i['code'] == 'BTC' and y['tenor'] == 7:
                             for z in r.json()['items']:
-                                assert z['apy'] == '1.5', 'BTC 7d利率出错，利率是{}'.format(z['apy'])
+                                assert z['apy'] == '1', 'BTC 7d利率出错，利率是{}'.format(z['apy'])
                         elif i['code'] == 'BTC' and y['tenor'] == 14:
                             for z in r.json()['items']:
-                                assert z['apy'] == '1.75', 'BTC 14d利率出错，利率是{}'.format(z['apy'])
+                                assert z['apy'] == '1.25', 'BTC 14d利率出错，利率是{}'.format(z['apy'])
                         elif i['code'] == 'ETH' and y['tenor'] == 1:
                             for z in r.json()['items']:
                                 assert z['apy'] == '10', 'ETH 1d利率出错，利率是{}'.format(z['apy'])
                         elif i['code'] == 'ETH' and y['tenor'] == 7:
                             for z in r.json()['items']:
-                                assert z['apy'] == '1.5', 'ETH 7d利率出错，利率是{}'.format(z['apy'])
+                                assert z['apy'] == '1', 'ETH 7d利率出错，利率是{}'.format(z['apy'])
                         elif i['code'] == 'ETH' and y['tenor'] == 14:
                             for z in r.json()['items']:
-                                assert z['apy'] == '1.75', 'ETH 14d利率出错，利率是{}'.format(z['apy'])
+                                assert z['apy'] == '1.25', 'ETH 14d利率出错，利率是{}'.format(z['apy'])
 
     @allure.title('test_fixed_004')
     @allure.description('购买定期产品')
