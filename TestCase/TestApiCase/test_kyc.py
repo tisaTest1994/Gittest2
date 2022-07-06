@@ -131,7 +131,7 @@ class TestKycApi:
     def test_kyc_008(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='KdNXYUK6YK@163.com')
         with allure.step("获取用户必填的KYC数据，获取数据为空"):
-            r = session.request('GET', url='{}/account/info/kyc/required'.format(env_url), headers=headers)
+            r = session.request('GET', url='{}/kyc/user/info/required'.format(env_url), headers=headers)
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -141,7 +141,7 @@ class TestKycApi:
     @allure.description('获取用户必填的KYC数据，获取全部信息')
     def test_kyc_009(self):
         with allure.step("获取用户必填的KYC数据，获取全部信息"):
-            r = session.request('GET', url='{}/account/info/kyc/required'.format(env_url), headers=headers)
+            r = session.request('GET', url='{}/kyc/user/info/required'.format(env_url), headers=headers)
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -152,7 +152,7 @@ class TestKycApi:
     def test_kyc_010(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei33@163.com')
         with allure.step("获取用户必填的KYC数据，获取全部信息"):
-            r = session.request('GET', url='{}/account/info/kyc/required'.format(env_url), headers=headers)
+            r = session.request('GET', url='{}/kyc/user/info/required'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -165,7 +165,7 @@ class TestKycApi:
     @allure.description('获取用户全部补充信息')
     def test_kyc_011(self):
         with allure.step("获取用户必填的KYC数据，获取全部信息"):
-            r = session.request('GET', url='{}/account/additional/info'.format(env_url), headers=headers)
+            r = session.request('GET', url='{}/kyc/user/info/additional'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
