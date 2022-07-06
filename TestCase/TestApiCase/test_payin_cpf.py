@@ -33,7 +33,7 @@ class TestPayinCpfApi:
 
     @allure.title('test_payin_cpf_002')
     @allure.description('webhook模拟brl充值（cpf status=5）')
-    # @pytest.mark.skip(reason='transaction id必须唯一，不唯一就会报错')
+    @pytest.mark.skip(reason='transaction id必须唯一，不唯一就会报错')
     def test_payin_cpf_002(self):
         cpf_info = [('yanting.huang+161@cabital.com', 5)]
         for i in cpf_info:
@@ -124,7 +124,7 @@ class TestPayinCpfApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("检查cpf状态是否从3变为5"):
                 sleep(10)
-                r2 = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'BRL', 'PIX'),headers=headers)
+                r2 = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'BRL', 'PIX'), headers=headers)
                 with allure.step("校验状态码"):
                     assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验cpf注册状态"):
