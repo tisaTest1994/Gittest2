@@ -46,19 +46,14 @@ class TestMobileApi:
     @allure.title('test_mobile_003')
     @allure.description('合作方划转交易 预校验link关系存在')
     def test_mobile_003(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice.wang@cabital.com', password='Zcdsw123')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='james.lee@cabital.com', password='itismeA!s2d3f4')
         with allure.step("合作方划转交易 预校验"):
             data = {
                 "amount": "50",
                 "code": "USDT",
                 "direction": "DEBIT",
-<<<<<<< HEAD
                 "account_vid": "d9f35f7c-ec94-425d-9f66-95585457bb7d",
                 "user_ext_ref": "988518746672869376"
-=======
-                "account_vid": "cb3f7670-a5c5-4bde-a588-441c20ea59de",
-                "user_ext_ref": "991292615343214592"
->>>>>>> 4148c1ce119c7b11935694b3a94c53c22d36efb3
             }
             r = session.request('POST', url='{}/connect/{}/transfer/confirm'.format(env_url, get_json()['infinni_games'][
                 'partner_id']), data=json.dumps(data), headers=headers)
@@ -125,7 +120,10 @@ class TestMobileApi:
         with allure.step('获得transfer前币种可用balance数量'):
             transfer_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=data['code'])
             logger.info('transfer_amount_wallet_balance_old的值是{}'.format(transfer_amount_wallet_balance_old))
-        r = session.request('POST', url='{}/connect/{}/transfer'.format(env_url, get_json()['infinni_games']['partner_id']), data=json.dumps(data), headers=headers)
+        r = session.request('POST',
+                            url='{}/connect/{}/transfer'.format(env_url, get_json()['infinni_games']['partner_id']),
+                            data=json.dumps(data), headers=headers)
+        logger.info('r.json()返回值是{}'.format(r.json()))
         with allure.step('获得transfer后币种可用balance数量'):
             transfer_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=data['code'])
             logger.info('transfer_amount_wallet_balance_latest的值是{}'.format(transfer_amount_wallet_balance_latest))
@@ -135,11 +133,12 @@ class TestMobileApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验transfer前后的可用balance数量"):
-            assert Decimal(transfer_amount_wallet_balance_old) - Decimal(data['amount']) == Decimal(transfer_amount_wallet_balance_latest), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest)
+            assert Decimal(transfer_amount_wallet_balance_old) - Decimal(data['amount']) == Decimal(
+                transfer_amount_wallet_balance_latest), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(
+                transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest)
         with allure.step("校验返回值"):
             assert r.json()['amount'] == data['amount'], "合作方划转交易错误，返回值是{}".format(r.text)
             transfer_id = r.json()['txn_id']
-            sleep(2)
         with allure.step("确认划转"):
             if r.json()['status'] == 1:
                 external_id = generate_string(25)
@@ -152,11 +151,15 @@ class TestMobileApi:
                 with allure.step("验签"):
                     unix_time = int(time.time())
                     nonce = generate_string(30)
-                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/transfers/{}'.format(get_json()['infinni_games']['account_vid_c'], transfer_id), key='infinni games', nonce=nonce, body=json.dumps(data))
+                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT',
+                                                        url='/api/v1/accounts/{}/transfers/{}'.format(
+                                                            get_json()['infinni_games']['account_vid_c'], transfer_id),
+                                                        key='infinni games', nonce=nonce, body=json.dumps(data))
                     headers['ACCESS-SIGN'] = sign
                     headers['ACCESS-TIMESTAMP'] = str(unix_time)
                     headers['ACCESS-NONCE'] = nonce
-                r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url, get_json()['infinni_games']['account_vid_c'], transfer_id), data=json.dumps(data), headers=headers)
+                sleep(30)
+                r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url,get_json()['infinni_games']['account_vid_c'], transfer_id),data=json.dumps(data), headers=headers)
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
