@@ -325,13 +325,12 @@ class TestConvertApi:
                 with allure.step('获得换汇前sell币种balance金额'):
                     sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[1])
                     transaction = ApiFunction.cfx_random(i, i.split('-')[0])
-                    sleep(5)
+                    sleep(10)
                     with allure.step("获得换汇后buy币种balance金额"):
                         buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[0])
                     with allure.step("获得换汇后sell币种balance金额"):
                         sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[1])
-                    assert Decimal(buy_amount_wallet_balance_old) + Decimal(
-                        transaction['data']['buy_amount']) == Decimal(
+                    assert Decimal(buy_amount_wallet_balance_old) + Decimal(transaction['data']['buy_amount']) == Decimal(
                         buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
                         i.split('-')[0], buy_amount_wallet_balance_old, transaction['data']['buy_amount'],
                         buy_amount_wallet_balance_latest)
@@ -346,7 +345,7 @@ class TestConvertApi:
                 with allure.step('获得换汇前sell币种balance金额'):
                     sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[1])
                     transaction = ApiFunction.cfx_random(i, i.split('-')[1])
-                    sleep(5)
+                    sleep(10)
                     with allure.step("获得换汇后buy币种balance金额"):
                         buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[0])
                     with allure.step("获得换汇后sell币种balance金额"):
@@ -368,7 +367,7 @@ class TestConvertApi:
                     sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[0])
                     transaction = ApiFunction.cfx_random('{}-{}'.format(i.split('-')[1], i.split('-')[0]),
                                                          i.split('-')[1])
-                    sleep(5)
+                    sleep(10)
                     with allure.step("获得换汇后buy币种balance金额"):
                         buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[1])
                     with allure.step("获得换汇后sell币种balance金额"):
@@ -390,7 +389,7 @@ class TestConvertApi:
                     sell_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=i.split('-')[0])
                     transaction = ApiFunction.cfx_random('{}-{}'.format(i.split('-')[1], i.split('-')[0]),
                                                          i.split('-')[0])
-                    sleep(5)
+                    sleep(10)
                     with allure.step("获得换汇后buy币种balance金额"):
                         buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[1])
                     with allure.step("获得换汇后sell币种balance金额"):

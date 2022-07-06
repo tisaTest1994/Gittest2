@@ -577,64 +577,63 @@ class ApiFunction:
     # 换汇
     @staticmethod
     def cfx_random(pair, major_ccy):
-        buy_type = pair.split('-')[0]
-        sell_type = pair.split('-')[1]
-        if major_ccy.lower() == buy_type.lower():
-            with allure.step("major_ccy 是buy值"):
-                if buy_type == 'BTC' or buy_type == 'ETH':
-                    buy_amount = random.uniform(0.02, 0.39999999)
-                elif buy_type == 'USDT':
-                    buy_amount = random.uniform(10, 500.999999)
-                elif buy_type == 'VND':
-                    buy_amount = random.randint(250000, 300000)
-                elif buy_type == 'BRL':
-                    buy_amount = random.uniform(50, 100.00)
-                else:
-                    buy_amount = random.uniform(20, 500.99)
-                quote = ApiFunction.get_quote(pair)
-                buy_amount = crypto_len(number=str(buy_amount), type=buy_type)
-                if sell_type == 'VND':
-                    sell_amount_temporary = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
-                    if '.' in str(sell_amount_temporary):
-                        sell_amount = sell_amount_temporary.split('.')[0]
-                else:
-                    sell_amount = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
-        else:
-            with allure.step("major_ccy 是sell值"):
-                if sell_type == 'BTC' or sell_type == 'ETH':
-                    sell_amount = random.uniform(0.02, 0.39999999)
-                elif sell_type == 'USDT':
-                    sell_amount = random.uniform(10, 500.999999)
-                elif sell_type == 'VND':
-                    sell_amount = random.randint(250000, 300000)
-                elif sell_type == 'BRL':
-                    sell_amount = random.uniform(50, 100.99)
-                else:
-                    sell_amount = random.uniform(20, 500.99)
-                quote = ApiFunction.get_quote(pair)
-                sell_amount = crypto_len(number=str(sell_amount), type=sell_type)
-                if buy_type == 'VND':
-                    buy_amount_temporary = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
-                    if '.' in str(buy_amount_temporary):
-                        buy_amount = buy_amount_temporary.split('.')[0]
-                else:
-                    buy_amount = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
-        data = {
-            "quote_id": quote['quote_id'],
-            "quote": quote['quote'],
-            "pair": pair,
-            "buy_amount": str(buy_amount),
-            "sell_amount": str(sell_amount),
-            "major_ccy": major_ccy
-        }
-        logger.info('发送换汇参数是{}'.format(data))
-        r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        return {'data': data, 'returnJson': r.json()}
+        while 1 < 2:
+            buy_type = pair.split('-')[0]
+            sell_type = pair.split('-')[1]
+            if major_ccy.lower() == buy_type.lower():
+                with allure.step("major_ccy 是buy值"):
+                    if buy_type == 'BTC' or buy_type == 'ETH':
+                        buy_amount = random.uniform(0.02, 0.39999999)
+                    elif buy_type == 'USDT':
+                        buy_amount = random.uniform(10, 500.999999)
+                    elif buy_type == 'VND':
+                        buy_amount = random.randint(250000, 300000)
+                    elif buy_type == 'BRL':
+                        buy_amount = random.uniform(50, 100.00)
+                    else:
+                        buy_amount = random.uniform(20, 500.99)
+                    quote = ApiFunction.get_quote(pair)
+                    buy_amount = crypto_len(number=str(buy_amount), type=buy_type)
+                    if sell_type == 'VND':
+                        sell_amount_temporary = crypto_len(number=str(float(buy_amount) * float(quote['quote'])),
+                                                           type=sell_type)
+                        if '.' in str(sell_amount_temporary):
+                            sell_amount = sell_amount_temporary.split('.')[0]
+                    else:
+                        sell_amount = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
+            else:
+                with allure.step("major_ccy 是sell值"):
+                    if sell_type == 'BTC' or sell_type == 'ETH':
+                        sell_amount = random.uniform(0.02, 0.39999999)
+                    elif sell_type == 'USDT':
+                        sell_amount = random.uniform(10, 500.999999)
+                    elif sell_type == 'VND':
+                        sell_amount = random.randint(250000, 300000)
+                    elif sell_type == 'BRL':
+                        sell_amount = random.uniform(50, 100.99)
+                    else:
+                        sell_amount = random.uniform(20, 500.99)
+                    quote = ApiFunction.get_quote(pair)
+                    sell_amount = crypto_len(number=str(sell_amount), type=sell_type)
+                    if buy_type == 'VND':
+                        buy_amount_temporary = crypto_len(number=str(float(sell_amount) / float(quote['quote'])),
+                                                          type=buy_type)
+                        if '.' in str(buy_amount_temporary):
+                            buy_amount = buy_amount_temporary.split('.')[0]
+                    else:
+                        buy_amount = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
+            data = {
+                "quote_id": quote['quote_id'],
+                "quote": quote['quote'],
+                "pair": pair,
+                "buy_amount": str(buy_amount),
+                "sell_amount": str(sell_amount),
+                "major_ccy": major_ccy
+            }
+            logger.info('发送换汇参数是{}'.format(data))
+            r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
+            if r.status_code == 200:
+                return {'data': data, 'returnJson': r.json()}
 
     # 根据config 获得支持币种，支持bybit，infinni games
     @staticmethod

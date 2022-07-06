@@ -3,7 +3,7 @@ from Function.operate_excel import *
 from Function.operate_sql import *
 
 
-@allure.feature("accounting 相关 testcases")
+@allure.feature("accounting PayOutOrder 相关 testcases")
 class TestAccountingPayOutOrderApi:
 
     # 初始化class
