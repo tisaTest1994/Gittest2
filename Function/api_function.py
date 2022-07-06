@@ -456,6 +456,7 @@ class ApiFunction:
     # 收取邮箱验证码，只收取
     @staticmethod
     def get_email_code(type):
+        sleep(20)
         sleep_time = 0
         while sleep_time < 10:
             email_info = get_email()
@@ -696,3 +697,72 @@ class ApiFunction:
                 cfx_list.append(i['pair'])
         return cfx_list
 
+    # 根据需求或得config参数
+    @staticmethod
+    def get_config_info(project='bybit', type=''):
+        headers = {}
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            if project == 'infinni games':
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', key='infinni games', nonce=nonce)
+                url = get_json()['infinni_games']['url']
+                headers['ACCESS-KEY'] = get_json()['infinni_games']['partner_id']
+            elif project == 'bybit':
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', nonce=nonce)
+                url = get_json()['connect'][get_json()['env']]['url']
+                headers = get_json()['connect'][get_json()['env']]['bybit']['Headers']
+            headers['ACCESS-SIGN'] = sign
+            headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            headers['ACCESS-NONCE'] = nonce
+        with allure.step("获取合作方的配置"):
+            r = session.request('GET', url='{}/config'.format(url), headers=headers)
+            if type == 'pairs':
+                cfx_list = []
+                for i in r.json()['pairs']:
+                    cfx_list.append(i['pair'])
+                return cfx_list
+            elif type == 'cash':
+                cash_list = []
+                for i in r.json()['currencies']:
+                    if i['type'] == 1:
+                        cash_list.append(i['symbol'])
+                return cash_list
+            elif type == 'crypto':
+                crypto_list = []
+                for i in r.json()['currencies']:
+                    if i['type'] == 2:
+                        crypto_list.append(i['symbol'])
+                return crypto_list
+            elif type == 'credit':
+                credit_list = []
+                for i in r.json()['currencies']:
+                    if i['config']['credit']['allow']:
+                        credit_dict = i['config']['credit']
+                        del(credit_dict['allow'])
+                        credit_dict['symbol'] = i['symbol']
+                        credit_list.append(credit_dict)
+                return credit_list
+            elif type == 'debit':
+                debit_list = []
+                for i in r.json()['currencies']:
+                    if i['config']['debit']['allow']:
+                        debit_dict = i['config']['debit']
+                        del(debit_dict['allow'])
+                        debit_dict['symbol'] = i['symbol']
+                        debit_list.append(debit_dict)
+                return debit_list
+            elif type == 'cfx':
+                cfx_list = []
+                for i in r.json()['currencies']:
+                    if i['config']['conversion']['allow']:
+                        cfx_dict = i['config']['conversion']
+                        del(cfx_dict['allow'])
+                        cfx_dict['symbol'] = i['symbol']
+                        cfx_list.append(cfx_dict)
+                return cfx_list
+            elif type == 'all':
+                all_list = []
+                for i in r.json()['currencies']:
+                    all_list.append(i['symbol'])
+                return all_list
