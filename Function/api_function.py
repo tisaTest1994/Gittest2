@@ -456,6 +456,7 @@ class ApiFunction:
     # 收取邮箱验证码，只收取
     @staticmethod
     def get_email_code(type):
+        sleep(20)
         sleep_time = 0
         while sleep_time < 10:
             email_info = get_email()
@@ -576,64 +577,63 @@ class ApiFunction:
     # 换汇
     @staticmethod
     def cfx_random(pair, major_ccy):
-        buy_type = pair.split('-')[0]
-        sell_type = pair.split('-')[1]
-        if major_ccy.lower() == buy_type.lower():
-            with allure.step("major_ccy 是buy值"):
-                if buy_type == 'BTC' or buy_type == 'ETH':
-                    buy_amount = random.uniform(0.02, 0.39999999)
-                elif buy_type == 'USDT':
-                    buy_amount = random.uniform(10, 500.999999)
-                elif buy_type == 'VND':
-                    buy_amount = random.randint(250000, 300000)
-                elif buy_type == 'BRL':
-                    buy_amount = random.uniform(50, 100.00)
-                else:
-                    buy_amount = random.uniform(20, 500.99)
-                quote = ApiFunction.get_quote(pair)
-                buy_amount = crypto_len(number=str(buy_amount), type=buy_type)
-                if sell_type == 'VND':
-                    sell_amount_temporary = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
-                    if '.' in str(sell_amount_temporary):
-                        sell_amount = sell_amount_temporary.split('.')[0]
-                else:
-                    sell_amount = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
-        else:
-            with allure.step("major_ccy 是sell值"):
-                if sell_type == 'BTC' or sell_type == 'ETH':
-                    sell_amount = random.uniform(0.02, 0.39999999)
-                elif sell_type == 'USDT':
-                    sell_amount = random.uniform(10, 500.999999)
-                elif sell_type == 'VND':
-                    sell_amount = random.randint(250000, 300000)
-                elif sell_type == 'BRL':
-                    sell_amount = random.uniform(50, 100.99)
-                else:
-                    sell_amount = random.uniform(20, 500.99)
-                quote = ApiFunction.get_quote(pair)
-                sell_amount = crypto_len(number=str(sell_amount), type=sell_type)
-                if buy_type == 'VND':
-                    buy_amount_temporary = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
-                    if '.' in str(buy_amount_temporary):
-                        buy_amount = buy_amount_temporary.split('.')[0]
-                else:
-                    buy_amount = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
-        data = {
-            "quote_id": quote['quote_id'],
-            "quote": quote['quote'],
-            "pair": pair,
-            "buy_amount": str(buy_amount),
-            "sell_amount": str(sell_amount),
-            "major_ccy": major_ccy
-        }
-        logger.info('发送换汇参数是{}'.format(data))
-        r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        return {'data': data, 'returnJson': r.json()}
+        while 1 < 2:
+            buy_type = pair.split('-')[0]
+            sell_type = pair.split('-')[1]
+            if major_ccy.lower() == buy_type.lower():
+                with allure.step("major_ccy 是buy值"):
+                    if buy_type == 'BTC' or buy_type == 'ETH':
+                        buy_amount = random.uniform(0.02, 0.39999999)
+                    elif buy_type == 'USDT':
+                        buy_amount = random.uniform(10, 500.999999)
+                    elif buy_type == 'VND':
+                        buy_amount = random.randint(250000, 300000)
+                    elif buy_type == 'BRL':
+                        buy_amount = random.uniform(50, 100.00)
+                    else:
+                        buy_amount = random.uniform(20, 500.99)
+                    quote = ApiFunction.get_quote(pair)
+                    buy_amount = crypto_len(number=str(buy_amount), type=buy_type)
+                    if sell_type == 'VND':
+                        sell_amount_temporary = crypto_len(number=str(float(buy_amount) * float(quote['quote'])),
+                                                           type=sell_type)
+                        if '.' in str(sell_amount_temporary):
+                            sell_amount = sell_amount_temporary.split('.')[0]
+                    else:
+                        sell_amount = crypto_len(number=str(float(buy_amount) * float(quote['quote'])), type=sell_type)
+            else:
+                with allure.step("major_ccy 是sell值"):
+                    if sell_type == 'BTC' or sell_type == 'ETH':
+                        sell_amount = random.uniform(0.02, 0.39999999)
+                    elif sell_type == 'USDT':
+                        sell_amount = random.uniform(10, 500.999999)
+                    elif sell_type == 'VND':
+                        sell_amount = random.randint(250000, 300000)
+                    elif sell_type == 'BRL':
+                        sell_amount = random.uniform(50, 100.99)
+                    else:
+                        sell_amount = random.uniform(20, 500.99)
+                    quote = ApiFunction.get_quote(pair)
+                    sell_amount = crypto_len(number=str(sell_amount), type=sell_type)
+                    if buy_type == 'VND':
+                        buy_amount_temporary = crypto_len(number=str(float(sell_amount) / float(quote['quote'])),
+                                                          type=buy_type)
+                        if '.' in str(buy_amount_temporary):
+                            buy_amount = buy_amount_temporary.split('.')[0]
+                    else:
+                        buy_amount = crypto_len(number=str(float(sell_amount) / float(quote['quote'])), type=buy_type)
+            data = {
+                "quote_id": quote['quote_id'],
+                "quote": quote['quote'],
+                "pair": pair,
+                "buy_amount": str(buy_amount),
+                "sell_amount": str(sell_amount),
+                "major_ccy": major_ccy
+            }
+            logger.info('发送换汇参数是{}'.format(data))
+            r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
+            if r.status_code == 200:
+                return {'data': data, 'returnJson': r.json()}
 
     # 根据config 获得支持币种，支持bybit，infinni games
     @staticmethod
@@ -696,3 +696,72 @@ class ApiFunction:
                 cfx_list.append(i['pair'])
         return cfx_list
 
+    # 根据需求或得config参数
+    @staticmethod
+    def get_config_info(project='bybit', type=''):
+        headers = {}
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            if project == 'infinni games':
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', key='infinni games', nonce=nonce)
+                url = get_json()['infinni_games']['url']
+                headers['ACCESS-KEY'] = get_json()['infinni_games']['partner_id']
+            elif project == 'bybit':
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', nonce=nonce)
+                url = get_json()['connect'][get_json()['env']]['url']
+                headers = get_json()['connect'][get_json()['env']]['bybit']['Headers']
+            headers['ACCESS-SIGN'] = sign
+            headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            headers['ACCESS-NONCE'] = nonce
+        with allure.step("获取合作方的配置"):
+            r = session.request('GET', url='{}/config'.format(url), headers=headers)
+            if type == 'pairs':
+                cfx_list = []
+                for i in r.json()['pairs']:
+                    cfx_list.append(i['pair'])
+                return cfx_list
+            elif type == 'cash':
+                cash_list = []
+                for i in r.json()['currencies']:
+                    if i['type'] == 1:
+                        cash_list.append(i['symbol'])
+                return cash_list
+            elif type == 'crypto':
+                crypto_list = []
+                for i in r.json()['currencies']:
+                    if i['type'] == 2:
+                        crypto_list.append(i['symbol'])
+                return crypto_list
+            elif type == 'credit':
+                credit_list = []
+                for i in r.json()['currencies']:
+                    if i['config']['credit']['allow']:
+                        credit_dict = i['config']['credit']
+                        del(credit_dict['allow'])
+                        credit_dict['symbol'] = i['symbol']
+                        credit_list.append(credit_dict)
+                return credit_list
+            elif type == 'debit':
+                debit_list = []
+                for i in r.json()['currencies']:
+                    if i['config']['debit']['allow']:
+                        debit_dict = i['config']['debit']
+                        del(debit_dict['allow'])
+                        debit_dict['symbol'] = i['symbol']
+                        debit_list.append(debit_dict)
+                return debit_list
+            elif type == 'cfx':
+                cfx_list = []
+                for i in r.json()['currencies']:
+                    if i['config']['conversion']['allow']:
+                        cfx_dict = i['config']['conversion']
+                        del(cfx_dict['allow'])
+                        cfx_dict['symbol'] = i['symbol']
+                        cfx_list.append(cfx_dict)
+                return cfx_list
+            elif type == 'all':
+                all_list = []
+                for i in r.json()['currencies']:
+                    all_list.append(i['symbol'])
+                return all_list

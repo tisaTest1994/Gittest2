@@ -16,7 +16,7 @@ class TestDepositApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("获得法币list"):
-            cash_list = ApiFunction.get_connect_support_cash(self.url, connect_headers)
+            cash_list = ApiFunction.get_config_info(type='cash')
             with allure.step("从metadata接口获取已开启的币种信息"):
                 fiat_metadata = session.request('GET', url='{}/core/metadata'.format(env_url), headers=headers)
                 fiat_list_metadata = fiat_metadata.json()['currencies']

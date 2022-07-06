@@ -51,7 +51,7 @@ class TestWalletBalancesApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId']
         with allure.step("获得support list"):
-            balance_list = ApiFunction.get_connect_support(self.url, connect_headers)
+            balance_list = ApiFunction.get_config_info(type='all')
             with allure.step("从metadata接口获取已开启的币种信息"):
                 fiat_metadata = session.request('GET', url='{}/core/metadata'.format(env_url), headers=headers)
                 fiat_list_metadata = fiat_metadata.json()['currencies']

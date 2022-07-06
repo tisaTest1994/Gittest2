@@ -85,7 +85,7 @@ class TestPayoutCryptoAbnormalApi:
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             assert r.json()['code'] == '103035', "BTC使用带有特殊字符的地址提现结果非预期，返回值为{}".format(r.text)
 
-    @allure.title('test_payout_crypto_bnormal_003')
+    @allure.title('test_payout_crypto_abnormal_003')
     @allure.description('确认&创建ETH虚拟货币提现交易-(提现金额小于最小金额')
     def test_payout_crypto_abnormal_003(self):
         with allure.step("ETH虚拟货币提现"):

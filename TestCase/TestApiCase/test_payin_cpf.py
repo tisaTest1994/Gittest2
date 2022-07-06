@@ -59,7 +59,7 @@ class TestPayinCpfApi:
                     "date": "2022-06-04",
                     "dateDetailed": "0001-01-01T00:00:00+00:00",
                     "type": "Credit",
-                    "transactionId": "c21cf84a-0ff5-4973-a010-00c6ee07004",
+                    "transactionId": "c213f84a-0ff5-4973-a010-00c6ee07004",
                     "counterpart": {
                         "name": "Yan Ting161",
                         "taxId": "123.322.238-98",
@@ -72,6 +72,9 @@ class TestPayinCpfApi:
             r = session.request('POST', url='https://webhook.latibac.com/mh/transfero/credit_transaction_status_changed',
                                 data=json.dumps(data),
                                 headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
 
@@ -121,7 +124,7 @@ class TestPayinCpfApi:
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("检查cpf状态是否从3变为5"):
                 sleep(10)
-                r2 = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'BRL', 'PIX'),headers=headers)
+                r2 = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'BRL', 'PIX'), headers=headers)
                 with allure.step("校验状态码"):
                     assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验cpf注册状态"):

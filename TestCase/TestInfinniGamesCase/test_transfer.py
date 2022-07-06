@@ -232,10 +232,6 @@ class TestTransferApi:
             with allure.step('换汇'):
                 transaction = ApiFunction.cfx_random(i, i.split('-')[0])
                 cfx_transaction_id = transaction['returnJson']['transaction']['transaction_id']
-                with allure.step("获得otp"):
-                    secretKey = get_json()['email']['secretKey_richard']
-                    totp = pyotp.TOTP(secretKey)
-                    mfaVerificationCode = totp.now()
                 with allure.step("获得data"):
                     external_id = generate_string(25)
                     if i.split('-')[0] in get_json()['crypto_list']:
@@ -245,7 +241,7 @@ class TestTransferApi:
                     data = {
                         'amount': transaction['data']['buy_amount'],
                         'symbol': symbol,
-                        'otp': str(mfaVerificationCode),
+                        'otp': get_mfa_code(get_json()['email']['secretKey_richard']),
                         'conversion_id': cfx_transaction_id,
                         'direction': 'DEBIT',
                         'external_id': external_id
@@ -267,25 +263,19 @@ class TestTransferApi:
                     assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
                     assert r.json()['transfer_id'] is not None, '划转失败，返回值是{}'.format(r.text)
-                with allure.step("等待30秒"):
-                    sleep(30)
 
     @allure.title('test_transfer_010')
     @allure.description('二笔transfer后balance检查')
     def test_transfer_010(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['infinni_games']['account_vid']
-        with allure.step("获得otp"):
-            secretKey = get_json()['email']['secretKey_richard']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
         with allure.step("获得data"):
             external_id = generate_string(25)
             amount = '120'
             data = {
                 'amount': amount,
                 'symbol': 'USDT',
-                'otp': str(mfaVerificationCode),
+                'otp': get_mfa_code(get_json()['email']['secretKey_richard']),
                 'direction': 'DEBIT',
                 'external_id': external_id
             }
@@ -296,7 +286,6 @@ class TestTransferApi:
             headers['ACCESS-SIGN'] = sign
             headers['ACCESS-TIMESTAMP'] = str(unix_time)
             headers['ACCESS-NONCE'] = nonce
-            print(mfaVerificationCode)
         with allure.step('获得transfer前币种可用balance数量'):
             transfer_amount_wallet_balance_old = ApiFunction.get_crypto_number(type=data['symbol'])
             logger.info('transfer_amount_wallet_balance_old的值是{}'.format(transfer_amount_wallet_balance_old))
@@ -315,13 +304,14 @@ class TestTransferApi:
             secretKey = get_json()['email']['secretKey_richard']
             totp = pyotp.TOTP(secretKey)
             mfaVerificationCode = totp.now()
+            sleep(5)
         with allure.step("获得data"):
             external_id = generate_string(25)
             amount1 = '100'
             data = {
                 'amount': amount1,
                 'symbol': 'USDT',
-                'otp': str(mfaVerificationCode),
+                'otp': get_mfa_code(get_json()['email']['secretKey_richard']),
                 'direction': 'CREDIT',
                 'external_id': external_id
             }
