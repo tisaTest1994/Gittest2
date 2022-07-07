@@ -2,7 +2,8 @@
 Reports/
 Screenshot/App/*.png
 Screenshot/Web/*.png
-Resource/latest_2fa.json
+latest_2fa.json
+multiple_languages_*.json
 TestCase/TestWebCase/temp.jpg
 TestCase/TestAndroidCase/temp.jpg
 TestCase/TestApiCase/payme.html
