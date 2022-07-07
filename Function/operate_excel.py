@@ -32,5 +32,11 @@ class OperateExcel:
         workbook = xlrd.open_workbook(path)
         sheet2 = workbook.sheet_by_name('Accounting Subject')
 
-
-
+    @staticmethod
+    def get_product_limit(sheet_name='Acquiring', path=os.path.split(os.path.realpath(__file__))[0] + '/../Resource/Product Limit.xlsx'):
+        row = OperateExcel.get_excel_sheet_all_row_number(sheet_name, path=path)
+        product_limit_list = []
+        for i in range(1, row):
+            line = OperateExcel.get_excel_sheet_row(sheet_name, i, path=path)
+            product_limit_list.append({'code': str(line[0]).split(':')[1].replace("'", ""), 'transaction_type': str(line[1]).split(':')[1].replace("'", ""), 'mix': int(float(str(line[5]).split(':')[1])), 'max': int(float(str(line[4]).split(':')[1]))})
+        return product_limit_list

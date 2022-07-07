@@ -38,6 +38,7 @@ class ApiFunction:
         headers['X-Browser-Key'] = 'yilei_api_test'
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account, password=password)
         headers['X-Currency'] = currency
+        headers['Accept-Language'] = get_json()['language']
 
     # 获取user_id
     @staticmethod

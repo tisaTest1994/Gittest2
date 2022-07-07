@@ -893,6 +893,8 @@ class TestFixedApi:
             }
             r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id),
                                 data=json.dumps(data), headers=headers)
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             transaction_id = r.json()['tx_id']
         with allure.step("查询申购项目的交易记录"):
             params = {
