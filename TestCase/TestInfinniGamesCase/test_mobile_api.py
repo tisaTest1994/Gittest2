@@ -104,9 +104,8 @@ class TestMobileApi:
                 account=get_json()['email']['payout_email'])
         with allure.step("获取email code"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+        with allure.step("获得otp"):
+            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
         with allure.step("参数"):
