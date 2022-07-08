@@ -699,7 +699,7 @@ class ApiFunction:
 
     # 根据需求或得config参数
     @staticmethod
-    def get_config_info(project='bybit', type=''):
+    def get_config_info(project='bybit', type='', symbol=''):
         headers = {}
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -734,33 +734,62 @@ class ApiFunction:
                     if i['type'] == 2:
                         crypto_list.append(i['symbol'])
                 return crypto_list
-            elif type == 'credit':
+            elif type == 'credit_limit':
                 credit_list = []
+                credit_limit = []
                 for i in r.json()['currencies']:
                     if i['config']['credit']['allow']:
                         credit_dict = i['config']['credit']
                         del(credit_dict['allow'])
                         credit_dict['symbol'] = i['symbol']
                         credit_list.append(credit_dict)
-                return credit_list
-            elif type == 'debit':
+                for j in credit_list:
+                    if j['symbol'] == symbol:
+                        credit_limit.append([j['min'], j['max']])
+                return credit_limit
+
+            elif type == 'debit_limit':
                 debit_list = []
+                debit_limit = []
                 for i in r.json()['currencies']:
                     if i['config']['debit']['allow']:
                         debit_dict = i['config']['debit']
                         del(debit_dict['allow'])
                         debit_dict['symbol'] = i['symbol']
                         debit_list.append(debit_dict)
-                return debit_list
-            elif type == 'cfx':
+                for j in debit_list:
+                    if j['symbol'] == symbol:
+                        debit_limit.append([j['min'], j['max']])
+                return debit_limit
+
+            elif type == 'debit_fee':
+                debit_fee = []
+                debit_fee_value = []
+                for i in r.json()['currencies']:
+                    if i['fees']['debit_fee']['is_single']:
+                        debit_dict = i['fees']['debit_fee']
+                        del (debit_dict['is_single'])
+                        debit_dict['symbol'] = i['symbol']
+                        debit_fee.append(debit_dict)
+                for j in debit_fee:
+                    if j['symbol'] == symbol:
+                        debit_fee_value.append([j['value'], j['original_value']])
+                return debit_fee_value
+
+            elif type == 'cfx_limit':
                 cfx_list = []
+                cfx_limit = []
                 for i in r.json()['currencies']:
                     if i['config']['conversion']['allow']:
                         cfx_dict = i['config']['conversion']
                         del(cfx_dict['allow'])
                         cfx_dict['symbol'] = i['symbol']
                         cfx_list.append(cfx_dict)
-                return cfx_list
+                for j in cfx_list:
+                    if j['symbol'] == symbol:
+                        cfx_limit.append([j['min'], j['max']])
+                return cfx_limit
+
             elif type == 'all':
                 all_list = []
                 for i in r.json()['currencies']:
