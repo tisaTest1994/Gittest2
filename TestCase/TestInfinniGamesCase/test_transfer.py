@@ -223,7 +223,7 @@ class TestTransferApi:
     def test_transfer_009(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['infinni_games']['account_vid']
-        for i in ApiFunction.get_connect_cfx_list(self.url, headers, key='infinni games'):
+        for i in ApiFunction.get_config_info(type='pairs'):
             with allure.step('换汇'):
                 transaction = ApiFunction.cfx_random(i, i.split('-')[0])
                 cfx_transaction_id = transaction['returnJson']['transaction']['transaction_id']
@@ -365,7 +365,7 @@ class TestTransferApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['infinni_games']['account_vid']
             with allure.step('换汇'):
-                pair ='USDT-EUR'
+                pair = 'USDT-EUR'
                 transaction = ApiFunction.cfx_random(pair, pair.split('-')[0])
                 cfx_transaction_id = transaction['returnJson']['transaction']['transaction_id']
                 with allure.step("获得data"):

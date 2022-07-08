@@ -64,13 +64,21 @@ class TestConvertApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['restrictions']['BRL'] == {"min": "50", "max": "1000000"}, "BRL换汇限制错误，接口返回值是{}".format(r.json()['restrictions']['BRL'])
-                assert r.json()['restrictions']['BTC'] == {"min": "0.0002", "max": "5"}, "BTC换汇限制错误，接口返回值是{}".format(r.json()['restrictions']['BRL'])
-                assert r.json()['restrictions']['CHF'] == {"min": "10", "max": "200000"}, "CHF换汇限制错误，接口返回值是{}".format(r.json()['restrictions']['BRL'])
-                assert r.json()['restrictions']['ETH'] == {"min": "0.002", "max": "100"}, "ETH换汇限制错误，接口返回值是{}".format(r.json()['restrictions']['BRL'])
-                assert r.json()['restrictions']['EUR'] == {"min": "10", "max": "200000"}, "EUR换汇限制错误，接口返回值是{}".format(r.json()['restrictions']['BRL'])
-                assert r.json()['restrictions']['USDT'] == {"min": "10", "max": "200000"}, "USDT换汇限制错误，接口返回值是{}".format(r.json()['restrictions']['BRL'])
-                assert r.json()['restrictions']['VND'] == {"min": "250000", "max": "5000000000"}, "VND换汇限制错误，接口返回值是{}".format(r.json()['restrictions']['BRL'])
+                assert r.json()['restrictions']['BRL'] == {"min": "50", "max": "1000000"}, "BRL换汇限制错误，接口返回值是{}".format(
+                    r.json()['restrictions']['BRL'])
+                assert r.json()['restrictions']['BTC'] == {"min": "0.0002", "max": "5"}, "BTC换汇限制错误，接口返回值是{}".format(
+                    r.json()['restrictions']['BRL'])
+                assert r.json()['restrictions']['CHF'] == {"min": "10", "max": "200000"}, "CHF换汇限制错误，接口返回值是{}".format(
+                    r.json()['restrictions']['BRL'])
+                assert r.json()['restrictions']['ETH'] == {"min": "0.002", "max": "100"}, "ETH换汇限制错误，接口返回值是{}".format(
+                    r.json()['restrictions']['BRL'])
+                assert r.json()['restrictions']['EUR'] == {"min": "10", "max": "200000"}, "EUR换汇限制错误，接口返回值是{}".format(
+                    r.json()['restrictions']['BRL'])
+                assert r.json()['restrictions']['USDT'] == {"min": "10", "max": "200000"}, "USDT换汇限制错误，接口返回值是{}".format(
+                    r.json()['restrictions']['BRL'])
+                assert r.json()['restrictions']['VND'] == {"min": "250000",
+                                                           "max": "5000000000"}, "VND换汇限制错误，接口返回值是{}".format(
+                    r.json()['restrictions']['BRL'])
 
     @allure.title('test_convert_004')
     @allure.description('换汇存在汇率差（手续费）')
@@ -112,180 +120,178 @@ class TestConvertApi:
     @allure.title('test_convert_006')
     @allure.description('小于接受的最小值换汇交易')
     def test_convert_006(self):
-        with allure.step("获取汇率对"):
-            headers['Accept-Language'] = 'en_US'
-            cfx_dict = ApiFunction.get_cfx_list()
-            # 获取换汇值
-            for i in cfx_dict:
-                cryptos = i.split('-')
-                with allure.step("major_ccy 是buy值，正兑换"):
-                    if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
-                        buy_amount = random.uniform(0.0001, 0.00019)
-                        if len(str(buy_amount).split('.')[1]) >= 8:
-                            buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                        str(buy_amount).split('.')[1][:8])
-                    elif cryptos[0] == 'USDT':
-                        buy_amount = random.uniform(1, 9)
-                        if len(str(buy_amount).split('.')[1]) >= 6:
-                            buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                        str(buy_amount).split('.')[1][:6])
-                    else:
-                        buy_amount = random.uniform(1, 9)
-                        if len(str(buy_amount).split('.')[1]) >= 2:
-                            buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                        str(buy_amount).split('.')[1][:2])
-                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
-                    sell_amount = str(float(buy_amount) * float(quote['quote']))
-                    if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
-                        if len(str(sell_amount).split('.')[1]) >= 8:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:8])
-                    elif cryptos[1] == 'USDT':
-                        if len(str(sell_amount).split('.')[1]) >= 6:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:6])
-                    else:
-                        if len(str(sell_amount).split('.')[1]) >= 2:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:8])
-                    data = {
-                        "quote_id": quote['quote_id'],
-                        "quote": quote['quote'],
-                        "pair": '{}-{}'.format(cryptos[0], cryptos[1]),
-                        "buy_amount": str(buy_amount),
-                        "sell_amount": str(sell_amount),
-                        "major_ccy": cryptos[0]
-                    }
-                    r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
-                                        headers=headers)
-                    logger.info('申请换汇参数{}'.format(data))
-                    assert 'invalid Amount' in r.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
-                with allure.step("major_ccy 是buy值，逆兑换 "):
-                    if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
-                        buy_amount = random.uniform(0.0001, 0.00019)
-                        if len(str(buy_amount).split('.')[1]) >= 8:
-                            buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                        str(buy_amount).split('.')[1][:8])
-                    elif cryptos[1] == 'USDT':
-                        buy_amount = random.uniform(1, 9)
-                        if len(str(buy_amount).split('.')[1]) >= 6:
-                            buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                        str(buy_amount).split('.')[1][:6])
-                    else:
-                        buy_amount = random.uniform(1, 9)
-                        if len(str(buy_amount).split('.')[1]) >= 2:
-                            buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                        str(buy_amount).split('.')[1][:2])
-                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
-                    sell_amount = str(float(buy_amount) * float(quote['quote']))
-                    if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
-                        if len(str(sell_amount).split('.')[1]) >= 8:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:8])
-                    elif cryptos[0] == 'USDT':
-                        if len(str(sell_amount).split('.')[1]) >= 6:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:6])
-                    else:
-                        if len(str(sell_amount).split('.')[1]) >= 2:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:8])
-                    data = {
-                        "quote_id": quote['quote_id'],
-                        "quote": quote['quote'],
-                        "pair": '{}-{}'.format(cryptos[1], cryptos[0]),
-                        "buy_amount": str(buy_amount),
-                        "sell_amount": str(sell_amount),
-                        "major_ccy": cryptos[1]
-                    }
-                    r1 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
-                                         headers=headers)
-                    logger.info('申请换汇参数{}'.format(data))
-                    assert 'invalid Amount' in r1.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r1.text)
-                with allure.step("major_ccy 是sell值，正兑换 "):
-                    if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
-                        sell_amount = random.uniform(0.0001, 0.00019)
-                        if len(str(buy_amount).split('.')[1]) >= 8:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:8])
-                    elif cryptos[1] == 'USDT':
-                        sell_amount = random.uniform(1, 9)
-                        if len(str(sell_amount).split('.')[1]) >= 6:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:6])
-                    else:
-                        sell_amount = random.uniform(1, 9)
-                        if len(str(sell_amount).split('.')[1]) >= 2:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:2])
-                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
-                    buy_amount = str(float(sell_amount) / float(quote['quote']))
-                    if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
-                        if len(str(buy_amount).split('.')[1]) >= 8:
-                            buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                        str(buy_amount).split('.')[1][:8])
-                    elif cryptos[0] == 'USDT':
-                        if len(str(buy_amount).split('.')[1]) >= 6:
-                            buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                        str(buy_amount).split('.')[1][:6])
-                    else:
-                        if len(str(buy_amount).split('.')[1]) >= 2:
-                            buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
-                                                        str(buy_amount).split('.')[1][:8])
-                    data = {
-                        "quote_id": quote['quote_id'],
-                        "quote": quote['quote'],
-                        "pair": '{}-{}'.format(cryptos[0], cryptos[1]),
-                        "buy_amount": str(buy_amount),
-                        "sell_amount": str(sell_amount),
-                        "major_ccy": cryptos[1]
-                    }
-                    r2 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
-                                         headers=headers)
-                    logger.info('申请换汇参数{}'.format(data))
-                    assert 'invalid Amount' in r2.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r2.text)
-                with allure.step("major_ccy 是sell值，逆兑换 "):
-                    if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
-                        sell_amount = random.uniform(0.0001, 0.00019)
-                        if len(str(buy_amount).split('.')[1]) >= 8:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:8])
-                    elif cryptos[0] == 'USDT':
-                        sell_amount = random.uniform(1, 9)
-                        if len(str(sell_amount).split('.')[1]) >= 6:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:6])
-                    else:
-                        sell_amount = random.uniform(1, 9)
-                        if len(str(sell_amount).split('.')[1]) >= 2:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:2])
-                    quote = ApiFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
-                    buy_amount = str(float(sell_amount) / float(quote['quote']))
-                    if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
-                        if len(str(sell_amount).split('.')[1]) >= 8:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:8])
-                    elif cryptos[1] == 'USDT':
-                        if len(str(sell_amount).split('.')[1]) >= 6:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:6])
-                    else:
-                        if len(str(sell_amount).split('.')[1]) >= 2:
-                            sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
-                                                         str(sell_amount).split('.')[1][:8])
-                    data = {
-                        "quote_id": quote['quote_id'],
-                        "quote": quote['quote'],
-                        "pair": '{}-{}'.format(cryptos[1], cryptos[0]),
-                        "buy_amount": str(buy_amount),
-                        "sell_amount": str(sell_amount),
-                        "major_ccy": cryptos[0]
-                    }
-                    r3 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
-                                         headers=headers)
-                    logger.info('申请换汇参数{}'.format(data))
-                    assert 'invalid Amount' in r3.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
+        cfx_dict = ApiFunction.get_cfx_list()
+        # 获取换汇值
+        for i in cfx_dict:
+            cryptos = i.split('-')
+            with allure.step("major_ccy 是buy值，正兑换"):
+                if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
+                    buy_amount = random.uniform(0.0001, 0.00019)
+                    if len(str(buy_amount).split('.')[1]) >= 8:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:8])
+                elif cryptos[0] == 'USDT':
+                    buy_amount = random.uniform(1, 9)
+                    if len(str(buy_amount).split('.')[1]) >= 6:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:6])
+                else:
+                    buy_amount = random.uniform(1, 9)
+                    if len(str(buy_amount).split('.')[1]) >= 2:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:2])
+                quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
+                sell_amount = str(float(buy_amount) * float(quote['quote']))
+                if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
+                    if len(str(sell_amount).split('.')[1]) >= 8:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:8])
+                elif cryptos[1] == 'USDT':
+                    if len(str(sell_amount).split('.')[1]) >= 6:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:6])
+                else:
+                    if len(str(sell_amount).split('.')[1]) >= 2:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:8])
+                data = {
+                    "quote_id": quote['quote_id'],
+                    "quote": quote['quote'],
+                    "pair": '{}-{}'.format(cryptos[0], cryptos[1]),
+                    "buy_amount": str(buy_amount),
+                    "sell_amount": str(sell_amount),
+                    "major_ccy": cryptos[0]
+                }
+                r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
+                                    headers=headers)
+                logger.info('申请换汇参数{}'.format(data))
+                assert 'invalid Amount' in r.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r.text)
+            with allure.step("major_ccy 是buy值，逆兑换 "):
+                if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
+                    buy_amount = random.uniform(0.0001, 0.00019)
+                    if len(str(buy_amount).split('.')[1]) >= 8:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:8])
+                elif cryptos[1] == 'USDT':
+                    buy_amount = random.uniform(1, 9)
+                    if len(str(buy_amount).split('.')[1]) >= 6:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:6])
+                else:
+                    buy_amount = random.uniform(1, 9)
+                    if len(str(buy_amount).split('.')[1]) >= 2:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:2])
+                quote = ApiFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
+                sell_amount = str(float(buy_amount) * float(quote['quote']))
+                if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
+                    if len(str(sell_amount).split('.')[1]) >= 8:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:8])
+                elif cryptos[0] == 'USDT':
+                    if len(str(sell_amount).split('.')[1]) >= 6:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:6])
+                else:
+                    if len(str(sell_amount).split('.')[1]) >= 2:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:8])
+                data = {
+                    "quote_id": quote['quote_id'],
+                    "quote": quote['quote'],
+                    "pair": '{}-{}'.format(cryptos[1], cryptos[0]),
+                    "buy_amount": str(buy_amount),
+                    "sell_amount": str(sell_amount),
+                    "major_ccy": cryptos[1]
+                }
+                r1 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
+                                     headers=headers)
+                logger.info('申请换汇参数{}'.format(data))
+                assert 'invalid Amount' in r1.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r1.text)
+            with allure.step("major_ccy 是sell值，正兑换 "):
+                if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
+                    sell_amount = random.uniform(0.0001, 0.00019)
+                    if len(str(buy_amount).split('.')[1]) >= 8:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:8])
+                elif cryptos[1] == 'USDT':
+                    sell_amount = random.uniform(1, 9)
+                    if len(str(sell_amount).split('.')[1]) >= 6:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:6])
+                else:
+                    sell_amount = random.uniform(1, 9)
+                    if len(str(sell_amount).split('.')[1]) >= 2:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:2])
+                quote = ApiFunction.get_quote('{}-{}'.format(cryptos[0], cryptos[1]))
+                buy_amount = str(float(sell_amount) / float(quote['quote']))
+                if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
+                    if len(str(buy_amount).split('.')[1]) >= 8:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:8])
+                elif cryptos[0] == 'USDT':
+                    if len(str(buy_amount).split('.')[1]) >= 6:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:6])
+                else:
+                    if len(str(buy_amount).split('.')[1]) >= 2:
+                        buy_amount = '{}.{}'.format(str(buy_amount).split('.')[0],
+                                                    str(buy_amount).split('.')[1][:8])
+                data = {
+                    "quote_id": quote['quote_id'],
+                    "quote": quote['quote'],
+                    "pair": '{}-{}'.format(cryptos[0], cryptos[1]),
+                    "buy_amount": str(buy_amount),
+                    "sell_amount": str(sell_amount),
+                    "major_ccy": cryptos[1]
+                }
+                r2 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
+                                     headers=headers)
+                logger.info('申请换汇参数{}'.format(data))
+                assert 'invalid Amount' in r2.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r2.text)
+            with allure.step("major_ccy 是sell值，逆兑换 "):
+                if cryptos[0] == 'BTC' or cryptos[0] == 'ETH':
+                    sell_amount = random.uniform(0.0001, 0.00019)
+                    if len(str(buy_amount).split('.')[1]) >= 8:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:8])
+                elif cryptos[0] == 'USDT':
+                    sell_amount = random.uniform(1, 9)
+                    if len(str(sell_amount).split('.')[1]) >= 6:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:6])
+                else:
+                    sell_amount = random.uniform(1, 9)
+                    if len(str(sell_amount).split('.')[1]) >= 2:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:2])
+                quote = ApiFunction.get_quote('{}-{}'.format(cryptos[1], cryptos[0]))
+                buy_amount = str(float(sell_amount) / float(quote['quote']))
+                if cryptos[1] == 'BTC' or cryptos[1] == 'ETH':
+                    if len(str(sell_amount).split('.')[1]) >= 8:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:8])
+                elif cryptos[1] == 'USDT':
+                    if len(str(sell_amount).split('.')[1]) >= 6:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:6])
+                else:
+                    if len(str(sell_amount).split('.')[1]) >= 2:
+                        sell_amount = '{}.{}'.format(str(sell_amount).split('.')[0],
+                                                     str(sell_amount).split('.')[1][:8])
+                data = {
+                    "quote_id": quote['quote_id'],
+                    "quote": quote['quote'],
+                    "pair": '{}-{}'.format(cryptos[1], cryptos[0]),
+                    "buy_amount": str(buy_amount),
+                    "sell_amount": str(sell_amount),
+                    "major_ccy": cryptos[0]
+                }
+                r3 = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data),
+                                     headers=headers)
+                logger.info('申请换汇参数{}'.format(data))
+                assert 'invalid Amount' in r3.text, '小于接受的最小值换汇交易错误，申请参数是{}. 返回结果是{}'.format(data, r3.text)
 
     @allure.title('test_convert_007')
     @allure.description('使用错误金额换汇交易')
@@ -330,7 +336,8 @@ class TestConvertApi:
                         buy_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[0])
                     with allure.step("获得换汇后sell币种balance金额"):
                         sell_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=i.split('-')[1])
-                    assert Decimal(buy_amount_wallet_balance_old) + Decimal(transaction['data']['buy_amount']) == Decimal(
+                    assert Decimal(buy_amount_wallet_balance_old) + Decimal(
+                        transaction['data']['buy_amount']) == Decimal(
                         buy_amount_wallet_balance_latest), '换汇后金额不匹配，buy币种是{}.在换汇前钱包有{},buy金额是{},交易完成后钱包金额是{}'.format(
                         i.split('-')[0], buy_amount_wallet_balance_old, transaction['data']['buy_amount'],
                         buy_amount_wallet_balance_latest)
