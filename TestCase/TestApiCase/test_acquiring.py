@@ -65,10 +65,8 @@ class TestAcquiringApi:
             with allure.step("校验返回值"):
                 assert r3.status_code == 200, "http 状态码不对，目前状`态码是{}".format(r.status_code)
             with allure.step("返回的redirect需要报存在html文件里打开操作一下,需要5分钟之内拿到payme给我们返回信息"):
-                payme_html = 'payme.html'
-                f = open(payme_html, 'w')
-                f.write(r.json()['redirect']['html_content'])
-                f.close()
+                with open('payme.html', 'w') as file:
+                    file.write(r2.json()['redirect']['html_content'])
 
     @allure.title('test_acquiring_003')
     @allure.description('计算收单费用-VND')
