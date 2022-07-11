@@ -297,7 +297,6 @@ class TestCheckoutApi:
         with allure.step("创建数字货币购买交易-payment with card"):
             r2 = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("校验状态码"):
-            print(r2.json())
             assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r2.status_code)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r2.status_code)))
