@@ -918,7 +918,6 @@ class TestFixedApi:
     @allure.title('test_fixed_019')
     @allure.description('查询包含复投的交易记录详情信息')
     def test_fixed_019(self):
-        sleep(5)
         with allure.step("申购一笔产品，并且获取信息"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
             product_list = random.choice(random.choice(r.json())['products'])
@@ -939,6 +938,7 @@ class TestFixedApi:
                 },
                 "auto_renew": True
             }
+            sleep(2)
             r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id),
                                 data=json.dumps(data), headers=headers)
             transaction_id = r.json()['tx_id']
