@@ -39,6 +39,5 @@ class OperateExcel:
         product_limit_list = []
         for i in range(1, row):
             line = OperateExcel.get_excel_sheet_row(sheet_name, i, path=path)
-            product_limit_list.append({'code': str(line[0]).split(':')[1].replace("'", ""), 'transaction_type':
-                str(line[1]).split(':')[1].replace("'", ""), 'min': str(line[5]).split(':')[1], 'max': str(line[4]).split(':')[1]})
+            product_limit_list.append({'code': str(line[0]).split(':')[1].replace("'", ""), 'transaction_type': str(line[1]).split(':')[1].replace("'", ""), 'min': str(line[5]).split(':')[1], 'max': str(line[4]).split(':')[1]})
         return product_limit_list

@@ -16,11 +16,11 @@ class TestCheckoutApi:
     def test_check_out_001(self):
         with allure.step("打开数字货币购买画面"):
             r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("获取接口返回的所有币种并放入list中"):
             payment_currencies = r.json()['payment_currencies']
         with allure.step("读取product limit中35个币种buy的最大最小值和接口的返回值进行对比"):
@@ -41,9 +41,32 @@ class TestCheckoutApi:
                                 else:
                                     j += 1
 
-    # @allure.title('test_check_out_002')
-    # @allure.description('buy交易所有币种精度检查')
-    # def test_check_out_002(self):
+    @allure.title('test_check_out_002')
+    @allure.description('buy交易所有币种精度检查')
+    def test_check_out_002(self):
+        with allure.step("打开数字货币购买画面"):
+            r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("读取Checkout currency中35个币种精度和接口的返回值进行对比"):
+            path = os.path.split(os.path.realpath(__file__))[0] + '/../../Resource/Checkout currency.xlsx'
+            row = OperateExcel.get_excel_sheet_all_row_number('Currency', path=path)
+            precision_list = []
+            for i in range(1, row):
+                line = OperateExcel.get_excel_sheet_row('Currency', i, path=path)
+                if 'empty' not in str(line[2]):
+                    precision_list.append({str(line[0]).split(':')[1].replace("'", ""): int(float(str(line[2]).split(':')[1]))})
+            for y in precision_list:
+                for z in r.json()['payment_currencies']:
+                    print(z)
+                    if list(y.keys())[0] == z['code']:
+                        assert y[str(list(y.keys())[0])] == z['precision'], '{}币种精度检查错误'.format(z['code'])
+
+
+
 
     # 没写完
     # @allure.title('test_check_out_003')
