@@ -315,7 +315,7 @@ def get_mfa_code(secretKey=get_json()['secretKey']):
     totp = pyotp.TOTP(secretKey)
     new_2fa = totp.now()
     if old_2fa == new_2fa:
-        time.sleep(30)
+        time.sleep(35)
         totp = pyotp.TOTP(secretKey)
         new_2fa = totp.now()
         write_json('2fa', new_2fa, file='latest_2fa.json')

@@ -129,7 +129,6 @@ class TestTransferApi:
                             assert r.json()['code'] == 'PA003', "把{}从cabital转移到bybit账户错误，返回值是{}".format(i['symbol'],
                                                                                                         r.text)
 
-
     @allure.title('test_transfer_005')
     @allure.description('从cabital转移到bybit账户使用错误otp')
     def test_transfer_005(self):

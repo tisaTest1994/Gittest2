@@ -1,11 +1,11 @@
 .idea/
 Reports/
+src/
+*.pyc
+Resource/latest_2fa.json
 Screenshot/App/*.png
 Screenshot/Web/*.png
-latest_2fa.json
 multiple_languages_*.json
 TestCase/TestWebCase/temp.jpg
 TestCase/TestAndroidCase/temp.jpg
 TestCase/TestApiCase/payme.html
-src/
-*.pyc
