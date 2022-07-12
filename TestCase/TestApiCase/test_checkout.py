@@ -1,7 +1,6 @@
 from Function.api_function import *
 from Function.operate_sql import *
 from Function.operate_excel import *
-from Function.web_common_function import *
 import webbrowser
 import copy
 
@@ -686,3 +685,26 @@ class TestCheckoutApi:
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+
+    @allure.title('test_check_out_053')
+    @allure.description('EE用户')
+    def test_check_out_053(self):
+        a = ApiFunction.get_buy_crypto_list(100, ccy='')
+        print(a)
+        # with allure.step("获取所有币种兑"):
+        #     pairs_list = []
+        #     spend_code = ApiFunction.get_buy_crypto_currency(type='all')
+        #     for i in spend_code:
+        #         buy_pair = 'USDT-{}'.format(i)
+        #         pairs_list.append(buy_pair)
+        # with allure.step("每个币种操作"):
+        #     for y in pairs_list:
+        #         with allure.step("获取汇率"):
+        #             r = session.request('GET', url='{}/acquiring/buy/quotes/{}'.format(env_url, y), headers=headers)
+        #             logger.info('状态码是{}'.format(str(r.status_code)))
+        #             logger.info('返回值是{}'.format(str(r.text)))
+
+
+
+
+

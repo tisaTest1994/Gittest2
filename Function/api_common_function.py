@@ -11,7 +11,7 @@ import chardet
 import logger
 import pyotp
 import base64
-
+import decimal
 
 # 获取当前时间
 def get_now_time():
@@ -332,3 +332,11 @@ def get_basic_auth(username, password):
     # base64 编码
     encode_str = base64.b64encode(bytesString)
     return 'Basic ' + encode_str.decode()
+
+
+# 保留几位小数
+def get_precision(amount, precision):
+    num = 10
+    for i in range(1, precision):
+        num = num * 10
+    return int(decimal.Decimal(amount) * num) / num
