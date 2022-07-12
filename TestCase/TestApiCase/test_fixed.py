@@ -938,6 +938,7 @@ class TestFixedApi:
                 },
                 "auto_renew": True
             }
+            sleep(2)
             r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id),
                                 data=json.dumps(data), headers=headers)
             transaction_id = r.json()['tx_id']
