@@ -60,12 +60,8 @@ class TestCheckoutApi:
                     precision_list.append({str(line[0]).split(':')[1].replace("'", ""): int(float(str(line[2]).split(':')[1]))})
             for y in precision_list:
                 for z in r.json()['payment_currencies']:
-                    print(z)
                     if list(y.keys())[0] == z['code']:
                         assert y[str(list(y.keys())[0])] == z['precision'], '{}币种精度检查错误'.format(z['code'])
-
-
-
 
     # 没写完
     # @allure.title('test_check_out_003')
