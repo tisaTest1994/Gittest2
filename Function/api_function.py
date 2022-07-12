@@ -146,6 +146,17 @@ class ApiFunction:
                         balance_type_available_amount = y[amount_type]
         return balance_type_available_amount
 
+    # 获取钱包指定币种某个交易状态的数量
+    @staticmethod
+    def get_crypto_frozen_number(type='BTC', balance_type='BALANCE_TYPE_FROZEN', wallet_type='BALANCE', amount_type='amount'):
+        r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
+        for i in r.json():
+            if i['code'] == type and i['wallet_type'] == wallet_type:
+                for y in i['balances']:
+                    if y['type'] == balance_type:
+                        balance_type_frozen_amount = y[amount_type]
+        return balance_type_frozen_amount
+
     # 获取钱包指定币种全部数量
     @staticmethod
     def get_all_crypto_number():
@@ -578,7 +589,7 @@ class ApiFunction:
 
     # 换汇
     @staticmethod
-    def cfx_random(pair, major_ccy):
+    def cfx_random(pair, major_ccy, buy_amount = random.uniform(10, 500.999999)):
         while 1 < 2:
             buy_type = pair.split('-')[0]
             sell_type = pair.split('-')[1]
@@ -587,7 +598,7 @@ class ApiFunction:
                     if buy_type == 'BTC' or buy_type == 'ETH':
                         buy_amount = random.uniform(0.02, 0.39999999)
                     elif buy_type == 'USDT':
-                        buy_amount = random.uniform(10, 500.999999)
+                        buy_amount = buy_amount
                     elif buy_type == 'VND':
                         buy_amount = random.randint(250000, 300000)
                     elif buy_type == 'BRL':
