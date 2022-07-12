@@ -1,5 +1,8 @@
+import random
+
 from run import *
 from Function.operate_sql import *
+import webbrowser
 
 
 class ApiFunction:
@@ -795,3 +798,112 @@ class ApiFunction:
                 for i in r.json()['currencies']:
                     all_list.append(i['symbol'])
                 return all_list
+
+    # 获取buy crypto所有支持的币种
+    @staticmethod
+    def get_buy_crypto_currency(type='all'):
+        r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
+        payment_currencies = r.json()['payment_currencies']
+        buy_crypto_currency = []
+        for i in range(0, len(payment_currencies)):
+            buy_crypto_currency.append(payment_currencies[i]['code'])
+        if type=='random':
+            j = random.randint(0, len(buy_crypto_currency))
+            return buy_crypto_currency[j]
+        else:
+            return buy_crypto_currency
+
+    # 获取buy crypto指定币种的最大最小值
+    @staticmethod
+    def get_buy_crypto_limit(currency='USDT'):
+        r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
+        payment_currencies = r.json()['payment_currencies']
+        buy_crypto_limit = []
+        for i in range(0, len(payment_currencies)):
+            if payment_currencies[i]['code'] == currency:
+                buy_crypto_limit.append(payment_currencies[i]['min'])
+                buy_crypto_limit.append(payment_currencies[i]['max'])
+                return buy_crypto_limit
+
+    # # 随机生成一笔任意币种的buy crpto交易
+    # @staticmethod
+    # def buy_crypto(account=get_json()['email']['email'], password=get_json()['web'][get_json()['env']]['password']):
+    #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account, password=password)
+    #     data = {
+    #         "type": "card",
+    #         "number": "4543474002249996",
+    #         "expiry_month": 6,
+    #         "expiry_year": 2045,
+    #         "name": "Bruce Wayne",
+    #         "cvv": "956",
+    #         "billing_address": {
+    #             "address_line1": "Checkout.com",
+    #             "address_line2": "90 Tottenham Court Road",
+    #             "city": "London",
+    #             "state": "London",
+    #             "zip": "W1T 4TJ",
+    #             "country": "GB"
+    #         }
+    #     }
+    #     headers2 = {
+    #         "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
+    #         "Content-Type": "application/json"
+    #     }
+    #     r = session.request('POST', url='https://api.sandbox.checkout.com/tokens', data=json.dumps(data), headers=headers2)
+    #     with allure.step("校验状态码"):
+    #         assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
+    #         token = r.json()['token']
+    #     with allure.step("随机一个spend币种，随机spend金额"):
+    #         spend_code = ApiFunction.get_buy_crypto_currency(type='random')
+    #         spend_amount_limit = ApiFunction.get_buy_crypto_limit(currency=spend_code)
+    #         spend_amount = random.uniform(spend_amount_limit[1], spend_amount_limit[0])
+    #         r3 = session.request('GET', url='{}/acquiring/buy/quotes/{}'.format(env_url, 'USDT-'+spend_code), headers=headers)
+    #         buy_amount = str(float(spend_amount)*float(r3.json()['quote']['amount']))
+    #     with allure.step("创建数字货币购买交易信息"):
+    #         data = {
+    #             "buy": {
+    #                 "code": "USDT",
+    #                 "amount": buy_amount
+    #             },
+    #             "spend": {
+    #                 "code": spend_code,
+    #                 "amount": spend_amount
+    #             },
+    #             "quote": {
+    #                 "id": r3.json()['quote']['id'],
+    #                 "amount": r3.json()['quote']['amount'],
+    #             },
+    #             "major_code": "USDT",
+    #             "card": {
+    #                 "type": 1,
+    #                 "token": token,
+    #                 "expiry_month": "4",
+    #                 "expiry_year": "2045",
+    #                 "scheme": "Visa",
+    #                 "last": "9996",
+    #                 "bin": "454347",
+    #                 "card_type": "Credit",
+    #                 "issuer": "JPMORGAN CHASE BANK NA",
+    #                 "issuer_country": "US"
+    #             },
+    #             "bind_card": False,
+    #             "card_holder_name": "yilei Wan",
+    #             "billing_address": {
+    #                 "country_code": "CN",
+    #                 "state": "",
+    #                 "city": "",
+    #                 "post_code": "210000",
+    #                 "street_line_1": "Shanghai",
+    #                 "street_line_2": "Shab"
+    #             },
+    #             "nonce": generate_string(30)
+    #         }
+    #     with allure.step("创建数字货币购买交易-payment with card"):
+    #         r2 = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
+    #     with allure.step("打开3ds"):
+    #         webbrowser.open(r2.json()['redirect']['url'])
+    #         sleep(5)
+    #     buy_crypto = []
+    #     buy_crypto.append(spend_code)
+    #     buy_crypto.append(spend_amount)
+    #     return buy_crypto

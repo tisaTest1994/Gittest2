@@ -3,6 +3,8 @@ from Function.operate_sql import *
 from Function.operate_excel import *
 from Function.web_common_function import *
 import webbrowser
+import copy
+
 
 @allure.feature("Check out 相关 testcases")
 class TestCheckoutApi:
@@ -65,29 +67,26 @@ class TestCheckoutApi:
                     if list(y.keys())[0] == z['code']:
                         assert y[str(list(y.keys())[0])] == z['precision'], '{}币种精度检查错误'.format(z['code'])
 
+    @allure.title('test_check_out_003')
+    @allure.description('无成功的buy的交易，检查默认币种对及排序')
+    def test_check_out_003(self):
+        with allure.step("打开数字货币购买画面"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+319@cabital.com', password='Zcdsw123')
+            r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
+        with allure.step("把返回的币种放入列表中"):
+            payment_currencies = r.json()['payment_currencies']
+            buy_crypto_currency = []
+            for i in range(0, len(payment_currencies)):
+                buy_crypto_currency.append(payment_currencies[i]['code'])
+        with allure.step("检查默认币种是否是EUR"):
+            assert buy_crypto_currency[0] == 'EUR', '无成功的buy的交易，默认币种错误，接口返回为{}'.format(buy_crypto_currency[0])
+        with allure.step("除去EUR，其他币种按a-z排序"):
+            buy_crypto_currency.remove(buy_crypto_currency[0])
+            buy_crypto_currency_original = copy.copy(buy_crypto_currency)
+            buy_crypto_currency.sort()
+            assert buy_crypto_currency == buy_crypto_currency_original, '币种默认排序错误，接口返回为{}'.format(buy_crypto_currency)
 
-
-
-    # 没写完
-    # @allure.title('test_check_out_003')
-    # @allure.description('同payment with的卡，显示同上一笔成功的buy的货币对(CAD-USDT)')
-    # def test_check_out_003(self):
-    #     with allure.step("打开数字货币购买画面"):
-    #         r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
-    #     with allure.step("校验状态码"):
-    #         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-    #     with allure.step("状态码和返回值"):
-    #         logger.info('状态码是{}'.format(str(r.status_code)))
-    #         logger.info('返回值是{}'.format(str(r.text)))
-    #     with allure.step("获取接口返回的所有币种并放入list中"):
-    #         payment_currencies = r.json()['payment_currencies']
-    #     with allure.step("检查buy currencies及精度配置"):
-    #         assert r.json()['buy_currencies']['code'] == 'USDT', 'buy currencies币种错误，接口返回是{}'.format(
-    #             r.json()['buy_currencies']['code'])
-    #         assert r.json()['buy_currencies']['precision'] == 6, 'buy currencies币种错误，接口返回是{}'.format(
-    #             r.json()['buy_currencies']['code'])
-
-    @allure.title('test_check_out_004获取报价')
+    @allure.title('test_check_out_004')
     @allure.description('获取报价')
     def test_check_out_004(self):
         with allure.step("获取所有报价对"):
@@ -107,7 +106,7 @@ class TestCheckoutApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
 
-    @allure.title('test_check_out_005获取数字货币购买人信息')
+    @allure.title('test_check_out_005')
     @allure.description('获取数字货币购买人信息')
     def test_check_out_005(self):
         with allure.step("获取报价"):
@@ -120,7 +119,7 @@ class TestCheckoutApi:
         with allure.step("校验返回值"):
             assert r.json()['card_holder_name'] == "yilei Wan" and r.json()['billing_address'] != {}, "获取数字货币购买人信息错误，返回值是{}".format(r.json()['card_holder_name'])
 
-    @allure.title('test_check_out_006获取购买数字货币费用-with card')
+    @allure.title('test_check_out_006')
     @allure.description('获取购买数字货币费用-with card')
     def test_check_out_006(self):
         data = {
@@ -142,7 +141,7 @@ class TestCheckoutApi:
             assert r.json()['fee']['amount'] == "3.75", '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
             assert r.json()['receivable_amount'] == str(float(data['amount']) - float(r.json()['fee']['amount'])), '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
 
-    @allure.title('test_check_out_007获取购买数字货币费用，使用不支持的scheme')
+    @allure.title('test_check_out_007')
     @allure.description('获取购买数字货币费用，使用不支持的scheme')
     def test_check_out_007(self):
         data = {
@@ -163,7 +162,7 @@ class TestCheckoutApi:
         with allure.step("校验返回值"):
             assert r.json()['code'] == '101019', '获取购买数字货币费用，使用不支持的scheme错误，接口返回值是{}'.format(r.json()['message'])
 
-    @allure.title('test_check_out_008获取购买数字货币费用-no card')
+    @allure.title('test_check_out_008')
     @allure.description('获取购买数字货币费用-no card')
     def test_check_out_008(self):
         data = {
@@ -185,7 +184,7 @@ class TestCheckoutApi:
             assert r.json()['fee']['amount'] == "3.75", '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
             assert r.json()['receivable_amount'] == str(float(data['amount']) - float(r.json()['fee']['amount'])), '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
 
-    @allure.title('test_check_out_009获取购买数字货币费用规则-with card')
+    @allure.title('test_check_out_009')
     @allure.description('获取购买数字货币费用规则-with card')
     def test_check_out_009(self):
         data = {
@@ -207,7 +206,7 @@ class TestCheckoutApi:
             assert r.json()['fee_rule']['percentage_charge_rule']['percentage'] == '3.75', '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee_rule']['percentage_charge_rule']['percentage'])
             assert r.json()['fee_rule']['formula'] == 'CEILING(x*0.04,2)', '购买数字货币公式错误，接口返回值为{}'.format(r.json()['fee_rule']['percentage_charge_rule']['percentage'])
 
-    @allure.title('test_check_out_010获取购买数字货币费用规则-no card')
+    @allure.title('test_check_out_010')
     @allure.description('获取购买数字货币费用规则-no card')
     def test_check_out_010(self):
         data = {
@@ -229,7 +228,7 @@ class TestCheckoutApi:
             assert r.json()['fee_rule']['formula'] == 'CEILING(x*0.02,2)', '购买数字货币公式错误，接口返回值为{}'.format(
                 r.json()['fee_rule']['percentage_charge_rule']['percentage'])
 
-    @allure.title('test_check_out_011获取购买数字货币费用规则-no card,使用不支持的币种')
+    @allure.title('test_check_out_011')
     @allure.description('获取购买数字货币费用规则-no card,使用不支持的币种')
     def test_check_out_011(self):
         data = {
@@ -552,7 +551,7 @@ class TestCheckoutApi:
                 file.write(r2.json()['redirect']['url'])
         with allure.step("打开3ds"):
             webbrowser.open(r2.json()['redirect']['url'])
-            sleep(15)
+            sleep(20)
         with allure.step("检易完成后，检查绑卡状态"):
             params = {
                 'binding': 'false'
@@ -561,6 +560,105 @@ class TestCheckoutApi:
             for i in r4.json()['cards']:
                 if i['token'] == 'src_jfqatucdnnbexp2whhgrybdns4':
                     assert i['is_deleted'] is True, '创建数字货币购买交易-payment with card不绑卡，绑卡状态错误，接口返回为{}'.format(i['is_deleted'])
+
+    @allure.title('test_check_out_016')
+    @allure.description('创建数字货币购买交易-payment with card完成交易后，同payment with的卡，显示同上一笔成功的buy的货币对')
+    def test_check_out_016(self):
+        with allure.step("get token"):
+            data = {
+                "type": "card",
+                "number": "4543474002249996",
+                "expiry_month": 6,
+                "expiry_year": 2045,
+                "name": "Bruce Wayne",
+                "cvv": "956",
+                "billing_address": {
+                    "address_line1": "Checkout.com",
+                    "address_line2": "90 Tottenham Court Road",
+                    "city": "London",
+                    "state": "London",
+                    "zip": "W1T 4TJ",
+                    "country": "GB"
+                }
+            }
+            headers2 = {
+                "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
+                "Content-Type": "application/json"
+            }
+            r = session.request('POST', url='https://api.sandbox.checkout.com/tokens', data=json.dumps(data), headers=headers2)
+        with allure.step("校验状态码"):
+            assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
+            token = r.json()['token']
+        with allure.step("spend 100USD,根据报价，算出buy的金额"):
+            spend_code = ApiFunction.get_buy_crypto_currency(type='random')
+            spend_amount_limit = ApiFunction.get_buy_crypto_limit(currency=spend_code)
+            spend_amount = str(int(random.uniform(float(spend_amount_limit[0]), float(spend_amount_limit[1]))))
+            buy_pair = 'USDT-' + spend_code
+            r3 = session.request('GET', url='{}/acquiring/buy/quotes/{}'.format(env_url, buy_pair),
+                                 headers=headers)
+            buy_amount = str(float(spend_amount) * float(r3.json()['quote']['amount']))
+        with allure.step("创建数字货币购买交易信息"):
+            data = {
+                "buy": {
+                    "code": "USDT",
+                    "amount": buy_amount
+                },
+                "spend": {
+                    "code": spend_code,
+                    "amount": spend_amount
+                },
+                "quote": {
+                    "id": r3.json()['quote']['id'],
+                    "amount": r3.json()['quote']['amount'],
+                },
+                "major_code": "USDT",
+                "card": {
+                    "type": 1,
+                    "token": token,
+                    "expiry_month": "4",
+                    "expiry_year": "2045",
+                    "scheme": "Visa",
+                    "last": "9996",
+                    "bin": "454347",
+                    "card_type": "Credit",
+                    "issuer": "JPMORGAN CHASE BANK NA",
+                    "issuer_country": "US"
+                },
+                "bind_card": False,
+                "card_holder_name": "yilei Wan",
+                "billing_address": {
+                    "country_code": "CN",
+                    "state": "",
+                    "city": "",
+                    "post_code": "210000",
+                    "street_line_1": "Shanghai",
+                    "street_line_2": "Shab"
+                },
+                "nonce": generate_string(30)
+            }
+        with allure.step("创建数字货币购买交易-payment with card"):
+            r2 = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
+        with allure.step("校验状态码"):
+            logger.info('返回值是{}'.format(str(r2.text)))
+            assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r2.status_code)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r2.status_code)))
+            logger.info('返回值是{}'.format(str(r2.text)))
+        with allure.step("校验返回值"):
+            assert r2.json() != {}, '创建数字货币购买交易-payment with card，接口返回值为{}'.format(r2.json())
+            logger.info('transaction id是{}'.format(str(r2.json()['txn_id'])))
+        with allure.step("返回的redirect需要报存在html文件里打开操作一下,需要5分钟之内拿到payme给我们返回信息,不需要了暂时先不删"):
+            with open('checkout.html', 'w') as file:
+                file.write(r2.json()['redirect']['url'])
+        with allure.step("打开3ds"):
+            webbrowser.open(r2.json()['redirect']['url'])
+            sleep(20)
+        with allure.step("交易完成后完成后，检查默认币种显是否正确"):
+            r3 = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
+            assert r3.json()["payment_currencies"][0]['code'] == spend_code
+        with allure.step("交易完成后完成后，检查获取的货币对汇率是否正确"):
+            r3 = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
+            assert 'USDT-' + spend_code + ':BuyTxn' in r3.json()["quote"]['id']
 
     @allure.title('test_check_out_051')
     @allure.description('查询用户使用过的所有卡')
@@ -589,9 +687,3 @@ class TestCheckoutApi:
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-
-
-
-
-
-
