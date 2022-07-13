@@ -869,3 +869,5 @@ class ApiFunction:
                 return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(amount, precision)}
 
 
+
+
