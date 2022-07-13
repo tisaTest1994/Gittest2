@@ -852,21 +852,28 @@ class ApiFunction:
             if ccy == 'spend':
                 with allure.step("判断地区"):
                     if country in get_json()['EAList']:
-                        service_charge = float(amount) * 0.0175
-                        buy_amount = float(amount) * (1 - 0.0175) / float(quote)
+                        total_spend_amount = amount
+                        service_charge = float(total_spend_amount) * 0.0185
+                        spend_amount = float(total_spend_amount) * (1 - 0.0185)
+                        buy_amount = spend_amount / float(quote)
                     else:
-                        service_charge = float(amount) * 0.0385
-                        buy_amount = float(amount) * (1 - 0.385) / float(quote)
-                return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'spend_amount': get_precision(amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(buy_amount, precision)}
+                        total_spend_amount = amount
+                        service_charge = float(total_spend_amount) * 0.0375
+                        spend_amount = float(total_spend_amount) * (1 - 0.0375)
+                        buy_amount = spend_amount / float(quote)
             else:
                 with allure.step("判断地区"):
                     if country in get_json()['EAList']:
-                        spend_amount = float(amount) * float(quote) / (1 - 0.0175)
-                        service_charge = spend_amount * 0.0175
+                        buy_amount = amount
+                        spend_amount = float(buy_amount) * float(quote)
+                        total_spend_amount = spend_amount / (1 - 0.0175)
+                        service_charge = total_spend_amount * 0.0175
                     else:
-                        spend_amount = float(amount) * float(quote) / (1 - 0.0385)
-                        service_charge = spend_amount * 0.0385
-                return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(amount, precision)}
+                        buy_amount = amount
+                        spend_amount = float(buy_amount) * float(quote)
+                        total_spend_amount = spend_amount / (1 - 0.0385)
+                        service_charge = total_spend_amount * 0.0385
+            return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'total_spend_amount': get_precision(total_spend_amount, precision), 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(buy_amount, precision)}
 
 
 

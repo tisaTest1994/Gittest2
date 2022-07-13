@@ -891,7 +891,9 @@ class TestCheckoutApi:
             token = r.json()['token']
         with allure.step("创建数字货币购买交易信息"):
             ccy = 'spend'
-            crypto_list = ApiFunction.get_buy_crypto_list(100, ccy=ccy)
+            issuer_country = 'US'
+            crypto_list = ApiFunction.get_buy_crypto_list(201, ccy=ccy, country=issuer_country)
+            print(crypto_list)
             data = {
                 "buy": {
                     "code": (str(crypto_list['pairs']).split('-'))[0],
@@ -910,7 +912,7 @@ class TestCheckoutApi:
                     "code": (str(crypto_list['pairs']).split('-'))[1],
                     "amount": crypto_list['service_charge']
                 },
-                "total_amount": crypto_list['spend_amount'],
+                "total_amount": crypto_list['total_spend_amount'],
                 "card": {
                     "type": 1,
                     "token": token,
@@ -921,7 +923,7 @@ class TestCheckoutApi:
                     "bin": "424242",
                     "card_type": "Credit",
                     "issuer": "JPMORGAN CHASE BANK NA",
-                    "issuer_country": "US"
+                    "issuer_country": issuer_country
                 },
                 "bind_card": True,
                 "card_holder_name": "Ting DP319",
@@ -934,7 +936,7 @@ class TestCheckoutApi:
                     "street_line_2": "Shab"
                 },
                 "nonce": generate_string(30),
-                "check_amount": False
+                "check_amount": True
             }
             print(data)
             r = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)

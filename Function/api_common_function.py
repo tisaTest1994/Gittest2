@@ -349,10 +349,13 @@ def get_precision(amount, precision, upgrade=False):
         num = 1
         add_amount = 1
         if upgrade:
-            for i in range(0, precision):
-                num = num * 10
-                add_amount = Decimal(add_amount) / 10
-            end_amount = Decimal(int(amount * num)) / Decimal(num) + Decimal(add_amount)
+            if len(str(amount).split('.')[1]) > precision:
+                for i in range(0, precision):
+                    num = num * 10
+                    add_amount = Decimal(add_amount) / 10
+                end_amount = Decimal(int(amount * num)) / Decimal(num) + Decimal(add_amount)
+            else:
+                end_amount = amount
             end_amount = str(end_amount)
         else:
             for i in range(0, precision):
