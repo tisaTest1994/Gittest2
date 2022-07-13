@@ -759,7 +759,7 @@ class TestCheckoutApi:
                 "street_line_2": "Shab"
             },
             "nonce": generate_string(30),
-            "check_amount": False
+            "check_amount": True
         }
         print(data)
         r = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
