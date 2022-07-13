@@ -74,7 +74,7 @@ class TestKycApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['additionalInfos'] == None, "获取用户补充信息, 补充信息为空失败，返回值是{}".format(r.text)
+            assert r.json()['additionalInfos'] is None, "获取用户补充信息, 补充信息为空失败，返回值是{}".format(r.text)
 
     @allure.title('test_kyc_005')
     @allure.description('用户kyc已过，补充信息已填写')
@@ -173,3 +173,4 @@ class TestKycApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['userId'] is not None and r.json()['additionalInfos'] is not None, "获取用户全部补充信息失败，返回值是{}".format(r.text)
+

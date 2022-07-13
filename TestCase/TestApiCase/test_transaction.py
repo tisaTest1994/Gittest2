@@ -153,9 +153,9 @@ class TestTransactionApi:
         with allure.step("校验返回值"):
             assert r.json()['transactions'] != [], "查询特定条件的交易错误，返回值是{}".format(r.text)
 
-    @allure.title('test_transaction_007')
+    @allure.title('test_transaction_008')
     @allure.description('查询check out的交易')
-    def test_transaction_007(self):
+    def test_transaction_008(self):
         data = {
             "pagination_request": {
                 "cursor": "0",

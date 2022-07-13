@@ -92,9 +92,7 @@ class ApiFunction:
     def get_payout_transaction_id(amount='0.02', address='0x428DA40C585514022b2eB537950d5AB5C7365a07', code_type='ETH'):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
         code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-        secretKey = get_json()['secretKey']
-        totp = pyotp.TOTP(secretKey)
-        mfaVerificationCode = totp.now()
+        mfaVerificationCode = get_mfa_code()
         headers['X-Mfa-Otp'] = str(mfaVerificationCode)
         headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
         if code_type == 'BTC':
@@ -118,7 +116,6 @@ class ApiFunction:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json()['transaction_id'] is not None, "payout币种是{}，金额是{}错误，返回值是{}".format(data['code'], data['amount'], r.text)
-        sleep(30)
         return r.json()['transaction_id']
 
     # 获取下次清算金额

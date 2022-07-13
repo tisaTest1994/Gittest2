@@ -879,7 +879,7 @@ class TestFixedApi:
             if code == 'USDT':
                 amount = '50'
             else:
-                amount = "0.21327"
+                amount = "1"
             data = {
                 "subscribe_amount": {
                     "code": code,
@@ -895,6 +895,7 @@ class TestFixedApi:
                                 data=json.dumps(data), headers=headers)
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                assert r.json()['status'] == 1, "申购产品失败"
             transaction_id = r.json()['tx_id']
         with allure.step("查询申购项目的交易记录"):
             params = {
@@ -926,7 +927,7 @@ class TestFixedApi:
             if code == 'USDT':
                 amount = '50'
             else:
-                amount = "0.21327"
+                amount = "1"
             data = {
                 "subscribe_amount": {
                     "code": code,
