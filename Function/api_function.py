@@ -839,6 +839,7 @@ class ApiFunction:
     def get_buy_crypto_list(amount, pairs='USDT-EUR', ccy='spend', area='EE'):
         with allure.step("获取汇率"):
             r = session.request('GET', url='{}/acquiring/buy/quotes/{}'.format(env_url, pairs), headers=headers)
+            quote_id = r.json()['quote']['id']
             quote = r.json()['quote']['amount']
         with allure.step("打开数字货币购买画面"):
             r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
@@ -863,6 +864,6 @@ class ApiFunction:
                     else:
                         spend_amount = float(amount) * float(quote) / (1 - 0.0385)
                         service_charge = spend_amount * 0.0385
-                return {'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision), 'buy_amount': get_precision(amount, precision)}
+                return {'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision), 'buy_amount': get_precision(amount, precision), 'quote_id' : quote_id, 'quote': quote}
 
 
