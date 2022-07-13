@@ -738,7 +738,7 @@ class TestCheckoutApi:
             "total_amount": crypto_list['spend_amount'],
             "card": {
                 "type": 1,
-                "token": "tok_l5p2zhjcx7rubk6yg3k3db3vky",
+                "token": 'src_eiuwrsam5b3u5gya5vjceotv3q',
                 "expiry_month": "4",
                 "expiry_year": "2044",
                 "scheme": "Visa",
@@ -749,17 +749,17 @@ class TestCheckoutApi:
                 "issuer_country": "US"
             },
             "bind_card": True,
-            "card_holder_name": "Lee James",
+            "card_holder_name": "Ting DP319",
             "billing_address": {
-                "country_code": "CH",
+                "country_code": "CN",
                 "state": "",
                 "city": "",
-                "post_code": "",
-                "street_line_1": "Nordstrasse 88, 8037 Zürich, Switzerland",
-                "street_line_2": ""
+                "post_code": "210000",
+                "street_line_1": "Shanghai",
+                "street_line_2": "Shab"
             },
             "nonce": generate_string(30),
-            "check_amount": True
+            "check_amount": False
         }
         print(data)
         r = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
