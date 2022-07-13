@@ -1,4 +1,5 @@
 from datetime import *
+from decimal import *
 import requests
 import random
 import json
@@ -11,7 +12,7 @@ import chardet
 import logger
 import pyotp
 import base64
-import decimal
+
 
 # 获取当前时间
 def get_now_time():
@@ -335,8 +336,25 @@ def get_basic_auth(username, password):
 
 
 # 保留几位小数
-def get_precision(amount, precision):
-    num = 10
-    for i in range(1, precision):
-        num = num * 10
-    return int(decimal.Decimal(amount) * num) / num
+def get_precision(amount, precision, upgrade=False):
+    if precision == 0:
+        if '.' in str(amount):
+            if upgrade and str(amount).split('.')[1][1:] != '0':
+                end_amount = Decimal(int(str(amount).split('.')[0]) + 1)
+            else:
+                end_amount = Decimal(int(str(amount).split('.')[0]))
+        else:
+            end_amount = Decimal(amount)
+    else:
+        num = 1
+        add_amount = 1
+        if upgrade:
+            for i in range(0, precision):
+                num = num * 10
+                add_amount = Decimal(add_amount) / 10
+            end_amount = Decimal(int(amount * num)) / Decimal(num) + Decimal(add_amount)
+        else:
+            for i in range(0, precision):
+                num = num * 10
+            end_amount = Decimal(int(amount * num)) / Decimal(num)
+    return end_amount

@@ -833,33 +833,39 @@ class ApiFunction:
 
     # 获取buy crypto指定币种的手续费，买入卖出数量。
     @staticmethod
-    def get_buy_crypto_list(amount, pairs='USDT-EUR', ccy='spend', area='EE'):
+    def get_buy_crypto_list(amount, pairs='USDT-EUR', ccy='spend', country='TH'):
         with allure.step("获取汇率"):
             r = session.request('GET', url='{}/acquiring/buy/quotes/{}'.format(env_url, pairs), headers=headers)
             quote = r.json()['quote']['amount']
+            quote_id = r.json()['quote']['id']
         with allure.step("打开数字货币购买画面"):
             r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
             for i in r.json()['payment_currencies']:
                 if i['code'] == str(pairs.split('-')[1]):
                     precision = i['precision']
+        with allure.step("确认major_code"):
+            if ccy == 'spend':
+                major_code = pairs.split('-')[1]
+            else:
+                major_code = pairs.split('-')[0]
         with allure.step("判断方向"):
             if ccy == 'spend':
                 with allure.step("判断地区"):
-                    if area == 'EE':
+                    if country in get_json()['EAList']:
                         service_charge = float(amount) * 0.0175
                         buy_amount = float(amount) * (1 - 0.0175) / float(quote)
                     else:
                         service_charge = float(amount) * 0.0385
                         buy_amount = float(amount) * (1 - 0.385) / float(quote)
-                return {'spend_amount': get_precision(amount, precision), 'service_charge': get_precision(service_charge, precision), 'buy_amount': get_precision(buy_amount, precision)}
+                return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'spend_amount': get_precision(amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(buy_amount, precision)}
             else:
                 with allure.step("判断地区"):
-                    if area == 'EE':
+                    if country in get_json()['EAList']:
                         spend_amount = float(amount) * float(quote) / (1 - 0.0175)
                         service_charge = spend_amount * 0.0175
                     else:
                         spend_amount = float(amount) * float(quote) / (1 - 0.0385)
                         service_charge = spend_amount * 0.0385
-                return {'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision), 'buy_amount': get_precision(amount, precision)}
+                return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(amount, precision)}
 
 
