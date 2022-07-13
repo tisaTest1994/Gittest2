@@ -862,58 +862,6 @@ class TestCheckoutApi:
     @allure.title('test_check_out_053')
     @allure.description('EE用户')
     def test_check_out_053(self):
-<<<<<<< HEAD
-        ccy = 'spend'
-        crypto_list = ApiFunction.get_buy_crypto_list(100, ccy=ccy)
-        data = {
-            "buy": {
-                "code": (str(crypto_list['pairs']).split('-'))[0],
-                "amount": crypto_list['buy_amount']
-            },
-            "spend": {
-                "code": (str(crypto_list['pairs']).split('-'))[1],
-                "amount": crypto_list['spend_amount']
-            },
-            "quote": {
-                "id": crypto_list['quote_id'],
-                "amount": crypto_list['quote']
-            },
-            "major_code": crypto_list['major_code'],
-            "fee": {
-                "code": (str(crypto_list['pairs']).split('-'))[1],
-                "amount": crypto_list['service_charge']
-            },
-            "total_amount": crypto_list['spend_amount'],
-            "card": {
-                "type": 1,
-                "token": 'src_eiuwrsam5b3u5gya5vjceotv3q',
-                "expiry_month": "4",
-                "expiry_year": "2044",
-                "scheme": "Visa",
-                "last": "4242",
-                "bin": "424242",
-                "card_type": "Credit",
-                "issuer": "JPMORGAN CHASE BANK NA",
-                "issuer_country": "US"
-            },
-            "bind_card": True,
-            "card_holder_name": "Ting DP319",
-            "billing_address": {
-                "country_code": "CN",
-                "state": "",
-                "city": "",
-                "post_code": "210000",
-                "street_line_1": "Shanghai",
-                "street_line_2": "Shab"
-            },
-            "nonce": generate_string(30),
-            "check_amount": True
-        }
-        print(data)
-        r = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
-        logger.info('状态码是{}'.format(str(r.status_code)))
-        logger.info('返回值是{}'.format(str(r.text)))
-=======
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+16@cabital.com')
         with allure.step("get token"):
             data = {
@@ -992,4 +940,5 @@ class TestCheckoutApi:
             r = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
->>>>>>> 75b7c5a83fb2e027064c846c94a31d181f329a65
+
+
