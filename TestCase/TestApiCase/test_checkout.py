@@ -862,53 +862,81 @@ class TestCheckoutApi:
     @allure.title('test_check_out_053')
     @allure.description('EE用户')
     def test_check_out_053(self):
-        ccy = 'spend'
-        crypto_list = ApiFunction.get_buy_crypto_list(100, ccy=ccy)
-        data = {
-            "buy": {
-                "code": (str(crypto_list['pairs']).split('-'))[0],
-                "amount": crypto_list['buy_amount']
-            },
-            "spend": {
-                "code": (str(crypto_list['pairs']).split('-'))[1],
-                "amount": crypto_list['spend_amount']
-            },
-            "quote": {
-                "id": crypto_list['quote_id'],
-                "amount": crypto_list['quote']
-            },
-            "major_code": crypto_list['major_code'],
-            "fee": {
-                "code": (str(crypto_list['pairs']).split('-'))[1],
-                "amount": crypto_list['service_charge']
-            },
-            "total_amount": crypto_list['spend_amount'],
-            "card": {
-                "type": 1,
-                "token": 'src_eiuwrsam5b3u5gya5vjceotv3q',
-                "expiry_month": "4",
-                "expiry_year": "2044",
-                "scheme": "Visa",
-                "last": "4242",
-                "bin": "424242",
-                "card_type": "Credit",
-                "issuer": "JPMORGAN CHASE BANK NA",
-                "issuer_country": "US"
-            },
-            "bind_card": True,
-            "card_holder_name": "Ting DP319",
-            "billing_address": {
-                "country_code": "CN",
-                "state": "",
-                "city": "",
-                "post_code": "210000",
-                "street_line_1": "Shanghai",
-                "street_line_2": "Shab"
-            },
-            "nonce": generate_string(30),
-            "check_amount": False
-        }
-        print(data)
-        r = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
-        logger.info('状态码是{}'.format(str(r.status_code)))
-        logger.info('返回值是{}'.format(str(r.text)))
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+16@cabital.com')
+        with allure.step("get token"):
+            data = {
+                "type": "card",
+                "number": "4242424242424242",
+                "expiry_month": 6,
+                "expiry_year": 2025,
+                "name": "Bruce Wayne",
+                "cvv": "100",
+                "billing_address": {
+                    "address_line1": "Checkout.com",
+                    "address_line2": "90 Tottenham Court Road",
+                    "city": "London",
+                    "state": "London",
+                    "zip": "W1T 4TJ",
+                    "country": "GB"
+                }
+            }
+            headers2 = {
+                "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
+                "Content-Type": "application/json"
+            }
+            r = session.request('POST', url='https://api.sandbox.checkout.com/tokens', data=json.dumps(data),
+                                headers=headers2)
+        with allure.step("校验状态码"):
+            assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
+            token = r.json()['token']
+        with allure.step("创建数字货币购买交易信息"):
+            ccy = 'spend'
+            crypto_list = ApiFunction.get_buy_crypto_list(100, ccy=ccy)
+            data = {
+                "buy": {
+                    "code": (str(crypto_list['pairs']).split('-'))[0],
+                    "amount": crypto_list['buy_amount']
+                },
+                "spend": {
+                    "code": (str(crypto_list['pairs']).split('-'))[1],
+                    "amount": crypto_list['spend_amount']
+                },
+                "quote": {
+                    "id": crypto_list['quote_id'],
+                    "amount": crypto_list['quote']
+                },
+                "major_code": crypto_list['major_code'],
+                "fee": {
+                    "code": (str(crypto_list['pairs']).split('-'))[1],
+                    "amount": crypto_list['service_charge']
+                },
+                "total_amount": crypto_list['spend_amount'],
+                "card": {
+                    "type": 1,
+                    "token": token,
+                    "expiry_month": "4",
+                    "expiry_year": "2044",
+                    "scheme": "Visa",
+                    "last": "4242",
+                    "bin": "424242",
+                    "card_type": "Credit",
+                    "issuer": "JPMORGAN CHASE BANK NA",
+                    "issuer_country": "US"
+                },
+                "bind_card": True,
+                "card_holder_name": "Ting DP319",
+                "billing_address": {
+                    "country_code": "CN",
+                    "state": "",
+                    "city": "",
+                    "post_code": "210000",
+                    "street_line_1": "Shanghai",
+                    "street_line_2": "Shab"
+                },
+                "nonce": generate_string(30),
+                "check_amount": False
+            }
+            print(data)
+            r = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
