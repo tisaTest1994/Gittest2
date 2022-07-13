@@ -31,6 +31,7 @@ class TestKycApi:
     @allure.description('未通过kyc的用户，获取kyc上传token')
     def test_kyc_002(self):
         account = generate_email()
+        logger.info('account 是 {}'.format(account))
         password = 'Abc112233'
         with allure.step("提前先注册好"):
             ApiFunction.sign_up(account, password)
