@@ -77,7 +77,7 @@ class TestCheckoutApi:
     def test_check_out_003(self):
         with allure.step("打开数字货币购买画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account='yanting.huang+305@cabital.com', password='Zcdsw123')
+                account='yanting.huang+18@cabital.com')
             r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
         with allure.step("把返回的币种放入列表中"):
             payment_currencies = r.json()['payment_currencies']
@@ -207,8 +207,7 @@ class TestCheckoutApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验返回值"):
-            assert r.json()['fee']['amount'] == "3.75", '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
-            assert r.json()['receivable_amount'] == str(float(data['amount']) - float(r.json()['fee']['amount'])), '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
+            assert r.json()['fee']['amount'] == "1.85", '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
 
     @allure.title('test_check_out_010')
     @allure.description('获取购买数字货币费用规则-with card')
@@ -618,6 +617,7 @@ class TestCheckoutApi:
                     assert i['is_deleted'] is True, '创建数字货币购买交易-payment with card不绑卡，绑卡状态错误，接口返回为{}'.format(i['is_deleted'])
 
     @allure.title('test_check_out_017')
+    @pytest.mark.skip(reason='要打开浏览器验证3ds，测试机上不能完成，仅可本地验证')
     @allure.description('创建数字货币购买交易-payment with card完成交易后，同payment with的卡，显示同上一笔成功的buy的货币对')
     def test_check_out_017(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+309@cabital.com')
@@ -793,8 +793,8 @@ class TestCheckoutApi:
                     "amount": spend_amount
                 },
                 "quote": {
-                    "id": r3.json()['quote']['id'],
-                    "amount": r3.json()['quote']['amount'],
+                    "id": r5.json()['quote']['id'],
+                    "amount": r5.json()['quote']['amount'],
                 },
                 "major_code": "USD",
                 "fee": {
