@@ -673,7 +673,7 @@ class TestFixedApi:
             data = {
                 "subscribe_amount": {
                     "code": product_info['code'],
-                    "amount": "0.013"
+                    "amount": "1"
                 },
                 "maturity_interest": {
                     "code": product_info['code'],

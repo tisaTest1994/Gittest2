@@ -360,6 +360,6 @@ def get_precision(amount, precision, upgrade=False):
         else:
             for i in range(0, precision):
                 num = num * 10
-            end_amount = Decimal(int(amount * num)) / Decimal(num)
+            end_amount = Decimal(int(Decimal(amount) * num)) / Decimal(num)
             end_amount = str(end_amount)
     return end_amount
