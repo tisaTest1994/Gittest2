@@ -391,6 +391,11 @@ class TestCheckoutApi:
                     "amount": quote,
                 },
                 "major_code": "USDT",
+                "fee": {
+                    "code": "USD",
+                    "amount": "3.75"
+                },
+                "total_amount": "100",
                 "card": {
                     "type": 2,
                     "token": "src_eiuwrsam5b3u5gya5vjceotv3q",
@@ -413,7 +418,8 @@ class TestCheckoutApi:
                     "street_line_1": "Shanghai",
                     "street_line_2": "Shab"
                 },
-                "nonce": generate_string(30)
+                "nonce": generate_string(30),
+                "check_amount": False
             }
         with allure.step("创建数字货币购买交易-payment with token"):
             r2 = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
