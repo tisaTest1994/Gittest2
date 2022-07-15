@@ -17,9 +17,7 @@ class TestTransactionApi:
             account_id = get_json()['email']['accountId']
         with allure.step("获得otp"):
             sleep(30)
-            secretKey = get_json()['email']['secretKey_richard']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
         with allure.step("获得data"):
             external_id = generate_string(25)
             data = {
