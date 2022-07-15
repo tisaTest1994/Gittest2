@@ -129,7 +129,7 @@ class TestTransactionApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['transactions'] != [], "根据id编号查询单笔交易错误，返回值是{}".format(r.text)
+            assert r.json()['transaction'] != [], "根据id编号查询单笔交易错误，返回值是{}".format(r.text)
 
     @allure.title('test_transaction_007')
     @allure.description('查询特定条件的交易')
