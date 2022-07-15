@@ -180,7 +180,7 @@ class TestFlexibleApi:
         with allure.step("有足够ETH的用户发起购买ETH投资项目成功"):
             data = {
                 "tx_type": 1,
-                "amount": "0.01327",
+                "amount": "0.06327",
                 "code": item['code']
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, item['product_id']), data=json.dumps(data), headers=headers)
@@ -236,7 +236,7 @@ class TestFlexibleApi:
         with allure.step("有足够USDT的用户发起购买USDT投资项目成功"):
             data = {
                 "tx_type": 1,
-                "amount": "1.17",
+                "amount": "51.17",
                 "code": BTC_item['code']
             }
             r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
@@ -293,7 +293,7 @@ class TestFlexibleApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'Minimum: 0.001 BTC' in r.text, "投资金额小于最小投资BTC数量错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == '104002', "投资金额小于最小投资BTC数量错误，返回值是{}".format(r.text)
 
     @allure.title('test_flexible_009')
     @allure.description('投资金额使用非常小的ETH数量判定无效')
@@ -341,16 +341,14 @@ class TestFlexibleApi:
                 "amount": "0.009",
                 "code": BTC_item['code']
             }
-            r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']),
-                                 data=json.dumps(data), headers=headers)
-
+            r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, BTC_item['product_id']), data=json.dumps(data), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert 'Minimum: 0.01 USDT' in r.text, "投资金额小于最小投资USDT数量错误，返回值是{}".format(r.text)
+                assert r.json()['code'] == '104002', "投资金额小于最小投资USDT数量错误，返回值是{}".format(r.text)
 
     @allure.title('test_flexible_011')
     @allure.description('获取产品持有情况')

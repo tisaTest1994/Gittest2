@@ -1,5 +1,3 @@
-import random
-
 from run import *
 from Function.operate_sql import *
 import webbrowser
@@ -94,9 +92,7 @@ class ApiFunction:
     def get_payout_transaction_id(amount='0.02', address='0x428DA40C585514022b2eB537950d5AB5C7365a07', code_type='ETH'):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
         code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-        secretKey = get_json()['secretKey']
-        totp = pyotp.TOTP(secretKey)
-        mfaVerificationCode = totp.now()
+        mfaVerificationCode = get_mfa_code()
         headers['X-Mfa-Otp'] = str(mfaVerificationCode)
         headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
         if code_type == 'BTC':
@@ -120,7 +116,6 @@ class ApiFunction:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json()['transaction_id'] is not None, "payout币种是{}，金额是{}错误，返回值是{}".format(data['code'], data['amount'], r.text)
-        sleep(30)
         return r.json()['transaction_id']
 
     # 获取下次清算金额
@@ -817,8 +812,8 @@ class ApiFunction:
         payment_currencies = r.json()['payment_currencies']
         buy_crypto_currency = []
         for i in range(0, len(payment_currencies)):
-            buy_crypto_currency.append(payment_currencies[i]['code'])
-        if type=='random':
+            buy_crypto_currency.append('USDT-{}'.format(payment_currencies[i]['code']))
+        if type == 'random':
             j = random.randint(0, len(buy_crypto_currency))
             return buy_crypto_currency[j]
         else:
@@ -836,85 +831,53 @@ class ApiFunction:
                 buy_crypto_limit.append(payment_currencies[i]['max'])
                 return buy_crypto_limit
 
-    # # 随机生成一笔任意币种的buy crpto交易
-    # @staticmethod
-    # def buy_crypto(account=get_json()['email']['email'], password=get_json()['web'][get_json()['env']]['password']):
-    #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account, password=password)
-    #     data = {
-    #         "type": "card",
-    #         "number": "4543474002249996",
-    #         "expiry_month": 6,
-    #         "expiry_year": 2045,
-    #         "name": "Bruce Wayne",
-    #         "cvv": "956",
-    #         "billing_address": {
-    #             "address_line1": "Checkout.com",
-    #             "address_line2": "90 Tottenham Court Road",
-    #             "city": "London",
-    #             "state": "London",
-    #             "zip": "W1T 4TJ",
-    #             "country": "GB"
-    #         }
-    #     }
-    #     headers2 = {
-    #         "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
-    #         "Content-Type": "application/json"
-    #     }
-    #     r = session.request('POST', url='https://api.sandbox.checkout.com/tokens', data=json.dumps(data), headers=headers2)
-    #     with allure.step("校验状态码"):
-    #         assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
-    #         token = r.json()['token']
-    #     with allure.step("随机一个spend币种，随机spend金额"):
-    #         spend_code = ApiFunction.get_buy_crypto_currency(type='random')
-    #         spend_amount_limit = ApiFunction.get_buy_crypto_limit(currency=spend_code)
-    #         spend_amount = random.uniform(spend_amount_limit[1], spend_amount_limit[0])
-    #         r3 = session.request('GET', url='{}/acquiring/buy/quotes/{}'.format(env_url, 'USDT-'+spend_code), headers=headers)
-    #         buy_amount = str(float(spend_amount)*float(r3.json()['quote']['amount']))
-    #     with allure.step("创建数字货币购买交易信息"):
-    #         data = {
-    #             "buy": {
-    #                 "code": "USDT",
-    #                 "amount": buy_amount
-    #             },
-    #             "spend": {
-    #                 "code": spend_code,
-    #                 "amount": spend_amount
-    #             },
-    #             "quote": {
-    #                 "id": r3.json()['quote']['id'],
-    #                 "amount": r3.json()['quote']['amount'],
-    #             },
-    #             "major_code": "USDT",
-    #             "card": {
-    #                 "type": 1,
-    #                 "token": token,
-    #                 "expiry_month": "4",
-    #                 "expiry_year": "2045",
-    #                 "scheme": "Visa",
-    #                 "last": "9996",
-    #                 "bin": "454347",
-    #                 "card_type": "Credit",
-    #                 "issuer": "JPMORGAN CHASE BANK NA",
-    #                 "issuer_country": "US"
-    #             },
-    #             "bind_card": False,
-    #             "card_holder_name": "yilei Wan",
-    #             "billing_address": {
-    #                 "country_code": "CN",
-    #                 "state": "",
-    #                 "city": "",
-    #                 "post_code": "210000",
-    #                 "street_line_1": "Shanghai",
-    #                 "street_line_2": "Shab"
-    #             },
-    #             "nonce": generate_string(30)
-    #         }
-    #     with allure.step("创建数字货币购买交易-payment with card"):
-    #         r2 = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
-    #     with allure.step("打开3ds"):
-    #         webbrowser.open(r2.json()['redirect']['url'])
-    #         sleep(5)
-    #     buy_crypto = []
-    #     buy_crypto.append(spend_code)
-    #     buy_crypto.append(spend_amount)
-    #     return buy_crypto
+    # 获取buy crypto指定币种的手续费，买入卖出数量。
+    @staticmethod
+    def get_buy_crypto_list(amount, pairs='USDT-EUR', ccy='spend', country='TH'):
+        with allure.step("获取汇率"):
+            r = session.request('GET', url='{}/acquiring/buy/quotes/{}'.format(env_url, pairs), headers=headers)
+            quote = r.json()['quote']['amount']
+            quote_id = r.json()['quote']['id']
+        with allure.step("打开数字货币购买画面"):
+            r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
+            for i in r.json()['payment_currencies']:
+                if i['code'] == str(pairs.split('-')[1]):
+                    precision = i['precision']
+        with allure.step("确认major_code"):
+            if ccy == 'spend':
+                major_code = pairs.split('-')[1]
+            else:
+                major_code = pairs.split('-')[0]
+        with allure.step("判断方向"):
+            if ccy == 'spend':
+                with allure.step("判断地区"):
+                    if country in get_json()['EAList']:
+                        total_spend_amount = Decimal(amount)
+                        service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        spend_amount = (total_spend_amount * Decimal(1 - 0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                    else:
+                        total_spend_amount = Decimal(amount)
+                        service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        spend_amount = (total_spend_amount * Decimal(1 - 0.0375)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+            else:
+                with allure.step("判断地区"):
+                    if country in get_json()['EAList']:
+                        buy_amount = Decimal(amount)
+                        spend_amount = Decimal(buy_amount * Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        total_spend_amount = (spend_amount / Decimal(1 - 0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        if total_spend_amount != Decimal(get_precision(service_charge, precision, True)) + spend_amount:
+                            total_spend_amount = Decimal(get_precision(service_charge, precision, True)) + spend_amount
+                    else:
+                        buy_amount = Decimal(amount)
+                        spend_amount = Decimal(buy_amount * Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        total_spend_amount = (spend_amount / Decimal(1 - 0.0375)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        if total_spend_amount != Decimal(get_precision(service_charge, precision, True)) + spend_amount:
+                            total_spend_amount = Decimal(get_precision(service_charge, precision, True)) + spend_amount
+            return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'total_spend_amount': get_precision(total_spend_amount, precision), 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(buy_amount, 6)}
+
+
+

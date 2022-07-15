@@ -1,4 +1,5 @@
 from datetime import *
+from decimal import *
 import requests
 import random
 import json
@@ -332,3 +333,33 @@ def get_basic_auth(username, password):
     # base64 编码
     encode_str = base64.b64encode(bytesString)
     return 'Basic ' + encode_str.decode()
+
+
+# 保留几位小数
+def get_precision(amount, precision, upgrade=False):
+    if precision == 0:
+        if '.' in str(amount):
+            if upgrade and str(amount).split('.')[1][1:] != '0':
+                end_amount = Decimal(int(str(amount).split('.')[0]) + 1)
+            else:
+                end_amount = Decimal(int(str(amount).split('.')[0]))
+        else:
+            end_amount = str(amount)
+    else:
+        num = 1
+        add_amount = 1
+        if upgrade:
+            if len(str(amount).split('.')[1]) > precision:
+                for i in range(0, precision):
+                    num = num * 10
+                    add_amount = Decimal(add_amount) / 10
+                end_amount = Decimal(int(amount * num)) / Decimal(num) + Decimal(add_amount)
+            else:
+                end_amount = amount
+            end_amount = str(end_amount)
+        else:
+            for i in range(0, precision):
+                num = num * 10
+            end_amount = Decimal(int(Decimal(amount) * num)) / Decimal(num)
+            end_amount = str(end_amount)
+    return end_amount
