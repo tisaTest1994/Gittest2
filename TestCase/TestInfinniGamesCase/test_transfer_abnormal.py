@@ -260,57 +260,57 @@ class TestTransferAbnormalApi:
                         assert int(buy_amount) < int(cfx_limit[0][0]), "换汇失败，buy_amount返回值是{},换汇最小限额值是{},".format(buy_amount, cfx_limit[0][0])
                 else:
                     print(i)
-    @allure.title('test_transfer_006')
-    @allure.description('异常场景C成功T失败，infinni games发起direct debit，校验C最大限额，因C+T时C小于T失败，获取conversion_id')
-    def test_transfer_006(self):
-        with allure.step("测试用户的account_id"):
-            account_id = get_json()['infinni_games']['account_vid']
-        with allure.step("从config获取Cfx的最大限额"):
-            symbol = 'USDT'
-            cfx_limit = ApiFunction.get_config_info(project='infinni games', type='cfx_limit', symbol=symbol)
-            logger.info('cfx_limit最大限额值是：{}'.format(cfx_limit[0][1]))
-            debit_limit = ApiFunction.get_config_info(project='infinni games', type='debit_limit', symbol=symbol)
-            debit_limit_max = int(debit_limit[0][1])
-            logger.info('config获取到最大debit限额值是：{}'.format(debit_limit_max))
-            cfx_limit_max = int(cfx_limit[0][1])
-            logger.info('换汇buy_amount值是：{}'.format(cfx_limit_max))
-            buy_amount2 = cfx_limit_max + int(1)
-            logger.info('做T时的buy_amount2值是：{}'.format(buy_amount2))
-        with allure.step('换汇'):
-            pair = 'USDT-EUR'
-            transaction = ApiFunction.cfx_random(pair, pair.split('-')[0], buy_amount=cfx_limit_max)
-            cfx_transaction_id = transaction['returnJson']['transaction']['transaction_id']
-        with allure.step("获得data"):
-            external_id = generate_string(25)
-            if debit_limit_max == -1 and cfx_limit_max != -1:
-                data = {
-                    'amount': str(buy_amount2),
-                    'symbol': symbol,
-                    'otp': get_mfa_code(get_json()['email']['secretKey_richard']),
-                    'conversion_id': cfx_transaction_id,
-                    'direction': 'DEBIT',
-                    'external_id': external_id
-                }
-                with allure.step("验签"):
-                    unix_time = int(time.time())
-                    nonce = generate_string(30)
-                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                        url='/api/v1/accounts/{}/transfers'.format(account_id),
-                                                        key='infinni games', nonce=nonce, body=json.dumps(data))
-                    headers['ACCESS-SIGN'] = sign
-                    headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                    headers['ACCESS-NONCE'] = nonce
-                with allure.step("transfer"):
-                    r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
-                                        data=json.dumps(data), headers=headers)
-                    logger.info('r.json()的返回值是{}'.format(r.json()))
-                    logger.info('conversion_id的值是{}'.format(data['conversion_id']))
-                with allure.step("校验状态码"):
-                    assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
-                with allure.step("校验返回值"):
-                    assert r.json()['code'] == 'PA032', "http状态码不对，目前状态码是{}".format(r.json()['code'])
-                with allure.step("校验返回值"):
-                    assert r.json()['message'] == 'transfer amount greater than conversion amount', '划转失败，返回值是{}'.format(r.text)
+    # @allure.title('test_transfer_006')
+    # @allure.description('异常场景C成功T失败，infinni games发起direct debit，校验C最大限额，因C+T时C小于T失败，获取conversion_id')
+    # def test_transfer_006(self):
+    #     with allure.step("测试用户的account_id"):
+    #         account_id = get_json()['infinni_games']['account_vid']
+    #     with allure.step("从config获取Cfx的最大限额"):
+    #         symbol = 'USDT'
+    #         cfx_limit = ApiFunction.get_config_info(project='infinni games', type='cfx_limit', symbol=symbol)
+    #         logger.info('cfx_limit最大限额值是：{}'.format(cfx_limit[0][1]))
+    #         debit_limit = ApiFunction.get_config_info(project='infinni games', type='debit_limit', symbol=symbol)
+    #         debit_limit_max = int(debit_limit[0][1])
+    #         logger.info('config获取到最大debit限额值是：{}'.format(debit_limit_max))
+    #         cfx_limit_max = int(cfx_limit[0][1])
+    #         logger.info('换汇buy_amount值是：{}'.format(cfx_limit_max))
+    #         buy_amount2 = cfx_limit_max + int(1)
+    #         logger.info('做T时的buy_amount2值是：{}'.format(buy_amount2))
+    #     with allure.step('换汇'):
+    #         pair = 'USDT-EUR'
+    #         transaction = ApiFunction.cfx_random(pair, pair.split('-')[0], buy_amount=cfx_limit_max)
+    #         cfx_transaction_id = transaction['returnJson']['transaction']['transaction_id']
+    #     with allure.step("获得data"):
+    #         external_id = generate_string(25)
+    #         if debit_limit_max == -1 and cfx_limit_max != -1:
+    #             data = {
+    #                 'amount': str(buy_amount2),
+    #                 'symbol': symbol,
+    #                 'otp': get_mfa_code(get_json()['email']['secretKey_richard']),
+    #                 'conversion_id': cfx_transaction_id,
+    #                 'direction': 'DEBIT',
+    #                 'external_id': external_id
+    #             }
+    #             with allure.step("验签"):
+    #                 unix_time = int(time.time())
+    #                 nonce = generate_string(30)
+    #                 sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+    #                                                     url='/api/v1/accounts/{}/transfers'.format(account_id),
+    #                                                     key='infinni games', nonce=nonce, body=json.dumps(data))
+    #                 headers['ACCESS-SIGN'] = sign
+    #                 headers['ACCESS-TIMESTAMP'] = str(unix_time)
+    #                 headers['ACCESS-NONCE'] = nonce
+    #             with allure.step("transfer"):
+    #                 r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
+    #                                     data=json.dumps(data), headers=headers)
+    #                 logger.info('r.json()的返回值是{}'.format(r.json()))
+    #                 logger.info('conversion_id的值是{}'.format(data['conversion_id']))
+    #             with allure.step("校验状态码"):
+    #                 assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+    #             with allure.step("校验返回值"):
+    #                 assert r.json()['code'] == 'PA032', "http状态码不对，目前状态码是{}".format(r.json()['code'])
+    #             with allure.step("校验返回值"):
+    #                 assert r.json()['message'] == 'transfer amount greater than conversion amount', '划转失败，返回值是{}'.format(r.text)
 
     @allure.title('test_transfer_007')
     @allure.description('异常场景C成功T失败，infinni games发起direct debit，C最小限额，因C+T时C小于T失败，获取conversion_id')
