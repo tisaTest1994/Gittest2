@@ -188,8 +188,6 @@ class TestTransferApi:
     def test_transfer_008(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['infinni_games']['account_vid']
-        with allure.step("获得otp"):
-            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
         with allure.step("获得data"):
             symbol = 'USDT'
             external_id = generate_string(25)
@@ -200,7 +198,6 @@ class TestTransferApi:
             data = {
                 'amount': str(amount),
                 'symbol': symbol,
-                'otp': str(mfaVerificationCode),
                 'direction': 'CREDIT',
                 'external_id': external_id
             }

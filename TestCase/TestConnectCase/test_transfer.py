@@ -123,6 +123,7 @@ class TestTransferApi:
                             r = session.request('POST',
                                                 url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                                 data=json.dumps(data), headers=connect_headers)
+                            logger.info('r.json返回值是:{}'.format(r.json()))
                         with allure.step("校验状态码"):
                             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                         with allure.step("校验返回值"):
