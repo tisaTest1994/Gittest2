@@ -18,8 +18,9 @@ class TestMobileApi:
     @allure.description('获取合作方配置')
     def test_mobile_001(self):
         with allure.step("获取合作方配置"):
-            r = session.request('GET', url='{}/connect/{}/transfer/limit'.format(env_url, get_json()['infinni_games'][
-                'partner_id']), headers=headers)
+            partner_id = get_json()['infinni_games']['partner_id']
+        with allure.step("获取data"):
+            r = session.request('GET', url='{}/connect/{}/transfer/limit'.format(env_url, partner_id), headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -29,8 +30,25 @@ class TestMobileApi:
                 assert r.json()['configs'] is not None, "获取合作方配置错误，返回值是{}".format(r.text)
 
     @allure.title('test_mobile_002')
-    @allure.description('合作方划转交易费用')
+    @allure.description('获取合作方配置-(传入部分参数)')
     def test_mobile_002(self):
+        with allure.step("获取合作方配置"):
+            partner_id = get_json()['infinni_games']['partner_id']
+        with allure.step("获取data"):
+            r = session.request('GET',
+                                url='{}/connect/{}/transfer/limit?ccy_type=2&transfer_type=1&only_enabled_ccy=true'.format(
+                                    env_url, partner_id), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['configs'] is not None, "获取合作方配置错误，返回值是{}".format(r.text)
+
+    @allure.title('test_mobile_003')
+    @allure.description('合作方划转交易费用')
+    def test_mobile_003(self):
         with allure.step("合作方划转交易费用"):
             data = {
                 "amount": "50",
@@ -46,9 +64,9 @@ class TestMobileApi:
                 logger.info('返回值是{}'.format(str(r.text)))
                 assert r.json()['fee']['amount'] == '0', "合作方划转交易费用错误，返回值是{}".format(r.text)
 
-    @allure.title('test_mobile_003')
-    @allure.description('合作方划转交易 预校验link关系存在')
-    def test_mobile_003(self):
+    @allure.title('test_mobile_004')
+    @allure.description('合作方划转交易预校验-(link关系存在)')
+    def test_mobile_004(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com', password='Zcdsw123')
         partner_id = get_json()['infinni_games']['partner_id']
         with allure.step("合作方划转交易 预校验"):
@@ -60,7 +78,7 @@ class TestMobileApi:
                 "user_ext_ref": "988518746672869376"
             }
             r = session.request('POST', url='{}/connect/{}/transfer/confirm'.format(env_url, partner_id), data=json.dumps(data), headers=headers)
-            print(r.json())
+            logger.info('r.json返回值是：{}'.format(r.json()))
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -69,19 +87,37 @@ class TestMobileApi:
             with allure.step("校验返回值"):
                 assert r.json() == {}, "合作方划转交易 预校验错误，返回值是{}".format(r.text)
 
-    @allure.title('test_mobile_004')
-    @allure.description('划转交易使用其他人绑定的account_idv')
-    def test_mobile_004(self):
+    @allure.title('test_mobile_005')
+    @allure.description('合作方划转交易预校验-(link关系不存在异常场景)')
+    def test_mobile_005(self):
+        with allure.step(" 没有link关系合作方划转交易 预校验"):
+            data = {
+                "amount": "50",
+                "code": "USDT",
+                "direction": "DEBIT",
+                "account_vid": "d9f35f7c-ec94-425d-9f66-95585457bb7d",
+                "user_ext_ref": "james.lee@cabital.com"
+            }
+            r = session.request('POST',
+                                url='{}/connect/{}/transfer/confirm'.format(env_url, get_json()['infinni_games'][
+                                    'partner_id']), data=json.dumps(data), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['code'] == "PA013", "合作方划转交易 预校验错误，返回值是{}".format(r.text)
+
+    @allure.title('test_mobile_006')
+    @allure.description('合作方划转交易-使用其他人绑定的account_idv')
+    def test_mobile_006(self):
         with allure.step("合作方划转交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
         with allure.step("法币提现"):
-            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
+            mfaVerificationCode = get_mfa_code()
             headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
         with allure.step("参数"):
             data = {
                 "amount": "50",
@@ -100,9 +136,9 @@ class TestMobileApi:
             with allure.step("校验返回值"):
                 assert r.json()['code'] == 'PA013', "合作方划转交易错误，返回值是{}".format(r.text)
 
-    @allure.title('test_mobile_005')
-    @allure.description('cabital申请，把资金从cabital划转到infinni games，交易成功，会校验可用余额的变更')
-    def test_mobile_005(self):
+    @allure.title('test_mobile_007')
+    @allure.description('合作方划转交易-cabital发起transfer debit交易成功，校验可用余额')
+    def test_mobile_007(self):
         with allure.step("合作方划转交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
@@ -165,9 +201,9 @@ class TestMobileApi:
                 with allure.step("校验返回值"):
                     assert r.json() == {}, "确认划转交易错误，返回值是{}".format(r.text)
 
-    @allure.title('test_mobile_006')
-    @allure.description('cabital申请，把资金从cabital划转到infinni games，webhook失败,校验用户账户可用资金解冻成功')
-    def test_mobile_006(self):
+    @allure.title('test_mobile_008')
+    @allure.description('合作方划转交易-cabital发起transfer debit交易失败，校验用户账户可用资金解冻成功')
+    def test_mobile_008(self):
         with allure.step("合作方划转交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
@@ -227,7 +263,7 @@ class TestMobileApi:
         r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url, get_json()['infinni_games'][
             'account_vid_c'], transfer_id), data=json.dumps(data), headers=headers)
         logger.info('webhook返回值是{}'.format(r.json()))
-        sleep(30)
+        sleep(3)
         with allure.step('获得webhook失败后币种可用balance数量'):
             transfer_amount_wallet_balance_latest2 = ApiFunction.get_crypto_number(type='USDT')
             logger.info('transfer_amount_wallet_balance_latest2的值是{}'.format(transfer_amount_wallet_balance_latest2))
@@ -239,45 +275,6 @@ class TestMobileApi:
             assert Decimal(transfer_amount_wallet_balance_old) == Decimal(
                 transfer_amount_wallet_balance_latest2), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(
                 transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest2)
-
-    @allure.title('test_mobile_007')
-    @allure.description('用户通过mobile link infinni games')
-    def test_mobile_007(self):
-        with allure.step("参数"):
-            data = {
-                "user_ext_ref": "1112313123"
-            }
-        r = session.request('POST', url='{}/connect/account/{}/link'.format(env_url, get_json()['infinni_games']['partner_id']), data=json.dumps(data), headers=headers)
-        logger.info('r.json返回值是{}'.format(r.json()))
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['partner_id'] == get_json()['infinni_games']['partner_id'], "用户通过mobile link infinni games错误，返回值是{}".format(r.text)
-
-    @allure.title('test_mobile_008')
-    @allure.description('合作方划转交易 预校验link关系不存在异常场景')
-    def test_mobile_008(self):
-        with allure.step(" 没有link关系合作方划转交易 预校验"):
-            data = {
-                "amount": "50",
-                "code": "USDT",
-                "direction": "DEBIT",
-                "account_vid": "d9f35f7c-ec94-425d-9f66-95585457bb7d",
-                "user_ext_ref": "james.lee@cabital.com"
-            }
-            r = session.request('POST',
-                                url='{}/connect/{}/transfer/confirm'.format(env_url, get_json()['infinni_games'][
-                                    'partner_id']), data=json.dumps(data), headers=headers)
-            with allure.step("状态码和返回值"):
-                logger.info('状态码是{}'.format(str(r.status_code)))
-                logger.info('返回值是{}'.format(str(r.text)))
-            with allure.step("校验状态码"):
-                assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-            with allure.step("校验返回值"):
-                assert r.json()['code'] == "PA013", "合作方划转交易 预校验错误，返回值是{}".format(r.text)
 
 
 
