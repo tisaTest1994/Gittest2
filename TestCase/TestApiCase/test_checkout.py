@@ -952,8 +952,8 @@ class TestCheckoutApi:
                         "card": {
                             "type": 1,
                             "token": token,
-                            "expiry_month": "4",
-                            "expiry_year": "2044",
+                            "expiry_month": "6",
+                            "expiry_year": "2025",
                             "scheme": "Visa",
                             "last": "4242",
                             "bin": "424242",
@@ -1011,7 +1011,11 @@ class TestCheckoutApi:
                         with allure.step("校验状态码"):
                             assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
                             token = r.json()['token']
-                    crypto_list = ApiFunction.get_buy_crypto_list(150, pairs=z, ccy='spend', country=x)
+                    if 'CLF' in z:
+                        amount = 100
+                    else:
+                        amount = 150
+                    crypto_list = ApiFunction.get_buy_crypto_list(amount, pairs=z, ccy='spend', country=x)
                     data = {
                         "buy": {
                             "code": (str(crypto_list['pairs']).split('-'))[0],
@@ -1034,8 +1038,8 @@ class TestCheckoutApi:
                         "card": {
                             "type": 1,
                             "token": token,
-                            "expiry_month": "4",
-                            "expiry_year": "2044",
+                            "expiry_month": "6",
+                            "expiry_year": "2025",
                             "scheme": "Visa",
                             "last": "4242",
                             "bin": "424242",
