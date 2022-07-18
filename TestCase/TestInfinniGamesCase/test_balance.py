@@ -37,7 +37,7 @@ class TestBalanceApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['balances'] is not None, "账户可用余额列表错误，返回值是{}".format(r.text)
-        with allure.step("判断提供给bybit的和我们自用的值一致"):
+        with allure.step("判断提供给partner的和我们自用的值一致"):
             balance_list = ApiFunction.get_connect_support(self.url, headers, key='infinni games')
             for i in balance_list:
                 mobile_balance = ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')

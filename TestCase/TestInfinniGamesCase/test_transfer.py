@@ -172,6 +172,7 @@ class TestTransferApi:
                 r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                     data=json.dumps(data), headers=headers)
                 logger.info('r.json返回值是{}'.format(r.json()))
+        if "PA043" not in str(r.json()):
             with allure.step('获得transfer后币种balance数量'):
                 transfer_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=data['symbol'])
             with allure.step("校验状态码"):
@@ -182,6 +183,11 @@ class TestTransferApi:
                 assert Decimal(transfer_amount_wallet_balance_old) - Decimal(data['amount']) == Decimal(
                     transfer_amount_wallet_balance_latest), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(
                     transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest)
+        else:
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+            logger.info('由于每日限额超额，该笔transfer交易不成功，message是{}'.format(r.json()['message']))
+
 
     @allure.title('test_transfer_008')
     @allure.description('infinni games申请发起一笔direct credit，把资金从infinni games划转到cabital')
