@@ -40,10 +40,7 @@ class TestAccountingWalletApi:
                                     wallet_subType = str(line_info[8]).split('(')[0].split(":'")[1]
                                 else:
                                     wallet_subType = str(line_info[8]).split("'")[1]
-                            sql = "select * from wallet where wallet_name = {} and code = {} and account_code = {} and status = {} and allow_overdraft = {} and balance_direction = {} and wallet_type = '{}';".format(
-                                str(line_info[3]).split(':')[1], str(line_info[5]).split(':')[1],
-                                int(float(str(line_info[9]).split(':')[1])), status, allow_overdraft, balance_direction,
-                                wallet_subType)
+                            sql = "select * from wallet where code = {} and account_code = {} and status = {} and allow_overdraft = {} and balance_direction = {} and wallet_type = '{}';".format(str(line_info[5]).split(':')[1], int(float(str(line_info[9]).split(':')[1])), status, allow_overdraft, balance_direction, wallet_subType)
                             info = sqlFunction().connect_mysql('wallet', sql=sql)
                             if not list(info):
                                 error_list.append({y: sql})

@@ -341,8 +341,10 @@ def get_precision(amount, precision, upgrade=False):
         if '.' in str(amount):
             if upgrade and str(amount).split('.')[1][1:] != '0':
                 end_amount = Decimal(int(str(amount).split('.')[0]) + 1)
+                end_amount = str(amount)
             else:
                 end_amount = Decimal(int(str(amount).split('.')[0]))
+                end_amount = str(amount)
         else:
             end_amount = str(amount)
     else:
