@@ -232,13 +232,10 @@ class TestRebalanceApi:
                                 "value_date": "2021-12-21"
                             },
                             "operator": "system",
-                            "txn_hash": '25C2lc79qWUFymE7',
+                            "txn_hash": generate_string(16),
                             "money_house_account_id": "e3fd552b-0faf-11ec-b6ea-a655f054239a",
                             "order_id": ""
                         },
-                        {
-                            "order_id": "07e1e465-f7c9-46d4-8c93-cb200d54bd6f"
-                        }
                     ]
             }
             r = session.request('POST', url='{}/operatorapi/orders/rebalance/create'.format(operateUrl),
