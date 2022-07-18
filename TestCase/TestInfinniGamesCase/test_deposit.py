@@ -44,6 +44,7 @@ class TestDepositApi:
                                     headers['ACCESS-NONCE'] = nonce
                                 with allure.step("获取入账显示"):
                                     r = session.request('GET', url='{}/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id, i['symbol'], y), headers=headers)
+                                    logger.info('r.json返回值是：{}'.format(r.json()))
                                 with allure.step("校验状态码"):
                                     assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                                 with allure.step("校验返回值"):

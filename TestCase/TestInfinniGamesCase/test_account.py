@@ -34,8 +34,7 @@ class TestAccountApi:
     #         headers['ACCESS-NONCE'] = nonce
     #         headers['ACCESS-KEY'] = partner_id
     #         r = session.request('POST', url='{}/accounts/{}/unlink'.format(self.url, account_id), data=json.dumps(data), headers=headers)
-    #         print(r.text)
-    #         # logger.info('r.json的返回值是{}'.format(r.json()))
+    #         logger.info('r.json的返回值是{}'.format(r.json())
     #         with allure.step("校验状态码"):
     #             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
 

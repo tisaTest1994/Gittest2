@@ -172,7 +172,7 @@ class TestTransferApi:
                 r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                     data=json.dumps(data), headers=headers)
                 logger.info('r.json返回值是{}'.format(r.json()))
-        if "PA043" not in str(r.json()):
+        if "PA043" not in r.text:
             with allure.step('获得transfer后币种balance数量'):
                 transfer_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=data['symbol'])
             with allure.step("校验状态码"):

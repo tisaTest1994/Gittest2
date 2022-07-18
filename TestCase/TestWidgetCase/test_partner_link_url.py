@@ -19,7 +19,7 @@ class TestWidgetApi:
               ('wallet', 'https://widget.latibac.com/wallet'),
               ('deposit', 'https://widget.latibac.com/deposit'),
               ('withdraw', 'https://widget.latibac.com/withdraw'),
-              ('conversion', 'https://widget.latibac.com/convert'),
+              ('convert', 'https://widget.latibac.com/convert'),
               ('transfer', 'https://widget.latibac.com/transfer'),
               ('transactions', 'https://widget.latibac.com/wallet//transaction'),
               ]
@@ -29,7 +29,7 @@ class TestWidgetApi:
                          'feature:wallet参数跳转检查',
                          'feature:deposit参数跳转检查',
                          'feature:withdraw参数跳转检查',
-                         'feature:conversion参数跳转检查',
+                         'feature:convert参数跳转检查',
                          'feature:transfer参数跳转检查',
                          'feature:transactions参数跳转检查',
                          ]
@@ -70,7 +70,7 @@ class TestWidgetApi:
     @allure.description('partner unlink用户link时全跳转到link地址,infinni账号：alice000010000@yeah.net')
     def test_account_002(self):
         expect_url = 'https://widget.latibac.com/connect/link'
-        feature = ['link', 'kyc', '2fa', 'wallet', 'deposit', 'withdraw', 'conversion', 'transfer', 'transactions']
+        feature = ['link', 'kyc', '2fa', 'wallet', 'deposit', 'withdraw', 'convert', 'transfer', 'transactions']
         for i in feature:
             params = {
                 'user_ext_ref': '992025295185788928',
