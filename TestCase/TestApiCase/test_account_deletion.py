@@ -80,11 +80,9 @@ class TestAccountDeletionApi:
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['code'] == '001036', "销户申请状态错误，返回值是{}".format(r.text)
-
         with allure.step("查看用户状态为SUSPEND"):
             ApiFunction.get_account_status(email="winnie.wang+121@cabital.com") == 'SUSPEND', "用户状态不对，目前状态是{}".format(
                 r.status_code)
-
 
     @allure.title('test_account_deletion_004')
     @allure.description('提交销户申请后审批通过，查看用户状态为CLOSED')
@@ -104,7 +102,6 @@ class TestAccountDeletionApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['status'] == 'PENDING', "销户状态错误，返回值是{}".format(r.text)
-
         with allure.step("修改用户状态为CLOSED"):
             user_id = ApiFunction.get_user_id(email=account)
             logger.info('user_id是：{}'.format(user_id))
@@ -126,7 +123,6 @@ class TestAccountDeletionApi:
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-
         with allure.step("销户申请审批通过"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['operate_admin_account']['email'],
@@ -164,7 +160,6 @@ class TestAccountDeletionApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['status'] == 'PENDING', "销户状态错误，返回值是{}".format(r.text)
-
         with allure.step("销户申请审批拒绝"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['operate_admin_account']['email'],
@@ -181,7 +176,6 @@ class TestAccountDeletionApi:
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-
         with allure.step("查看用户状态为NEW"):
             status = ApiFunction.get_account_status(user_id=user_id)
         with allure.step("校验用户状态"):
@@ -202,7 +196,6 @@ class TestAccountDeletionApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['status'] == 'PENDING', "销户状态错误，返回值是{}".format(r.text)
-
         with allure.step("销户申请审批拒绝"):
             user_id = "20f336f6-7dbd-48b5-953b-2d805593448f"
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
@@ -218,9 +211,7 @@ class TestAccountDeletionApi:
             logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-
             with allure.step("查看用户状态为ACTIVE"):
                 status = ApiFunction.get_account_status(user_id=user_id)
             with allure.step("校验用户状态"):
                 assert status == 'ACTIVE', "用户状态不对，目前状态是{}".format(r.status_code)
-

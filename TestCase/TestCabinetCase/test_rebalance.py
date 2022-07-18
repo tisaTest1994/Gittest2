@@ -185,7 +185,7 @@ class TestRebalanceApi:
                             "counterparty_txn_id": generate_string(16),
                             "money_house_id": "MoneyHouseTypeTransactiveDGTLT",
                             "currency": "EUR",
-                            "principal": "86",
+                            "principal": "33",
                             "fee_detail": {
                                 "amount": "",
                                 "cost_type": 0,
@@ -222,19 +222,22 @@ class TestRebalanceApi:
                             "counterparty_txn_id": generate_string(16),
                             "money_house_id": "MoneyHouseTypeFTXDGTLT",
                             "currency": "EUR",
-                            "principal": "53",
+                            "principal": "33",
                             "fee_detail": {
                                 "cost_type": 2,
-                                "amount": "0.0003",
-                                "money_house_account_id": "3a3b75b8-f04e-11eb-9e63-ba224deb3be4",
+                                "amount": "3",
+                                "money_house_account_id": "e3fd552b-0faf-11ec-b6ea-a655f054239a",
                                 "cost_txn_id": generate_string(16),
-                                "currency": "BNB",
+                                "currency": "EUR",
                                 "value_date": "2021-12-21"
                             },
                             "operator": "system",
-                            "txn_hash": generate_string(16),
+                            "txn_hash": '25C2lc79qWUFymE7',
                             "money_house_account_id": "e3fd552b-0faf-11ec-b6ea-a655f054239a",
                             "order_id": ""
+                        },
+                        {
+                            "order_id": "07e1e465-f7c9-46d4-8c93-cb200d54bd6f"
                         }
                     ]
             }
@@ -249,10 +252,167 @@ class TestRebalanceApi:
         with allure.step("校验返回值"):
             assert 'order_ids' in r.text, "创建单边pay-out order错误，返回值是{}".format(r.text)
 
-
     @allure.title('test_rebalance_007')
-    @allure.description('查询fx order')
+    @allure.description('创建单边pay-in order后再创建pay-out order匹配')
     def test_rebalance_007(self):
+        txn_hash = generate_string(16)
+        with allure.step("创建单边pay-in order后再创建pay-out order匹配"):
+            data = {
+                "orders":
+                    [
+                        {
+                            "value_date": "2021-12-30",
+                            "order_type_enum": 1,
+                            "counterparty_txn_id": generate_string(16),
+                            "money_house_id": "MoneyHouseTypeTransactiveDGTLT",
+                            "currency": "EUR",
+                            "principal": "22",
+                            "fee_detail": {
+                                "amount": "",
+                                "cost_type": 0,
+                                "currency": ""
+                            },
+                            "operator": "system",
+                            "txn_hash": txn_hash,
+                            "money_house_account_id": "df5f83a1-0973-11ec-b1e1-82683a56eb1d",
+                            "order_id": ""
+                        }
+                    ]
+            }
+            r = session.request('POST', url='{}/operatorapi/orders/rebalance/create'.format(operateUrl),
+                                data=json.dumps(data),
+                                headers=headers)
+            order_id = r.json()['order_ids'][0]
+            logger.info(order_id)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'order_ids' in r.text, "创建单边pay-in order错误，返回值是{}".format(r.text)
+        with allure.step("创建pay-out order与其匹配"):
+            data = {
+                "orders":
+                    [
+                        {
+                            "value_date": "2021-12-30",
+                            "order_type_enum": 2,
+                            "counterparty_txn_id": generate_string(16),
+                            "money_house_id": "MoneyHouseTypeFTXDGTLT",
+                            "currency": "EUR",
+                            "principal": "22",
+                            "fee_detail": {
+                                "cost_type": 2,
+                                "amount": "3",
+                                "money_house_account_id": "e3fd552b-0faf-11ec-b6ea-a655f054239a",
+                                "cost_txn_id": generate_string(16),
+                                "currency": "EUR",
+                                "value_date": "2021-12-21"
+                            },
+                            "operator": "system",
+                            "txn_hash": txn_hash,
+                            "money_house_account_id": "e3fd552b-0faf-11ec-b6ea-a655f054239a",
+                            "order_id": ""
+                        },
+                        {
+                            "order_id": order_id
+                        }
+                    ]
+            }
+            r = session.request('POST', url='{}/operatorapi/orders/rebalance/create'.format(operateUrl),
+                                data=json.dumps(data),
+                                headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'order_ids' in r.text, "创建单边pay-out order错误，返回值是{}".format(r.text)
+
+    @allure.title('test_rebalance_008')
+    @allure.description('创建单边pay-out order后再创建pay-in order匹配')
+    def test_rebalance_008(self):
+        txn_hash = generate_string(16)
+        with allure.step("创建单边pay-out order后再创建pay-in order匹配"):
+            data = {
+                "orders":
+                    [
+                        {
+                            "value_date": "2021-12-30",
+                            "order_type_enum": 2,
+                            "counterparty_txn_id": generate_string(16),
+                            "money_house_id": "MoneyHouseTypeTransactiveDGTLT",
+                            "currency": "EUR",
+                            "principal": "33",
+                            "fee_detail": {
+                                "cost_type": 2,
+                                "amount": "3",
+                                "money_house_account_id": "e3fd552b-0faf-11ec-b6ea-a655f054239a",
+                                "cost_txn_id": generate_string(16),
+                                "currency": "EUR",
+                                "value_date": "2021-12-21"
+                            },
+                            "operator": "system",
+                            "txn_hash": txn_hash,
+                            "money_house_account_id": "df5f83a1-0973-11ec-b1e1-82683a56eb1d",
+                            "order_id": ""
+                        }
+                    ]
+            }
+            r = session.request('POST', url='{}/operatorapi/orders/rebalance/create'.format(operateUrl),
+                                data=json.dumps(data),
+                                headers=headers)
+            order_id = r.json()['order_ids'][0]
+            logger.info(order_id)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'order_ids' in r.text, "创建单边pay-in order错误，返回值是{}".format(r.text)
+        with allure.step("创建pay-out order与其匹配"):
+            data = {
+                "orders":
+                    [
+                        {
+                            "value_date": "2021-12-30",
+                            "order_type_enum": 1,
+                            "counterparty_txn_id": generate_string(16),
+                            "money_house_id": "MoneyHouseTypeFTXDGTLT",
+                            "currency": "EUR",
+                            "principal": "33",
+                            "fee_detail": {
+                                "amount": "",
+                                "cost_type": 0,
+                                "currency": ""
+                            },
+                            "operator": "system",
+                            "txn_hash": txn_hash,
+                            "money_house_account_id": "e3fd552b-0faf-11ec-b6ea-a655f054239a",
+                            "order_id": ""
+                        },
+                        {
+                            "order_id": order_id
+                        }
+                    ]
+            }
+            r = session.request('POST', url='{}/operatorapi/orders/rebalance/create'.format(operateUrl),
+                                data=json.dumps(data),
+                                headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert 'order_ids' in r.text, "创建单边pay-out order错误，返回值是{}".format(r.text)
+
+    @allure.title('test_rebalance_009')
+    @allure.description('查询fx order')
+    def test_rebalance_009(self):
         with allure.step("查询fx order"):
             data = {
                 "pagination_request": {
@@ -277,9 +437,9 @@ class TestRebalanceApi:
         with allure.step("校验返回值"):
             assert 'orders' in r.text, "查询order错误，返回值是{}".format(r.text)
 
-    @allure.title('test_rebalance_008')
+    @allure.title('test_rebalance_010')
     @allure.description('创建fx order')
-    def test_rebalance_008(self):
+    def test_rebalance_010(self):
         with allure.step("创建fx order"):
             data = {
                 "fx_buy": {
