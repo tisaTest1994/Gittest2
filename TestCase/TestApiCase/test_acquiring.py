@@ -29,7 +29,7 @@ class TestAcquiringApi:
     def test_acquiring_002(self):
         with allure.step("VND创建收单交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
+                account='yanting.huang+234@cabital.com')
             with allure.step("VND法币acquiring信息"):
                 data = {
                     "amount": "20000",

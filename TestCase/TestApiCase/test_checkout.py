@@ -94,7 +94,6 @@ class TestCheckoutApi:
             buy_crypto_currency.sort()
             assert buy_crypto_currency == buy_crypto_currency_original, '币种默认排序错误，接口返回为{}'.format(buy_crypto_currency)
 
-
     @allure.title('test_check_out_004')
     @allure.description('获取报价')
     def test_check_out_004(self):
@@ -347,7 +346,7 @@ class TestCheckoutApi:
                 "billing_address": {
                     "country_code": "CN",
                     "state": "",
-                    "city": "",
+                    "city": "shanghai",
                     "post_code": "210000",
                     "address_line_1": "Shanghai",
                     "address_line_2": "Shab"
@@ -406,14 +405,15 @@ class TestCheckoutApi:
                     "bin": "424242",
                     "card_type": "Credit",
                     "issuer": "JPMORGAN CHASE BANK NA",
-                    "issuer_country": "US"
+                    "issuer_country": "US",
+                    "cvv": "100"
                 },
                 "bind_card": True,
                 "card_holder_name": "yilei Wan",
                 "billing_address": {
                     "country_code": "CN",
                     "state": "",
-                    "city": "",
+                    "city": "shanghai",
                     "post_code": "210000",
                     "address_line_1": "Shanghai",
                     "address_line_2": "Shab"
@@ -490,17 +490,18 @@ class TestCheckoutApi:
                                 "bin": "424242",
                                 "card_type": "Credit",
                                 "issuer": "JPMORGAN CHASE BANK NA",
-                                "issuer_country": "US"
+                                "issuer_country": "US",
+                                "cvv": "100"
                             },
                             "bind_card": True,
                             "card_holder_name": "yilei Wan",
                             "billing_address": {
                                 "country_code": "CN",
                                 "state": "",
-                                "city": "",
+                                "city": "shanghai",
                                 "post_code": "210000",
-                                "address_line_1": "Shanghai",
-                                "address_line_2": "Shab"
+                                "street_line_1": "Shanghai",
+                                "street_line_2": "Shab"
                             },
                             "nonce": generate_string(30)
                         }
@@ -589,7 +590,7 @@ class TestCheckoutApi:
                 "billing_address": {
                     "country_code": "CN",
                     "state": "",
-                    "city": "",
+                    "city": "shanghai",
                     "post_code": "210000",
                     "address_line_1": "Shanghai",
                     "address_line_2": "Shab"
@@ -700,7 +701,7 @@ class TestCheckoutApi:
                 "billing_address": {
                     "country_code": "CN",
                     "state": "",
-                    "city": "",
+                    "city": "shanghai",
                     "post_code": "210000",
                     "address_line_1": "Shanghai",
                     "address_line_2": "Shab"
@@ -825,7 +826,7 @@ class TestCheckoutApi:
                 "billing_address": {
                     "country_code": "CN",
                     "state": "",
-                    "city": "",
+                    "city": "shanghai",
                     "post_code": "210000",
                     "address_line_1": "Shanghai",
                     "address_line_2": "Shab"
@@ -962,10 +963,10 @@ class TestCheckoutApi:
                             "billing_address": {
                                 "country_code": "CN",
                                 "state": "",
-                                "city": "",
+                                "city": "shanghai",
                                 "post_code": "210000",
-                                "address_line_1": "Shanghai",
-                                "address_line_2": "Shab"
+                                "street_line_1": "Shanghai",
+                                "street_line_2": "Shab"
                             },
                             "nonce": generate_string(30),
                             "check_amount": True
@@ -1062,10 +1063,10 @@ class TestCheckoutApi:
                             "billing_address": {
                                 "country_code": "CN",
                                 "state": "",
-                                "city": "",
+                                "city": "shanghai",
                                 "post_code": "210000",
-                                "address_line_1": "Shanghai",
-                                "address_line_2": "Shab"
+                                "street_line_1": "Shanghai",
+                                "street_line_2": "Shab"
                             },
                             "nonce": generate_string(30),
                             "check_amount": True
