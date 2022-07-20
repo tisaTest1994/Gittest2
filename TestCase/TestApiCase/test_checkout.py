@@ -87,13 +87,13 @@ class TestCheckoutApi:
             for i in range(0, len(payment_currencies)):
                 buy_crypto_currency.append(payment_currencies[i]['code'])
         with allure.step("检查默认币种是否是EUR"):
-            sleep(2)
             assert buy_crypto_currency[0] == 'EUR', '无成功的buy的交易，默认币种错误，接口返回为{}'.format(buy_crypto_currency[0])
         with allure.step("除去EUR，其他币种按a-z排序"):
             buy_crypto_currency.remove(buy_crypto_currency[0])
             buy_crypto_currency_original = copy.copy(buy_crypto_currency)
             buy_crypto_currency.sort()
             assert buy_crypto_currency == buy_crypto_currency_original, '币种默认排序错误，接口返回为{}'.format(buy_crypto_currency)
+
 
     @allure.title('test_check_out_004')
     @allure.description('获取报价')
@@ -733,7 +733,7 @@ class TestCheckoutApi:
             assert buy_pair + ':BuyTxn' in r3.json()["quote"]['id']
 
     @allure.title('test_check_out_018')
-    # @pytest.mark.skip(reason='要打开浏览器验证3ds，测试机上不能完成，仅可本地验证')
+    @pytest.mark.skip(reason='要打开浏览器验证3ds，测试机上不能完成，仅可本地验证')
     @allure.description('创建数字货币购买交易-payment with card完成交易后，同payment with的卡，显示同上一笔成功的buy的货币对')
     def test_check_out_018(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+16@cabital.com',
