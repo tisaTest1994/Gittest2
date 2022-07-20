@@ -466,27 +466,26 @@ class ApiFunction:
     # 收取邮箱验证码，只收取
     @staticmethod
     def get_email_code(type):
-        sleep(20)
         sleep_time = 0
         while sleep_time < 10:
             email_info = get_email()
             if type == 'REGISTRY':
                 if get_json(file='multiple_languages_email.json')['EM001'] in email_info['title']:
-                    sleep_time == 20
+                    break
             elif type == 'FORGET_PASSWORD':
                 if get_json(file='multiple_languages_email.json')['EM007'] in email_info['title']:
-                    sleep_time == 20
+                    break
             elif type == 'ENABLE_MFA':
                 if get_json(file='multiple_languages_email.json')['EM014'] in email_info['title']:
-                    sleep_time == 20
+                    break
             elif type == 'DISABLE_MFA':
                 if get_json(file='multiple_languages_email.json')['EM016'] in email_info['title']:
-                    sleep_time == 20
+                    break
             elif type == 'MFA_EMAIL':
                 if get_json(file='multiple_languages_email.json')['EM011'] in email_info['title']:
-                    sleep_time == 20
+                    break
             sleep_time = sleep_time + 5
-            sleep(5)
+            sleep(10)
         code = str(email_info['body']).split('"code":')[1].split('"')[1]
         return code
 
