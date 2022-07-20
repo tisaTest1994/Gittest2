@@ -900,7 +900,7 @@ class TestCheckoutApi:
         with allure.step("币种兑选择"):
             pairs = ApiFunction.get_buy_crypto_currency(type='all')
         for z in pairs:
-            for x in get_json()['checkOutAreaList2']:
+            for x in get_json()['checkOutAreaList']:
                 with allure.step("创建数字货币购买交易信息，ccy 是buy"):
                     with allure.step("get token"):
                         data = {
