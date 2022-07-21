@@ -466,27 +466,26 @@ class ApiFunction:
     # 收取邮箱验证码，只收取
     @staticmethod
     def get_email_code(type):
-        sleep(20)
         sleep_time = 0
         while sleep_time < 10:
             email_info = get_email()
             if type == 'REGISTRY':
                 if get_json(file='multiple_languages_email.json')['EM001'] in email_info['title']:
-                    sleep_time == 20
+                    break
             elif type == 'FORGET_PASSWORD':
                 if get_json(file='multiple_languages_email.json')['EM007'] in email_info['title']:
-                    sleep_time == 20
+                    break
             elif type == 'ENABLE_MFA':
                 if get_json(file='multiple_languages_email.json')['EM014'] in email_info['title']:
-                    sleep_time == 20
+                    break
             elif type == 'DISABLE_MFA':
                 if get_json(file='multiple_languages_email.json')['EM016'] in email_info['title']:
-                    sleep_time == 20
+                    break
             elif type == 'MFA_EMAIL':
                 if get_json(file='multiple_languages_email.json')['EM011'] in email_info['title']:
-                    sleep_time == 20
+                    break
             sleep_time = sleep_time + 5
-            sleep(5)
+            sleep(10)
         code = str(email_info['body']).split('"code":')[1].split('"')[1]
         return code
 
@@ -811,11 +810,13 @@ class ApiFunction:
         r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
         payment_currencies = r.json()['payment_currencies']
         buy_crypto_currency = []
+        buy_crypto_currency_random = []
         for i in range(0, len(payment_currencies)):
             buy_crypto_currency.append('USDT-{}'.format(payment_currencies[i]['code']))
         if type == 'random':
             j = random.randint(0, len(buy_crypto_currency))
-            return buy_crypto_currency[j]
+            buy_crypto_currency_random.append(buy_crypto_currency[j])
+            return buy_crypto_currency_random
         else:
             return buy_crypto_currency
 
@@ -855,11 +856,12 @@ class ApiFunction:
                         total_spend_amount = Decimal(amount)
                         service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
                         spend_amount = (total_spend_amount * Decimal(1 - 0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
-                        buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        buy_amount = (spend_amount / Decimal(quote))
                     else:
                         total_spend_amount = Decimal(amount)
                         service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.000000'), ROUND_FLOOR)
-                        spend_amount = (total_spend_amount * Decimal(1 - 0.0375)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        spend_amount = (total_spend_amount * Decimal(1 - 0.0375))
+
                         buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
             else:
                 with allure.step("判断地区"):

@@ -882,17 +882,13 @@ class TestPayoutCashAbnormalApi:
                 "sort_code": "040541"
             }
             with allure.step("确认GBP法币提现交易(提现金额小于最小金额or大于最大金额)"):
-                code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-                mfaVerificationCode = get_mfa_code()
-                headers['X-Mfa-Otp'] = str(mfaVerificationCode)
-                headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
                                     headers=headers)
-                with allure.step("校验状态码"):
-                    assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
                     if i == amount_list[0]:
                         assert r.json()['code'] == '103001', "确认GBP法币提现交易-(提现金额小于最小金额)返回值错误，当前返回值是{}".format(
@@ -907,11 +903,11 @@ class TestPayoutCashAbnormalApi:
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                      headers=headers)
-                with allure.step("校验状态码"):
-                    assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r2.status_code)))
                     logger.info('返回值是{}'.format(str(r2.text)))
+                with allure.step("校验状态码"):
+                    assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
                     if i == amount_list[0]:
                         assert r2.json()['code'] == '103001', "创建GBP法币提现交易-(提现金额小于最小金额)返回值错误，当前返回值是{}".format(r2.text)
@@ -965,8 +961,7 @@ class TestPayoutCashAbnormalApi:
     @allure.description('确认&创建GBP法币提现交易-错误account_number')
     def test_payout_cash_abnormal_020(self):
         with allure.step("法币提现交易-错误account_number"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
             data = {
                 "code": "GBP",
                 "amount": '25',
@@ -983,12 +978,8 @@ class TestPayoutCashAbnormalApi:
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验状态码"):
                     assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                with allure.step("状态码和返回值"):
-                    logger.info('状态码是{}'.format(str(r.status_code)))
-                    logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验返回值"):
-                    assert r.json()['code'] == '103024',\
-                        "确认GBP法币提现交易-错误account_number返回值错误，接口返回值是{}".format(r.text)
+                    assert r.json()['code'] == '103024', "确认GBP法币提现交易-错误account_number返回值错误，接口返回值是{}".format(r.text)
             with allure.step("创建GBP法币提现交易-错误account_number"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
                 mfaVerificationCode = get_mfa_code()
@@ -1001,8 +992,7 @@ class TestPayoutCashAbnormalApi:
                 with allure.step("校验状态码"):
                     assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
-                    assert r2.json()['code'] == '103024',\
-                        "创建GBP法币提现交易-错误account_number返回值错误，接口返回值是{}".format(r2.text)
+                    assert r2.json()['code'] == '103024', "创建GBP法币提现交易-错误account_number返回值错误，接口返回值是{}".format(r2.text)
 
     @allure.title('test_payout_cash_abnormal_021')
     @allure.description('确认&创建GBP法币提现交易-错误sort_code')
@@ -1290,8 +1280,7 @@ class TestPayoutCashAbnormalApi:
     @allure.description('确认&创建CHF法币提现交易-使用account number(bic格式错误)')
     def test_payout_cash_abnormal_027(self):
         with allure.step("法币提现交易-错误bic"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
             data = {
                 "code": "CHF",
                 "amount": "25",
