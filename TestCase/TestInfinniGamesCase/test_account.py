@@ -14,7 +14,7 @@ class TestAccountApi:
             headers['locale'] = 'zh-TW'
 
     # @allure.title('test_account_001')
-    # @allure.description('partner unlink')
+    # @allure.description('partner unlink(改account_vid)')
     # def test_account_001(self):
     #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='test1027@163.com',password ='Zcdsw123')
     #     partner_id = get_json()["infinni_games"]["partner_id"]
@@ -86,7 +86,7 @@ class TestAccountApi:
                 assert r.json()['email'] == 'zcdsw@sina.com', "获取infinni games账号信息错误,返回值是{}".format(r.text)
 
     # @allure.title('test_account_005')
-    # @allure.description('cabital unlink解绑成功')
+    # @allure.description('cabital unlink解绑成功（改account_vid）')
     # def test_account_005(self):
     #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='test1027@163.com')
     #     partner_id = get_json()["infinni_games"]["partner_id"]
@@ -102,7 +102,7 @@ class TestAccountApi:
     #             assert r.json()['link_status'] == 3, "http 状态码不对，目前状态码是{}".format(r.json()['link_status'])
     #
     # @allure.title('test_account_006')
-    # @allure.description('cabital 单一用户link成功')
+    # @allure.description('cabital 单一用户link成功（改account&uid）')
     # def test_account_006(self):
     #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='test1027@163.com')
     #     partner_id = get_json()["infinni_games"]["partner_id"]

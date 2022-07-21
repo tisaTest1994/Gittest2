@@ -222,16 +222,21 @@ class TestTransferApi:
             r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                 data=json.dumps(data), headers=headers)
             logger.info('r.json返回值是{}'.format(r.json()))
-        with allure.step('获得transfer后币种balance数量'):
-            transfer_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=data['symbol'])
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['transfer_id'] is not None, '划转失败，返回值是{}'.format(r.text)
-        with allure.step("校验transfer前后的可用balance数量"):
-            assert Decimal(transfer_amount_wallet_balance_old) + Decimal(data['amount']) == Decimal(
-                transfer_amount_wallet_balance_latest), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(
-                transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest)
+        if "PA043" not in r.text:
+            with allure.step('获得transfer后币种balance数量'):
+                transfer_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=data['symbol'])
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['transfer_id'] is not None, '划转失败，返回值是{}'.format(r.text)
+            with allure.step("校验transfer前后的可用balance数量"):
+                assert Decimal(transfer_amount_wallet_balance_old) + Decimal(data['amount']) == Decimal(
+                    transfer_amount_wallet_balance_latest), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(
+                    transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest)
+        else:
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+            logger.info('由于每日限额超额，该笔transfer交易不成功，message是{}'.format(r.json()['message']))
 
     @allure.title('test_transfer_009')
     @allure.description('infinni games申请，先做C+T，把资金从cabital划转到infinni games')
@@ -272,10 +277,15 @@ class TestTransferApi:
                     r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                         data=json.dumps(data), headers=headers)
                     logger.info('r.json返回值是{}'.format(r.json()))
-                with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-                with allure.step("校验返回值"):
-                    assert r.json()['transfer_id'] is not None, '划转失败，返回值是{}'.format(r.text)
+                if "PA043" not in r.text:
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+                    with allure.step("校验返回值"):
+                        assert r.json()['transfer_id'] is not None, '划转失败，返回值是{}'.format(r.text)
+                else:
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+                    logger.info('由于每日限额超额，该笔transfer交易不成功，message是{}'.format(r.json()['message']))
 
     @allure.title('test_transfer_010')
     @allure.description('二笔transfer后balance检查')
@@ -305,13 +315,18 @@ class TestTransferApi:
         with allure.step("transfer"):
             r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                 data=json.dumps(data), headers=headers)
-        with allure.step('获得transfer后币种balance数量'):
-            transfer_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=data['symbol'])
-            logger.info('transfer_amount_wallet_balance_latest的值是{}'.format(transfer_amount_wallet_balance_latest))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验transfer前后的可用balance数量"):
-            assert Decimal(transfer_amount_wallet_balance_old) - Decimal(data['amount']) == Decimal(transfer_amount_wallet_balance_latest), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest)
+        if "PA043" not in r.text:
+            with allure.step('获得transfer后币种balance数量'):
+                transfer_amount_wallet_balance_latest = ApiFunction.get_crypto_number(type=data['symbol'])
+                logger.info('transfer_amount_wallet_balance_latest的值是{}'.format(transfer_amount_wallet_balance_latest))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验transfer前后的可用balance数量"):
+                assert Decimal(transfer_amount_wallet_balance_old) - Decimal(data['amount']) == Decimal(transfer_amount_wallet_balance_latest), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest)
+        else:
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+            logger.info('由于每日限额超额，该笔transfer交易不成功，message是{}'.format(r.json()['message']))
         with allure.step("获得otp"):
             mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
         with allure.step("获得data"):
@@ -339,19 +354,24 @@ class TestTransferApi:
         with allure.step("transfer"):
             r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                 data=json.dumps(data), headers=headers)
-        with allure.step('获得transfer后币种balance数量'):
-            transfer_amount_wallet_balance_latest2 = ApiFunction.get_crypto_number(type=data['symbol'])
-            logger.info('transfer_amount_wallet_balance_latest2的值是{}'.format(transfer_amount_wallet_balance_latest2))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验第2笔transfer前后的可用balance数量"):
-            assert Decimal(transfer_amount_wallet_balance_latest2) == Decimal(
-                transfer_amount_wallet_balance_old2) + Decimal(amount1), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(
-                transfer_amount_wallet_balance_old2, transfer_amount_wallet_balance_latest2)
-        with allure.step("总校验2笔transfer前后的可用balance数量"):
-            assert Decimal(transfer_amount_wallet_balance_old) - Decimal(amount) == Decimal(
-                transfer_amount_wallet_balance_latest2) - Decimal(amount1), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(
-                transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest2)
+        if "PA043" not in r.text:
+            with allure.step('获得transfer后币种balance数量'):
+                transfer_amount_wallet_balance_latest2 = ApiFunction.get_crypto_number(type=data['symbol'])
+                logger.info('transfer_amount_wallet_balance_latest2的值是{}'.format(transfer_amount_wallet_balance_latest2))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验第2笔transfer前后的可用balance数量"):
+                assert Decimal(transfer_amount_wallet_balance_latest2) == Decimal(
+                    transfer_amount_wallet_balance_old2) + Decimal(amount1), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(
+                    transfer_amount_wallet_balance_old2, transfer_amount_wallet_balance_latest2)
+            with allure.step("总校验2笔transfer前后的可用balance数量"):
+                assert Decimal(transfer_amount_wallet_balance_old) - Decimal(amount) == Decimal(
+                    transfer_amount_wallet_balance_latest2) - Decimal(amount1), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(
+                    transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest2)
+        else:
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+            logger.info('由于每日限额超额，该笔transfer交易不成功，message是{}'.format(r.json()['message']))
 
     @allure.title('test_transfer_011')
     @allure.description('对账 - 划转交易详情使用正确的external_id')

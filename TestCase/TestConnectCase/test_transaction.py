@@ -35,29 +35,35 @@ class TestTransactionApi:
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("把数字货币从cabital转移到bybit账户"):
             r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
-                                                url='/api/v1/recon/transfers/{}'.format(external_id),
-                                                nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
-        with allure.step("查询转账记录"):
-            r = session.request('GET', url='{}/recon/transfers/{}'.format(self.url, external_id), headers=connect_headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['external_id'] == external_id, "查询转账记录错误，返回值是{}".format(r.text)
+            logger.info('r.json返回值是:{}'.format(r.json()))
+        if "PA043" not in r.text:
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("验签"):
+                unix_time = int(time.time())
+                nonce = generate_string(30)
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                    url='/api/v1/recon/transfers/{}'.format(external_id),
+                                                    nonce=nonce)
+                connect_headers['ACCESS-SIGN'] = sign
+                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                connect_headers['ACCESS-NONCE'] = nonce
+            with allure.step("查询转账记录"):
+                r = session.request('GET', url='{}/recon/transfers/{}'.format(self.url, external_id), headers=connect_headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['external_id'] == external_id, "查询转账记录错误，返回值是{}".format(r.text)
+        else:
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+            logger.info('由于每日限额超额，该笔transfer交易不成功，message是{}'.format(r.json()['message']))
 
     @allure.title('test_transaction_002')
     @allure.description('对账 - 划转交易详情使用无效external_id')
