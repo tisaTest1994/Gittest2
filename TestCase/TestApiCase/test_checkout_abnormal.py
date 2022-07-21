@@ -849,7 +849,7 @@ class TestCheckoutApi:
         with allure.step("校验状态码"):
             assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
         with allure.step("校验返回值"):
-            assert r2.json()['code'] == '101038', '创建数字货币购买交易-payment with token，接口返回值为{}'.format(r2.json()['code'])
+            assert r2.json()['code'] == '101046', '创建数字货币购买交易-payment with token，接口返回值为{}'.format(r2.json()['code'])
 
     @allure.title('test_check_out_abnormal_015')
     @allure.description('创建数字货币购买交易-payment with token，country为空(应不为空)')
