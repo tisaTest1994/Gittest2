@@ -78,8 +78,6 @@ class TestCheckoutApi:
     @allure.description('无成功的buy的交易，检查默认币种对及排序')
     def test_check_out_003(self):
         with allure.step("打开数字货币购买画面"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account='yanting.huang+18@cabital.com')
             r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
         with allure.step("把返回的币种放入列表中"):
             payment_currencies = r.json()['payment_currencies']
