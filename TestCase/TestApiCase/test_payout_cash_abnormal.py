@@ -305,11 +305,11 @@ class TestPayoutCashAbnormalApi:
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                      headers=headers)
-                with allure.step("校验状态码"):
-                    assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r2.status_code)))
                     logger.info('返回值是{}'.format(str(r2.text)))
+                with allure.step("校验状态码"):
+                    assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
                     if i == amount_list[0]:
                         assert r2.json()['code'] == '103001', "创建BRL-PIX—CPF法币提现交易-(提现金额小于最小金额)返回值错误，当前返回值是{}".format(r2.text)
