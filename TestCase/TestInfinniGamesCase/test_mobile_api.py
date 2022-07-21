@@ -30,7 +30,7 @@ class TestMobileApi:
                 assert r.json()['configs'] is not None, "获取合作方配置错误，返回值是{}".format(r.text)
 
     @allure.title('test_mobile_002')
-    @allure.description('获取合作方配置-(传入部分参数)')
+    @allure.description('获取合作方划转交易配置- (传入部分参数)')
     def test_mobile_002(self):
         with allure.step("获取合作方配置"):
             partner_id = get_json()['infinni_games']['partner_id']

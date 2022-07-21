@@ -43,7 +43,10 @@ class TestWidgetApi:
                 'user_ext_ref': '988518746672869376',
                 'partner_key': '07c9297b-65f1-4e16-a0bd-ff6889e386de',
                 'feature': feature,
-                'device_type': 'app'
+                'device_type': 'app',
+                'major_ccy': '',
+                'txn_id': ''
+
             }
             with allure.step("验签"):
                 sign = ApiFunction.infinni_games_access_sign(
