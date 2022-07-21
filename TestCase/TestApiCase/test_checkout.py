@@ -339,7 +339,8 @@ class TestCheckoutApi:
                     "bin": "424242",
                     "card_type": "Credit",
                     "issuer": "JPMORGAN CHASE BANK NA",
-                    "issuer_country": "US"
+                    "issuer_country": "US",
+                    "cvv": "100"
                 },
                 "bind_card": True,
                 "card_holder_name": "yilei Wan",
@@ -348,14 +349,16 @@ class TestCheckoutApi:
                     "state": "",
                     "city": "shanghai",
                     "post_code": "210000",
-                    "address_line_1": "Shanghai",
-                    "address_line_2": "Shab"
+                    "street_line_1": "Shanghai",
+                    "street_line_2": "Shab"
                 },
                 "nonce": generate_string(30),
             }
         with allure.step("创建数字货币购买交易-payment with card"):
             r2 = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("校验状态码"):
+            logger.info('状态码是{}'.format(str(r2.status_code)))
+            logger.info('返回值是{}'.format(str(r2.text)))
             assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r2.status_code)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r2.status_code)))
@@ -415,8 +418,8 @@ class TestCheckoutApi:
                     "state": "",
                     "city": "shanghai",
                     "post_code": "210000",
-                    "address_line_1": "Shanghai",
-                    "address_line_2": "Shab"
+                    "street_line_1": "Shanghai",
+                    "street_line_2": "Shab"
                 },
                 "nonce": generate_string(30),
                 "check_amount": False
