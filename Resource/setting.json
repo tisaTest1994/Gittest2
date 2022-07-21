@@ -518,5 +518,17 @@
   },
   "EAList": ["BG", "HR", "CZ", "DK", "AT", "BE", "CY", "EE", "FI", "FR", "DE", "GR", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PT", "SK", "SI", "ES", "RO", "NO", "SE", "PL"],
   "checkOutAreaList": ["US", "EG", "ZA", "TH", "VN", "HK", "MY", "TW", "SG", "LK", "KR", "JP", "AU", "NZ", "BG", "HR", "CZ", "DK", "AT", "BE", "CY", "EE", "FI", "FR", "DE", "GR", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PT", "SK", "SI", "ES", "RO", "NO", "GB", "SE", "PL", "BR", "CL", "CO", "MX", "PE", "CL", "KW", "IL", "OM", "AE", "CA"],
-  "checkOutAreaList2":["US", "EG", "ZA", "DE"]
+  "checkOutAreaList2":["US", "EG", "ZA", "DE"],
+  "cfx_service_charge": {
+    "CHF": 0.01,
+    "BRL": 0.01,
+    "VND": 0.025,
+    "Other": 0.008
+  },
+  "check_out_cfx_service_charge": {
+    "EUR": 0.005,
+    "GBP": 0.005,
+    "USD": 0.005,
+    "Other": 0.00249
+  }
 }
