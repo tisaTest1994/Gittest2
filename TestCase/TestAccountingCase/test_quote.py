@@ -22,13 +22,21 @@ class TestQuoteApi:
                 logger.info('sql命令是{}'.format(sql))
                 quote = (sqlFunction().connect_mysql('pricing', sql=sql))[0]
                 logger.info('汇率list是{}'.format(quote))
+                service_charge_type = 0
                 with allure.step("获取需要增加的汇率"):
                     for y in (get_json()['cfx_service_charge']).keys():
                         if y in i:
                             service_charge = get_json()['cfx_service_charge'][y]
                             assert (Decimal(quote['original_bid']) * Decimal(str(1 - service_charge))).quantize(Decimal('0.00'), ROUND_FLOOR) == Decimal(quote['bid']).quantize(Decimal('0.00'), ROUND_FLOOR), '校验cfx汇率增加的浮点错误，original_bid是{}, bid是{}, pair是{}'.format(quote['original_bid'], quote['bid'], i)
-                        else:
-                            service_charge = get_json()['cfx_service_charge']['Other']
-                            assert (Decimal(quote['original_bid']) * Decimal(str(1 - service_charge))).quantize(Decimal('0.00'), ROUND_FLOOR) == Decimal(quote['bid']).quantize(Decimal('0.00'), ROUND_FLOOR), '校验cfx汇率增加的浮点错误，original_bid是{}, bid是{}, pair是{}'.format(quote['original_bid'], quote['bid'], i)
+                            service_charge_type = 1
+                    if service_charge_type == 0:
+                        service_charge = get_json()['cfx_service_charge']['Other']
+                        assert (Decimal(quote['original_bid']) * Decimal(str(1 - service_charge))).quantize(
+                            Decimal('0.00'),
+                            ROUND_FLOOR) == Decimal(
+                            quote['bid']).quantize(Decimal('0.00'),
+                                                   ROUND_FLOOR), '校验cfx汇率增加的浮点错误，original_bid是{}, bid是{}, pair是{}'.format(
+                            quote['original_bid'], quote['bid'], i)
+
 
 
