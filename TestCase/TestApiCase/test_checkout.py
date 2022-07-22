@@ -595,8 +595,8 @@ class TestCheckoutApi:
                     "state": "",
                     "city": "shanghai",
                     "post_code": "210000",
-                    "address_line_1": "Shanghai",
-                    "address_line_2": "Shab"
+                    "street_line_1": "Shanghai",
+                    "street_line_2": "Shab"
                 },
                 "nonce": generate_string(30)
             }
@@ -706,8 +706,8 @@ class TestCheckoutApi:
                     "state": "",
                     "city": "shanghai",
                     "post_code": "210000",
-                    "address_line_1": "Shanghai",
-                    "address_line_2": "Shab"
+                    "street_line_1": "Shanghai",
+                    "street_line_2": "Shab"
                 },
                 "nonce": generate_string(30),
                 "check_amount": False
@@ -831,8 +831,8 @@ class TestCheckoutApi:
                     "state": "",
                     "city": "shanghai",
                     "post_code": "210000",
-                    "address_line_1": "Shanghai",
-                    "address_line_2": "Shab"
+                    "street_line_1": "Shanghai",
+                    "street_line_2": "Shab"
                 },
                 "nonce": generate_string(30),
                 "check_amount": False
