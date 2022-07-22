@@ -71,6 +71,7 @@ class TestQuoteApi:
                             service_charge_type = 1
                     if service_charge_type == 0:
                         service_charge = get_json()['check_out_cfx_service_charge']['Other']
+                        print(Decimal(str(1 - service_charge)))
                         assert (Decimal(quote['original_bid']) * Decimal(str(1 - service_charge))).quantize(
                             Decimal('0.00'),
                             ROUND_FLOOR) == Decimal(
