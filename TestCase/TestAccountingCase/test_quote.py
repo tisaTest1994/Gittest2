@@ -21,6 +21,7 @@ class TestQuoteApi:
                 sql = "select bid, ask, original_bid, original_ask from quote_{} where pair = '{}' and purpose = 'Customer' limit 1;".format(day_time, i)
                 logger.info('sql命令是{}'.format(sql))
                 quote = (sqlFunction().connect_mysql('pricing', sql=sql))[0]
+                logger.info('汇率list是{}'.format(quote))
                 with allure.step("获取需要增加的汇率"):
                     for y in (get_json()['cfx_service_charge']).keys():
                         if y in i:
