@@ -420,4 +420,19 @@ class TestTransferAbnormalApi:
         with allure.step("校验返回值"):
             assert r.json()['code'] == 'PA030', "对账 - 划转交易详情使用external_id错误，返回值是{}".format(r.text)
 
-
+    @allure.title('test_transfer_010')
+    @allure.description('基于账户获取划转列表（传入错误的account_id/account_vid,返回403）')
+    def test_transfer_010(self):
+        with allure.step("测试用户的account_id"):
+            account_id = '9777dcc37-fb9f-40fc-af2833a362222312'
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/accounts/{}/transfers'.format(account_id), key='infinni games', nonce=nonce)
+            headers['ACCESS-SIGN'] = sign
+            headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            headers['ACCESS-NONCE'] = nonce
+        with allure.step("把数字货币从cabital转移到bybit账户"):
+            r = session.request('GET', url='{}/accounts/{}/transfers'.format(self.url, account_id), headers=headers)
+        with allure.step("校验状态码"):
+            assert r.status_code == 403, "http状态码不对，目前状态码是{}".format(r.status_code)
