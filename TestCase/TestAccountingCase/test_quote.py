@@ -26,10 +26,9 @@ class TestQuoteApi:
                     for y in (get_json()['cfx_service_charge']).keys():
                         if y in i:
                             service_charge = get_json()['cfx_service_charge'][y]
-                            assert (Decimal(quote['original_bid']) * Decimal(1 - service_charge).quantize(Decimal('0.00000'), ROUND_FLOOR)).quantize(Decimal('0.00'), ROUND_FLOOR) == Decimal(quote['bid']).quantize(Decimal('0.00'), ROUND_FLOOR), '校验cfx汇率增加的浮点错误，original_bid是{}, bid是{}, pair是{}'.format(quote['original_bid'], quote['bid'], i)
+                            assert (Decimal(quote['original_bid']) * Decimal(str(1 - service_charge))).quantize(Decimal('0.00'), ROUND_FLOOR) == Decimal(quote['bid']).quantize(Decimal('0.00'), ROUND_FLOOR), '校验cfx汇率增加的浮点错误，original_bid是{}, bid是{}, pair是{}'.format(quote['original_bid'], quote['bid'], i)
                         else:
                             service_charge = get_json()['cfx_service_charge']['Other']
-                            print(Decimal(str(1 - service_charge)).quantize(Decimal('0.00000'), ROUND_FLOOR))
-                            assert (Decimal(quote['original_bid']) * Decimal(1 - service_charge).quantize(Decimal('0.00000'), ROUND_FLOOR)).quantize(Decimal('0.00'), ROUND_FLOOR) == Decimal(quote['bid']).quantize(Decimal('0.00'), ROUND_FLOOR), '校验cfx汇率增加的浮点错误，original_bid是{}, bid是{}, pair是{}'.format(quote['original_bid'], quote['bid'], i)
+                            assert (Decimal(quote['original_bid']) * Decimal(str(1 - service_charge))).quantize(Decimal('0.00'), ROUND_FLOOR) == Decimal(quote['bid']).quantize(Decimal('0.00'), ROUND_FLOOR), '校验cfx汇率增加的浮点错误，original_bid是{}, bid是{}, pair是{}'.format(quote['original_bid'], quote['bid'], i)
 
 
