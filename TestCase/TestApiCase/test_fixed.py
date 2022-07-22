@@ -223,24 +223,24 @@ class TestFixedApi:
                             transaction_id=r.json()['tx_id'], type='3') == 1, '{}项目错误，购买定期产品失败，返回值是{}'.format(
                             y['product_id'], r.text)
                         assert Decimal(balance_amount_old) - Decimal(data['subscribe_amount']['amount']) == Decimal(
-                            balance_amount_latest), '购买定期产品后钱包余额错误,购买前钱包BTC数量{},购买定期数量{},购买后钱包BTC数量{}'.format(
+                            balance_amount_latest), '购买定期产品后钱包余额错误,购买前钱包ETH数量{},购买定期数量{},购买后钱包ETH数量{}'.format(
                             balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(
-                            saving_amount_latest), '购买定期产品后活期金额错误,购买前活期BTC数量{},购买后活期BTC数量{}'.format(saving_amount_old,
+                            saving_amount_latest), '购买定期产品后活期金额错误,购买前活期ETH数量{},购买后活期ETH数量{}'.format(saving_amount_old,
                                                                                                     saving_amount_latest)
                         assert Decimal(fix_amount_old) + Decimal(data['subscribe_amount']['amount']) == Decimal(
-                            fix_amount_latest), '购买定期产品后定期金额错误,购买前定期BTC数量{},购买定期数量{},购买后定期BTC数量{}'.format(
+                            fix_amount_latest), '购买定期产品后定期金额错误,购买前定期ETH数量{},购买定期数量{},购买后定期ETH数量{}'.format(
                             balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
                 elif i['code'] == 'USDT':
-                    with allure.step("获取购买定期前ETH可用数量"):
+                    with allure.step("获取购买定期前USDT可用数量"):
                         balance_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                            balance_type='BALANCE_TYPE_AVAILABLE',
                                                                            wallet_type='BALANCE')
-                    with allure.step("获取购买定期前ETH购买活期数量"):
+                    with allure.step("获取购买定期前USDT购买活期数量"):
                         saving_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                           balance_type='BALANCE_TYPE_AVAILABLE',
                                                                           wallet_type='SAVING')
-                    with allure.step("获取购买定期前ETH购买定期数量"):
+                    with allure.step("获取购买定期前USDT购买定期数量"):
                         fix_amount_old = ApiFunction.get_crypto_number(type='USDT',
                                                                        balance_type='BALANCE_TYPE_AVAILABLE',
                                                                        wallet_type='SAVING-FIX')
@@ -285,15 +285,14 @@ class TestFixedApi:
                             transaction_id=r.json()['tx_id'], type='3') == 2, '{}项目错误，购买定期产品失败，返回值是{}'.format(
                             y['product_id'], r.text)
                         assert Decimal(balance_amount_old) - Decimal(data['subscribe_amount']['amount']) == Decimal(
-                            balance_amount_latest), '购买定期产品后钱包余额错误,购买前钱包BTC数量{},购买定期数量{},购买后钱包BTC数量{}'.format(
+                            balance_amount_latest), '购买定期产品后钱包余额错误,购买前钱包USDT数量{},购买定期数量{},购买后钱包USDT数量{}'.format(
                             balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
                         assert Decimal(saving_amount_old) == Decimal(
-                            saving_amount_latest), '购买定期产品后活期金额错误,购买前活期BTC数量{},购买后活期BTC数量{}'.format(saving_amount_old,
+                            saving_amount_latest), '购买定期产品后活期金额错误,购买前活期USDT数量{},购买后活期USDT数量{}'.format(saving_amount_old,
                                                                                                     saving_amount_latest)
                         assert Decimal(fix_amount_old) + Decimal(data['subscribe_amount']['amount']) == Decimal(
-                            fix_amount_latest), '购买定期产品后定期金额错误,购买前定期BTC数量{},购买定期数量{},购买后定期BTC数量{}'.format(
+                            fix_amount_latest), '购买定期产品后定期金额错误,购买前定期USDT数量{},购买定期数量{},购买后定期USDT数量{}'.format(
                             balance_amount_old, data['subscribe_amount']['amount'], balance_amount_latest)
-
                 else:
                     assert False, "币种不对，购买定期产品失败。"
 

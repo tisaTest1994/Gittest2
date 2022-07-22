@@ -18,14 +18,14 @@ class TestQuoteApi:
         with allure.step("获取全部换汇币种对"):
             cfx_list = ApiFunction.get_cfx_list()
             for i in cfx_list:
-                # sql = "select bid, ask, original_bid, original_ask from quote_{} where pair = '{}' and purpose = 'Customer' limit 1;".format(day_time, i)
-                # logger.info('sql命令是{}'.format(sql))
-                # quote = sqlFunction().connect_mysql('pricing', sql=sql)
-                # print(quote)
-                with allure.step("获取需要增加的汇率"):
-                    for y in (get_json()['cfx_service_charge']).keys():
-                        if y in i:
-                            print(y)
-                            print(i)
+                sql = "select bid, ask, original_bid, original_ask from quote_{} where pair = '{}' and purpose = 'Customer' limit 1;".format(day_time, i)
+                logger.info('sql命令是{}'.format(sql))
+                quote = sqlFunction().connect_mysql('pricing', sql=sql)
+                print(quote)
+                # with allure.step("获取需要增加的汇率"):
+                #     for y in (get_json()['cfx_service_charge']).keys():
+                #         if y in i:
+                #             print(y)
+                #             print(i)
 
 
