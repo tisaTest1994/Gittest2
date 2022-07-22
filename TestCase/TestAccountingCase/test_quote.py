@@ -1,6 +1,7 @@
 from Function.api_function import *
 from Function.operate_excel import *
 from Function.operate_sql import *
+global service_charge_type
 
 
 @allure.feature("Quote 相关 testcases")
@@ -29,6 +30,8 @@ class TestQuoteApi:
                             service_charge = get_json()['cfx_service_charge'][y]
                             assert (Decimal(quote['original_bid']) * Decimal(str(1 - service_charge))).quantize(Decimal('0.00'), ROUND_FLOOR) == Decimal(quote['bid']).quantize(Decimal('0.00'), ROUND_FLOOR), '校验cfx汇率增加的浮点错误，original_bid是{}, bid是{}, pair是{}'.format(quote['original_bid'], quote['bid'], i)
                             service_charge_type = 1
+                    print(i)
+                    print(service_charge_type)
                     if service_charge_type == 0:
                         service_charge = get_json()['cfx_service_charge']['Other']
                         assert (Decimal(quote['original_bid']) * Decimal(str(1 - service_charge))).quantize(
