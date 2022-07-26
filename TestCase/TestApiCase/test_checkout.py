@@ -867,9 +867,9 @@ class TestCheckoutApi:
                 if i['id'] == token_id:
                     assert i['is_deleted'] is False, '删除绑定的卡，预期参数错误，接口返回{}'.format(i['is_deleted'])
 
-    @allure.title('test_check_out_051')
+    @allure.title('test_check_out_019')
     @allure.description('查询用户使用过的所有卡')
-    def test_check_out_051(self):
+    def test_check_out_019(self):
         with allure.step("查询用户使用过的所有卡"):
             params = {
                 'binding': 'false'
@@ -881,9 +881,9 @@ class TestCheckoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
 
-    @allure.title('test_check_out_052')
+    @allure.title('test_check_out_020')
     @allure.description('删除用户是用过的卡')
-    def test_check_out_052(self):
+    def test_check_out_020(self):
         with allure.step("删除用户是用过的卡"):
             params = {
                 'token_id': 'false'
@@ -896,9 +896,9 @@ class TestCheckoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
 
-    @allure.title('test_check_out_053')
+    @allure.title('test_check_out_021')
     @allure.description('EE用户')
-    def test_check_out_053(self):
+    def test_check_out_021(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+16@cabital.com')
         with allure.step("币种兑选择"):
             pairs = ApiFunction.get_buy_crypto_currency(type='all')
