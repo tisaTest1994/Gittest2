@@ -919,7 +919,7 @@ class TestCheckoutApi:
                                 "city": "London",
                                 "state": "London",
                                 "zip": "W1T 4TJ",
-                                "country": "HK"
+                                "country": x
                             }
                         }
                         headers2 = {
@@ -961,14 +961,14 @@ class TestCheckoutApi:
                             "card": {
                                 "type": 1,
                                 "token": token,
-                                "expiry_month": str(r.json()['expiry_month']),
+                                "expiry_month": '6',
                                 "expiry_year": str(r.json()['expiry_year']),
                                 "scheme": str(r.json()['scheme']),
                                 "last": str(r.json()['last4']),
                                 "bin": str(r.json()['bin']),
                                 "card_type": str(r.json()['card_type']),
                                 "issuer": issuer,
-                                "issuer_country": str(r.json()['issuer_country'])
+                                "issuer_country": x
                             },
                             "bind_card": True,
                             "card_holder_name": "Ting DP319",
@@ -1009,7 +1009,7 @@ class TestCheckoutApi:
                                 "city": "London",
                                 "state": "London",
                                 "zip": "W1T 4TJ",
-                                "country": "HK"
+                                "country": x
                             }
                         }
                         headers2 = {
@@ -1061,14 +1061,14 @@ class TestCheckoutApi:
                             "card": {
                                 "type": 1,
                                 "token": token,
-                                "expiry_month": str(r.json()['expiry_month']),
+                                "expiry_month": '6',
                                 "expiry_year": str(r.json()['expiry_year']),
                                 "scheme": str(r.json()['scheme']),
                                 "last": str(r.json()['last4']),
                                 "bin": str(r.json()['bin']),
                                 "card_type": str(r.json()['card_type']),
                                 "issuer": issuer,
-                                "issuer_country": str(r.json()['issuer_country'])
+                                "issuer_country": x
                             },
                             "bind_card": True,
                             "card_holder_name": "Ting DP319",
