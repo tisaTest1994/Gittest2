@@ -79,7 +79,7 @@ class TestCheckoutApi:
     def test_check_out_003(self):
         with allure.step("打开数字货币购买画面"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account='yanting.huang+18@cabital.com')
+                account='yanting.huang+4@cabital.com')
             r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
         with allure.step("把返回的币种放入列表中"):
             payment_currencies = r.json()['payment_currencies']
@@ -307,6 +307,11 @@ class TestCheckoutApi:
         with allure.step("校验状态码"):
             assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
             token = r.json()['token']
+            dic = json.loads(r.text)
+            if "issuer" in dic.keys():
+                issuer = dic["issuer"]
+            else:
+                issuer = ''
         with allure.step("获取交易数据"):
             crypto_list = ApiFunction.get_buy_crypto_list(100, pairs='USDT-USD', ccy='buy', country='HK')
         with allure.step("创建数字货币购买交易信息"):
@@ -332,15 +337,14 @@ class TestCheckoutApi:
                 "card": {
                     "type": 1,
                     "token": token,
-                    "expiry_month": "4",
-                    "expiry_year": "2044",
-                    "scheme": "Visa",
-                    "last": "4242",
-                    "bin": "424242",
-                    "card_type": "Credit",
-                    "issuer": "JPMORGAN CHASE BANK NA",
-                    "issuer_country": "US",
-                    "cvv": "100"
+                    "expiry_month": str(r.json()['expiry_month']),
+                    "expiry_year": str(r.json()['expiry_year']),
+                    "scheme": str(r.json()['scheme']),
+                    "last": str(r.json()['last4']),
+                    "bin": str(r.json()['bin']),
+                    "card_type": str(r.json()['card_type']),
+                    "issuer": issuer,
+                    "issuer_country": str(r.json()['issuer_country'])
                 },
                 "bind_card": True,
                 "card_holder_name": "yilei Wan",
@@ -579,14 +583,14 @@ class TestCheckoutApi:
                 "card": {
                     "type": 1,
                     "token": token,
-                    "expiry_month": "4",
-                    "expiry_year": "2045",
-                    "scheme": "Visa",
-                    "last": "9996",
-                    "bin": "454347",
-                    "card_type": "Credit",
-                    "issuer": "JPMORGAN CHASE BANK NA",
-                    "issuer_country": "US"
+                    "expiry_month": str(r.json()['expiry_month']),
+                    "expiry_year": str(r.json()['expiry_year']),
+                    "scheme": str(r.json()['scheme']),
+                    "last": str(r.json()['last4']),
+                    "bin": str(r.json()['bin']),
+                    "card_type": str(r.json()['card_type']),
+                    "issuer": str(r.json()['issuer']),
+                    "issuer_country": str(r.json()['issuer_country'])
                 },
                 "bind_card": False,
                 "card_holder_name": "yilei Wan",
@@ -690,14 +694,14 @@ class TestCheckoutApi:
                 "card": {
                     "type": 1,
                     "token": token,
-                    "expiry_month": "4",
-                    "expiry_year": "2045",
-                    "scheme": "Visa",
-                    "last": "9996",
-                    "bin": "454347",
-                    "card_type": "Credit",
-                    "issuer": "JPMORGAN CHASE BANK NA",
-                    "issuer_country": "US"
+                    "expiry_month": str(r.json()['expiry_month']),
+                    "expiry_year": str(r.json()['expiry_year']),
+                    "scheme": str(r.json()['scheme']),
+                    "last": str(r.json()['last4']),
+                    "bin": str(r.json()['bin']),
+                    "card_type": str(r.json()['card_type']),
+                    "issuer": str(r.json()['issuer']),
+                    "issuer_country": str(r.json()['issuer_country'])
                 },
                 "bind_card": False,
                 "card_holder_name": "yilei Wan",
@@ -815,14 +819,14 @@ class TestCheckoutApi:
                 "card": {
                     "type": 1,
                     "token": token,
-                    "expiry_month": "4",
-                    "expiry_year": "2044",
-                    "scheme": "Mastercard",
-                    "last": "6378",
-                    "bin": "543603",
-                    "card_type": "Credit",
-                    "issuer": "JPMORGAN CHASE BANK NA",
-                    "issuer_country": "US"
+                    "expiry_month": str(r.json()['expiry_month']),
+                    "expiry_year": str(r.json()['expiry_year']),
+                    "scheme": str(r.json()['scheme']),
+                    "last": str(r.json()['last4']),
+                    "bin": str(r.json()['bin']),
+                    "card_type": str(r.json()['card_type']),
+                    "issuer": str(r.json()['issuer']),
+                    "issuer_country": str(r.json()['issuer_country'])
                 },
                 "bind_card": True,
                 "card_holder_name": "Ting DP319",
@@ -915,7 +919,7 @@ class TestCheckoutApi:
                                 "city": "London",
                                 "state": "London",
                                 "zip": "W1T 4TJ",
-                                "country": x
+                                "country": "HK"
                             }
                         }
                         headers2 = {
@@ -928,6 +932,11 @@ class TestCheckoutApi:
                         with allure.step("校验状态码"):
                             assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
                             token = r.json()['token']
+                            dic = json.loads(r.text)
+                            if "issuer" in dic.keys():
+                                issuer = dic["issuer"]
+                            else:
+                                issuer = ''
                     while 1 < 2:
                         crypto_list = ApiFunction.get_buy_crypto_list(150, pairs=z, ccy='buy', country=x)
                         data = {
@@ -952,14 +961,14 @@ class TestCheckoutApi:
                             "card": {
                                 "type": 1,
                                 "token": token,
-                                "expiry_month": "6",
-                                "expiry_year": "2025",
-                                "scheme": "Visa",
-                                "last": "4242",
-                                "bin": "424242",
-                                "card_type": "Credit",
-                                "issuer": "JPMORGAN CHASE BANK NA",
-                                "issuer_country": x
+                                "expiry_month": str(r.json()['expiry_month']),
+                                "expiry_year": str(r.json()['expiry_year']),
+                                "scheme": str(r.json()['scheme']),
+                                "last": str(r.json()['last4']),
+                                "bin": str(r.json()['bin']),
+                                "card_type": str(r.json()['card_type']),
+                                "issuer": issuer,
+                                "issuer_country": str(r.json()['issuer_country'])
                             },
                             "bind_card": True,
                             "card_holder_name": "Ting DP319",
@@ -1000,7 +1009,7 @@ class TestCheckoutApi:
                                 "city": "London",
                                 "state": "London",
                                 "zip": "W1T 4TJ",
-                                "country": x
+                                "country": "HK"
                             }
                         }
                         headers2 = {
@@ -1052,14 +1061,14 @@ class TestCheckoutApi:
                             "card": {
                                 "type": 1,
                                 "token": token,
-                                "expiry_month": "6",
-                                "expiry_year": "2025",
-                                "scheme": "Visa",
-                                "last": "4242",
-                                "bin": "424242",
-                                "card_type": "Credit",
-                                "issuer": "JPMORGAN CHASE BANK NA",
-                                "issuer_country": x
+                                "expiry_month": str(r.json()['expiry_month']),
+                                "expiry_year": str(r.json()['expiry_year']),
+                                "scheme": str(r.json()['scheme']),
+                                "last": str(r.json()['last4']),
+                                "bin": str(r.json()['bin']),
+                                "card_type": str(r.json()['card_type']),
+                                "issuer": issuer,
+                                "issuer_country": str(r.json()['issuer_country'])
                             },
                             "bind_card": True,
                             "card_holder_name": "Ting DP319",
