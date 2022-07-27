@@ -188,7 +188,6 @@ class TestTransferApi:
                 assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
             logger.info('由于每日限额超额，该笔transfer交易不成功，message是{}'.format(r.json()['message']))
 
-
     @allure.title('test_transfer_008')
     @allure.description('infinni games申请发起一笔direct credit，把资金从infinni games划转到cabital')
     def test_transfer_008(self):
