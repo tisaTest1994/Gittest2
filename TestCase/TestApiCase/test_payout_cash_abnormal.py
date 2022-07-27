@@ -1287,7 +1287,7 @@ class TestPayoutCashAbnormalApi:
                 "payment_method": "SIC",
                 "account_name": "Richard External QA",
                 "iban": "12345678",
-                "bic": "ZX"
+                "bic": "ZXX"
             }
             with allure.step("确认CHF法币提现交易-使用account number(bic格式错误)"):
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
