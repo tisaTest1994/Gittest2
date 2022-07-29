@@ -118,7 +118,7 @@ class TestTransferApi:
     @allure.title('test_transfer_006')
     @allure.description('基于划转ID获取划转详情')
     def test_transfer_006(self):
-        transfer_id = "4b960cc1-ebf8-4bbc-a8fb-f8549e2d60d8"
+        transfer_id = "4cb097db-7de9-4219-b497-8b0e912e9b9a"
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
@@ -132,7 +132,7 @@ class TestTransferApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['user_ext_ref'] == 'weqw@163.com', '基于划转ID获取划转详情错误，返回值是{}'.format(r.text)
+            assert r.json()['user_ext_ref'] == '979698088019091456', '基于划转ID获取划转详情错误，返回值是{}'.format(r.text)
 
     @allure.title('test_transfer_007')
     @allure.description('infinni games申请direct debit，把资金从cabital划转到infinni games')
@@ -187,7 +187,6 @@ class TestTransferApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
             logger.info('由于每日限额超额，该笔transfer交易不成功，message是{}'.format(r.json()['message']))
-
 
     @allure.title('test_transfer_008')
     @allure.description('infinni games申请发起一笔direct credit，把资金从infinni games划转到cabital')
@@ -376,7 +375,7 @@ class TestTransferApi:
     @allure.title('test_transfer_011')
     @allure.description('对账 - 划转交易详情使用正确的external_id')
     def test_transfer_011(self):
-        external_id = 'fVug0yqnyCJcPRbpgYnilfUPF'
+        external_id = 'NErlo1fEBqCIu78u3DxbWrbqr'
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
@@ -385,8 +384,8 @@ class TestTransferApi:
             headers['ACCESS-SIGN'] = sign
             headers['ACCESS-TIMESTAMP'] = str(unix_time)
             headers['ACCESS-NONCE'] = nonce
-        with allure.step("划转交易详情使用无效external_id"):
-            r = session.request('GET', url='{}recon/transfers/{}'.format(self.url, external_id),headers=headers)
+        with allure.step("划转交易详情使用正确的external_id"):
+            r = session.request('GET', url='{}recon/transfers/{}'.format(self.url, external_id), headers=headers)
             logger.info('r.json的返回值是{}'.format(r.json()))
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
