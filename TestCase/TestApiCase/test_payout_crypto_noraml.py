@@ -208,7 +208,7 @@ class TestPayoutCryptoNormalApi:
     def test_payout_crypto_normal_008(self):
         with allure.step("USDT确认Crypto提现交易"):
             data = {
-                "amount": "20000",
+                "amount": "21000",
                 "code": "USDT",
                 "address": "0xA7185FBEE96B605709D9659894066dF21cc87f05",
                 "method": "ERC20"

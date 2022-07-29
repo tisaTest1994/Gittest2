@@ -523,12 +523,13 @@
     "CHF": 0.01,
     "BRL": 0.01,
     "VND": 0.025,
+    "GBP": 0.0125,
     "Other": 0.008
   },
   "check_out_cfx_service_charge": {
     "EUR": 0.005,
     "GBP": 0.005,
     "USD": 0.005,
-    "Other": 0.00249
+    "Other": 0.0249
   }
 }

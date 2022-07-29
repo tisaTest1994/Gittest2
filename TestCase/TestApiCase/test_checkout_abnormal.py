@@ -1,11 +1,9 @@
 from Function.api_function import *
 from Function.operate_sql import *
-from Function.operate_excel import *
-import webbrowser
 
 
-@allure.feature("Check out 相关 testcases")
-class TestCheckoutApi:
+@allure.feature("Check out abnormal 相关 testcases")
+class TestCheckoutAbnormalApi:
 
     # 初始化class
     def setup_method(self):
