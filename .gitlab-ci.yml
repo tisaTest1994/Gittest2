@@ -61,7 +61,9 @@ AccountingTest:
     - python
   script:
     - python run.py accounting en_US
-  artifacts:
+  artifacts:、
+
+
     paths:
       - Reports
     expire_in: 1 week
