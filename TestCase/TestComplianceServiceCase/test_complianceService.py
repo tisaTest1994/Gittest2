@@ -51,16 +51,12 @@ class TestComplianceServiceApi:
             ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Submitted', caseSystemId=caseSystemId)
             ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='Created', caseSystemId=caseSystemId)
             ApiFunction.check_webhook_info(path='/webhook/screen/case/pending', caseSystemId=caseSystemId)
-            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted',
-                                               caseSystemId=caseSystemId)
-            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated',
-                                               caseSystemId=caseSystemId)
-            ApiFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId,
-                                               suggestion='SUGGEST_TO_ACCEPT')
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='ScreenCompleted', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/compliance/operator', action='SuggestionUpdated', caseSystemId=caseSystemId)
+            ApiFunction.check_webhook_info(path='/webhook/screen/case/reviewed', caseSystemId=caseSystemId, suggestion='SUGGEST_TO_ACCEPT')
         with allure.step("查询case结果"):
             unix_time = int(time.time())
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
-                                                    url='/api/v1/cases/{}'.format(caseSystemId))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/cases/{}'.format(caseSystemId))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             r = session.request('GET', url='{}/api/v1/cases/{}'.format(self.kyc_url, caseSystemId), headers=kyc_headers)
@@ -78,9 +74,7 @@ class TestComplianceServiceApi:
                 "decision": "ACCEPT",
                 "comment": "决策备注"
             }
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                    url='/api/v1/cases/{}/decision'.format(caseSystemId),
-                                                    body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/cases/{}/decision'.format(caseSystemId), body=json.dumps(data))
             kyc_headers['ACCESS-SIGN'] = sign
             kyc_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             r = session.request('POST', url='{}/api/v1/cases/{}/decision'.format(self.kyc_url, caseSystemId),
