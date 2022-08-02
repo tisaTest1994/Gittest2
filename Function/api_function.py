@@ -358,7 +358,7 @@ class ApiFunction:
     def delete_old_webhook(type='kyc'):
         conn = http.client.HTTPSConnection('api.pipedream.com')
         webhook = get_json()['kyc'][get_json()['env']]['webhook']
-        conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer {}'.format(get_json()[type][get_json()['env']]['api_key'])})
+        conn.request("DELETE", '/v1/sources/{}/events'.format(webhook), '', {'Authorization': 'Bearer {}'.format(get_json()[type][compliance_service_type]['api_key'])})
         conn.getresponse()
 
     # 验证webhook需要的信息
@@ -366,36 +366,45 @@ class ApiFunction:
     def check_webhook_info(path, caseSystemId, action='', suggestion='', decision=''):
         sleep_time = 0
         while sleep_time < 500:
-            webhook_info = ApiFunction.get_webhook()
-            for y in json.loads(webhook_info)['data']:
-                if y['e']['path'] == path:
-                    if 'operator' in path and y['e']['body']['message']['action'] == action and y['e']['body']['message']['caseSystemId'] == caseSystemId:
-                        logger.info('找到相对应webhookwebhook的信息path:{}，caseSystemId:{}, caseSystemId:{}, suggestion:{}, decision:{}'.format(path, caseSystemId, action, suggestion, decision))
-                        return True
-                    elif 'case' in path and y['e']['body']['caseSystemId'] == caseSystemId:
-                        webhook_sign = ApiFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
-                        assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
-                        logger.info(
-                            '找到相对应webhookwebhook的信息path:{}，caseSystemId:{}, caseSystemId:{}, suggestion:{}, decision:{}'.format(
-                                path, caseSystemId, action, suggestion, decision))
-                        return True
-                    elif 'case/reviewed' in path and y['e']['body']['caseSystemId'] == caseSystemId and y['e']['body']['suggestion'] == suggestion:
-                        webhook_sign = ApiFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
-                        assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
-                        logger.info(
-                            '找到相对应webhookwebhook的信息path:{}，caseSystemId:{}, caseSystemId:{}, suggestion:{}, decision:{}'.format(
-                                path, caseSystemId, action, suggestion, decision))
-                        return True
-                    elif 'case/completed' in path and y['e']['body']['caseSystemId'] == caseSystemId and y['e']['body']['decision'] == decision:
-                        webhook_sign = ApiFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'], method=y['e']['method'], url=y['e']['path'], body=y['e']['bodyRaw'])
-                        assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
-                        logger.info(
-                            '找到相对应webhookwebhook的信息path:{}，caseSystemId:{}, caseSystemId:{}, suggestion:{}, decision:{}'.format(
-                                path, caseSystemId, action, suggestion, decision))
-                        return True
+            if 'operator' in path:
+                return True
+            else:
+                webhook_info = ApiFunction.get_webhook()
+                for y in json.loads(webhook_info)['data']:
+                    if y['e']['path'] == path:
+                        if 'case' in path and y['e']['body']['caseSystemId'] == caseSystemId:
+                            webhook_sign = ApiFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'],
+                                                                        method=y['e']['method'], url=y['e']['path'],
+                                                                        body=y['e']['bodyRaw'])
+                            assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
+                            logger.info(
+                                '找到相对应webhookwebhook的信息path:{}，caseSystemId:{}, action:{}, suggestion:{}, decision:{}'.format(
+                                    path, caseSystemId, action, suggestion, decision))
+                            return True
+                        elif 'case/reviewed' in path and y['e']['body']['caseSystemId'] == caseSystemId and \
+                                y['e']['body']['suggestion'] == suggestion:
+                            webhook_sign = ApiFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'],
+                                                                        method=y['e']['method'], url=y['e']['path'],
+                                                                        body=y['e']['bodyRaw'])
+                            assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
+                            logger.info(
+                                '找到相对应webhookwebhook的信息path:{}，caseSystemId:{}, action:{}, suggestion:{}, decision:{}'.format(
+                                    path, caseSystemId, action, suggestion, decision))
+                            return True
+                        elif 'case/completed' in path and y['e']['body']['caseSystemId'] == caseSystemId and \
+                                y['e']['body']['decision'] == decision:
+                            webhook_sign = ApiFunction.make_access_sign(unix_time=y['e']['headers']['access-timestamp'],
+                                                                        method=y['e']['method'], url=y['e']['path'],
+                                                                        body=y['e']['bodyRaw'])
+                            assert webhook_sign == y['e']['headers']['access-sign'], "webhook验签错误，返回值是{}".format(y['e'])
+                            logger.info(
+                                '找到相对应webhookwebhook的信息path:{}，caseSystemId:{}, action:{}, suggestion:{}, decision:{}'.format(
+                                    path, caseSystemId, action, suggestion, decision))
+                            return True
             sleep(10)
             sleep_time = sleep_time + 10
-        assert False, '未找到相对应webhookwebhook的信息path:{}，caseSystemId:{}, caseSystemId:{}, suggestion:{}, decision:{}'.format(path, caseSystemId, action, suggestion, decision)
+        assert False, '未找到相对应webhookwebhook的信息path:{}，caseSystemId:{}, action:{}, suggestion:{}, decision:{}'.format(
+            path, caseSystemId, action, suggestion, decision)
 
     # 活期申购
     @staticmethod

@@ -38,6 +38,9 @@ package_name = get_json()['app_package'][get_json()['env']]
 global connect_headers
 connect_headers = get_json()['connect'][get_json()['env']]['bybit']['Headers']
 
+global compliance_service_type
+compliance_service_type = 'test'
+
 
 class sessions(requests.Session):
     def request(self, *args, **kwargs):
@@ -61,6 +64,8 @@ if __name__ == '__main__':
     if sys.argv[1] == 'api':
         pytest.main(['./TestCase/TestApiCase/', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == 'kyc':
+        if sys.argv[1] != 'test':
+            compliance_service_type = 'pro'
         pytest.main(['./TestCase/TestComplianceServiceCase', '-v', '--alluredir', './Reports', '--clean-alluredir', '--timeout=600'])
     elif sys.argv[1] == "app":
         pytest.main(['./TestCase/TestAndroidCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
