@@ -68,7 +68,7 @@ class TestAccountApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['account_bindings'][0]['partner_name'] == 'Yeeha Games', "获取cabital账号link infinni games账号错误，返回值是{}".format(r.text)
+                assert r.json()['account_bindings'][1]['partner_name'] == 'davionlabs', "获取cabital账号link infinni games账号错误，返回值是{}".format(r.text)
 
     @allure.title('test_account_004')
     @allure.description('获取partner userinfo')

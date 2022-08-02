@@ -1,5 +1,7 @@
 from Function.api_function import *
 from Function.operate_sql import *
+
+
 class TestTransferAbnormalApi:
     url = get_json()['infinni_games']['url']
 
@@ -39,7 +41,7 @@ class TestTransferAbnormalApi:
             else:
                 data = {
                     'amount': str(amount),
-                    'symbol': 'USDT',
+                    'symbol': symbol,
                     'otp': str(mfaVerificationCode),
                     'direction': 'DEBIT',
                     'external_id': external_id
