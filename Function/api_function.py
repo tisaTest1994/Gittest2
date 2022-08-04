@@ -654,6 +654,8 @@ class ApiFunction:
             r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
             if r.status_code == 200:
                 return {'data': data, 'returnJson': r.json()}
+            else:
+                assert r.status_code == 200, '换汇出错，接口返回{}'.format(r.text)
 
     # 根据config 获得支持币种，支持bybit，infinni games
     @staticmethod
