@@ -85,4 +85,4 @@ if __name__ == '__main__':
     else:
         assert False, 'error 需要传入正确的参数'
     os.system("allure generate ./Reports  -o ./Reports/html --clean")
-    slack_report(type=sys.argv[1])
+    slack_report(type=sys.argv[1], env=sys.argv[2])

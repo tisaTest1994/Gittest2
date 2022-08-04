@@ -27,7 +27,7 @@ def get_test_result():
 
 
 # 和slack交互
-def slack_report(type):
+def slack_report(type, env='test'):
     sleep(3)
     slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
     result = get_test_result()
@@ -35,7 +35,10 @@ def slack_report(type):
     if type == 'api':
         title = "Api Test Report"
     elif type == 'kyc':
-        title = "Compliance Service Test Report"
+        if env == 'test':
+            title = "Compliance Service Test Report (test)"
+        else:
+            title = "Compliance Service Test Report (sanbox)"
     elif type == 'app':
         title = "App Test Report"
     elif type == 'cabinet':
