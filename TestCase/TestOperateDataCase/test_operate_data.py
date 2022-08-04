@@ -7,7 +7,9 @@ class TestOperateDataApi:
 
     # 初始化class
     def setup_method(self):
-        ApiFunction.add_headers()
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+            account=get_json()['operate_admin_account']['email'],
+            password=get_json()['operate_admin_account']['password'], type='operate')
 
     @allure.title('test_001')
     @allure.description('生成deposit return 测试数据')
@@ -37,5 +39,26 @@ class TestOperateDataApi:
                 }
             ]
         }
-        r = session.request('POST', url='http://webhook.latibac.com/mh/bcb/events_callback', data=json.dumps(data), headers={'content-type': 'application/json'})
+        r = session.request('POST', url='http://webhook.latibac.com/mh/bcb/events_callback', data=json.dumps(data),
+                            headers={'content-type': 'application/json'})
+        print(r.text)
+
+    @allure.title('test_002')
+    @allure.description('生成deposit return 测试数据')
+    def test_002(self):
+        data = {
+            "hook_id": "WebhookQATestHookId",
+            "payload": {
+                "account_uuid": "accountId",
+                "user_email": "userEmail",
+                "user_ext_ref": "userExtRef",
+                "status": "status",
+                "event_time": "2022-06-08 14:52:18"
+            },
+            "options": {
+                "delay_millis": 2000
+            }
+        }
+        r = session.request('POST', url='https://opapi.cabital.io/api/v1/operatorapi/webhook/notifications/create',
+                            data=json.dumps(data), headers=headers)
         print(r.text)

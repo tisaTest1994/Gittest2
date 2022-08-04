@@ -594,7 +594,7 @@ class ApiFunction:
 
     # 换汇
     @staticmethod
-    def cfx_random(pair, major_ccy, buy_amount = random.uniform(10, 500.999999)):
+    def cfx_random(pair, major_ccy, buy_amount=random.uniform(10, 500.999999)):
         while 1 < 2:
             buy_type = pair.split('-')[0]
             sell_type = pair.split('-')[1]
@@ -646,7 +646,9 @@ class ApiFunction:
                 "pair": pair,
                 "buy_amount": str(buy_amount),
                 "sell_amount": str(sell_amount),
-                "major_ccy": major_ccy
+                "major_ccy": major_ccy,
+                "partner_id": '07c9297b-65f1-4e16-a0bd-ff6889e386de',
+                'user_ext_ref': '988518746672869376'
             }
             logger.info('发送换汇参数是{}'.format(data))
             r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)

@@ -59,7 +59,8 @@ if __name__ == '__main__':
         os.makedirs('Reports')
     # 修改默认语言
     if sys.argv[2] is not None:
-        write_json('language', sys.argv[2])
+        if sys.argv[1] != 'kyc':
+            write_json('language', sys.argv[2])
     # run
     if sys.argv[1] == 'api':
         pytest.main(['./TestCase/TestApiCase/', '-v', '--alluredir', './Reports', '--clean-alluredir'])
