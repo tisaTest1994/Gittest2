@@ -129,7 +129,7 @@ class TestCheckoutApi:
                 'billing_address'] != {}, "获取数字货币购买人信息错误，返回值是{}".format(r.json()['card_holder_name'])
 
     @allure.title('test_check_out_006')
-    @allure.description('获取购买数字货币费用-with card(EEA)')
+    @allure.description('获取购买数字货币费用-with card(None EEA)')
     def test_check_out_006(self):
         data = {
             "code": "GBP",
@@ -151,7 +151,7 @@ class TestCheckoutApi:
             assert r.json()['fee']['amount'] == "3.75", '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
 
     @allure.title('test_check_out_007')
-    @allure.description('获取购买数字货币费用-with card(Non EEA)')
+    @allure.description('获取购买数字货币费用-with card(EEA)')
     def test_check_out_007(self):
         data = {
             "code": "HRK",
