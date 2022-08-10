@@ -34,7 +34,7 @@ ApiTest:
     expire_in: 1 week
 
 CabinetTest:
-  stage: test2
+  stage: test1
   tags:
     - python
   script:
@@ -45,7 +45,7 @@ CabinetTest:
     expire_in: 1 week
 
 ConnectTest:
-  stage: test3
+  stage: test2
   tags:
     - python
   script:
@@ -56,7 +56,7 @@ ConnectTest:
     expire_in: 1 week
 
 AccountingTest:
-  stage: test4
+  stage: test1
   tags:
     - python
   script:
@@ -67,7 +67,7 @@ AccountingTest:
     expire_in: 1 week
 
 Infinni Games Test:
-  stage: test5
+  stage: test3
   tags:
     - python
   script:
@@ -78,7 +78,7 @@ Infinni Games Test:
     expire_in: 1 week
 
 KycTest:
-  stage: test6
+  stage: test2
   tags:
     - python
   script:
@@ -89,7 +89,7 @@ KycTest:
     expire_in: 1 week
 
 KycTest（sanbox）:
-  stage: test6
+  stage: test2
   tags:
     - python
   script:
