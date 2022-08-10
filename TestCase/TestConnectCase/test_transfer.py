@@ -215,6 +215,7 @@ class TestTransferApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
             logger.info('由于每日限额超额，该笔transfer交易不成功，message是{}'.format(r.json()['message']))
+
     @allure.title('test_transfer_007')
     @allure.description('从cabital转移到bybit账户并且关联C+T交易')
     def test_transfer_007(self):
@@ -222,9 +223,10 @@ class TestTransferApi:
             account_id = get_json()['email']['accountId']
         with allure.step("换汇"):
             for i in ApiFunction.get_connect_cfx_list(self.url, connect_headers):
+                sleep(5)
                 with allure.step('换汇'):
-                    transaction = ApiFunction.cfx_random(i, i.split('-')[0])
-                    cfx_transaction_id = transaction['returnJson']['transaction']['transaction_id']
+                    transaction = ApiFunction.cfx_random(i, i.split('-')[0], type='bybit', account_id=account_id, headers=connect_headers,url=self.url)
+                    cfx_transaction_id = transaction['returnJson']['transaction_id']
                 with allure.step("获得otp"):
                     mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
                 with allure.step("获得data"):
@@ -267,10 +269,5 @@ class TestTransferApi:
                     else:
                         assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
                         with allure.step("校验返回值"):
-                            assert r.json()['code'] == 'PA043', "关联C+T交易错误，返回值是{}".format(
-                            r.text)
-
-
-
-
+                            assert r.json()['code'] == 'PA043', "关联C+T交易错误，返回值是{}".format(r.text)
 

@@ -100,13 +100,17 @@ class ApiFunction:
                 "amount": amount,
                 "code": code_type,
                 "address": address,
+                "partner_id": '800b482d-0a88-480a-aae7-741f77a572f4',
+                'user_ext_ref': '988518746672869376'
             }
         else:
             data = {
                 "amount": amount,
                 "code": code_type,
                 "address": address,
-                "method": "ERC20"
+                "method": "ERC20",
+                "partner_id": '800b482d-0a88-480a-aae7-741f77a572f4',
+                'user_ext_ref': '988518746672869376'
             }
         r = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
                             headers=headers)
@@ -594,8 +598,9 @@ class ApiFunction:
 
     # 换汇
     @staticmethod
-    def cfx_random(pair, major_ccy, buy_amount=random.uniform(10, 500.999999)):
-        while 1 < 2:
+    def cfx_random(pair, major_ccy, buy_amount=random.uniform(10, 500.999999), url=env_url, type='interior', headers=headers, account_id=''):
+        cycle = 0
+        while cycle < 5:
             buy_type = pair.split('-')[0]
             sell_type = pair.split('-')[1]
             if major_ccy.lower() == buy_type.lower():
@@ -651,12 +656,25 @@ class ApiFunction:
                 'user_ext_ref': '988518746672869376'
             }
             logger.info('发送换汇参数是{}'.format(data))
-
-            r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
-            if r.status_code == 200:
-                return {'data': data, 'returnJson': r.json()}
+            if type == 'interior':
+                r = session.request('POST', url='{}/txn/cfx'.format(url), data=json.dumps(data), headers=headers)
             else:
-                assert r.status_code == 200, '换汇出错，接口返回{}'.format(r.text)
+                with allure.step("验签"):
+                    unix_time = int(time.time())
+                    nonce = generate_string(30)
+                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                        url='/api/v1/accounts/{}/conversions'.format(
+                                                            account_id),
+                                                        nonce=nonce,
+                                                        body=json.dumps(data))
+                    headers['ACCESS-SIGN'] = sign
+                    headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                    headers['ACCESS-NONCE'] = nonce
+                r = session.request('POST', url='{}/accounts/{}/conversions'.format(url, account_id), data=json.dumps(data), headers=headers)
+            if r.status_code == 200 or r.status_code == 201:
+                return {'data': data, 'returnJson': r.json()}
+            cycle = cycle + 1
+        assert False, '换汇失败，接口返回{}'.format(r.text)
 
     # 根据config 获得支持币种，支持bybit，infinni games
     @staticmethod
