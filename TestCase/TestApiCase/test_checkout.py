@@ -305,7 +305,7 @@ class TestCheckoutApi:
             r = session.request('POST', url='https://api.sandbox.checkout.com/tokens', data=json.dumps(data),
                                 headers=headers2)
         with allure.step("校验状态码"):
-            assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(r.status_code)
             token = r.json()['token']
             dic = json.loads(r.text)
             if "issuer" in dic.keys():
@@ -556,7 +556,7 @@ class TestCheckoutApi:
             r = session.request('POST', url='https://api.sandbox.checkout.com/tokens', data=json.dumps(data),
                                 headers=headers2)
         with allure.step("校验状态码"):
-            assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(r.status_code)
             token = r.json()['token']
         with allure.step("算出交易金额"):
             crypto_list = ApiFunction.get_buy_crypto_list(16, pairs='USDT-USD', ccy='buy', country='HK')
@@ -663,7 +663,7 @@ class TestCheckoutApi:
             r = session.request('POST', url='https://api.sandbox.checkout.com/tokens', data=json.dumps(data),
                                 headers=headers2)
         with allure.step("校验状态码"):
-            assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(r.status_code)
             token = r.json()['token']
         with allure.step("随机币种，获取交易数据"):
             buy_pair = ApiFunction.get_buy_crypto_currency(type='random')[0]
@@ -930,7 +930,7 @@ class TestCheckoutApi:
                                             data=json.dumps(data),
                                             headers=headers2)
                         with allure.step("校验状态码"):
-                            assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
+                            assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(r.status_code)
                             token = r.json()['token']
                             dic = json.loads(r.text)
                             if "issuer" in dic.keys():
@@ -1020,7 +1020,7 @@ class TestCheckoutApi:
                                             data=json.dumps(data),
                                             headers=headers2)
                         with allure.step("校验状态码"):
-                            assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
+                            assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(r.status_code)
                             token = r.json()['token']
                     with allure.step("解决最大/最小值"):
                         if 'CLF' in z:

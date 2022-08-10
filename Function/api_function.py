@@ -647,13 +647,16 @@ class ApiFunction:
                 "buy_amount": str(buy_amount),
                 "sell_amount": str(sell_amount),
                 "major_ccy": major_ccy,
-                "partner_id": '07c9297b-65f1-4e16-a0bd-ff6889e386de',
+                "partner_id": '800b482d-0a88-480a-aae7-741f77a572f4',
                 'user_ext_ref': '988518746672869376'
             }
             logger.info('发送换汇参数是{}'.format(data))
+
             r = session.request('POST', url='{}/txn/cfx'.format(env_url), data=json.dumps(data), headers=headers)
             if r.status_code == 200:
                 return {'data': data, 'returnJson': r.json()}
+            else:
+                assert r.status_code == 200, '换汇出错，接口返回{}'.format(r.text)
 
     # 根据config 获得支持币种，支持bybit，infinni games
     @staticmethod

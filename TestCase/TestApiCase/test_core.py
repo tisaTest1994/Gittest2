@@ -754,35 +754,35 @@ class TestCoreApi:
                                 i, x, crypto_len(Decimal(quote['middle']) * sum(fixed_all_interest_amount_list), i),
                                 r.json()['fixed_earning_map'][x]['abs_amount'])
 
-    @allure.title('test_core_027')
-    @allure.description('获取所有Saving产品的收益详情数字货币活期已派发利息总金额')
-    def test_core_027(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['earn_email'])
-        with allure.step("显示币种矩阵"):
-            for i in get_json()['show_list']:
-                headers['X-Currency'] = i
-                with allure.step("获取所有Saving产品的收益详情数字货币活期已派发利息总金额"):
-                    r = session.request('GET', url='{}/earn/saving/return'.format(env_url),
-                                        headers=headers)
-                with allure.step("状态码和返回值"):
-                    logger.info('状态码是{}'.format(str(r.status_code)))
-                    logger.info('返回值是{}'.format(str(r.text)))
-                with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
-                with allure.step("获取累计活期利息"):
-                    all_interest = []
-                    with allure.step("获取产品product_id"):
-                        r2 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
-                        for z in r2.json():
-                            product_id = z['product_id']
-                            with allure.step("获取产品持有情况"):
-                                r3 = session.request('GET',
-                                                     url='{}/earn/products/{}/summary'.format(env_url, product_id),
-                                                     headers=headers)
-                                all_interest.append(Decimal(r3.json()['total_yield']['abs_amount']))
-                assert Decimal(sum(all_interest)) == Decimal(r.json()[
-                                                                 'flexible_earnings']), '获取所有Saving产品的收益详情数字货币活期已派发利息总金额错误, 显示币种是{}, 计算获取累计利息总和是{}, 接口返回的累计利息总和是{}'.format(
-                    i, sum(all_interest), str(r.json()['flexible_earnings']))
+    # @allure.title('test_core_027')
+    # @allure.description('获取所有Saving产品的收益详情数字货币活期已派发利息总金额')
+    # def test_core_027(self):
+    #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['earn_email'])
+    #     with allure.step("显示币种矩阵"):
+    #         for i in get_json()['show_list']:
+    #             headers['X-Currency'] = i
+    #             with allure.step("获取所有Saving产品的收益详情数字货币活期已派发利息总金额"):
+    #                 r = session.request('GET', url='{}/earn/saving/return'.format(env_url),
+    #                                     headers=headers)
+    #             with allure.step("状态码和返回值"):
+    #                 logger.info('状态码是{}'.format(str(r.status_code)))
+    #                 logger.info('返回值是{}'.format(str(r.text)))
+    #             with allure.step("校验状态码"):
+    #                 assert r.status_code == 200, "http 状态码不对,目前状态码是{}".format(r.status_code)
+    #             with allure.step("获取累计活期利息"):
+    #                 all_interest = []
+    #                 with allure.step("获取产品product_id"):
+    #                     r2 = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
+    #                     for z in r2.json():
+    #                         product_id = z['product_id']
+    #                         with allure.step("获取产品持有情况"):
+    #                             r3 = session.request('GET',
+    #                                                  url='{}/earn/products/{}/summary'.format(env_url, product_id),
+    #                                                  headers=headers)
+    #                             all_interest.append(Decimal(r3.json()['total_yield']['abs_amount']))
+    #             assert Decimal(sum(all_interest)) == Decimal(r.json()[
+    #                                                              'flexible_earnings']), '获取所有Saving产品的收益详情数字货币活期已派发利息总金额错误, 显示币种是{}, 计算获取累计利息总和是{}, 接口返回的累计利息总和是{}'.format(
+    #                 i, sum(all_interest), str(r.json()['flexible_earnings']))
 
     @allure.title('test_core_028')
     @allure.description('获取所有Saving产品的收益详情数字货币活期已派发利息的数量和金额')
