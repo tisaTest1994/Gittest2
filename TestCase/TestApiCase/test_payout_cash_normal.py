@@ -419,7 +419,9 @@ class TestPayoutCashNormalApi:
                 "payment_method": "SIC",
                 "account_name": account_name[0],
                 "iban": "12345678",
-                "bic": "bkauatwwxxx"
+                "bic": "bkauatwwxxx",
+                "partner_id": '800b482d-0a88-480a-aae7-741f77a572f4',
+                'user_ext_ref': '988518746672869376'
             }
             with allure.step("确认CHF法币提现交易"):
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url),
