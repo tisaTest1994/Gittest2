@@ -56,7 +56,7 @@ ConnectTest:
     expire_in: 1 week
 
 AccountingTest:
-  stage: test1
+  stage: test4
   tags:
     - python
   script:
