@@ -527,8 +527,6 @@
     "Other": 0.008
   },
   "check_out_cfx_service_charge": {
-    "EUR": 0.005,
-    "GBP": 0.005,
     "USD": 0.005,
     "Other": 0.0249
   }

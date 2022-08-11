@@ -19,7 +19,7 @@ class TestQuoteApi:
         with allure.step("获取全部换汇币种对"):
             cfx_list = ApiFunction.get_cfx_list()
             for i in cfx_list:
-                sql = "select bid, ask, original_bid, original_ask from quote_{} where pair = '{}' and purpose = 'Customer' limit 1;".format(day_time, i)
+                sql = "select bid, ask, original_bid, original_ask, extra from quote_{} where pair = '{}' and purpose = 'Customer' limit 1;".format(day_time, i)
                 logger.info('sql命令是{}'.format(sql))
                 quote = (sqlFunction().connect_mysql('pricing', sql=sql))[0]
                 logger.info('汇率list是{}'.format(quote))
@@ -54,7 +54,7 @@ class TestQuoteApi:
         with allure.step("获取全部换汇币种对"):
             cfx_list = ApiFunction.get_buy_crypto_currency(type='all')
             for i in cfx_list:
-                sql = "select bid, ask, original_bid, original_ask from quote_{} where pair = '{}' and purpose = 'BuyTxn' limit 1;".format(day_time, i)
+                sql = "select bid, ask, original_bid, original_ask, extra from quote_{} where pair = '{}' and purpose = 'BuyTxn' limit 1;".format(day_time, i)
                 logger.info('sql命令是{}'.format(sql))
                 quote = (sqlFunction().connect_mysql('pricing', sql=sql))[0]
                 logger.info('汇率list是{}'.format(quote))
@@ -65,8 +65,7 @@ class TestQuoteApi:
                             service_charge = get_json()['check_out_cfx_service_charge'][y]
                             assert (Decimal(quote['original_bid']) * Decimal(str(1 - service_charge))).quantize(Decimal('0.000'), ROUND_FLOOR) == Decimal(quote['bid']).quantize(Decimal('0.000'), ROUND_FLOOR), '校验cfx汇率增加的浮点错误，original_bid是{}, bid是{}, pair是{}'.format(quote['original_bid'], quote['bid'], i)
                             assert (Decimal(quote['original_ask']) * Decimal(str(1 + service_charge))).quantize(
-                                Decimal('0.000'), ROUND_FLOOR) == Decimal(quote['ask']).quantize(Decimal('0.000'),
-                                                                                                ROUND_FLOOR), '校验cfx汇率增加的浮点错误，original_ask是{}, ask是{}, pair是{}'.format(
+                                Decimal('0.000'), ROUND_FLOOR) == Decimal(quote['ask']).quantize(Decimal('0.000'), ROUND_FLOOR), '校验cfx汇率增加的浮点错误，original_ask是{}, ask是{}, pair是{}'.format(
                                 quote['original_ask'], quote['ask'], i)
                             service_charge_type = 1
                     if service_charge_type == 0:
