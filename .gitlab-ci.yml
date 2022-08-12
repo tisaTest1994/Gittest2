@@ -23,7 +23,7 @@ before_script:
     - pip install -r requirements.txt
 
 ApiTest:
-  stage: test1
+  stage: test4
   tags:
     - python
   script:
@@ -56,7 +56,7 @@ ConnectTest:
     expire_in: 1 week
 
 AccountingTest:
-  stage: test4
+  stage: test1
   tags:
     - python
   script:

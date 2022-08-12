@@ -23,6 +23,14 @@ class TestQuoteApi:
                 logger.info('sql命令是{}'.format(sql))
                 quote = (sqlFunction().connect_mysql('pricing', sql=sql))[0]
                 logger.info('汇率list是{}'.format(quote))
+                with allure.step("获取具体汇率"):
+                    extra = json.loads(quote['extra'])
+                    print(len(extra['origins']))
+                    print(extra['origins'])
+                    if len(extra['origins']) == 1:
+                        print(extra['origins'])
+                    else:
+                        print(11111)
                 service_charge_type = 0
                 with allure.step("获取需要增加的汇率"):
                     for y in (get_json()['cfx_service_charge']).keys():
