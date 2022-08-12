@@ -29,6 +29,8 @@ class TestQuoteApi:
                         original_bid = extra['origins'][0]['bid']
                         original_ask = extra['origins'][0]['ask']
                     else:
+                        print(111111111)
+                        print(extra['origins'])
                         original_bid = quote['original_bid']
                         original_ask = quote['original_ask']
                 service_charge_type = 0
