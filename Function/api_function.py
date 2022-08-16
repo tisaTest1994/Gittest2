@@ -482,8 +482,6 @@ class ApiFunction:
         sleep(5)
         sleep_time = 0
         while sleep_time < 10:
-            if get_email() is None:
-                assert False, '获取email失败'
             email_info = get_email()
             if type == 'REGISTRY':
                 if get_json(file='multiple_languages_email.json')['EM001'] in email_info['title']:
