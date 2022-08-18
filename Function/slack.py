@@ -51,6 +51,8 @@ def slack_report(type, env='test'):
         title = "Accounting Test Report"
     elif type == 'infinni':
         title = "Infinni Games Test Report"
+    elif type == 'pay':
+        title = "Cabital Pay Test Report"
     else:
         title = "Test Report"
     attachment = [
@@ -77,28 +79,31 @@ def get_job_id(type):
     id_list = []
     for i in r.json():
         if type == 'api':
-            if i['name'] == 'ApiTest':
+            if i['name'] == 'Api Test':
                 id_list.append(i['id'])
         elif type == 'kyc':
-            if i['name'] == 'KycTest':
+            if i['name'] == 'Kyc Test':
                 id_list.append(i['id'])
         elif type == 'app':
-            if i['name'] == 'AppTest':
+            if i['name'] == 'App Test':
                 id_list.append(i['id'])
         elif type == 'cabinet':
-            if i['name'] == 'CabinetTest':
+            if i['name'] == 'Cabinet Test':
                 id_list.append(i['id'])
         elif type == 'connect':
-            if i['name'] == 'ConnectTest':
+            if i['name'] == 'Connect Test':
                 id_list.append(i['id'])
         elif type == 'web':
-            if i['name'] == 'WebTest':
+            if i['name'] == 'Web Test':
                 id_list.append(i['id'])
         elif type == 'accounting':
-            if i['name'] == 'AccountingTest':
+            if i['name'] == 'Accounting Test':
                 id_list.append(i['id'])
         elif type == 'infinni':
             if i['name'] == 'Infinni Games Test':
+                id_list.append(i['id'])
+        elif type == 'pay':
+            if i['name'] == 'Cabital Pay Test':
                 id_list.append(i['id'])
     return id_list[0]
 
