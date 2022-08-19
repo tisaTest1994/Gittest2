@@ -313,31 +313,46 @@ class ApiFunction:
     # 验签
     @staticmethod
     def make_access_sign(unix_time, method, url, body='', key='', nonce=''):
-        if nonce == '':
-            if key == '':
-                key = get_json()['kyc'][get_json()['env']]['kycSecretKey']
-            elif key == 'infinni games':
-                key = get_json()['infinni_games']['secretKey']
-            if body == '':
-                data = '{}{}{}'.format(unix_time, method, url)
+        if key == 'cabital pay':
+            if nonce == '':
+                if body == '':
+                    data = '{}{}{}'.format(unix_time, method, url)
+                else:
+                    data = '{}{}{}{}'.format(unix_time, method, url, body)
             else:
-                data = '{}{}{}{}'.format(unix_time, method, url, body)
+                if body == '':
+                    data = '{}{}{}{}'.format(unix_time, method, nonce, url)
+                else:
+                    data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
+            key = get_json()['cabital_pay'][get_json()['env']]['secretKey']
+            data = data.encode("utf-8")
+            #sign = str(sign, 'utf-8')
         else:
-            if key == '':
-                key = get_json()['connect'][get_json()['env']]['bybit']['secretKey']
-            elif key == 'infinni games':
-                key = get_json()['infinni_games']['secretKey']
-            if body == '':
-                data = '{}{}{}{}'.format(unix_time, method, nonce, url)
+            if nonce == '':
+                if key == '':
+                    key = get_json()['kyc'][get_json()['env']]['kycSecretKey']
+                elif key == 'infinni games':
+                    key = get_json()['infinni_games']['secretKey']
+                if body == '':
+                    data = '{}{}{}'.format(unix_time, method, url)
+                else:
+                    data = '{}{}{}{}'.format(unix_time, method, url, body)
             else:
-                data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
-        key = key.encode('utf-8')
-        message = data.encode('utf-8')
-        sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
-        sign = str(sign, 'utf-8')
+                if key == '':
+                    key = get_json()['connect'][get_json()['env']]['bybit']['secretKey']
+                elif key == 'infinni games':
+                    key = get_json()['infinni_games']['secretKey']
+                if body == '':
+                    data = '{}{}{}{}'.format(unix_time, method, nonce, url)
+                else:
+                    data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
+            key = key.encode('utf-8')
+            message = data.encode('utf-8')
+            sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
+            sign = str(sign, 'utf-8')
         return sign
 
-    # 验签
+    # 验签 sha256
     @staticmethod
     def infinni_games_access_sign(url):
         key = get_json()['infinni_games']['secretKey']

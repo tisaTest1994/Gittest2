@@ -34,7 +34,7 @@ class TestConnectApi:
                 amount = str(float(i['withdraw']['amount_limit']['min']) + float(0.002))
                 data = {
                     "amount": amount,
-                    "symbol": i['code'],
+                    "code": i['code'],
                     "direction": "DEBIT"
                 }
                 with allure.step("transfer 预校验"):
@@ -57,7 +57,7 @@ class TestConnectApi:
                 amount = str(float(i['withdraw']['amount_limit']['min']) - float(0.0001))
                 data = {
                     "amount": amount,
-                    "symbol": i['code'],
+                    "code": i['code'],
                     "direction": "DEBIT"
                 }
                 with allure.step("transfer 预校验小于最小值"):
@@ -81,7 +81,7 @@ class TestConnectApi:
                 amount = str(float(i['withdraw']['amount_limit']['min']) + float(0.001))
                 data = {
                     "amount": amount,
-                    "symbol": i['code'],
+                    "code": i['code'],
                     "direction": "DEBIT"
                 }
                 with allure.step("获取2fa code"):
@@ -89,7 +89,6 @@ class TestConnectApi:
                     headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 with allure.step("transfer 交易"):
                     r = session.request('POST', url='{}/connect/{}/transfer'.format(env_url, get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']), data=json.dumps(data), headers=headers)
-                    print(r.url)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
@@ -101,7 +100,7 @@ class TestConnectApi:
                 sleep(15)
                 with allure.step("获得transfer后金额"):
                     wallet_balance_latest = ApiFunction.get_crypto_number(type=i['code'])
-                assert Decimal(wallet_balance_old) - Decimal(data['amount']) == Decimal(wallet_balance_latest), 'transfer币种是{},transfer前金额是{},transfer金额是{}，transfer后金额是{}'.format(i['symbol'], wallet_balance_old, data['amount'], wallet_balance_latest)
+                assert Decimal(wallet_balance_old) - Decimal(data['amount']) == Decimal(wallet_balance_latest), 'transfer币种是{},transfer前金额是{},transfer金额是{}，transfer后金额是{}'.format(i['code'], wallet_balance_old, data['amount'], wallet_balance_latest)
 
     @allure.title('test_connect_005')
     @allure.description('transfer 交易小于最小值')
@@ -115,7 +114,7 @@ class TestConnectApi:
                 amount = str(float(i['withdraw']['amount_limit']['min']) - float(0.0001))
                 data = {
                     "amount": amount,
-                    "symbol": i['symbol'],
+                    "code": i['code'],
                     "direction": "DEBIT"
                 }
                 with allure.step("获取email code"):

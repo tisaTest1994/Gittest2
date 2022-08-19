@@ -170,8 +170,8 @@ class TestTransferApi:
         with allure.step("获得data"):
             external_id = generate_string(25)
             data = {
-                'amount': '0.02',
-                'symbol': 'ETH',
+                'amount': '0.0005',
+                'symbol': 'BTC',
                 'otp': str(mfaVerificationCode),
                 'direction': 'DEBIT',
                 'external_id': external_id

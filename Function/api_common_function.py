@@ -1,5 +1,6 @@
 from datetime import *
 from decimal import *
+from Crypto.PublicKey import RSA
 import requests
 import random
 import json
@@ -371,3 +372,17 @@ def get_precision(amount, precision, upgrade=False):
             end_amount = Decimal(int(Decimal(amount) * num)) / Decimal(num)
             end_amount = str(end_amount)
     return end_amount
+
+
+def CreateRSAKeys():
+    # 生成 2048 位的 RSA 密钥
+    key = RSA.generate(2048)
+    encrypted_key = key.exportKey(pkcs=8)
+    # 生成私钥
+    with open('my_private_rsa_key.bin', 'wb') as f:
+        f.write(encrypted_key)
+    # 生成公钥
+    with open('my_rsa_public.pem', 'wb') as f:
+        f.write(key.publickey().exportKey())
+
+#CreateRSAKeys()
