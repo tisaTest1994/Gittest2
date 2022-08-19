@@ -73,7 +73,7 @@ def slack_report(type, env='test'):
 # 获得build id
 def get_job_id(type):
     headers = {
-        "PRIVATE-TOKEN": get_json()['PRIVATE-TOKEN']
+        "PRIVATE-TOKEN": 'tjkst4kHzfDPwyThPoX-'
     }
     r = requests.request('GET', url='https://gitlab.com/api/v4/projects/25201898/jobs', headers=headers)
     id_list = []

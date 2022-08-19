@@ -13,7 +13,7 @@ class TestKycApi:
     @allure.description('通过kyc的用户，获取kyc上传token失败')
     def test_kyc_001(self):
         with allure.step("随机获得国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
+            citizenCountryCode = random.choice(get_json('country_code_list.json')['citizenCountryCodeList'])
             data = {
                 "citizenCountryCode": citizenCountryCode
             }
@@ -40,7 +40,7 @@ class TestKycApi:
         with allure.step("把token写入headers"):
             headers['Authorization'] = "Bearer " + accessToken
         with allure.step("获取随机国家代码"):
-            citizenCountryCode = random.choice(get_json()['citizenCountryCodeList'])
+            citizenCountryCode = random.choice(get_json('country_code_list.json')['citizenCountryCodeList'])
         with allure.step("未通过kyc的用户，获取kyc上传token"):
             data = {
                 "citizenCountryCode": citizenCountryCode
