@@ -66,3 +66,31 @@ class TestCabitalPayApi:
             print(self.headers)
             print(r.status_code)
             print(r.text)
+
+    @allure.title('test_cabital_pay_002')
+    @allure.description('创建订单只留必传参数')
+    def test_cabital_pay_002(self):
+        with allure.step("创建订单data"):
+            data = {
+                "reference_id": generate_string(30),
+                "purchase_currency": "GBP",
+                "purchase_amount": "100.23",
+                "success_url": "https://callback.cabital.com/success",
+                "failed_url": "https://callback.cabital.com/failed",
+                "processing_url": "https://callback.cabital.com/processing",
+            }
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
+            self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
+            self.headers['ACCESS-SIGN'] = sign
+            self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            self.headers['ACCESS-NONCE'] = nonce
+        with allure.step("创建订单"):
+            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data), headers=self.headers)
+            print(r.json())
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json(), "查询数字货币转入地址错误，返回值是{}".format(r.text)
