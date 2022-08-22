@@ -1,7 +1,10 @@
 from run import *
 from Function.operate_sql import *
+from Crypto.PublicKey import RSA
+from Crypto.Signature import PKCS1_v1_5
+from Crypto.Hash import MD5, SHA1, SHA256
+import base64
 import webbrowser
-
 
 class ApiFunction:
 
@@ -324,12 +327,12 @@ class ApiFunction:
                     data = '{}{}{}{}'.format(unix_time, method, nonce, url)
                 else:
                     data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
-            private_key = RSA.import_key(open("/Users/jtr109/Downloads/public_key.pem").read())
-            # In[5]: encryptor = PKCS1_OAEP.new(public_key)
-            #
-            # In[6]: data = b'Hello world'
-            #
-            # In[7]: encrypted_data = encryptor.encrypt(data)
+            path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/my_private_rsa_key.bin'
+            private_key = RSA.import_key(open(path).read())
+            signer = PKCS1_v1_5.new(private_key,)
+            hash_obj = SHA256.new(data.encode('utf-8'))
+            sign = base64.b64encode(signer.sign(hash_obj))
+            sign = str(sign, 'utf-8')
         else:
             if nonce == '':
                 if key == '':
@@ -931,6 +934,5 @@ class ApiFunction:
                         if total_spend_amount != Decimal(get_precision(service_charge, precision, True)) + spend_amount:
                             total_spend_amount = Decimal(get_precision(service_charge, precision, True)) + spend_amount
             return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'total_spend_amount': get_precision(total_spend_amount, precision), 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(buy_amount, 6)}
-
 
 

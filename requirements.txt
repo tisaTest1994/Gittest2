@@ -17,3 +17,4 @@ selenium~=3.141.0
 pynput~=1.7.3
 websockets~=10.1
 xlrd==1.2.0
+Crypto==1.4.1
