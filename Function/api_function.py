@@ -324,9 +324,12 @@ class ApiFunction:
                     data = '{}{}{}{}'.format(unix_time, method, nonce, url)
                 else:
                     data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
-            key = get_json()['cabital_pay'][get_json()['env']]['secretKey']
-            data = data.encode("utf-8")
-            #sign = str(sign, 'utf-8')
+            private_key = RSA.import_key(open("/Users/jtr109/Downloads/public_key.pem").read())
+            # In[5]: encryptor = PKCS1_OAEP.new(public_key)
+            #
+            # In[6]: data = b'Hello world'
+            #
+            # In[7]: encrypted_data = encryptor.encrypt(data)
         else:
             if nonce == '':
                 if key == '':

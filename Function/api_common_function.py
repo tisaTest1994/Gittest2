@@ -379,10 +379,10 @@ def CreateRSAKeys():
     key = RSA.generate(2048)
     encrypted_key = key.exportKey(pkcs=8)
     # 生成私钥
-    with open('my_private_rsa_key.bin', 'wb') as f:
+    with open('../Resource/my_private_rsa_key.bin', 'wb') as f:
         f.write(encrypted_key)
     # 生成公钥
-    with open('my_rsa_public.pem', 'wb') as f:
+    with open('../Resource/my_rsa_public.pem', 'wb') as f:
         f.write(key.publickey().exportKey())
 
 #CreateRSAKeys()

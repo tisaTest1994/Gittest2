@@ -59,6 +59,7 @@
   ],
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
+    "user_ext_ref": "38f26ee0d72f9031644a41874edbeda8",
     "earn_email": "mrt1@cabital.com",
     "email": "richard.wan@cabital.com",
     "host": "imap.gmail.com",
@@ -262,7 +263,7 @@
   "cabital_pay": {
     "test": {
       "url": "https://merchant.latibac.com",
-      "secretKey": "c60e42fe-a4cb-46a3-9290-9f57403689d7",
+      "secretKey": "8d16bbdb-3872-4741-9fec-8e208d12f264",
       "config": {
         "cashier": {
         "merchant_logo": "testLogo",
