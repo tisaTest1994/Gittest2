@@ -386,7 +386,6 @@ class TestTransferApi:
             headers['ACCESS-NONCE'] = nonce
         with allure.step("划转交易详情使用正确的external_id"):
             r = session.request('GET', url='{}recon/transfers/{}'.format(self.url, external_id), headers=headers)
-            logger.info('r.json的返回值是{}'.format(r.json()))
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -394,6 +393,30 @@ class TestTransferApi:
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['external_id'] == external_id, "对账 - 划转交易详情使用external_id错误，返回值是{}".format(r.text)
+
+    @allure.title('test_transfer_012')
+    @allure.description('交易列表查询（不传默认参数）')
+    def test_transfer_012(self):
+        with allure.step("测试用户的account_id"):
+            user_ext_ref = get_json()['infinni_games']['uid_D']
+            tx_type_list = ['buy', 'convert', 'transfer']
+        for tx_type in tx_type_list:
+            with allure.step("验签"):
+                unix_time = int(time.time())
+                nonce = generate_string(30)
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                    url='/api/v1/accounts/{}/transactions/{}'.format(user_ext_ref, tx_type), key='infinni games', nonce=nonce)
+                headers['ACCESS-SIGN'] = sign
+                headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                headers['ACCESS-NONCE'] = nonce
+            with allure.step("账户划转列表"):
+                r = session.request('GET', url='{}/accounts/{}/transactions/{}'.format(self.url, user_ext_ref, tx_type),
+                                    headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
 
 
 

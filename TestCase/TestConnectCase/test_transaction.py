@@ -14,9 +14,9 @@ class TestTransactionApi:
     @allure.description('先进行一笔交易后，查询转账记录')
     def test_transaction_001(self):
         with allure.step("测试用户的account_id"):
-            account_id = get_json()['email']['accountId']
+            account_id = 'cd7e353b-6f4c-45db-bdd5-78bdc13a53c7'
         with allure.step("获得otp"):
-            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_neoding'])
         with allure.step("获得data"):
             external_id = generate_string(25)
             data = {
@@ -43,6 +43,7 @@ class TestTransactionApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("验签"):
+                headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='neoding@yandex.com', password='Zcdsw123')
                 unix_time = int(time.time())
                 nonce = generate_string(30)
                 sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',

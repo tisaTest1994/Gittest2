@@ -90,7 +90,7 @@ class TestWalletBalancesApi:
                             i, mobile_balance, r.json()['balance']['balances'])
 
     @allure.title('test_wallet_003')
-    @allure.description('kyc状态为：INITIALIZED--查询可用余额列表')
+    @allure.description('kyc状态为：INITIALIZED--查询可用余额列表,权限校验')
     def test_wallet_003(self):
         with allure.step("测试用户的account_id"):
             account_id = 'eb9659ea-0d95-4f0f-83a3-1152c5a90ee9'
@@ -106,12 +106,10 @@ class TestWalletBalancesApi:
             r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
                                 headers=connect_headers)
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['balances'] is None, "INITIALIZED--查询可用余额列表错误，目前错误码是{}".format(r.json()['code'])
+            assert r.status_code == 403, "权限不对，目前状态码是{}".format(r.status_code)
 
     @allure.title('test_wallet_004')
-    @allure.description('kyc状态为：PENDING--查询可用余额列表')
+    @allure.description('kyc状态为：PENDING--查询可用余额列表，权限校验')
     def test_wallet_004(self):
         with allure.step("测试用户的account_id"):
             account_id = '358ff717-ea3c-40d4-86da-d73b4a2dce37'
@@ -127,12 +125,10 @@ class TestWalletBalancesApi:
             r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
                                 headers=connect_headers)
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['balances'] is None, "PENDING--查询可用余额列表错误，目前错误码是{}".format(r.json()['code'])
+            assert r.status_code == 403, "权限不对，目前状态码是{}".format(r.status_code)
 
     @allure.title('test_wallet_005')
-    @allure.description('kyc状态为：temporary_rejected--查询可用余额列表')
+    @allure.description('kyc状态为：temporary_rejected--查询可用余额列表，权限校验')
     def test_wallet_005(self):
         with allure.step("测试用户的account_id"):
             account_id = '146aa112-2fd7-4cb5-a8ff-bb2fc45f55ed'
@@ -148,12 +144,10 @@ class TestWalletBalancesApi:
             r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
                                 headers=connect_headers)
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['balances'] is None, "temporary_rejected--查询可用余额列表错误，目前错误码是{}".format(r.json()['code'])
+            assert r.status_code == 403, "权限不对，目前状态码是{}".format(r.status_code)
 
     @allure.title('test_wallet_006')
-    @allure.description('kyc状态为：FINAL_REJECTED-查询可用余额列表')
+    @allure.description('kyc状态为：FINAL_REJECTED-查询可用余额列表，权限校验')
     def test_wallet_006(self):
         with allure.step("测试用户的account_id"):
             account_id = '1799875b-5749-4056-9cc9-6fba16f0f1e0'
@@ -169,6 +163,4 @@ class TestWalletBalancesApi:
             r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
                                 headers=connect_headers)
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['balances'] is None, "FINAL_REJECTED-查询可用余额列表错误，目前错误码是{}".format(r.json()['code'])
+            assert r.status_code == 403, "http状态码不对，目前状态码是{}".format(r.status_code)

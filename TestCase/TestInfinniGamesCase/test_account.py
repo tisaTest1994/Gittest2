@@ -85,30 +85,30 @@ class TestAccountApi:
             with allure.step("校验返回值"):
                 assert r.json()['email'] == 'zcdsw@sina.com', "获取infinni games账号信息错误,返回值是{}".format(r.text)
 
-    # @allure.title('test_account_005')
-    # @allure.description('cabital unlink解绑成功（改account_vid）')
-    # def test_account_005(self):
-    #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='test1027@163.com')
-    #     partner_id = get_json()["infinni_games"]["partner_id"]
-    #     with allure.step("获得data"):
-    #         data = {
-    #             'account_vid': 'c713ddf2-895e-4ef5-b123-98e035ad0967'
-    #         }
-    #         r = session.request('POST', url='{}/connect/account/{}/unlink'.format(env_url, partner_id), data=json.dumps(data), headers=headers)
-    #         print(r.json())
-    #         with allure.step("校验状态码"):
-    #             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-    #         with allure.step("校验返回值"):
-    #             assert r.json()['link_status'] == 3, "http 状态码不对，目前状态码是{}".format(r.json()['link_status'])
-    #
+    @allure.title('test_account_005')
+    @allure.description('cabital unlink解绑成功（改account_vid）')
+    def test_account_005(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='test1027@163.com')
+        partner_id = get_json()["infinni_games"]["partner_id"]
+        with allure.step("获得data"):
+            data = {
+                'account_vid': 'e9c7e5ec-5d80-443c-b53c-220882664b9c'
+            }
+            r = session.request('POST', url='{}/connect/account/{}/unlink'.format(env_url, partner_id), data=json.dumps(data), headers=headers)
+            print(r.json())
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['link_status'] == 3, "http 状态码不对，目前状态码是{}".format(r.json()['link_status'])
+
     # @allure.title('test_account_006')
-    # @allure.description('cabital 单一用户link成功（改account&uid）')
+    # @allure.description('cabital 单一用户link成功查询（改account&uid）')
     # def test_account_006(self):
-    #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='test1027@163.com')
+    #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice0012022@yeah.net')
     #     partner_id = get_json()["infinni_games"]["partner_id"]
     #     with allure.step("获得data"):
     #         data = {
-    #             'user_ext_ref': '992025900348358656'
+    #             'user_ext_ref': '992027385639485440'
     #         }
     #         r = session.request('POST', url='{}/connect/account/{}/link'.format(env_url, partner_id), data=json.dumps(data), headers=headers)
     #         print(r.json())

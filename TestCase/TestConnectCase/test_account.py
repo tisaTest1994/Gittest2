@@ -20,7 +20,6 @@ class TestAccountApi:
                        ('ffa1b49e-46f6-47b3-8ea6-2c41bac6b6ed', 'CREATED', 'yanting.huang+305@cabital.com'),
                        ('bacf2b3e-6599-44f4-adf6-c4c13ff40946', 'MATCHING', 'yanting.huang+309@cabital.com'),
                        ('b7ff2c76-5dae-4ea3-bb42-4b355357072a', 'MISMATCHED', 'yanting.huang+311@cabital.com'),
-                       ('3e5b1a67-bfd9-4670-a31b-26a47f371fb2', 'UNLINKED', 'yanting.huang+312@cabital.com'),
                        ]
 
     case_title = ['test_accounts_none 用户未进行关联',
@@ -32,7 +31,6 @@ class TestAccountApi:
                   'test_accounts_temporary_created 用户成功 KYC，Cabital 账户开通，等待合作方提交同名验证',
                   'test_accounts_temporary_matching 合作方已提交，同名验证人工审核中',
                   'test_accounts_mismatched 同名验证拒绝，多种因素',
-                  'test_accounts_unlinked 同用户/Cabital主动关闭与合作方的某账户关联',
                   ]
 
     @allure.title('test_account_001')
@@ -122,32 +120,74 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['otp_ready'] is True, "查询用户otp状态，otp已经绑定错误，返回值是{}".format(r.text)
 
-    # @allure.title('test_connect_account_004')
-    # @allure.description('成功解绑+name match用户 pass')
-    # def test_connect_account_04(self):
-    #     with allure.step("准备参数"):
-    #         account_id = 'ced61c30-859b-4c99-91fe-d0d56107e665'
-    #     with allure.step("name match 数据"):
-    #         data = {
-    #             'name': 'neo+5 ding+5',
-    #             'id': '123421231',
-    #             'id_document': 'PASSPORT',
-    #             'issued_by': 'HKG',
-    #             'dob': '19950528'
-    #         }
-    #     with allure.step("验签"):
-    #         unix_time = int(time.time())
-    #         nonce = generate_string(30)
-    #         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data))
-    #         connect_headers['ACCESS-SIGN'] = sign
-    #         connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-    #         connect_headers['ACCESS-NONCE'] = nonce
-    #     with allure.step("name match"):
-    #         r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
-    #     with allure.step("状态码和返回值"):
-    #         logger.info('状态码是{}'.format(str(r.status_code)))
-    #         logger.info('返回值是{}'.format(str(r.text)))
-    #     with allure.step("校验状态码"):
-    #         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-    #     with allure.step("校验返回值"):
-    #         assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)
+    @allure.title('test_connect_account_004')
+    @allure.description('成功解绑+name match用户 pass')
+    def test_connect_account_04(self):
+        with allure.step("准备参数"):
+            account_id = 'cd7e353b-6f4c-45db-bdd5-78bdc13a53c7'
+        with allure.step("name match 数据"):
+            data = {
+                'name': 'Neo DingTest6',
+                'id': '356214563',
+                'id_document': 'PASSPORT',
+                'issued_by': 'HKG',
+                'dob': '19910101'
+            }
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data))
+            connect_headers['ACCESS-SIGN'] = sign
+            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_headers['ACCESS-NONCE'] = nonce
+        with allure.step("name match"):
+            r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
+        with allure.step("状态码和返回值"):
+            # logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['result'] == 'PASS', "name match pass错误，返回值是{}".format(r.text)
+
+    @allure.title('test_connect_account_005')
+    @allure.description('获取用户绑定关系新（通过bybit账号获取cabital信息）')
+    def test_connect_account_005(self):
+        with allure.step("获取cabital账号link bybit账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='neoding1@yandex.com', password='Zcdsw123')
+            params = {
+                'partner_ids': get_json()['bybit']['partner_id'],
+                'user_ext_ref': '76c7006eba45a314687861ef73c6970a',
+                'link_mode': '1'
+            }
+            r = session.request('GET', url='{}/connect/account/links'.format(self.url), params=params, headers=headers)
+            logger.info('r.json的返回值是{}'.format(r.json()))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['list'][0]['partner_id'] == params['partner_ids'], "获取cabital账号link infinni games账号错误，返回值是{}".format(r.text)
+                assert r.json()['list'][0]['account_links'][0]['user_ext_ref'] == get_json()['bybit']['uid_A'], "获取cabital账号link infinni games账号错误，返回值是{}".format(r.text)
+
+    @allure.title('test_connect_account_006')
+    @allure.description('partner unlink(改account_vid和account)')
+    def test_connect_account_006(self):
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='neoding3@yeah.net', password ='Zcdsw123')
+        partner_id = get_json()["bybit"]["partner_id"]
+        account_id = "27fa917f-11d7-4a16-8a13-1fd74268c870"
+        with allure.step("获得data"):
+            data = {
+                "channel": "PARTNER"
+            }
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+                                                url='/api/v1/accounts/{}/unlink'.format(account_id),
+                                                    nonce=nonce, body=json.dumps(data))
+            headers['ACCESS-SIGN'] = sign
+            headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            headers['ACCESS-NONCE'] = nonce
+            headers['ACCESS-KEY'] = partner_id
+            r = session.request('POST', url='{}/accounts/{}/unlink'.format(self.url, account_id), data=json.dumps(data), headers=headers)
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)

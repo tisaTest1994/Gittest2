@@ -4,6 +4,35 @@
     "flexible_product": "eaa55390-745e-11ec-ae7e-0a3898443cb8",
     "mirana_account": "5661da70-a84f-4d49-adf0-1e7aebcd2820"
   },
+  "EAList": [
+    "BG",
+    "HR",
+    "CZ",
+    "DK",
+    "AT",
+    "BE",
+    "CY",
+    "EE",
+    "FI",
+    "FR",
+    "DE",
+    "GR",
+    "IE",
+    "IT",
+    "LV",
+    "LT",
+    "LU",
+    "MT",
+    "NL",
+    "PT",
+    "SK",
+    "SI",
+    "ES",
+    "RO",
+    "NO",
+    "SE",
+    "PL"
+  ],
   "app_package": {
     "pro": "com.cabital.cabital",
     "test": "com.cabital.cabital.debug"
@@ -19,6 +48,160 @@
       "url": "https://test.salesforce.com"
     }
   },
+  "cabital_pay": {
+    "test": {
+      "config": {
+        "cashier": {
+          "cabital_logo_allowed": true,
+          "merchant_display_name": "testMerchant1",
+          "merchant_logo": "testLogo"
+        },
+        "collection_config": {
+          "payment_currencies": [
+            {
+              "chains": [
+                "ETH",
+                "TRX"
+              ],
+              "limit": {
+                "max": "10000",
+                "min": "1"
+              },
+              "role": 2,
+              "symbol": "USDT"
+            }
+          ],
+          "valid_interval": 1800
+        },
+        "purchase_config": {
+          "payment_currencies": [
+            {
+              "chains": [
+                "ETH",
+                "TRX"
+              ],
+              "limit": {
+                "max": "10000",
+                "min": "1"
+              },
+              "role": 2,
+              "symbol": "USDT"
+            }
+          ],
+          "price_configs": [
+            {
+              "mark_up": {
+                "fix": "0",
+                "percentage": "100.8"
+              },
+              "pair": "EUR-USDT",
+              "strategy_id": "USDT-EUR:7:6"
+            },
+            {
+              "mark_up": {
+                "fix": "0",
+                "percentage": "100.8"
+              },
+              "pair": "USD-USDT",
+              "strategy_id": "USDT-USD:7"
+            },
+            {
+              "mark_up": {
+                "fix": "0",
+                "percentage": "102.49"
+              },
+              "pair": "TWD-USDT",
+              "strategy_id": "USDT-TWD:7:6"
+            },
+            {
+              "mark_up": {
+                "fix": "0",
+                "percentage": "102.49"
+              },
+              "pair": "SGD-USDT",
+              "strategy_id": "USDT-SGD:7:6"
+            },
+            {
+              "mark_up": {
+                "fix": "0",
+                "percentage": "102.49"
+              },
+              "pair": "HKD-USDT",
+              "strategy_id": "USDT-HKD:7:6"
+            },
+            {
+              "mark_up": {
+                "fix": "0",
+                "percentage": "101.25"
+              },
+              "pair": "GBP-USDT",
+              "strategy_id": "USDT-GBP:7:6"
+            }
+          ],
+          "purchase_currencies": [
+            {
+              "limit": {
+                "max": "10000",
+                "min": "1"
+              },
+              "role": 1,
+              "symbol": "USD"
+            },
+            {
+              "limit": {
+                "max": "1000",
+                "min": "1"
+              },
+              "role": 1,
+              "symbol": "EUR"
+            },
+            {
+              "limit": {
+                "max": "300000",
+                "min": "30"
+              },
+              "role": 1,
+              "symbol": "TWD"
+            },
+            {
+              "limit": {
+                "max": "-1",
+                "min": "-1"
+              },
+              "role": 1,
+              "symbol": "HKD"
+            },
+            {
+              "limit": {
+                "max": "-1",
+                "min": "-1"
+              },
+              "role": 1,
+              "symbol": "SGD"
+            },
+            {
+              "limit": {
+                "max": "-1",
+                "min": "-1"
+              },
+              "role": 1,
+              "symbol": "GBP"
+            }
+          ],
+          "valid_interval": 1800
+        },
+        "web_hooks": [
+          {
+            "hook_id": "MerchantTest1",
+            "name": "AcceptanceTxn",
+            "url": "https://c0b1e1042fcc1396f0dc2a60528f1f35.m.pipedream.net"
+          }
+        ]
+      },
+      "secretKey": "8d16bbdb-3872-4741-9fec-8e208d12f264",
+      "url": "https://merchant.latibac.com"
+    }
+  },
   "cash_list": [
     "GBP",
     "EUR",
@@ -26,6 +209,78 @@
     "BRL",
     "VND"
   ],
+  "cfx_service_charge": {
+    "BRL": 0.01,
+    "CHF": 0.01,
+    "GBP": 0.0125,
+    "Other": 0.008,
+    "VND": 0.025
+  },
+  "checkOutAreaList": [
+    "US",
+    "EG",
+    "ZA",
+    "TH",
+    "VN",
+    "HK",
+    "MY",
+    "TW",
+    "SG",
+    "LK",
+    "KR",
+    "JP",
+    "AU",
+    "NZ",
+    "BG",
+    "HR",
+    "CZ",
+    "DK",
+    "AT",
+    "BE",
+    "CY",
+    "EE",
+    "FI",
+    "FR",
+    "DE",
+    "GR",
+    "IE",
+    "IT",
+    "LV",
+    "LT",
+    "LU",
+    "MT",
+    "NL",
+    "PT",
+    "SK",
+    "SI",
+    "ES",
+    "RO",
+    "NO",
+    "GB",
+    "SE",
+    "PL",
+    "BR",
+    "CL",
+    "CO",
+    "MX",
+    "PE",
+    "CL",
+    "KW",
+    "IL",
+    "OM",
+    "AE",
+    "CA"
+  ],
+  "checkOutAreaList2": [
+    "US",
+    "EG",
+    "ZA",
+    "DE"
+  ],
+  "check_out_cfx_service_charge": {
+    "Other": 0.0249,
+    "USD": 0.005
+  },
   "connect": {
     "test": {
       "bybit": {
@@ -59,7 +314,7 @@
   ],
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",
-    "user_ext_ref": "38f26ee0d72f9031644a41874edbeda8",
+    "accountId_neoding": "cd7e353b-6f4c-45db-bdd5-78bdc13a53c7",
     "earn_email": "mrt1@cabital.com",
     "email": "richard.wan@cabital.com",
     "host": "imap.gmail.com",
@@ -69,8 +324,10 @@
     "port": "993",
     "secretKey": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY",
     "secretKey_richard": "NFCECYTRO54TOZRRJZXGKOKFOFRXSTDN",
+    "secretKey_neoding": "II4DO23UGZDHQZ3VNBGWMODHM5WWCSBT",
     "security_code": "oitmiuqbxclbqovn",
-    "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008"
+    "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008",
+    "user_ext_ref": "38f26ee0d72f9031644a41874edbeda8"
   },
   "env": "test",
   "headers": {
@@ -162,6 +419,17 @@
     "uid_A": "979698088019091456",
     "uid_B": "975832859451428864",
     "uid_C": "988518746672869376",
+    "uid_D": "992029247440699392",
+    "url": "https://connect.latibac.com/api/v1"
+  },
+  "bybit": {
+    "account_vid": "8feaa69e-08f7-4d35-b7c9-abcf04879d59",
+    "account_vid_c": "125831ca-a068-46fe-b5a9-bfc610f915dc",
+    "partner_id": "8dbb1484-fba8-42ad-b177-48a841ecf045",
+    "secretKey": "d7277081-3edd-47b6-b016-114f44f19320",
+    "uid_A": "76c7006eba45a314687861ef73c6970a",
+    "uid_B": "a765b947392c5c972601e334dbc9ab85",
+    "uid_C": "988518746672869376",
     "url": "https://connect.latibac.com/api/v1"
   },
   "kyc": {
@@ -245,173 +513,5 @@
   },
   "websocket": {
     "url": "wss://api.latibac.com/api/v1/realtime/ws"
-  },
-  "EAList": ["BG", "HR", "CZ", "DK", "AT", "BE", "CY", "EE", "FI", "FR", "DE", "GR", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PT", "SK", "SI", "ES", "RO", "NO", "SE", "PL"],
-  "checkOutAreaList": ["US", "EG", "ZA", "TH", "VN", "HK", "MY", "TW", "SG", "LK", "KR", "JP", "AU", "NZ", "BG", "HR", "CZ", "DK", "AT", "BE", "CY", "EE", "FI", "FR", "DE", "GR", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PT", "SK", "SI", "ES", "RO", "NO", "GB", "SE", "PL", "BR", "CL", "CO", "MX", "PE", "CL", "KW", "IL", "OM", "AE", "CA"],
-  "checkOutAreaList2":["US", "EG", "ZA", "DE"],
-  "cfx_service_charge": {
-    "CHF": 0.01,
-    "BRL": 0.01,
-    "VND": 0.025,
-    "GBP": 0.0125,
-    "Other": 0.008
-  },
-  "check_out_cfx_service_charge": {
-    "USD": 0.005,
-    "Other": 0.0249
-  },
-  "cabital_pay": {
-    "test": {
-      "url": "https://merchant.latibac.com",
-      "secretKey": "8d16bbdb-3872-4741-9fec-8e208d12f264",
-      "config": {
-        "cashier": {
-        "merchant_logo": "testLogo",
-        "cabital_logo_allowed": true,
-        "merchant_display_name": "testMerchant1"
-    },
-        "web_hooks": [
-        {
-            "url": "https://c0b1e1042fcc1396f0dc2a60528f1f35.m.pipedream.net",
-            "name": "AcceptanceTxn",
-            "hook_id": "MerchantTest1"
-        }
-    ],
-        "purchase_config": {
-          "price_configs": [
-            {
-                "pair": "EUR-USDT",
-                "mark_up": {
-                    "fix": "0",
-                    "percentage": "100.8"
-                },
-                "strategy_id": "USDT-EUR:7:6"
-            },
-            {
-                "pair": "USD-USDT",
-                "mark_up": {
-                    "fix": "0",
-                    "percentage": "100.8"
-                },
-                "strategy_id": "USDT-USD:7"
-            },
-            {
-                "pair": "TWD-USDT",
-                "mark_up": {
-                    "fix": "0",
-                    "percentage": "102.49"
-                },
-                "strategy_id": "USDT-TWD:7:6"
-            },
-            {
-                "pair": "SGD-USDT",
-                "mark_up": {
-                    "fix": "0",
-                    "percentage": "102.49"
-                },
-                "strategy_id": "USDT-SGD:7:6"
-            },
-            {
-                "pair": "HKD-USDT",
-                "mark_up": {
-                    "fix": "0",
-                    "percentage": "102.49"
-                },
-                "strategy_id": "USDT-HKD:7:6"
-            },
-            {
-                "pair": "GBP-USDT",
-                "mark_up": {
-                    "fix": "0",
-                    "percentage": "101.25"
-                },
-                "strategy_id": "USDT-GBP:7:6"
-            }
-        ],
-          "valid_interval": 1800,
-          "payment_currencies": [
-            {
-                "role": 2,
-                "limit": {
-                    "max": "10000",
-                    "min": "1"
-                },
-                "chains": [
-                    "ETH",
-                    "TRX"
-                ],
-                "symbol": "USDT"
-            }
-        ],
-          "purchase_currencies": [
-            {
-                "role": 1,
-                "limit": {
-                    "max": "10000",
-                    "min": "1"
-                },
-                "symbol": "USD"
-            },
-            {
-                "role": 1,
-                "limit": {
-                    "max": "1000",
-                    "min": "1"
-                },
-                "symbol": "EUR"
-            },
-            {
-                "role": 1,
-                "limit": {
-                    "max": "300000",
-                    "min": "30"
-                },
-                "symbol": "TWD"
-            },
-            {
-                "role": 1,
-                "limit": {
-                    "max": "-1",
-                    "min": "-1"
-                },
-                "symbol": "HKD"
-            },
-            {
-                "role": 1,
-                "limit": {
-                    "max": "-1",
-                    "min": "-1"
-                },
-                "symbol": "SGD"
-            },
-            {
-                "role": 1,
-                "limit": {
-                    "max": "-1",
-                    "min": "-1"
-                },
-                "symbol": "GBP"
-            }
-        ]
-        },
-        "collection_config": {
-          "valid_interval": 1800,
-          "payment_currencies": [
-            {
-                "role": 2,
-                "limit": {
-                    "max": "10000",
-                    "min": "1"
-                },
-                "chains": [
-                    "ETH",
-                    "TRX"
-                ],
-                "symbol": "USDT"
-            }
-        ]
-        }
-      }
-    }
   }
 }

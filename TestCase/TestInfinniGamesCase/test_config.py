@@ -16,7 +16,7 @@ class TestBalanceApi:
             headers['ACCESS-KEY'] = get_json()['infinni_games']['partner_id']
 
     @allure.title('test_config_001')
-    @allure.description('config相关')
+    @allure.description('connect获取合作方的config')
     def test_config_001(self):
         with allure.step("验签"):
             unix_time = int(time.time())

@@ -319,6 +319,8 @@ class TestTransferAbnormalApi:
     def test_transfer_007(self):
         with allure.step("测试用户的account_id"):
             account_id = get_json()['infinni_games']['account_vid']
+            user_ref_id ='979698088019091456'
+            type = 'convert'
         with allure.step("从config获取Cfx的最小限额"):
             symbol = 'USDT'
             cfx_limit = ApiFunction.get_config_info(project='infinni games', type='cfx_limit', symbol=symbol)
@@ -330,6 +332,7 @@ class TestTransferAbnormalApi:
             pair = 'USDT-EUR'
             transaction = ApiFunction.cfx_random(pair, pair.split('-')[0], buy_amount=buy_amount)
             cfx_transaction_id = transaction['returnJson']['transaction']['transaction_id']
+            print(cfx_transaction_id)
         with allure.step("获得data"):
             external_id = generate_string(25)
             data = {
@@ -352,15 +355,19 @@ class TestTransferAbnormalApi:
         with allure.step("transfer"):
             r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                 data=json.dumps(data), headers=headers)
-            logger.info('r.json()的返回值是{}'.format(r.json()))
+            # logger.info('r.json()的返回值是{}'.format(r.json()))
             logger.info('conversion_id的值是{}'.format(data['conversion_id']))
-        with allure.step("校验状态码"):
-            assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['code'] == 'PA032', "http状态码不对，目前状态码是{}".format(r.json()['code'])
-        with allure.step("校验返回值"):
-            assert r.json()['message'] == 'transfer amount greater than conversion amount', '划转失败，返回值是{}'.format(r.text)
-
+            with allure.step("校验状态码"):
+                assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['code'] == 'PA032', "http状态码不对，目前状态码是{}".format(r.json()['code'])
+            with allure.step("校验返回值"):
+                assert r.json()['message'] == 'transfer amount greater than conversion amount', '划转失败，返回值是{}'.format(r.text)
+        if r.status_code == 400:
+            with allure.step("查询transfer"):
+                r = session.request('Get', url='{}/accounts/{}/transaction/{}/{}'.format(self.url, user_ref_id, type, symbol),
+                                     headers=headers)
+                logger.info('r.json()的返回值是{}'.format(r.json()))
     @allure.title('test_transfer_008')
     @allure.description('infinni games申请，先做C+T，单做一笔交易C成功T因2FA失败，获取conversion_id')
     def test_transfer_008(self):
@@ -438,3 +445,30 @@ class TestTransferAbnormalApi:
             r = session.request('GET', url='{}/accounts/{}/transfers'.format(self.url, account_id), headers=headers)
         with allure.step("校验状态码"):
             assert r.status_code == 403, "http状态码不对，目前状态码是{}".format(r.status_code)
+
+    @allure.title('test_transfer_011')
+    @allure.description('交易列表查询（不传默认参数）-INITIALIZED 权限校验')
+    def test_transfer_011(self):
+        with allure.step("partner用户的user_ext_ref"):
+            user_ext_ref = '992030823286849536'
+            tx_type_list = ['buy', 'convert', 'transfer']
+            for tx_type in tx_type_list:
+                with allure.step("验签"):
+                    unix_time = int(time.time())
+                    nonce = generate_string(30)
+                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                        url='/api/v1/accounts/{}/transactions/{}'.format(user_ext_ref,
+                                                                                                         tx_type),
+                                                        key='infinni games', nonce=nonce)
+                    headers['ACCESS-SIGN'] = sign
+                    headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                    headers['ACCESS-NONCE'] = nonce
+                with allure.step("账户划转列表"):
+                    r = session.request('GET',
+                                        url='{}/accounts/{}/transactions/{}'.format(self.url, user_ext_ref, tx_type),
+                                        headers=headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 403, "http状态码不对，目前状态码是{}".format(r.status_code)

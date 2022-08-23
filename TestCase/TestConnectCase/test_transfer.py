@@ -61,7 +61,7 @@ class TestTransferApi:
             assert r.json()['transfers'] is not None, "账户划转列表（传入部分参数）错误，返回值是{}".format(r.text)
 
     @allure.title('test_transfer_003')
-    @allure.description('没有通过kyc的账户划转列表（不传默认参数）失败')
+    @allure.description('没有通过kyc的账户划转列表（不传默认参数）没有权限验证')
     def test_transfer_003(self):
         with allure.step("测试用户的account_id"):
             account_id = "eb9659ea-0d95-4f0f-83a3-1152c5a90ee9"
@@ -77,9 +77,7 @@ class TestTransferApi:
             r = session.request('GET', url='{}/accounts/{}/transfers'.format(self.url, account_id),
                                 headers=connect_headers)
         with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert r.json()['transfers'] is None, "没有通过kyc的账户划转列表（不传默认参数）失败错误，返回值是{}".format(r.text)
+            assert r.status_code == 403, "权限不对，目前状态码是{}".format(r.status_code)
 
     @allure.title('test_transfer_004')
     @allure.description('把数字货币从cabital转移到bybit账户（小于单比最小限额）')
@@ -164,9 +162,9 @@ class TestTransferApi:
     @allure.description('bybit发起请求，把资金从cabital转移到bybit账户')
     def test_transfer_006(self):
         with allure.step("测试用户的account_id"):
-            account_id = get_json()['email']['accountId']
+            account_id = get_json()['email']['accountId_neoding']
         with allure.step("获得otp"):
-            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_neoding'])
         with allure.step("获得data"):
             external_id = generate_string(25)
             data = {
@@ -220,12 +218,14 @@ class TestTransferApi:
     @allure.description('从cabital转移到bybit账户并且关联C+T交易')
     def test_transfer_007(self):
         with allure.step("测试用户的account_id"):
-            account_id = get_json()['email']['accountId']
+            # account_id = get_json()['email']['accountId']
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='ddjking998@gmail.com', password='Zcdsw123')
+            account_id = '2c40eff0-b159-4728-9bfd-0abb962607a4'
         with allure.step("换汇"):
             for i in ApiFunction.get_connect_cfx_list(self.url, connect_headers):
                 sleep(5)
                 with allure.step('换汇'):
-                    transaction = ApiFunction.cfx_random(i, i.split('-')[0], type='bybit', account_id=account_id, headers=connect_headers,url=self.url)
+                    transaction = ApiFunction.cfx_random(i, i.split('-')[0], type='bybit', account_id=account_id, headers=connect_headers, url=self.url)
                     cfx_transaction_id = transaction['returnJson']['transaction_id']
                 with allure.step("获得otp"):
                     mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
