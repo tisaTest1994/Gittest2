@@ -576,7 +576,7 @@ class TestAccountApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['version'] == 20220711, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
+                assert r.json()['version'] == 20220825, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_036')
     @allure.description('多次referal注册用户')
