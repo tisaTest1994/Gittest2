@@ -126,7 +126,7 @@ class TestTransferDetailApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json()['user_ext_ref'] == 'cd7e353b-6f4c-45db-bdd5-78bdc13a53c7', '基于划转ID获取划转详情错误，返回值是{}'.format(r.text)
+            assert r.json()['user_ext_ref'] == '76c7006eba45a314687861ef73c6970a', '基于划转ID获取划转详情错误，返回值是{}'.format(r.text)
 
     @allure.title('test_transfer_detail_006')
     @allure.description('UserExtRef划转列表（不传默认参数）')
