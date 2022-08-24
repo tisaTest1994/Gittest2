@@ -708,7 +708,7 @@ class TestCabitalPayApi:
                 assert r.json()['status'] == 'Pending', "创建订单只会pending错误，返回值是{}".format(r.text)
 
     @allure.title('test_cabital_pay_014')
-    @allure.description('交易详情payment_id不存在')
+    @allure.description('使用不属于本商户的payment_id查询订单')
     def test_cabital_pay_014(self):
         payment_id = '3d3676eb-a3f9-4bf8-8958-c222f692f716'
         with allure.step("验签"):
