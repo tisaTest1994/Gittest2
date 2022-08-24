@@ -73,7 +73,7 @@ if __name__ == '__main__':
     elif sys.argv[1] == "cabinet":
         pytest.main(['./TestCase/TestCabinetCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "bybit":
-        pytest.main(['./TestCase/TestbybitCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
+        pytest.main(['./TestCase/TestBybitCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "web":
         pytest.main(['./TestCase/TestWebCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "accounting":
