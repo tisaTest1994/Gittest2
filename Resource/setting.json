@@ -212,7 +212,7 @@
   "cfx_service_charge": {
     "BRL": 0.01,
     "CHF": 0.01,
-    "GBP": 0.0125,
+    "GBP": 0.01,
     "Other": 0.008,
     "VND": 0.025
   },

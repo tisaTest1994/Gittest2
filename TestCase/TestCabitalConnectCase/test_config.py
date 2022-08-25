@@ -4,14 +4,13 @@ from Function.operate_sql import *
 
 # 获取合作方的配置
 class TestConfigApi:
-    url = get_json()['connect'][get_json()['env']]['url']
 
     # 初始化class
     def setup_method(self):
-        ApiFunction.add_headers()
+        pass
 
     @allure.title('test_config_001')
-    @allure.description('config相关')
+    @allure.description('获得config')
     def test_config_001(self):
         with allure.step("验签"):
             unix_time = int(time.time())
