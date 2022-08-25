@@ -56,13 +56,15 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
+                                                key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
         with allure.step("创建订单"):
-            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data), headers=self.headers)
+            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data),
+                                headers=self.headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -86,13 +88,15 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
+                                                key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
         with allure.step("创建订单"):
-            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data), headers=self.headers)
+            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data),
+                                headers=self.headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -108,7 +112,6 @@ class TestCabitalPayApi:
             data = {
                 "reference_id": generate_string(30),
                 "purchase_currency": "GBP",
-                #"purchase_amount": "100.23",
                 "success_url": "https://callback.cabital.com/success",
                 "failed_url": "https://callback.cabital.com/failed",
                 "processing_url": "https://callback.cabital.com/processing",
@@ -116,13 +119,15 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
+                                                key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
         with allure.step("创建订单"):
-            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data), headers=self.headers)
+            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data),
+                                headers=self.headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -174,13 +179,15 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
+                                                key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
         with allure.step("创建订单"):
-            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data), headers=self.headers)
+            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data),
+                                headers=self.headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -232,13 +239,15 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
+                                                key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
         with allure.step("创建订单"):
-            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data), headers=self.headers)
+            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data),
+                                headers=self.headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -424,13 +433,15 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
+                                                key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
         with allure.step("创建订单"):
-            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data), headers=self.headers)
+            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data),
+                                headers=self.headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -482,13 +493,15 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
+                                                key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
         with allure.step("创建订单"):
-            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data), headers=self.headers)
+            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data),
+                                headers=self.headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -540,20 +553,24 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
+                                                key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
         with allure.step("创建订单"):
-            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data), headers=self.headers)
+            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data),
+                                headers=self.headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['crypto_address'] != '', "指定了payment currency，指定了Network，接口返回参数中包含支付地址信息错误，返回值是{}".format(r.text)
+                assert r.json()[
+                           'crypto_address'] != '', "指定了payment currency，指定了Network，接口返回参数中包含支付地址信息错误，返回值是{}".format(
+                    r.text)
                 assert r.json()['payment_amount'] != '', "自动补全payment amount 金额错误，返回值是{}".format(r.text)
 
     @allure.title('test_cabital_pay_011')
@@ -596,20 +613,24 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
+                                                key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
         with allure.step("创建订单"):
-            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data), headers=self.headers)
+            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data),
+                                headers=self.headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                assert r.json()['crypto_address'] == '', "指定了payment currency，指定了Network，接口返回参数中包含支付地址信息错误，返回值是{}".format(r.text)
+                assert r.json()[
+                           'crypto_address'] == '', "指定了payment currency，指定了Network，接口返回参数中包含支付地址信息错误，返回值是{}".format(
+                    r.text)
 
     @allure.title('test_cabital_pay_012')
     @allure.description('交易详情payment_id不存在')
@@ -618,7 +639,9 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/payments/{}'.format(payment_id), key='cabital pay', nonce=nonce)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
+                                                nonce=nonce)
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
@@ -674,13 +697,15 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
+                                                key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
         with allure.step("创建订单"):
-            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data), headers=self.headers)
+            r = session.request('POST', url='{}/api/v1/payments'.format(self.url), data=json.dumps(data),
+                                headers=self.headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -692,12 +717,14 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/payments/{}'.format(payment_id), key='cabital pay', nonce=nonce)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
+                                                nonce=nonce)
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
-        with allure.step("创建订单"):
+        with allure.step("查询订单"):
             r = session.request('GET', url='{}/api/v1/payments/{}'.format(self.url, payment_id), headers=self.headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -714,12 +741,14 @@ class TestCabitalPayApi:
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/payments/{}'.format(payment_id), key='cabital pay', nonce=nonce)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
+                                                nonce=nonce)
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
             self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
             self.headers['ACCESS-NONCE'] = nonce
-        with allure.step("创建订单"):
+        with allure.step("查询订单"):
             r = session.request('GET', url='{}/api/v1/payments/{}'.format(self.url, payment_id), headers=self.headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
@@ -727,3 +756,105 @@ class TestCabitalPayApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 404, "http 状态码不对，目前状态码是{}".format(r.status_code)
 
+    @allure.title('test_cabital_pay_015')
+    @allure.description('查询支付金额不足的过期订单')
+    def test_cabital_pay_015(self):
+        with allure.step("创建好的订单编号"):
+            payment_id = "cdf28bdc-093a-4eae-a2eb-7ca071b08bd8"
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
+                                                nonce=nonce)
+            self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
+            self.headers['ACCESS-SIGN'] = sign
+            self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            self.headers['ACCESS-NONCE'] = nonce
+        with allure.step("查询订单"):
+            r = session.request('GET', url='{}/api/v1/payments/{}'.format(self.url, payment_id),
+                                headers=self.headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['status'] == "Failed", "查询支付金额不足的过期订单错误，返回值是{}".format(r.text)
+
+    @allure.title('test_cashier_016')
+    @allure.description('查询未支付的过期订单')
+    def test_cashier_016(self):
+        with allure.step("创建好的订单编号"):
+            payment_id = "7684b8bf-f9a9-4ea2-b3d6-3933fdd37294"
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
+                                                nonce=nonce)
+            self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
+            self.headers['ACCESS-SIGN'] = sign
+            self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            self.headers['ACCESS-NONCE'] = nonce
+        with allure.step("查询订单"):
+            r = session.request('GET', url='{}/api/v1/payments/{}'.format(self.url, payment_id),
+                                headers=self.headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['status'] == "Expired", "查询未支付的过期订单错误，返回值是{}".format(r.text)
+
+    @allure.title('test_cashier_017')
+    @allure.description('查询完成支付的订单（金额正好）')
+    def test_cashier_017(self):
+        with allure.step("创建好的订单编号"):
+            payment_id = "0b11f4a3-0576-4c47-a91b-4af059fdcc14"
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
+                                                nonce=nonce)
+            self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
+            self.headers['ACCESS-SIGN'] = sign
+            self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            self.headers['ACCESS-NONCE'] = nonce
+        with allure.step("查询订单"):
+            r = session.request('GET', url='{}/api/v1/payments/{}'.format(self.url, payment_id),
+                                headers=self.headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['status'] == "Completed", "查询完成支付的订单（金额正好）错误，返回值是{}".format(r.text)
+
+    @allure.title('test_cashier_018')
+    @allure.description('查询完成支付的订单（金额超过）')
+    def test_cashier_018(self):
+        with allure.step("创建好的订单编号"):
+            payment_id = "4ff2d3ab-a3ee-43c1-9654-c010955b9e7c"
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
+                                                url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
+                                                nonce=nonce)
+            self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
+            self.headers['ACCESS-SIGN'] = sign
+            self.headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            self.headers['ACCESS-NONCE'] = nonce
+        with allure.step("查询订单"):
+            r = session.request('GET', url='{}/api/v1/payments/{}'.format(self.url, payment_id),
+                                headers=self.headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['status'] == "Completed", "查询完成支付的订单（金额超过）错误，返回值是{}".format(r.text)

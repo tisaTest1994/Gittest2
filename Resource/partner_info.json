@@ -1,0 +1,12 @@
+{
+  "test": {
+    "Bybit": {
+      "Partner_ID": "8dbb1484-fba8-42ad-b177-48a841ecf045",
+      "Secret_Key": "d7277081-3edd-47b6-b016-114f44f19320"
+    },
+    "Matrixport": {
+      "Partner_ID": "4751fd32-ac32-43b3-bb08-84cffd579fbd",
+      "Secret_Key": "2b17f8e5-568f-4636-803d-5106f168f2ca"
+    }
+  }
+}

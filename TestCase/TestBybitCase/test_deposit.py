@@ -217,18 +217,4 @@ class TestDepositApi:
                             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                         with allure.step("校验返回值"):
                             assert r.json()['meta'] is not None, "获取账户单币入账信息, 入币方式SIC错误，返回值是{}".format(r.text)
-                        # bank_accounts = r.json()['meta']
-                    # with allure.step("moblie接口一致性查询"):
-                    #     with allure.step("CHF法币充值账户"):
-                    #         r = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'CHF', 'SIC'),
-                    #                             headers=headers)
-                    #         with allure.step("状态码和返回值"):
-                    #             logger.info('状态码是{}'.format(str(r.status_code)))
-                    #             logger.info('返回值是{}'.format(str(r.text)))
-                    #         with allure.step("校验状态码"):
-                    #             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                    #         with allure.step("校验返回值"):
-                    #             assert r.json()['bank_accounts'] is not None, "EUR法币充值账户错误，返回值是{}".format(r.text)
-                    #             bank_accounts_mobile = r.json()['bank_accounts'][0]
-                    #             del bank_accounts_mobile['header']
-                    #             assert bank_accounts_mobile == bank_accounts, "moblie接口一致性查询错误，返回值是{}".format(r.text)
+

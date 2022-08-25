@@ -10,6 +10,7 @@ stages:
     - test5
     - test6
     - test7
+    - test8
 
 before_script:
     - apt-get update
@@ -56,12 +57,12 @@ Cabinet Test:
       - Reports
     expire_in: 1 week
 
-Connect Test:
+Bybit Test:
   stage: test4
   tags:
     - python
   script:
-    - python run.py connect en_US
+    - python run.py bybit en_US
   artifacts:
     paths:
       - Reports
@@ -106,6 +107,17 @@ Kyc Test（sanbox）:
     - python
   script:
     - python run.py kyc sanbox
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+Cabital Connect Test:
+  stage: test8
+  tags:
+    - python
+  script:
+    - python run.py connect en_US
   artifacts:
     paths:
       - Reports

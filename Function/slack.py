@@ -43,8 +43,8 @@ def slack_report(type, env='test'):
         title = "App Test Report"
     elif type == 'cabinet':
         title = "Cabinet Test Report"
-    elif type == 'connect':
-        title = "Cabital Connect Test Report"
+    elif type == 'bybit':
+        title = "Bybit Test Report"
     elif type == 'web':
         title = "Web Test Report"
     elif type == 'accounting':
@@ -53,6 +53,8 @@ def slack_report(type, env='test'):
         title = "Infinni Games Test Report"
     elif type == 'pay':
         title = "Cabital Pay Test Report"
+    elif type == 'connect':
+        title = "Cabital Connect Test Report"
     else:
         title = "Test Report"
     attachment = [
@@ -90,8 +92,8 @@ def get_job_id(type):
         elif type == 'cabinet':
             if i['name'] == 'Cabinet Test':
                 id_list.append(i['id'])
-        elif type == 'connect':
-            if i['name'] == 'Connect Test':
+        elif type == 'bybit':
+            if i['name'] == 'Bybit Test':
                 id_list.append(i['id'])
         elif type == 'web':
             if i['name'] == 'Web Test':
@@ -104,6 +106,9 @@ def get_job_id(type):
                 id_list.append(i['id'])
         elif type == 'pay':
             if i['name'] == 'Cabital Pay Test':
+                id_list.append(i['id'])
+        elif type == 'connect':
+            if i['name'] == 'Cabital Connect Test':
                 id_list.append(i['id'])
     return id_list[0]
 
