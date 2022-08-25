@@ -28,6 +28,9 @@ env_url = get_json()[get_json()['env']]
 global operateUrl
 operateUrl = get_json()['operateUrl']
 
+global connect_url
+connect_url = get_json()['url_list']['connect']
+
 # headers
 global headers
 headers = get_json()['headers']

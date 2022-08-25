@@ -591,3 +591,53 @@ class TestCashierApi:
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json()['code'] == "301000", "查询订单缺少code错误，返回值是{}".format(r.text)
+
+    @allure.title('test_cashier_012')
+    @allure.description('查询支付金额不足的过期订单')
+    def test_cashier_012(self):
+        with allure.step("创建好的订单编号"):
+            payment_id = "cdf28bdc-093a-4eae-a2eb-7ca071b08bd8"
+            with allure.step("获取交易详情"):
+                r = session.request('GET', url='{}/api/v1/cashier/payment/{}'.format(self.url, payment_id),
+                                    headers=self.headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验返回值"):
+                    assert r.json()['status'] == "Failed", "查询支付金额不足的过期订单错误，返回值是{}".format(r.text)
+
+    @allure.title('test_cashier_013')
+    @allure.description('查询未支付的过期订单')
+    def test_cashier_013(self):
+        with allure.step("创建好的订单编号"):
+            payment_id = "7684b8bf-f9a9-4ea2-b3d6-3933fdd37294"
+            with allure.step("获取交易详情"):
+                r = session.request('GET', url='{}/api/v1/cashier/payment/{}'.format(self.url, payment_id),
+                                    headers=self.headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验返回值"):
+                    assert r.json()['status'] == "Expired", "查询未支付的过期订单错误，返回值是{}".format(r.text)
+
+    @allure.title('test_cashier_014')
+    @allure.description('查询完成支付的订单（金额正好）')
+    def test_cashier_014(self):
+        with allure.step("创建好的订单编号"):
+            payment_id = "0b11f4a3-0576-4c47-a91b-4af059fdcc14"
+            with allure.step("获取交易详情"):
+                r = session.request('GET', url='{}/api/v1/cashier/payment/{}'.format(self.url, payment_id),
+                                    headers=self.headers)
+                with allure.step("状态码和返回值"):
+                    logger.info('状态码是{}'.format(str(r.status_code)))
+                    logger.info('返回值是{}'.format(str(r.text)))
+                with allure.step("校验状态码"):
+                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                with allure.step("校验返回值"):
+                    assert r.json()['status'] == "Completed", "查询未支付的过期订单错误，返回值是{}".format(r.text)
+
+

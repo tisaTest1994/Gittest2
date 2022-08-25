@@ -513,5 +513,8 @@
   },
   "websocket": {
     "url": "wss://api.latibac.com/api/v1/realtime/ws"
+  },
+  "url_list": {
+    "connect": "https://connect.latibac.com/api/v1"
   }
 }

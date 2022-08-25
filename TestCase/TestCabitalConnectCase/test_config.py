@@ -4,10 +4,11 @@ from Function.operate_sql import *
 
 # 获取合作方的配置
 class TestConfigApi:
+    url = get_json()['connect'][get_json()['env']]['url']
 
     # 初始化class
     def setup_method(self):
-        pass
+        ApiFunction.add_headers()
 
     @allure.title('test_config_001')
     @allure.description('config相关')
@@ -21,7 +22,7 @@ class TestConfigApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("获取合作方的配置"):
-            r = session.request('GET', url='{}/config'.format(connect_url), headers=connect_headers)
+            r = session.request('GET', url='{}/config'.format(self.url), headers=connect_headers)
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
