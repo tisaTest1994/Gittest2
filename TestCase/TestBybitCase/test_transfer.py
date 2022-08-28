@@ -218,9 +218,7 @@ class TestTransferApi:
     @allure.description('从cabital转移到bybit账户并且关联C+T交易')
     def test_transfer_007(self):
         with allure.step("测试用户的account_id"):
-            # account_id = get_json()['email']['accountId']
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='ddjking998@gmail.com', password='Zcdsw123')
-            account_id = '2c40eff0-b159-4728-9bfd-0abb962607a4'
+            account_id = get_json()['email']['accountId_neoding']
         with allure.step("换汇"):
             for i in ApiFunction.get_connect_cfx_list(self.url, connect_headers):
                 sleep(5)
@@ -228,7 +226,7 @@ class TestTransferApi:
                     transaction = ApiFunction.cfx_random(i, i.split('-')[0], type='bybit', account_id=account_id, headers=connect_headers, url=self.url)
                     cfx_transaction_id = transaction['returnJson']['transaction_id']
                 with allure.step("获得otp"):
-                    mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+                    mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_neoding'])
                 with allure.step("获得data"):
                     if i.split('-')[0] in get_json()['crypto_list']:
                         symbol = i.split('-')[0]

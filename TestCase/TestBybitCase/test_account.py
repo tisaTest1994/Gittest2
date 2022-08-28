@@ -168,26 +168,27 @@ class TestAccountApi:
                 assert r.json()['list'][0]['partner_id'] == params['partner_ids'], "获取cabital账号link infinni games账号错误，返回值是{}".format(r.text)
                 assert r.json()['list'][0]['account_links'][0]['user_ext_ref'] == get_json()['bybit']['uid_A'], "获取cabital账号link infinni games账号错误，返回值是{}".format(r.text)
 
-    @allure.title('test_connect_account_006')
-    @allure.description('partner unlink(改account_vid和account)')
-    def test_connect_account_006(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='neoding3@yeah.net', password ='Zcdsw123')
-        partner_id = get_json()["bybit"]["partner_id"]
-        account_id = "27fa917f-11d7-4a16-8a13-1fd74268c870"
-        with allure.step("获得data"):
-            data = {
-                "channel": "PARTNER"
-            }
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                url='/api/v1/accounts/{}/unlink'.format(account_id),
-                                                    nonce=nonce, body=json.dumps(data))
-            headers['ACCESS-SIGN'] = sign
-            headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            headers['ACCESS-NONCE'] = nonce
-            headers['ACCESS-KEY'] = partner_id
-            r = session.request('POST', url='{}/accounts/{}/unlink'.format(self.url, account_id), data=json.dumps(data), headers=headers)
-            with allure.step("校验状态码"):
-                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+    # @allure.title('test_connect_account_006')
+    # @allure.description('partner unlink(改account_vid和account)')
+    # def test_connect_account_006(self):
+    #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='neoding3@yeah.net', password='Zcdsw123')
+    #     partner_id = get_json()["bybit"]["partner_id"]
+    #     account_id = "27fa917f-11d7-4a16-8a13-1fd74268c870"
+    #     with allure.step("获得data"):
+    #         data = {
+    #             "channel": "PARTNER"
+    #         }
+    #     with allure.step("验签"):
+    #         unix_time = int(time.time())
+    #         nonce = generate_string(30)
+    #         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
+    #                                             url='/api/v1/accounts/{}/unlink'.format(account_id),
+    #                                                 nonce=nonce, body=json.dumps(data))
+    #         headers['ACCESS-SIGN'] = sign
+    #         headers['ACCESS-TIMESTAMP'] = str(unix_time)
+    #         headers['ACCESS-NONCE'] = nonce
+    #         headers['ACCESS-KEY'] = partner_id
+    #         r = session.request('POST', url='{}/accounts/{}/unlink'.format(self.url, account_id), data=json.dumps(data), headers=headers)
+    #         with allure.step("校验状态码"):
+    #             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+

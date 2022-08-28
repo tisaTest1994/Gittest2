@@ -51,6 +51,8 @@ class TestKycAcceptanceApi:
         with allure.step("获取kyc info"):
             r = session.request('POST', url='{}/accounts/{}/kycinfo/submit'.format(self.url, account_id),
                                 headers=headers, files=data)
-            print(r.status_code)
-            print(r.text)
+            with allure.step("校验状态码"):
+                assert r.status_code == 201, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json()['Metadata'] is not None, "获取cabital账号link infinni games账号错误，返回值是{}".format(r.text)
 
