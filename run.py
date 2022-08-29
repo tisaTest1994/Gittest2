@@ -35,6 +35,11 @@ connect_url = get_json()['url_list']['connect']
 global headers
 headers = get_json()['headers']
 
+global connect_headers
+connect_headers = {
+    "Content-Type": "application/json"
+}
+
 global package_name
 package_name = get_json()['app_package'][get_json()['env']]
 

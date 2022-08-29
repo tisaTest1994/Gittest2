@@ -7,6 +7,7 @@ from Crypto.Signature import PKCS1_v1_5 as Signature_PKC
 import base64
 import webbrowser
 
+
 class ApiFunction:
 
     # 获取用户token
@@ -384,6 +385,39 @@ class ApiFunction:
                     data = '{}{}{}{}'.format(unix_time, method, nonce, url)
                 else:
                     data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
+            key = key.encode('utf-8')
+            message = data.encode('utf-8')
+            sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
+            sign = str(sign, 'utf-8')
+        return sign
+
+    # partner and cabital pay 验签
+    @staticmethod
+    def make_signature(unix_time, method, url, connect_type, body='', nonce=''):
+        if connect_type == 'cabital pay':
+            if nonce == '':
+                if body == '':
+                    data = '{}{}{}'.format(unix_time, method, url)
+                else:
+                    data = '{}{}{}{}'.format(unix_time, method, url, body)
+            else:
+                if body == '':
+                    data = '{}{}{}{}'.format(unix_time, method, nonce, url)
+                else:
+                    data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
+            path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/my_private_rsa_key.bin'
+            private_key = RSA.import_key(open(path).read())
+            signer = PKCS1_v1_5.new(private_key,)
+            hash_obj = SHA256.new(data.encode('utf-8'))
+            sign = base64.b64encode(signer.sign(hash_obj))
+            sign = str(sign, 'utf-8')
+        else:
+            if get_json(file='partner_info.json')[get_json()['env']][connect_type] != '':
+                key = get_json(file='partner_info.json')[get_json()['env']][connect_type]['Secret_Key']
+            if body == '':
+                data = '{}{}{}{}'.format(unix_time, method, nonce, url)
+            else:
+                data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
             key = key.encode('utf-8')
             message = data.encode('utf-8')
             sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
