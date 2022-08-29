@@ -103,7 +103,7 @@ class TestCashierApi:
     @allure.description('使用不存在的payment_id获取交易详情')
     def test_cashier_003(self):
         with allure.step("创建好的订单编号"):
-            payment_id = "0ad7d01a-09b9-4845-8d91-5f1df6a9010f1231231"
+            payment_id = "05e76a4c-7c8c-4101-b517-f072e2ce13b3"
             with allure.step("获取交易详情"):
                 r = session.request('GET', url='{}/api/v1/cashier/payment/{}'.format(self.url, payment_id),
                                     headers=self.headers)

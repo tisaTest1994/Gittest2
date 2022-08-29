@@ -276,5 +276,33 @@ class TestMobileApi:
                 transfer_amount_wallet_balance_latest2), "transfer前后可用balance数量不对，transfer前balance是{}，transfer后balance是{}".format(
                 transfer_amount_wallet_balance_old, transfer_amount_wallet_balance_latest2)
 
-
+    @allure.title('test_connect_001 transfer 交易')
+    @allure.description('transfer 交易')
+    def test_connect_002(self):
+        with allure.step("确认划转"):
+            account_id = '2f1f9c33-6e3a-40e0-b5e2-e38e2ebe4987'
+            external_id = generate_string(25)
+            transfer_id = '5304901b-9f4b-4536-91e0-ab3b345aa3bd'
+            data = {
+                "status": "FAILED",
+                "code": "bad",
+                "message": "fail error",
+                "handle_time": int(time.time()),
+                "external_id": external_id
+            }
+            with allure.step("验签"):
+                unix_time = int(time.time())
+                nonce = generate_string(30)
+                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT',
+                                                    url='/api/v1/accounts/{}/transfers/{}'.format(
+                                                        account_id,
+                                                        transfer_id), key='infinni games', nonce=nonce, body=json.dumps(data))
+                connect_headers['ACCESS-SIGN'] = sign
+                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                connect_headers['ACCESS-NONCE'] = nonce
+            r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url, account_id, transfer_id), data=json.dumps(data), headers=connect_headers)
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                assert r.json() == {}, "确认划转交易错误，返回值是{}".format(r.text)
 

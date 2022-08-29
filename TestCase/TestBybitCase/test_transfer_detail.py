@@ -14,7 +14,7 @@ class TestTransferDetailApi:
     @allure.description('账户划转详情使用错误transfer_id')
     def test_transfer_detail_001(self):
         with allure.step("测试用户的account_id"):
-            account_id = '96f29441-feb4-495a-a531-96c833e8261a'
+            account_id = get_json()['email']['accountId_neoding']
             transfer_id = "f5346953-d422-4c56-846f-779fafd1c2b2"
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -41,7 +41,7 @@ class TestTransferDetailApi:
     @allure.description('账户划转详情使用正确transfer_id')
     def test_transfer_detail_002(self):
         with allure.step("测试用户的account_id"):
-            account_id = '96f29441-feb4-495a-a531-96c833e8261a'
+            account_id = get_json()['email']['accountId']
             transfer_id = "fa8765b0-bc77-4ee8-840b-e292df6a9f06"
         with allure.step("验签"):
             unix_time = int(time.time())
@@ -78,7 +78,7 @@ class TestTransferDetailApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("划转交易详情使用正确external_id"):
-            r = session.request('GET', url='{}/recon/transfers/{}'.format(self.url, external_id),headers=connect_headers)
+            r = session.request('GET', url='{}/recon/transfers/{}'.format(self.url, external_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -111,7 +111,7 @@ class TestTransferDetailApi:
     @allure.title('test_transfer_detail_005')
     @allure.description('基于划转ID获取划转详情')
     def test_transfer_detail_005(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='neoding@yandex.com', password='Zcdsw123')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='neoding@yandex.com')
         transfer_id = "5fbbd31e-5703-4f0c-bdb7-3a43881c8c74"
         with allure.step("验签"):
             unix_time = int(time.time())
