@@ -5,6 +5,11 @@ from Function.operate_sql import *
 # Balance相关cases
 class TestBalanceApi:
 
+    # 初始化class
+    def setup_method(self):
+        with allure.step("登录客户账户获得后续操作需要的token"):
+            ApiFunction.add_headers()
+
     @allure.title('test_balance_001')
     @allure.description('获取用户的所有账户余额')
     def test_balance_001(self, partner):
@@ -19,7 +24,7 @@ class TestBalanceApi:
             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
             connect_headers['ACCESS-NONCE'] = nonce
         with allure.step("账户可用余额列表"):
-            r = session.request('GET', url='{}/accounts/{}/balances'.format(connect_url, account_id), headers=headers)
+            r = session.request('GET', url='{}/accounts/{}/balances'.format(connect_url, account_id), headers=connect_headers)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -28,12 +33,11 @@ class TestBalanceApi:
         with allure.step("校验返回值"):
             assert r.json()['balances'] is not None, "账户可用余额列表错误，返回值是{}".format(r.text)
         with allure.step("判断提供给partner的和我们自用的值一致"):
-            balance_list = ApiFunction.get_connect_support(connect_url, headers, key='infinni games')
-            for i in balance_list:
-                mobile_balance = ApiFunction.get_crypto_number(type=i, balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
+            for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
+                mobile_balance = ApiFunction.get_crypto_number(type=i['symbol'], balance_type='BALANCE_TYPE_AVAILABLE', wallet_type='BALANCE')
                 for y in r.json()['balances']:
-                    if y['code'] == i:
-                        assert float(mobile_balance) == float(y['balances']), '币种{}判断提供给infinni games的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(i, mobile_balance, y['balances'])
+                    if y['code'] == i['symbol']:
+                        assert float(mobile_balance) == float(y['balances']), '币种{}判断提供给{}的和我们自用的值一致失败，我们自用balance是{},bybit是{}'.format(i['symbol'], partner, mobile_balance, y['balances'])
 
     @allure.title('test_balance_002')
     @allure.description('获取账户可用余额单币(有资金）')
