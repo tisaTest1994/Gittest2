@@ -18,18 +18,18 @@ class TestCurrencyQuoteApi:
             nonce = generate_string(30)
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config',
                                                 nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("获取合作方的配置"):
-            r = session.request('GET', url='{}/config'.format(self.url), headers=connect_headers)
+            r = session.request('GET', url='{}/config'.format(self.url), headers=connect_header)
             new_list = []
             for i in r.json()['pairs']:
                 new_list.append(i['pair'])
         with allure.step("获取最新的报价"):
             for i in new_list:
                 with allure.step("获取正向报价"):
-                    r = session.request('GET', url='{}/quotes/{}'.format(self.url, i), headers=connect_headers)
+                    r = session.request('GET', url='{}/quotes/{}'.format(self.url, i), headers=connect_header)
                     logger.info('币种对为{}'.format(i))
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
@@ -41,7 +41,7 @@ class TestCurrencyQuoteApi:
                 with allure.step("获取反向报价"):
                     new_pair = '{}{}{}'.format(i.split('-')[1], '-', i.split('-')[0])
                     r = session.request('GET', url='{}/quotes/{}'.format(self.url, new_pair),
-                                        headers=connect_headers)
+                                        headers=connect_header)
                     logger.info('币种对为{}'.format(new_pair))
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))

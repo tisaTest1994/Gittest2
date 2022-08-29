@@ -34,13 +34,13 @@ class TestDepositApi:
                         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                             url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(
                                                                 account_id, i, ''), nonce=nonce)
-                        connect_headers['ACCESS-SIGN'] = sign
-                        connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                        connect_headers['ACCESS-NONCE'] = nonce
+                        connect_header['ACCESS-SIGN'] = sign
+                        connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+                        connect_header['ACCESS-NONCE'] = nonce
                     with allure.step("获取账户单币入账信息, 入币方式缺失，使用默认"):
                         r = session.request('GET',
                                             url='{}/accounts/{}/balances/{}/deposit/{}'.
-                                            format(self.url, account_id, i, ''), headers=connect_headers)
+                                            format(self.url, account_id, i, ''), headers=connect_header)
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
@@ -69,14 +69,14 @@ class TestDepositApi:
                     sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                         url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(
                                                             account_id, i, 'SEPA'), nonce=nonce)
-                    connect_headers['ACCESS-SIGN'] = sign
-                    connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                    connect_headers['ACCESS-NONCE'] = nonce
+                    connect_header['ACCESS-SIGN'] = sign
+                    connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+                    connect_header['ACCESS-NONCE'] = nonce
                 with allure.step("获取账户单币入账信息, 入币方式Faster Payments"):
                     r = session.request('GET',
                                         url='{}/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id, i,
                                                                                            'SEPA'),
-                                        headers=connect_headers)
+                                        headers=connect_header)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
@@ -124,14 +124,14 @@ class TestDepositApi:
                         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                             url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(
                                                                 account_id, i, 'FPS'), nonce=nonce)
-                        connect_headers['ACCESS-SIGN'] = sign
-                        connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                        connect_headers['ACCESS-NONCE'] = nonce
+                        connect_header['ACCESS-SIGN'] = sign
+                        connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+                        connect_header['ACCESS-NONCE'] = nonce
                     with allure.step("获取账户单币入账信息, 入币方式Faster Payments"):
                         r = session.request('GET',
                                             url='{}/accounts/{}/balances/{}/deposit/{}'.format(self.url, account_id, i,
                                                                                                'FPS'),
-                                            headers=connect_headers)
+                                            headers=connect_header)
                     with allure.step("状态码和返回值"):
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
@@ -173,13 +173,13 @@ class TestDepositApi:
                         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                             url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(
                                                                 account_id, i, 'SIC'), nonce=nonce)
-                        connect_headers['ACCESS-SIGN'] = sign
-                        connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                        connect_headers['ACCESS-NONCE'] = nonce
+                        connect_header['ACCESS-SIGN'] = sign
+                        connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+                        connect_header['ACCESS-NONCE'] = nonce
                     with allure.step("获取账户单币入账信息, 入币方式SIC"):
                         r = session.request('GET',
                                             url='{}/accounts/{}/balances/{}/deposit/{}'.
-                                            format(self.url, account_id, i, 'SIC'), headers=connect_headers)
+                                            format(self.url, account_id, i, 'SIC'), headers=connect_header)
                     if i == 'BRL':
                         with allure.step("校验状态码"):
                             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
@@ -208,13 +208,13 @@ class TestDepositApi:
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(
                                                     account_id, 'abc', 'SIC'), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("获取账户单币入账信息, 入币方式SIC"):
             r = session.request('GET',
                                 url='{}/accounts/{}/balances/{}/deposit/{}'.
-                                format(self.url, account_id, 'abc', 'SIC'), headers=connect_headers)
+                                format(self.url, account_id, 'abc', 'SIC'), headers=connect_header)
             with allure.step("校验状态码"):
                 assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
@@ -233,13 +233,13 @@ class TestDepositApi:
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(
                                                     account_id, 'CHF', 'SIC'), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("获取账户单币CHF入账信息, 入币方式SIC"):
             r = session.request('GET',
                                 url='{}/accounts/{}/balances/{}/deposit/{}'.
-                                format(self.url, account_id, 'CHF', 'SIC'), headers=connect_headers)
+                                format(self.url, account_id, 'CHF', 'SIC'), headers=connect_header)
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
@@ -262,13 +262,13 @@ class TestDepositApi:
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(
                                                     account_id, 'EUR', 'SEPA'), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("获取账户单币EUR入账信息, 入币方式SEPA"):
             r = session.request('GET',
                                 url='{}/accounts/{}/balances/{}/deposit/{}'.
-                                format(self.url, account_id, 'EUR', 'SEPA'), headers=connect_headers)
+                                format(self.url, account_id, 'EUR', 'SEPA'), headers=connect_header)
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
@@ -291,13 +291,13 @@ class TestDepositApi:
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(
                                                     account_id, 'GBP', 'FPS'), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("获取账户单币GBP入账信息, 入币方式Faster Payments"):
             r = session.request('GET',
                                 url='{}/accounts/{}/balances/{}/deposit/{}'.
-                                format(self.url, account_id, 'GBP', 'FPS'), headers=connect_headers)
+                                format(self.url, account_id, 'GBP', 'FPS'), headers=connect_header)
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
