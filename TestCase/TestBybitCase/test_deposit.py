@@ -14,7 +14,7 @@ class TestDepositApi:
     @allure.description('账户操作相关-获取账户单币入账信息, 入币方式缺失，使用默认')
     def test_deposit_001(self):
         with allure.step("测试用户的account_id"):
-            account_id_list =['cd7e353b-6f4c-45db-bdd5-78bdc13a53c7', 'c328af6a-c523-4032-9181-0596c7db6db7', 'bacf2b3e-6599-44f4-adf6-c4c13ff40946']
+            account_id_list = ['cd7e353b-6f4c-45db-bdd5-78bdc13a53c7', 'c328af6a-c523-4032-9181-0596c7db6db7', 'bacf2b3e-6599-44f4-adf6-c4c13ff40946']
         for account_id in account_id_list:
             with allure.step("获得法币list"):
                 cash_list = ApiFunction.get_config_info(type='cash')

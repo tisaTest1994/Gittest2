@@ -11,7 +11,7 @@ class TestConfigApi:
 
     @allure.title('test_config_001')
     @allure.description('获得config')
-    def test_config_001(self):
+    def test_config_001(self, partner):
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)

@@ -3,6 +3,7 @@ from Function.operate_sql import *
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import MD5, SHA1, SHA256
+from Crypto.Signature import PKCS1_v1_5 as Signature_PKC
 import base64
 import webbrowser
 
@@ -312,6 +313,37 @@ class ApiFunction:
                 cfx_dict['cost'] = z['cost']
                 cfx_list.append(cfx_dict)
         return cfx_list
+
+    # webhook解码
+    @staticmethod
+    def webhook_verify(signature, unix_time, method, url, body='', nonce=''):
+        """
+        RSA公钥验签
+        :param data: 明文数据,签名之前的数据
+        :param signature: 接收到的sign签名
+        :return: 验签结果,布尔值
+        """
+        if nonce == '':
+            if body == '':
+                data = '{}{}{}'.format(unix_time, method, url)
+            else:
+                data = '{}{}{}{}'.format(unix_time, method, url, body)
+        else:
+            if body == '':
+                data = '{}{}{}{}'.format(unix_time, method, nonce, url)
+            else:
+                data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
+        # 接收到的sign签名 base64解码
+        sign_data = base64.b64decode(signature.encode("utf-8"))
+        # 加载公钥
+        path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/my_rsa_public.pem'
+        public_key = RSA.importKey(open(path).read())
+        # 根据SHA256算法处理签名之前内容data
+        sha_data = SHA256.new(str(data).encode("utf-8"))
+        # 验证签名
+        print(data)
+        signer = Signature_PKC.new(public_key)
+        return signer.verify(sha_data, sign_data)
 
     # 验签
     @staticmethod
