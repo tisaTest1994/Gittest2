@@ -68,16 +68,16 @@ before_script:
 #       - Reports
 #     expire_in: 1 week
 #
-# Accounting Test:
-#   stage: test1
-#   tags:
-#     - python
-#   script:
-#     - python run.py accounting en_US
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
+Accounting Test:
+  stage: test1
+  tags:
+    - python
+  script:
+    - python run.py accounting en_US
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
 #
 # Infinni Games Test:
 #   stage: test6
@@ -112,7 +112,7 @@ before_script:
 #       - Reports
 #     expire_in: 1 week
 
-Cabital Connect Test(bybit):
+Cabital Connect Test (bybit):
   stage: test8
   tags:
     - python
@@ -123,7 +123,7 @@ Cabital Connect Test(bybit):
       - Reports
     expire_in: 1 week
 
-Cabital Connect Test(gate):
+Cabital Connect Test (gate):
   stage: test8
   tags:
     - python
@@ -134,7 +134,7 @@ Cabital Connect Test(gate):
       - Reports
     expire_in: 1 week
 
-Cabital Connect Test(ace):
+Cabital Connect Test (ace):
   stage: test8
   tags:
     - python
@@ -145,7 +145,7 @@ Cabital Connect Test(ace):
       - Reports
     expire_in: 1 week
 
-Cabital Connect Test(matrixport):
+Cabital Connect Test (matrixport):
   stage: test8
   tags:
     - python
@@ -156,7 +156,7 @@ Cabital Connect Test(matrixport):
       - Reports
     expire_in: 1 week
 
-Cabital Connect Test(infinni):
+Cabital Connect Test (infinni):
   stage: test8
   tags:
     - python
@@ -167,7 +167,7 @@ Cabital Connect Test(infinni):
       - Reports
     expire_in: 1 week
 
-Cabital Connect Test(woo):
+Cabital Connect Test (woo):
   stage: test8
   tags:
     - python
