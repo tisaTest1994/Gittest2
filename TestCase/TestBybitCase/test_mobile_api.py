@@ -64,10 +64,10 @@ class TestConnectApi:
                                                                 url='/api/v1/accounts/{}/transfers/{}'.format(
                                                                     get_json()['email']['accountId'],
                                                                     transfer_id), nonce=nonce, body=json.dumps(data))
-                            connect_headers['ACCESS-SIGN'] = sign
-                            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                            connect_headers['ACCESS-NONCE'] = nonce
-                        r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url, get_json()['email']['accountId'], transfer_id), data=json.dumps(data), headers=connect_headers)
+                            connect_header['ACCESS-SIGN'] = sign
+                            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+                            connect_header['ACCESS-NONCE'] = nonce
+                        r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url, get_json()['email']['accountId'], transfer_id), data=json.dumps(data), headers=connect_header)
                         with allure.step("校验状态码"):
                             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                         with allure.step("校验返回值"):
@@ -94,10 +94,10 @@ class TestConnectApi:
     #                                                 url='/api/v1/accounts/{}/transfers/{}'.format(
     #                                                     account_id,
     #                                                     transfer_id), nonce=nonce, body=json.dumps(data))
-    #             connect_headers['ACCESS-SIGN'] = sign
-    #             connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-    #             connect_headers['ACCESS-NONCE'] = nonce
-    #         r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url, account_id, transfer_id), data=json.dumps(data), headers=connect_headers)
+    #             connect_header['ACCESS-SIGN'] = sign
+    #             connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+    #             connect_header['ACCESS-NONCE'] = nonce
+    #         r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url, account_id, transfer_id), data=json.dumps(data), headers=connect_header)
     #         with allure.step("校验状态码"):
     #             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
     #         with allure.step("校验返回值"):

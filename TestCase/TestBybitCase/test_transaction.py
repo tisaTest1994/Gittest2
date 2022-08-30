@@ -30,11 +30,11 @@ class TestTransactionApi:
             unix_time = int(time.time())
             nonce = generate_string(30)
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/accounts/{}/transfers'.format(account_id), nonce=nonce, body=json.dumps(data))
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("把数字货币从cabital转移到bybit账户"):
-            r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
+            r = session.request('POST', url='{}/accounts/{}/transfers'.format(self.url, account_id), data=json.dumps(data), headers=connect_header)
             logger.info('r.json返回值是:{}'.format(r.json()))
         if "PA043" not in r.text:
             with allure.step("状态码和返回值"):
@@ -49,11 +49,11 @@ class TestTransactionApi:
                 sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                     url='/api/v1/recon/transfers/{}'.format(external_id),
                                                     nonce=nonce)
-                connect_headers['ACCESS-SIGN'] = sign
-                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                connect_headers['ACCESS-NONCE'] = nonce
+                connect_header['ACCESS-SIGN'] = sign
+                connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+                connect_header['ACCESS-NONCE'] = nonce
             with allure.step("查询转账记录"):
-                r = session.request('GET', url='{}/recon/transfers/{}'.format(self.url, external_id), headers=connect_headers)
+                r = session.request('GET', url='{}/recon/transfers/{}'.format(self.url, external_id), headers=connect_header)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -74,11 +74,11 @@ class TestTransactionApi:
             unix_time = int(time.time())
             nonce = generate_string(30)
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/recon/transfers/{}'.format(external_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("划转交易详情使用无效external_id"):
-            r = session.request('GET', url='{}recon/transfers/{}'.format(self.url, external_id),headers=connect_headers)
+            r = session.request('GET', url='{}recon/transfers/{}'.format(self.url, external_id),headers=connect_header)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))

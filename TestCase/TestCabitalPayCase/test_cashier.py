@@ -35,7 +35,7 @@ class TestCashierApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": generate_string(30),
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "purchase_amount": "100.23",
                 "payment_currency": "USDT",
                 "payment_amount": "",
@@ -119,7 +119,7 @@ class TestCashierApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": generate_string(30),
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "purchase_amount": "100.23",
                 "payment_currency": "USDT",
                 "payment_amount": "",
@@ -194,7 +194,7 @@ class TestCashierApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": generate_string(30),
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "purchase_amount": "100.23",
                 "valid_time": 0,
                 "fee_paid_by": "Merchant",
@@ -286,7 +286,7 @@ class TestCashierApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": generate_string(30),
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "purchase_amount": "100.23",
                 "valid_time": 0,
                 "fee_paid_by": "Merchant",
@@ -358,7 +358,7 @@ class TestCashierApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": generate_string(30),
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "purchase_amount": "100.23",
                 "valid_time": 0,
                 "fee_paid_by": "Merchant",
@@ -450,7 +450,7 @@ class TestCashierApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": generate_string(30),
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "purchase_amount": "100.23",
                 "payment_currency": "USDT",
                 "payment_amount": "",
@@ -524,7 +524,7 @@ class TestCashierApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": generate_string(30),
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "purchase_amount": "100.23",
                 "payment_currency": "USDT",
                 "payment_amount": "",

@@ -45,11 +45,11 @@ class TestAccountApi:
             nonce = generate_string(30)
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/accounts/{}/detail'.format(account_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("获取用户关联状况"):
-            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_header)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -85,11 +85,11 @@ class TestAccountApi:
             unix_time = int(time.time())
             nonce = generate_string(30)
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/accounts/{}/detail'.format(account_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("查询用户otp状态"):
-            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_header)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -107,11 +107,11 @@ class TestAccountApi:
             unix_time = int(time.time())
             nonce = generate_string(30)
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/accounts/{}/detail'.format(account_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("查询用户otp状态"):
-            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_headers)
+            r = session.request('GET', url='{}/accounts/{}/detail'.format(self.url, account_id), headers=connect_header)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -137,11 +137,11 @@ class TestAccountApi:
     #         unix_time = int(time.time())
     #         nonce = generate_string(30)
     #         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/match'.format(account_id), nonce=nonce, body=json.dumps(data))
-    #         connect_headers['ACCESS-SIGN'] = sign
-    #         connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-    #         connect_headers['ACCESS-NONCE'] = nonce
+    #         connect_header['ACCESS-SIGN'] = sign
+    #         connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+    #         connect_header['ACCESS-NONCE'] = nonce
     #     with allure.step("name match"):
-    #         r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_headers)
+    #         r = session.request('PUT', url='{}/accounts/{}/match'.format(self.url, account_id), data=json.dumps(data), headers=connect_header)
     #     with allure.step("状态码和返回值"):
     #         # logger.info('状态码是{}'.format(str(r.status_code)))
     #         logger.info('返回值是{}'.format(str(r.text)))

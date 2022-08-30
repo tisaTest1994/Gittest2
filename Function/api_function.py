@@ -3,8 +3,10 @@ from Function.operate_sql import *
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import MD5, SHA1, SHA256
+from Crypto.Signature import PKCS1_v1_5 as Signature_PKC
 import base64
 import webbrowser
+
 
 class ApiFunction:
 
@@ -313,6 +315,37 @@ class ApiFunction:
                 cfx_list.append(cfx_dict)
         return cfx_list
 
+    # webhook解码
+    @staticmethod
+    def webhook_verify(signature, unix_time, method, url, body='', nonce=''):
+        """
+        RSA公钥验签
+        :param data: 明文数据,签名之前的数据
+        :param signature: 接收到的sign签名
+        :return: 验签结果,布尔值
+        """
+        if nonce == '':
+            if body == '':
+                data = '{}{}{}'.format(unix_time, method, url)
+            else:
+                data = '{}{}{}{}'.format(unix_time, method, url, body)
+        else:
+            if body == '':
+                data = '{}{}{}{}'.format(unix_time, method, nonce, url)
+            else:
+                data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
+        # 接收到的sign签名 base64解码
+        sign_data = base64.b64decode(signature.encode("utf-8"))
+        # 加载公钥
+        path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/my_rsa_public.pem'
+        public_key = RSA.importKey(open(path).read())
+        # 根据SHA256算法处理签名之前内容data
+        sha_data = SHA256.new(str(data).encode("utf-8"))
+        # 验证签名
+        print(data)
+        signer = Signature_PKC.new(public_key)
+        return signer.verify(sha_data, sign_data)
+
     # 验签
     @staticmethod
     def make_access_sign(unix_time, method, url, body='', key='', nonce=''):
@@ -352,6 +385,39 @@ class ApiFunction:
                     data = '{}{}{}{}'.format(unix_time, method, nonce, url)
                 else:
                     data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
+            key = key.encode('utf-8')
+            message = data.encode('utf-8')
+            sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
+            sign = str(sign, 'utf-8')
+        return sign
+
+    # partner and cabital pay 验签
+    @staticmethod
+    def make_signature(unix_time, method, url, connect_type, body='', nonce=''):
+        if connect_type == 'cabital pay':
+            if nonce == '':
+                if body == '':
+                    data = '{}{}{}'.format(unix_time, method, url)
+                else:
+                    data = '{}{}{}{}'.format(unix_time, method, url, body)
+            else:
+                if body == '':
+                    data = '{}{}{}{}'.format(unix_time, method, nonce, url)
+                else:
+                    data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
+            path = os.path.split(os.path.realpath(__file__))[0] + '/../Resource/my_private_rsa_key.bin'
+            private_key = RSA.import_key(open(path).read())
+            signer = PKCS1_v1_5.new(private_key,)
+            hash_obj = SHA256.new(data.encode('utf-8'))
+            sign = base64.b64encode(signer.sign(hash_obj))
+            sign = str(sign, 'utf-8')
+        else:
+            if get_json(file='partner_info.json')[get_json()['env']][connect_type] != '':
+                key = get_json(file='partner_info.json')[get_json()['env']][connect_type]['Secret_Key']
+            if body == '':
+                data = '{}{}{}{}'.format(unix_time, method, nonce, url)
+            else:
+                data = '{}{}{}{}{}'.format(unix_time, method, nonce, url, body)
             key = key.encode('utf-8')
             message = data.encode('utf-8')
             sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())

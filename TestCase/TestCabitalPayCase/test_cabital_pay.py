@@ -19,7 +19,7 @@ class TestCabitalPayApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": generate_string(30),
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "purchase_amount": "100.23",
                 "payment_currency": "USDT",
                 "payment_amount": "",
@@ -79,7 +79,7 @@ class TestCabitalPayApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": generate_string(30),
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "purchase_amount": "100.23",
                 "success_url": "https://callback.cabital.com/success",
                 "failed_url": "https://callback.cabital.com/failed",
@@ -111,7 +111,7 @@ class TestCabitalPayApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": generate_string(30),
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "success_url": "https://callback.cabital.com/success",
                 "failed_url": "https://callback.cabital.com/failed",
                 "processing_url": "https://callback.cabital.com/processing",
@@ -142,7 +142,7 @@ class TestCabitalPayApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": "NZxNU1GGBzOeKErL8HVSkDT8KZkTpj",
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "purchase_amount": "100.23",
                 "payment_currency": "USDT",
                 "payment_amount": "",
@@ -660,7 +660,7 @@ class TestCabitalPayApi:
         with allure.step("创建订单data"):
             data = {
                 "reference_id": generate_string(30),
-                "purchase_currency": "GBP",
+                "purchase_currency": "USD",
                 "purchase_amount": "100.23",
                 "payment_currency": "USDT",
                 "payment_amount": "",
@@ -858,3 +858,10 @@ class TestCabitalPayApi:
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json()['status'] == "Completed", "查询完成支付的订单（金额超过）错误，返回值是{}".format(r.text)
+
+    @allure.title('test_cashier_019')
+    @allure.description('查询完成支付的订单（金额超过）')
+    def test_cashier_019(self):
+        with allure.step("解签"):
+            data = {"event_type":"payment_status_changed","event_time":"2022-08-26T07:55:17Z","data":{"payment_id":"6a595338-131b-4af1-9aa8-3dab0058e86f","reference_id":"txwSAkWmsPMLz2sbc5CwCHS4bhMwKr","purchase_currency":"USD","purchase_amount":"100.23","payment_currency":"USDT","payment_amount":"116.66","exchange_rate":"1.1639651858","payment_method":"OnChain","network":"ETH","status":"Created","response_code":"000","refunded_amount":"0","refundable_amount":"0","underpaid_amount":"116.66","overpaid_amount":"0","receiving_amount":"0"}}
+            print(ApiFunction.webhook_verify(signature='a04FVVrVUAVxM7ZDHhNgqFI/RHyhgzq3JzBrjoo6Jrc=', unix_time='1661500517', method='POST', url='/', nonce='166150051796697292830000151', body=json.dumps(data)))

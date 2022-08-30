@@ -31,7 +31,7 @@ def slack_report(type, env='test'):
     sleep(3)
     slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
     result = get_test_result()
-    id = get_job_id(type)
+    id = get_job_id(type, env)
     if type == 'api':
         title = "Api Test Report"
     elif type == 'kyc':
@@ -54,7 +54,7 @@ def slack_report(type, env='test'):
     elif type == 'pay':
         title = "Cabital Pay Test Report"
     elif type == 'connect':
-        title = "Cabital Connect Test Report"
+        title = "Cabital Connect Test Report ({})".format(env)
     else:
         title = "Test Report"
     attachment = [
@@ -73,7 +73,7 @@ def slack_report(type, env='test'):
 
 
 # 获得build id
-def get_job_id(type):
+def get_job_id(type, env):
     headers = {
         "PRIVATE-TOKEN": 'tjkst4kHzfDPwyThPoX-'
     }
@@ -108,7 +108,7 @@ def get_job_id(type):
             if i['name'] == 'Cabital Pay Test':
                 id_list.append(i['id'])
         elif type == 'connect':
-            if i['name'] == 'Cabital Connect Test':
+            if i['name'] == "Cabital Connect Test ({})".format(env):
                 id_list.append(i['id'])
     return id_list[0]
 

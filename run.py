@@ -35,11 +35,16 @@ connect_url = get_json()['url_list']['connect']
 global headers
 headers = get_json()['headers']
 
+global connect_headers
+connect_headers = {
+    "Content-Type": "application/json"
+}
+
 global package_name
 package_name = get_json()['app_package'][get_json()['env']]
 
-global connect_headers
-connect_headers = get_json()['connect'][get_json()['env']]['bybit']['Headers']
+global connect_header
+connect_header = get_json()['connect'][get_json()['env']]['bybit']['Headers']
 
 global compliance_service_type
 compliance_service_type = 'test'

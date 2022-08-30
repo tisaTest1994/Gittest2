@@ -20,12 +20,12 @@ class TestWalletBalancesApi:
             nonce = generate_string(30)
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/accounts/{}/balances'.format(account_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("账户可用余额列表"):
             r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
-                                headers=connect_headers)
+                                headers=connect_header)
         with allure.step("状态码和返回值"):
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
@@ -68,12 +68,12 @@ class TestWalletBalancesApi:
                     sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                         url='/api/v1/accounts/{}/balances/{}'.format(account_id, i),
                                                         nonce=nonce)
-                    connect_headers['ACCESS-SIGN'] = sign
-                    connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                    connect_headers['ACCESS-NONCE'] = nonce
+                    connect_header['ACCESS-SIGN'] = sign
+                    connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+                    connect_header['ACCESS-NONCE'] = nonce
                 with allure.step("账户可用余额列表"):
                     r = session.request('GET', url='{}/accounts/{}/balances/{}'.format(self.url, account_id, i),
-                                        headers=connect_headers)
+                                        headers=connect_header)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
@@ -99,12 +99,12 @@ class TestWalletBalancesApi:
             nonce = generate_string(30)
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/accounts/{}/balances'.format(account_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("账户可用余额列表"):
             r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
-                                headers=connect_headers)
+                                headers=connect_header)
         with allure.step("校验状态码"):
             assert r.status_code == 403, "权限不对，目前状态码是{}".format(r.status_code)
 
@@ -118,12 +118,12 @@ class TestWalletBalancesApi:
             nonce = generate_string(30)
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/accounts/{}/balances'.format(account_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("账户可用余额列表"):
             r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
-                                headers=connect_headers)
+                                headers=connect_header)
         with allure.step("校验状态码"):
             assert r.status_code == 403, "权限不对，目前状态码是{}".format(r.status_code)
 
@@ -137,12 +137,12 @@ class TestWalletBalancesApi:
             nonce = generate_string(30)
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/accounts/{}/balances'.format(account_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("账户可用余额列表"):
             r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
-                                headers=connect_headers)
+                                headers=connect_header)
         with allure.step("校验状态码"):
             assert r.status_code == 403, "权限不对，目前状态码是{}".format(r.status_code)
 
@@ -156,11 +156,11 @@ class TestWalletBalancesApi:
             nonce = generate_string(30)
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/accounts/{}/balances'.format(account_id), nonce=nonce)
-            connect_headers['ACCESS-SIGN'] = sign
-            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            connect_headers['ACCESS-NONCE'] = nonce
+            connect_header['ACCESS-SIGN'] = sign
+            connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_header['ACCESS-NONCE'] = nonce
         with allure.step("账户可用余额列表"):
             r = session.request('GET', url='{}/accounts/{}/balances'.format(self.url, account_id),
-                                headers=connect_headers)
+                                headers=connect_header)
         with allure.step("校验状态码"):
             assert r.status_code == 403, "http状态码不对，目前状态码是{}".format(r.status_code)
