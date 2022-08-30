@@ -226,7 +226,7 @@ class TestTransferApi:
                     transaction = ApiFunction.cfx_random(i, i.split('-')[0], type='bybit', account_id=account_id, headers=connect_headers, url=self.url)
                     cfx_transaction_id = transaction['returnJson']['transaction_id']
                 with allure.step("获得otp"):
-                    mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey'])
+                    mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
                 with allure.step("获得data"):
                     if i.split('-')[0] in get_json()['crypto_list']:
                         symbol = i.split('-')[0]
