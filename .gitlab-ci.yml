@@ -24,89 +24,100 @@ before_script:
     - ln -s /opt/allure-2.13.9/bin/allure /usr/bin/allure
     - pip install -r requirements.txt
 
-Api Test:
-  stage: test5
-  tags:
-    - python
-  script:
-    - python run.py api en_US
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
+# Api Test:
+#   stage: test5
+#   tags:
+#     - python
+#   script:
+#     - python run.py api en_US
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+#
+# Cabital Pay Test:
+#   stage: test2
+#   tags:
+#     - python
+#   script:
+#     - python run.py pay en_US
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+#
+# Cabinet Test:
+#   stage: test3
+#   tags:
+#     - python
+#   script:
+#     - python run.py cabinet en_US
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+#
+# Bybit Test:
+#   stage: test4
+#   tags:
+#     - python
+#   script:
+#     - python run.py bybit en_US
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+#
+# Accounting Test:
+#   stage: test1
+#   tags:
+#     - python
+#   script:
+#     - python run.py accounting en_US
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+#
+# Infinni Games Test:
+#   stage: test6
+#   tags:
+#     - python
+#   script:
+#     - python run.py infinni en_US
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+#
+# Kyc Test:
+#   stage: test7
+#   tags:
+#     - python
+#   script:
+#     - python run.py kyc test
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+#
+# Kyc Test（sanbox）:
+#   stage: test7
+#   tags:
+#     - python
+#   script:
+#     - python run.py kyc sanbox
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
 
-Cabital Pay Test:
-  stage: test2
+Cabital Connect Test:
+  stage: test8
   tags:
     - python
   script:
-    - python run.py pay en_US
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
-
-Cabinet Test:
-  stage: test3
-  tags:
-    - python
-  script:
-    - python run.py cabinet en_US
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
-
-Bybit Test:
-  stage: test4
-  tags:
-    - python
-  script:
-    - python run.py bybit en_US
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
-
-Accounting Test:
-  stage: test1
-  tags:
-    - python
-  script:
-    - python run.py accounting en_US
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
-
-Infinni Games Test:
-  stage: test6
-  tags:
-    - python
-  script:
-    - python run.py infinni en_US
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
-
-Kyc Test:
-  stage: test7
-  tags:
-    - python
-  script:
-    - python run.py kyc test
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
-
-Kyc Test（sanbox）:
-  stage: test7
-  tags:
-    - python
-  script:
-    - python run.py kyc sanbox
+    - python run.py connect bybit
   artifacts:
     paths:
       - Reports
@@ -117,7 +128,7 @@ Cabital Connect Test:
   tags:
     - python
   script:
-    - python run.py connect en_US
+    - python run.py connect gate
   artifacts:
     paths:
       - Reports

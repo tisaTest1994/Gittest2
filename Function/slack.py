@@ -54,7 +54,7 @@ def slack_report(type, env='test'):
     elif type == 'pay':
         title = "Cabital Pay Test Report"
     elif type == 'connect':
-        title = "Cabital Connect Test Report"
+        title = "Cabital Connect Test Report({})".format(env)
     else:
         title = "Test Report"
     attachment = [
