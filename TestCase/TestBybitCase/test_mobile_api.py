@@ -11,8 +11,8 @@ class TestConnectApi:
         with allure.step("登录客户账户获得后续操作需要的token"):
             ApiFunction.add_headers()
 
-    @allure.title('test_connect_001 transfer 交易')
-    @allure.description('transfer 交易')
+    @allure.title('test_connect_001 cabital发起的transfer debit交易')
+    @allure.description('transfer debit 交易')
     def test_connect_001(self):
         with allure.step("划转"):
             for i in get_json()['crypto_list']:
