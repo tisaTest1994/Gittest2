@@ -112,7 +112,7 @@ before_script:
 #       - Reports
 #     expire_in: 1 week
 
-Cabital Connect Test:
+Cabital Connect Test(bybit):
   stage: test8
   tags:
     - python
@@ -123,12 +123,56 @@ Cabital Connect Test:
       - Reports
     expire_in: 1 week
 
-Cabital Connect Test:
+Cabital Connect Test(gate):
   stage: test8
   tags:
     - python
   script:
     - python run.py connect gate
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+Cabital Connect Test(ace):
+  stage: test8
+  tags:
+    - python
+  script:
+    - python run.py connect ace
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+Cabital Connect Test(matrixport):
+  stage: test8
+  tags:
+    - python
+  script:
+    - python run.py connect matrixport
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+Cabital Connect Test(infinni):
+  stage: test8
+  tags:
+    - python
+  script:
+    - python run.py connect infinni
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+Cabital Connect Test(woo):
+  stage: test8
+  tags:
+    - python
+  script:
+    - python run.py connect woo
   artifacts:
     paths:
       - Reports
