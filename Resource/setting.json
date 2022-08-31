@@ -41,6 +41,16 @@
     "email": "yilei1@cabital.com",
     "password": "Zcdsw123"
   },
+  "bybit": {
+    "account_vid": "8feaa69e-08f7-4d35-b7c9-abcf04879d59",
+    "account_vid_c": "125831ca-a068-46fe-b5a9-bfc610f915dc",
+    "partner_id": "8dbb1484-fba8-42ad-b177-48a841ecf045",
+    "secretKey": "d7277081-3edd-47b6-b016-114f44f19320",
+    "uid_A": "76c7006eba45a314687861ef73c6970a",
+    "uid_B": "a765b947392c5c972601e334dbc9ab85",
+    "uid_C": "988518746672869376",
+    "url": "https://connect.latibac.com/api/v1"
+  },
   "caas": {
     "test": {
       "account": "data.admin@cabital.com.uat",
@@ -323,8 +333,8 @@
     "payout_email_accountId": "700dca34-1e6f-408b-903d-e37d0fcfd615",
     "port": "993",
     "secretKey": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY",
-    "secretKey_richard": "NFCECYTRO54TOZRRJZXGKOKFOFRXSTDN",
     "secretKey_neoding": "KVHXGRSWNZWG4UTHKVLVK4CRNQYTGT2X",
+    "secretKey_richard": "MNHXOSSCNRWHURSDORSXQ5CIJZZEUMLT",
     "security_code": "oitmiuqbxclbqovn",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008",
     "user_ext_ref": "38f26ee0d72f9031644a41874edbeda8"
@@ -422,16 +432,6 @@
     "uid_D": "992029247440699392",
     "url": "https://connect.latibac.com/api/v1"
   },
-  "bybit": {
-    "account_vid": "8feaa69e-08f7-4d35-b7c9-abcf04879d59",
-    "account_vid_c": "125831ca-a068-46fe-b5a9-bfc610f915dc",
-    "partner_id": "8dbb1484-fba8-42ad-b177-48a841ecf045",
-    "secretKey": "d7277081-3edd-47b6-b016-114f44f19320",
-    "uid_A": "76c7006eba45a314687861ef73c6970a",
-    "uid_B": "a765b947392c5c972601e334dbc9ab85",
-    "uid_C": "988518746672869376",
-    "url": "https://connect.latibac.com/api/v1"
-  },
   "kyc": {
     "pro": {
       "Authorization": "Basic c2FuZGJveC1zY3JlZW4tc2VydmljZTo1ZTk5ZDgwYS1lYzU4LTRiNmUtODg4Zi1kZDM3ZGU5MmQ4YzY=",
@@ -502,6 +502,9 @@
     "CHF"
   ],
   "test": "https://api.latibac.com/api/v1",
+  "url_list": {
+    "connect": "https://connect.latibac.com/api/v1"
+  },
   "web": {
     "test": {
       "account": "richard.wan@cabital.com",
@@ -513,8 +516,5 @@
   },
   "websocket": {
     "url": "wss://api.latibac.com/api/v1/realtime/ws"
-  },
-  "url_list": {
-    "connect": "https://connect.latibac.com/api/v1"
   }
 }
