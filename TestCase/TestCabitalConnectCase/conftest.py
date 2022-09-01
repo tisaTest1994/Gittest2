@@ -5,5 +5,5 @@ import sys
 @pytest.fixture(scope='session')
 def partner():
     partner = sys.argv[2]
-    #partner = 'infinni'
+    #partner = 'matrixport'
     return partner

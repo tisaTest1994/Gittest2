@@ -67,18 +67,18 @@ before_script:
 #     paths:
 #       - Reports
 #     expire_in: 1 week
-#
-# Accounting Test:
-#   stage: test1
-#   tags:
-#     - python
-#   script:
-#     - python run.py accounting en_US
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-#
+
+Accounting Test:
+  stage: test1
+  tags:
+    - python
+  script:
+    - python run.py accounting hello
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
 # Infinni Games Test:
 #   stage: test6
 #   tags:
