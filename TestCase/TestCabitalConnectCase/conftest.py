@@ -4,6 +4,6 @@ import sys
 
 @pytest.fixture(scope='session')
 def partner():
-    partner = sys.argv[2]
-    #partner = 'matrixport'
+    #partner = sys.argv[2]
+    partner = 'bybit'
     return partner

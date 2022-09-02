@@ -686,7 +686,7 @@ class ApiFunction:
 
     # 换汇
     @staticmethod
-    def cfx_random(pair, major_ccy, buy_amount=random.uniform(10, 500.999999), url=env_url, type='interior', headers=headers, account_id=''):
+    def cfx_random(pair, major_ccy, buy_amount=random.uniform(10, 500.999999), url=env_url, headers=headers, account_id='', partner=''):
         cycle = 0
         while cycle < 5:
             buy_type = pair.split('-')[0]
@@ -739,22 +739,20 @@ class ApiFunction:
                 "pair": pair,
                 "buy_amount": str(buy_amount),
                 "sell_amount": str(sell_amount),
-                "major_ccy": major_ccy,
-                "partner_id": '800b482d-0a88-480a-aae7-741f77a572f4',
-                'user_ext_ref': '988518746672869376'
+                "major_ccy": major_ccy
             }
             logger.info('发送换汇参数是{}'.format(data))
-            if type == 'interior':
+            if partner == '':
                 r = session.request('POST', url='{}/txn/cfx'.format(url), data=json.dumps(data), headers=headers)
             else:
                 with allure.step("验签"):
                     unix_time = int(time.time())
                     nonce = generate_string(30)
-                    sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
-                                                        url='/api/v1/accounts/{}/conversions'.format(
-                                                            account_id),
-                                                        nonce=nonce,
-                                                        body=json.dumps(data))
+                    sign = ApiFunction.make_signature(unix_time=str(unix_time), method='POST',
+                                                      url='/api/v1/accounts/{}/conversions'.format(account_id),
+                                                      connect_type=partner, nonce=nonce, body=json.dumps(data))
+                    headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner][
+                        'Partner_ID']
                     headers['ACCESS-SIGN'] = sign
                     headers['ACCESS-TIMESTAMP'] = str(unix_time)
                     headers['ACCESS-NONCE'] = nonce

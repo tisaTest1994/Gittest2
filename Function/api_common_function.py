@@ -387,3 +387,18 @@ def CreateRSAKeys():
         f.write(key.publickey().exportKey())
 
 
+# 根据不同的币种返回数据
+def giveAmount(type):
+    if type == 'USDT':
+        amount = random.uniform(50, 100.00)
+    elif type == 'BTC' or type == 'ETH':
+        amount = random.uniform(0.02, 0.039999999)
+    elif type == 'VND':
+        amount = random.randint(250000, 300000)
+    elif type == 'BRL':
+        amount = random.uniform(50, 100.00)
+    else:
+        amount = random.uniform(20, 500.99)
+    return str(amount)
+
+
