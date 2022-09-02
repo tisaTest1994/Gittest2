@@ -490,7 +490,6 @@
       "username": "249b4f13-ce40-412a-ac76-19aefdc89337"
     }
   },
-  "secretKey": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
   "secretKeyForTest": " ",
   "show_list": [
     "USD",
@@ -515,7 +514,8 @@
     "url": "wss://api.latibac.com/api/v1/realtime/ws"
   },
   "secretKey": {
-    "external.qa": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY",
+    "external.qa": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
+    "external.qa1": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY",
     "neoding": "KVHXGRSWNZWG4UTHKVLVK4CRNQYTGT2X",
     "richard": "MNHXOSSCNRWHURSDORSXQ5CIJZZEUMLT"
   }
