@@ -30,7 +30,7 @@ class TestConnectApi:
                     "user_ext_ref": get_json()['email']['user_ext_ref']
                 }
                 with allure.step("获取2fa code"):
-                    mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+                    mfaVerificationCode = get_mfa_code('richard')
                     headers['X-Mfa-Otp'] = str(mfaVerificationCode)
                 with allure.step("transfer 交易"):
                     r = session.request('POST', url='{}/connect/{}/transfer'.format(env_url, get_json()['connect'][get_json()['env']]['bybit']['Headers']['ACCESS-KEY']), data=json.dumps(data), headers=headers)

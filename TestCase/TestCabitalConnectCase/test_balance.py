@@ -13,7 +13,7 @@ class TestBalanceApi:
     @allure.title('test_balance_001')
     @allure.description('获取用户的所有账户余额')
     def test_balance_001(self, partner):
-        with allure.step("获取用户的所有账户余额"):
+        with allure.step("获取用户的account_vid"):
             account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']
         with allure.step("验签"):
             unix_time = int(time.time())

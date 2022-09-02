@@ -332,9 +332,6 @@
     "payout_email": "external.qa@cabital.com",
     "payout_email_accountId": "700dca34-1e6f-408b-903d-e37d0fcfd615",
     "port": "993",
-    "secretKey": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY",
-    "secretKey_neoding": "KVHXGRSWNZWG4UTHKVLVK4CRNQYTGT2X",
-    "secretKey_richard": "MNHXOSSCNRWHURSDORSXQ5CIJZZEUMLT",
     "security_code": "oitmiuqbxclbqovn",
     "userId": "a8c8e08f-26c6-4e77-acac-dcb3d1a7a008",
     "user_ext_ref": "38f26ee0d72f9031644a41874edbeda8"
@@ -516,5 +513,10 @@
   },
   "websocket": {
     "url": "wss://api.latibac.com/api/v1/realtime/ws"
+  },
+  "secretKey": {
+    "external.qa": "KVYWK3ZZJJ5HMT3JIJFUGODQINIUESTY",
+    "neoding": "KVHXGRSWNZWG4UTHKVLVK4CRNQYTGT2X",
+    "richard": "MNHXOSSCNRWHURSDORSXQ5CIJZZEUMLT"
   }
 }

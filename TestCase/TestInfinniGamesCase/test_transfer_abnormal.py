@@ -19,7 +19,7 @@ class TestTransferAbnormalApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['infinni_games']['account_vid']
         with allure.step("获得otp"):
-            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+            mfaVerificationCode = get_mfa_code('richard')
         with allure.step("获得data"):
             external_id = generate_string(25)
         with allure.step("改symbol，模拟对应的币种limit限额"):
@@ -78,7 +78,7 @@ class TestTransferAbnormalApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['infinni_games']['account_vid']
         with allure.step("获得otp"):
-            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+            mfaVerificationCode = get_mfa_code('richard')
         with allure.step("获得data"):
             external_id = generate_string(25)
         with allure.step("改symbol，模拟对应的币种limit限额"):
@@ -137,7 +137,7 @@ class TestTransferAbnormalApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['infinni_games']['account_vid']
         with allure.step("获得otp"):
-            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+            mfaVerificationCode = get_mfa_code('richard')
         with allure.step("获得data"):
             symbol = 'USDT'
             external_id = generate_string(25)
@@ -193,7 +193,7 @@ class TestTransferAbnormalApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['infinni_games']['account_vid']
         with allure.step("获得otp"):
-            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+            mfaVerificationCode = get_mfa_code('richard')
         with allure.step("获得data"):
             symbol = 'USDT'
             external_id = generate_string(25)
@@ -288,7 +288,7 @@ class TestTransferAbnormalApi:
     #             data = {
     #                 'amount': str(buy_amount2),
     #                 'symbol': symbol,
-    #                 'otp': get_mfa_code(get_json()['email']['secretKey_richard']),
+    #                 'otp': get_mfa_code('richard'),
     #                 'conversion_id': cfx_transaction_id,
     #                 'direction': 'DEBIT',
     #                 'external_id': external_id
@@ -338,7 +338,7 @@ class TestTransferAbnormalApi:
             data = {
                 'amount': str(buy_amount2),
                 'symbol': symbol,
-                'otp': get_mfa_code(get_json()['email']['secretKey_richard']),
+                'otp': get_mfa_code('richard'),
                 'conversion_id': cfx_transaction_id,
                 'direction': 'DEBIT',
                 'external_id': external_id

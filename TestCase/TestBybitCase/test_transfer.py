@@ -98,7 +98,7 @@ class TestTransferApi:
                 for i in r.json()['currencies']:
                     if i['config']['debit']['allow']:
                         with allure.step("获得otp"):
-                            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+                            mfaVerificationCode = get_mfa_code('richard')
                         with allure.step("获得data"):
                             data = {
                                 'amount': str(float(i['config']['debit']['min']) - float(0.0001)),
@@ -164,7 +164,7 @@ class TestTransferApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['email']['accountId_neoding']
         with allure.step("获得otp"):
-            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_neoding'])
+            mfaVerificationCode = get_mfa_code('neoding')
         with allure.step("获得data"):
             external_id = generate_string(25)
             data = {
@@ -226,7 +226,7 @@ class TestTransferApi:
                     transaction = ApiFunction.cfx_random(i, i.split('-')[0], type='bybit', account_id=account_id, headers=connect_header, url=self.url)
                     cfx_transaction_id = transaction['returnJson']['transaction_id']
                 with allure.step("获得otp"):
-                    mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+                    mfaVerificationCode = get_mfa_code('richard')
                 with allure.step("获得data"):
                     if i.split('-')[0] in get_json()['crypto_list']:
                         symbol = i.split('-')[0]

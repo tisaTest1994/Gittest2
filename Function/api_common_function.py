@@ -320,7 +320,8 @@ def add_comma_number(number):
 
 
 # 获取2fa google code
-def get_mfa_code(secretKey=get_json()['secretKey']):
+def get_mfa_code(account='external.qa'):
+    secretKey = get_json()['secretKey'][account]
     old_2fa = get_json(file='latest_2fa.json')['2fa']
     totp = pyotp.TOTP(secretKey)
     new_2fa = totp.now()
