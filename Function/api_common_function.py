@@ -321,12 +321,13 @@ def add_comma_number(number):
 
 # 获取2fa google code
 def get_mfa_code(account='external.qa'):
+    time.sleep(5)
     secretKey = get_json()['secretKey'][account]
     old_2fa = get_json(file='latest_2fa.json')['2fa']
     totp = pyotp.TOTP(secretKey)
     new_2fa = totp.now()
     if old_2fa == new_2fa:
-        time.sleep(35)
+        time.sleep(30)
         totp = pyotp.TOTP(secretKey)
         new_2fa = totp.now()
         write_json('2fa', new_2fa, file='latest_2fa.json')

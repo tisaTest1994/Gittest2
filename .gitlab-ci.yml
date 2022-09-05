@@ -24,16 +24,16 @@ before_script:
     - ln -s /opt/allure-2.13.9/bin/allure /usr/bin/allure
     - pip install -r requirements.txt
 
-Api Test:
-  stage: test5
-  tags:
-    - python
-  script:
-    - python run.py api en_US
-  artifacts:
-    paths:
-      - Reports
-    expire_in: 1 week
+# Api Test:
+#   stage: test5
+#   tags:
+#     - python
+#   script:
+#     - python run.py api en_US
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
 
 Cabital Pay Test:
   stage: test2
