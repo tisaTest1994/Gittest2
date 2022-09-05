@@ -64,7 +64,8 @@ class TestWidgetApi:
                         "amount": giveAmount(i['symbol']),
                         "code": i['symbol'],
                         "direction": "DEBIT",
-                        "account_vid": get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']
+                        "account_vid": get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid'],
+                        "user_ref_id": get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['user_ref_id']
                     }
                     with allure.step("获取2fa code"):
                         mfaVerificationCode = get_mfa_code('richard')

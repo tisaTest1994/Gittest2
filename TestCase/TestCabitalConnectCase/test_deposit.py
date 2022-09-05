@@ -13,7 +13,7 @@ class TestDepositApi:
     @allure.description('获取EUR deposit 信息')
     def test_deposit_001(self, partner):
         with allure.step("获取用户的所有账户余额"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
         with allure.step("判断partner是否支持deposit"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['symbol'] == 'EUR' and i['deposit_methods'][0] == 'SEPA':
@@ -52,7 +52,7 @@ class TestDepositApi:
     @allure.description('获取GBP deposit 信息')
     def test_deposit_002(self, partner):
         with allure.step("获取用户的所有账户余额"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
         with allure.step("判断partner是否支持deposit"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['symbol'] == 'GBP' and i['deposit_methods'][0] == 'FPS':
@@ -93,7 +93,7 @@ class TestDepositApi:
     @allure.description('获取CHF deposit 信息')
     def test_deposit_003(self, partner):
         with allure.step("获取用户的所有账户余额"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
         with allure.step("判断partner是否支持deposit"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['symbol'] == 'CHF' and i['deposit_methods'][0] == 'SIC':

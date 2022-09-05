@@ -14,7 +14,7 @@ class TestBalanceApi:
     @allure.description('获取用户的所有账户余额')
     def test_balance_001(self, partner):
         with allure.step("获取用户的account_vid"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(30)
@@ -43,7 +43,7 @@ class TestBalanceApi:
     @allure.description('获取账户可用余额单币(有资金）')
     def test_balance_002(self, partner):
         with allure.step("获取用户的所有账户余额"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
         with allure.step("循环获取单币种"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 with allure.step("验签"):

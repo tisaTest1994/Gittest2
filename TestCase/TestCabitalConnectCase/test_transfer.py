@@ -13,7 +13,7 @@ class TestTransferApi:
     @allure.description('partner发起请求，把资金从cabital转移到partner账户')
     def test_transfer_001(self, partner):
         with allure.step("获取用户的account_vid"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
         with allure.step("获得不同币种"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['config']['debit']['allow']:
@@ -82,7 +82,7 @@ class TestTransferApi:
     @allure.description('partner发起请求，把资金从cabital转移到partner账户并且关联C+T交易')
     def test_transfer_002(self, partner):
         with allure.step("获取用户的account_vid"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
         with allure.step("获取换汇支持币种对"):
             cfx_list = []
             for z in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['pairs']:
