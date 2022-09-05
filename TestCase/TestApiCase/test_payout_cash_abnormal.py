@@ -731,10 +731,7 @@ class TestPayoutCashAbnormalApi:
             account_name = r.json()['name_list']
         with allure.step("法币提现交易-iban和bic不匹配"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+            headers['X-Mfa-Otp'] = get_mfa_code()
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "EUR",
@@ -777,10 +774,7 @@ class TestPayoutCashAbnormalApi:
             account_name = r.json()['name_list']
         with allure.step("法币提现交易-使用非SEPA地区iban"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+            headers['X-Mfa-Otp'] = get_mfa_code()
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "EUR",
@@ -824,10 +818,7 @@ class TestPayoutCashAbnormalApi:
             logger.info('提款名字是{}'.format(account_name))
         with allure.step("法币提现交易-用户名字带有中文字符提现失败错误"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+            headers['X-Mfa-Otp'] = get_mfa_code()
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "EUR",
@@ -1024,8 +1015,7 @@ class TestPayoutCashAbnormalApi:
                         "确认GBP法币提现交易-错误sort_code返回值错误，接口返回值是{}".format(r.text)
             with allure.step("创建GBP法币提现交易-错误sort_code"):
                 code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-                mfaVerificationCode = get_mfa_code()
-                headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+                headers['X-Mfa-Otp'] = get_mfa_code()
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                      headers=headers)
@@ -1052,10 +1042,7 @@ class TestPayoutCashAbnormalApi:
             logger.info('提款名字是{}'.format(account_name))
         with allure.step("法币提现交易-用户名字带有中文字符提现失败错误"):
             code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+            headers['X-Mfa-Otp'] = get_mfa_code()
             headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
             data = {
                 "code": "GBP",
