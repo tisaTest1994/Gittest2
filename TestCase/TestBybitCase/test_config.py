@@ -22,6 +22,7 @@ class TestConfigApi:
             connect_header['ACCESS-NONCE'] = nonce
         with allure.step("获取合作方的配置"):
             r = session.request('GET', url='{}/config'.format(connect_url), headers=connect_header)
+            print(r.json())
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
