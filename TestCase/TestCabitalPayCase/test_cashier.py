@@ -27,7 +27,7 @@ class TestCashierApi:
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
-                    assert r.json()['merchant']['display_name'] == 'qaMerchant1', "获取商户logo和name错误，返回值是{}".format(r.text)
+                    assert r.json()['merchant']['display_name'] == 'qaMerchant2', "获取商户logo和name错误，返回值是{}".format(r.text)
 
     @allure.title('test_cashier_002')
     @allure.description('获取交易详情')

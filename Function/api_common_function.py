@@ -320,7 +320,8 @@ def add_comma_number(number):
 
 
 # 获取2fa google code
-def get_mfa_code(secretKey=get_json()['secretKey']):
+def get_mfa_code(account='external.qa'):
+    secretKey = get_json()['secretKey'][account]
     old_2fa = get_json(file='latest_2fa.json')['2fa']
     totp = pyotp.TOTP(secretKey)
     new_2fa = totp.now()
@@ -384,5 +385,20 @@ def CreateRSAKeys():
     # 生成公钥
     with open('../Resource/my_rsa_public.pem', 'wb') as f:
         f.write(key.publickey().exportKey())
+
+
+# 根据不同的币种返回数据
+def giveAmount(type):
+    if type == 'USDT':
+        amount = random.uniform(50, 100.00)
+    elif type == 'BTC' or type == 'ETH':
+        amount = random.uniform(0.02, 0.039999999)
+    elif type == 'VND':
+        amount = random.randint(250000, 300000)
+    elif type == 'BRL':
+        amount = random.uniform(50, 100.00)
+    else:
+        amount = random.uniform(20, 500.99)
+    return str(amount)
 
 

@@ -16,7 +16,7 @@ class TestTransactionApi:
         with allure.step("测试用户的account_id"):
             account_id = 'cd7e353b-6f4c-45db-bdd5-78bdc13a53c7'
         with allure.step("获得otp"):
-            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_neoding'])
+            mfaVerificationCode = get_mfa_code('neoding')
         with allure.step("获得data"):
             external_id = generate_string(25)
             data = {

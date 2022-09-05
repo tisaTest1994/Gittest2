@@ -5,5 +5,5 @@ import sys
 @pytest.fixture(scope='session')
 def partner():
     #partner = sys.argv[2]
-    partner = 'ace'
+    partner = 'bybit'
     return partner

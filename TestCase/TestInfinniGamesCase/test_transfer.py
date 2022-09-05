@@ -140,7 +140,7 @@ class TestTransferApi:
         with allure.step("测试用户的account_id"):
             account_id = get_json()['infinni_games']['account_vid']
         with allure.step("获得otp"):
-            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+            mfaVerificationCode = get_mfa_code('richard')
         with allure.step("获得data"):
             symbol = 'USDT'
             external_id = generate_string(25)
@@ -258,7 +258,7 @@ class TestTransferApi:
                     data = {
                         'amount': str(buy_amount),
                         'symbol': symbol,
-                        'otp': get_mfa_code(get_json()['email']['secretKey_richard']),
+                        'otp': get_mfa_code('richard'),
                         'conversion_id': cfx_transaction_id,
                         'direction': 'DEBIT',
                         'external_id': external_id
@@ -297,7 +297,7 @@ class TestTransferApi:
             data = {
                 'amount': amount,
                 'symbol': 'USDT',
-                'otp': get_mfa_code(get_json()['email']['secretKey_richard']),
+                'otp': get_mfa_code('richard'),
                 'direction': 'DEBIT',
                 'external_id': external_id
             }
@@ -327,7 +327,7 @@ class TestTransferApi:
                 assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
             logger.info('由于每日限额超额，该笔transfer交易不成功，message是{}'.format(r.json()['message']))
         with allure.step("获得otp"):
-            mfaVerificationCode = get_mfa_code(get_json()['email']['secretKey_richard'])
+            mfaVerificationCode = get_mfa_code('richard')
         with allure.step("获得data"):
             external_id = generate_string(25)
             amount1 = '100'

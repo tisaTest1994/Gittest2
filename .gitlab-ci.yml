@@ -24,28 +24,28 @@ before_script:
     - ln -s /opt/allure-2.13.9/bin/allure /usr/bin/allure
     - pip install -r requirements.txt
 
-# Api Test:
-#   stage: test5
-#   tags:
-#     - python
-#   script:
-#     - python run.py api en_US
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-#
-# Cabital Pay Test:
-#   stage: test2
-#   tags:
-#     - python
-#   script:
-#     - python run.py pay en_US
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-#
+Api Test:
+  stage: test5
+  tags:
+    - python
+  script:
+    - python run.py api en_US
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+Cabital Pay Test:
+  stage: test2
+  tags:
+    - python
+  script:
+    - python run.py pay en_US
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
 # Cabinet Test:
 #   stage: test3
 #   tags:
@@ -67,18 +67,18 @@ before_script:
 #     paths:
 #       - Reports
 #     expire_in: 1 week
-#
-# Accounting Test:
-#   stage: test1
-#   tags:
-#     - python
-#   script:
-#     - python run.py accounting en_US
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-#
+
+Accounting Test:
+  stage: test1
+  tags:
+    - python
+  script:
+    - python run.py accounting hello
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
 # Infinni Games Test:
 #   stage: test6
 #   tags:
