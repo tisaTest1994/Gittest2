@@ -84,6 +84,7 @@ def write_json(key, value, file='setting.json'):
             js[i] = value
     with open(path, "w") as f:
         json.dump(js, f, sort_keys=True, indent=2)
+        f.close()
 
 
 # 获得本日UTC时间的0点
@@ -321,7 +322,6 @@ def add_comma_number(number):
 
 # 获取2fa google code
 def get_mfa_code(account='external.qa'):
-    time.sleep(5)
     secretKey = get_json()['secretKey'][account]
     old_2fa = get_json(file='latest_2fa.json')['2fa']
     totp = pyotp.TOTP(secretKey)
