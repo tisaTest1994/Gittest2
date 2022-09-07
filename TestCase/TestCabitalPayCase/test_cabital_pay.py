@@ -260,9 +260,9 @@ class TestCabitalPayApi:
     @allure.description('purchase_amount使用超过最大值')
     def test_cabital_pay_006(self):
         with allure.step("确定币种"):
-            for i in get_json(file='cabital_pay_config.json')['purchase_config']['purchase_currencies']:
+            for i in get_json(file='cabital_pay_config.json')['purchaseConfig']['purchaseCurrencies']:
                 if i['symbol'] not in ['EUR', 'HKD', 'SGD', 'GBP']:
-                    purchase_amount = i['limit']['max']
+                    purchase_amount = i['limit']['max']['amount']
                     if purchase_amount == '-1':
                         continue
                     else:
