@@ -56,6 +56,8 @@ class TestWidgetApi:
     @allure.description('transfer debit 交易')
     def test_widget_003(self, partner):
         with allure.step("划转"):
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard'][
+                'account_vid']
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['config']['transfer_debit']['allow'] is True:
                     with allure.step("获得transfer前金额"):
@@ -83,9 +85,9 @@ class TestWidgetApi:
                     transfer_id = r.json()['txn_id']
                     sleep(10)
                     with allure.step("获得transfer后金额"):
-                        wallet_balance_latest = ApiFunction.get_crypto_number(type=i)
+                        wallet_balance_latest = ApiFunction.get_crypto_number(type=i['symbol'])
                     assert Decimal(wallet_balance_old) - Decimal(data['amount']) == Decimal(
-                        wallet_balance_latest), 'transfer币种是{},transfer前金额是{},transfer金额是{}，transfer后金额是{}'.format(i,
+                        wallet_balance_latest), 'transfer币种是{},transfer前金额是{},transfer金额是{}，transfer后金额是{}'.format(i['symbol'],
                                                                                                                    wallet_balance_old,
                                                                                                                    data[
                                                                                                                        'amount'],
@@ -103,19 +105,12 @@ class TestWidgetApi:
                             with allure.step("验签"):
                                 unix_time = int(time.time())
                                 nonce = generate_string(30)
-                                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='PUT',
-                                                                    url='/api/v1/accounts/{}/transfers/{}'.format(
-                                                                        get_json()['email']['accountId'],
-                                                                        transfer_id), nonce=nonce,
-                                                                    body=json.dumps(data))
-                                connect_header['ACCESS-SIGN'] = sign
-                                connect_header['ACCESS-TIMESTAMP'] = str(unix_time)
-                                connect_header['ACCESS-NONCE'] = nonce
-                            r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(self.url,
-                                                                                                get_json()['email'][
-                                                                                                    'accountId'],
-                                                                                                transfer_id),
-                                                data=json.dumps(data), headers=connect_header)
+                                sign = ApiFunction.make_signature(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/transfers/{}'.format(account_vid, transfer_id), connect_type=partner, nonce=nonce, body=json.dumps(data))
+                                connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
+                                connect_headers['ACCESS-SIGN'] = sign
+                                connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+                                connect_headers['ACCESS-NONCE'] = nonce
+                            r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(connect_url, account_vid, transfer_id), data=json.dumps(data), headers=connect_headers)
                             with allure.step("校验状态码"):
                                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                             with allure.step("校验返回值"):
