@@ -490,7 +490,12 @@
       "username": "249b4f13-ce40-412a-ac76-19aefdc89337"
     }
   },
-  "secretKeyForTest": " ",
+  "secretKey": {
+    "external.qa": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
+    "neoding": "KVHXGRSWNZWG4UTHKVLVK4CRNQYTGT2X",
+    "richard": "MNHXOSSCNRWHURSDORSXQ5CIJZZEUMLT"
+  },
+  "secretKeyForTest": "NRJVKV3SIFXXEZCMIRHVIZ2WO4ZFM3CP",
   "show_list": [
     "USD",
     "GBP",

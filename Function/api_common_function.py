@@ -411,4 +411,3 @@ def giveAmount(type):
         amount = round(amount, 2)
     return str(amount)
 
-

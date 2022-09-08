@@ -361,81 +361,78 @@ class TestAccountApi:
         with allure.step("校验返回值"):
             assert r.json()['totpSecret'] is not None, "获取opt二维码失败，目前返回值是{}".format(r.text)
 
-    @allure.title('test_account_022')
-    @allure.description('创建opt验证，并且删除')
-    def test_account_022(self):
-        with allure.step("修改测试账号"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei3@163.com')
-        with allure.step("获得opt secretKey"):
-            r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
-        with allure.step("判断opt状态"):
-            if '001018' in r.text:
-                with allure.step("删除opt"):
-                    secretKey = get_json()['secretKeyForTest']
-                    totp = pyotp.TOTP(secretKey)
-                    mfaVerificationCode = totp.now()
-                    data = {
-                        "mfaVerificationCode": str(mfaVerificationCode),
-                        "emailVerificationCode": "666666"
-                    }
-                    session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data), headers=headers)
-                    write_json('secretKeyForTest', ' ')
-            else:
-                r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
-        if r.status_code == 200:
-            secretData = r.json()['totpSecret']
-            secretKey = r.json()['uriParams']['secret']
-            # 写入secretKey
-            logger.info('secretKey是{}'.format(secretKey))
-            write_json('secretKeyForTest', secretKey)
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            data = {
-                "secretData": str(secretData),
-                "mfaVerificationCode": str(mfaVerificationCode),
-                "userLabel": "account",
-                "emailVerificationCode": "666666"
-            }
-            r = session.request('POST', url='{}/account/security/mfa/otp/enable'.format(env_url), data=json.dumps(data), headers=headers)
-            with allure.step("状态码和返回值"):
-                logger.info('状态码是{}'.format(str(r.status_code)))
-                logger.info('返回值是{}'.format(str(r.text)))
-            with allure.step("校验状态码"):
-                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-            with allure.step("校验返回值"):
-                assert {} == r.json(), "创建opt验证不对，目前返回值是{}".format(r.text)
-        with allure.step("删除opt"):
-            secretKey = get_json()['secretKeyForTest']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            data = {
-                "mfaVerificationCode": str(mfaVerificationCode),
-                "emailVerificationCode": "666666"
-            }
-            session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data), headers=headers)
-            write_json('secretKeyForTest', ' ')
-
-    @allure.title('test_account_023')
-    @allure.description('验证opt code')
-    def test_account_023(self):
-        with allure.step("修改测试账号"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
-        with allure.step("验证opt code"):
-            secretKey = get_json()['secretKey']
-            totp = pyotp.TOTP(secretKey)
-            mfaVerificationCode = totp.now()
-            data = {
-                "totp": str(mfaVerificationCode)
-            }
-            r = session.request('POST', url='{}/account/security/mfa/otp/verify'.format(env_url), data=json.dumps(data),
-                                headers=headers)
-        with allure.step("状态码和返回值"):
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
-        with allure.step("校验状态码"):
-            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-        with allure.step("校验返回值"):
-            assert {} == r.json(), " 验证opt code不对，目前返回值是{}".format(r.text)
+    # @allure.title('test_account_022')
+    # @allure.description('创建opt验证，并且删除')
+    # def test_account_022(self):
+    #     with allure.step("修改测试账号"):
+    #         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yilei3@163.com')
+    #     with allure.step("获得opt secretKey"):
+    #         r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
+    #     with allure.step("判断opt状态"):
+    #         if '001018' in r.text:
+    #             with allure.step("删除opt"):
+    #                 secretKey = get_json()['secretKeyForTest']
+    #                 totp = pyotp.TOTP(secretKey)
+    #                 mfaVerificationCode = totp.now()
+    #                 data = {
+    #                     "mfaVerificationCode": str(mfaVerificationCode),
+    #                     "emailVerificationCode": "666666"
+    #                 }
+    #                 session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data), headers=headers)
+    #                 write_json('secretKeyForTest', ' ')
+    #         else:
+    #             r = session.request('GET', url='{}/account/security/mfa/otp/qrcode'.format(env_url), headers=headers)
+    #     if r.status_code == 200:
+    #         secretData = r.json()['totpSecret']
+    #         secretKey = r.json()['uriParams']['secret']
+    #         # 写入secretKey
+    #         logger.info('secretKey是{}'.format(secretKey))
+    #         write_json('secretKeyForTest', secretKey)
+    #         totp = pyotp.TOTP(secretKey)
+    #         mfaVerificationCode = totp.now()
+    #         data = {
+    #             "secretData": str(secretData),
+    #             "mfaVerificationCode": str(mfaVerificationCode),
+    #             "userLabel": "account",
+    #             "emailVerificationCode": "666666"
+    #         }
+    #         r = session.request('POST', url='{}/account/security/mfa/otp/enable'.format(env_url), data=json.dumps(data), headers=headers)
+    #         with allure.step("状态码和返回值"):
+    #             logger.info('状态码是{}'.format(str(r.status_code)))
+    #             logger.info('返回值是{}'.format(str(r.text)))
+    #         with allure.step("校验状态码"):
+    #             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+    #         with allure.step("校验返回值"):
+    #             assert {} == r.json(), "创建opt验证不对，目前返回值是{}".format(r.text)
+    #     with allure.step("删除opt"):
+    #         data = {
+    #             "mfaVerificationCode": str(mfaVerificationCode),
+    #             "emailVerificationCode": "666666"
+    #         }
+    #         session.request('POST', url='{}/account/security/mfa/otp/disable'.format(env_url), data=json.dumps(data), headers=headers)
+    #         write_json('secretKeyForTest', ' ')
+    #
+    # @allure.title('test_account_023')
+    # @allure.description('验证opt code')
+    # def test_account_023(self):
+    #     with allure.step("修改测试账号"):
+    #         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
+    #     with allure.step("验证opt code"):
+    #         secretKey = get_json()['secretKey']
+    #         totp = pyotp.TOTP(secretKey)
+    #         mfaVerificationCode = totp.now()
+    #         data = {
+    #             "totp": str(mfaVerificationCode)
+    #         }
+    #         r = session.request('POST', url='{}/account/security/mfa/otp/verify'.format(env_url), data=json.dumps(data),
+    #                             headers=headers)
+    #     with allure.step("状态码和返回值"):
+    #         logger.info('状态码是{}'.format(str(r.status_code)))
+    #         logger.info('返回值是{}'.format(str(r.text)))
+    #     with allure.step("校验状态码"):
+    #         assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+    #     with allure.step("校验返回值"):
+    #         assert {} == r.json(), " 验证opt code不对，目前返回值是{}".format(r.text)
 
     @allure.title('test_account_024')
     @allure.description('接受隐私政策版本')
