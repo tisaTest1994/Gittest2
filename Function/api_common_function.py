@@ -394,8 +394,11 @@ def giveAmount(type):
     if type == 'USDT':
         amount = random.uniform(30, 100)
         amount = round(amount, 6)
-    elif type == 'BTC' or type == 'ETH':
-        amount = random.uniform(0.02, 0.05)
+    elif type == 'BTC':
+        amount = random.uniform(0.002, 0.005)
+        amount = round(amount, 8)
+    elif type == 'ETH':
+        amount = random.uniform(0.002, 0.01)
         amount = round(amount, 8)
     elif type == 'VND':
         amount = random.randint(250000, 300000)
@@ -404,7 +407,7 @@ def giveAmount(type):
         amount = random.uniform(30, 300)
         amount = round(amount, 2)
     else:
-        amount = random.uniform(20, 500)
+        amount = random.uniform(30, 100)
         amount = round(amount, 2)
     return str(amount)
 
