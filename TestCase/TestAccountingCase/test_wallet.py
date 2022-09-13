@@ -15,35 +15,67 @@ class TestAccountingWalletApi:
     def test_accounting_wallet_001(self):
         error_list = []
         for y in OperateExcel.get_excel_sheet_names():
-            if 'Wallet' in y and 'Entity-Clearing Wallet' not in y:
+            if 'Cabital-Connect Wallet' in y and 'Entity-Clearing Wallet' not in y:
                 for i in range(1, OperateExcel.get_excel_sheet_all_row_number(y)):
                     line_info = OperateExcel.get_excel_sheet_row(y, i)
                     with allure.step("判断是否需要"):
                         if 'Yes' in str(line_info[16]):
-                            with allure.step("账户状态"):
-                                if '正常' in str(line_info[15]):
-                                    status = 1
-                                else:
-                                    status = 2
-                            with allure.step("是否可透支"):
-                                if 'Yes' in str(line_info[14]):
-                                    allow_overdraft = 1
-                                else:
-                                    allow_overdraft = 0
-                            with allure.step("借贷关系"):
-                                if 'Debit' in str(line_info[12]).split(':')[1]:
-                                    balance_direction = 2
-                                else:
-                                    balance_direction = 1
-                            with allure.step("账户子类型"):
-                                if '(' in str(line_info[7]):
-                                    wallet_subType = str(line_info[7]).split('(')[0].split(":'")[1]
-                                else:
-                                    wallet_subType = str(line_info[7]).split("'")[1]
-                            sql = "select * from wallet where code = {} and account_code = {} and status = {} and allow_overdraft = {} and balance_direction = {} and wallet_type = '{}';".format(str(line_info[4]).split(':')[1], int(float(str(line_info[8]).split(':')[1])), status, allow_overdraft, balance_direction, wallet_subType)
-                            info = sqlFunction().connect_mysql('wallet', sql=sql)
-                            if not list(info):
-                                error_list.append({y: sql})
+                            if 'Cabital-Connect Wallet' in y:
+                                with allure.step("账户状态"):
+                                    if '正常' in str(line_info[15]):
+                                        status = 1
+                                    else:
+                                        status = 2
+                                with allure.step("是否可透支"):
+                                    if 'Yes' in str(line_info[14]):
+                                        allow_overdraft = 1
+                                    else:
+                                        allow_overdraft = 0
+                                with allure.step("借贷关系"):
+                                    if 'Debit' in str(line_info[12]).split(':')[1]:
+                                        balance_direction = 2
+                                    else:
+                                        balance_direction = 1
+                                with allure.step("账户子类型"):
+                                    if '(' in str(line_info[7]):
+                                        wallet_subType = str(line_info[7]).split('(')[0].split(":'")[1]
+                                    else:
+                                        wallet_subType = str(line_info[7]).split("'")[1]
+                                with allure.step("Account_Type"):
+                                    account_type = str(line_info[5]).split('=')[1].split("'")[0]
+                                sql = "select * from wallet where code = {} and account_code = {} and status = {} and allow_overdraft = {} and balance_direction = {} and wallet_type = '{}' and account_type = '{}';".format(
+                                    str(line_info[4]).split(':')[1], int(float(str(line_info[8]).split(':')[1])),
+                                    status, allow_overdraft, balance_direction, wallet_subType, account_type)
+                                info = sqlFunction().connect_mysql('wallet', sql=sql)
+                                if not list(info):
+                                    error_list.append({y: sql})
+                            else:
+                                with allure.step("账户状态"):
+                                    if '正常' in str(line_info[15]):
+                                        status = 1
+                                    else:
+                                        status = 2
+                                with allure.step("是否可透支"):
+                                    if 'Yes' in str(line_info[14]):
+                                        allow_overdraft = 1
+                                    else:
+                                        allow_overdraft = 0
+                                with allure.step("借贷关系"):
+                                    if 'Debit' in str(line_info[12]).split(':')[1]:
+                                        balance_direction = 2
+                                    else:
+                                        balance_direction = 1
+                                with allure.step("账户子类型"):
+                                    if '(' in str(line_info[7]):
+                                        wallet_subType = str(line_info[7]).split('(')[0].split(":'")[1]
+                                    else:
+                                        wallet_subType = str(line_info[7]).split("'")[1]
+                                sql = "select * from wallet where code = {} and account_code = {} and status = {} and allow_overdraft = {} and balance_direction = {} and wallet_type = '{}';".format(
+                                    str(line_info[4]).split(':')[1], int(float(str(line_info[8]).split(':')[1])),
+                                    status, allow_overdraft, balance_direction, wallet_subType)
+                                info = sqlFunction().connect_mysql('wallet', sql=sql)
+                                if not list(info):
+                                    error_list.append({y: sql})
         logger.info(error_list)
         assert error_list == [], 'error list 是{}'.format(error_list)
 
