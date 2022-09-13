@@ -15,7 +15,7 @@ class TestAccountingWalletApi:
     def test_accounting_wallet_001(self):
         error_list = []
         for y in OperateExcel.get_excel_sheet_names():
-            if 'Cabital-Connect Wallet' in y and 'Entity-Clearing Wallet' not in y:
+            if 'Wallet' in y and 'Entity-Clearing Wallet' not in y:
                 for i in range(1, OperateExcel.get_excel_sheet_all_row_number(y)):
                     line_info = OperateExcel.get_excel_sheet_row(y, i)
                     with allure.step("判断是否需要"):
