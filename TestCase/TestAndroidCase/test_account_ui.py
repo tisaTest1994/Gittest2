@@ -2,7 +2,7 @@ from Function.ui_function import *
 import allure
 from Function.api_common_function import *
 from Function.ui_common_function import *
-from TestCase.TestApiCase.test_asset import *
+from TestCase.TestApiCase.asset import *
 import datetime
 
 

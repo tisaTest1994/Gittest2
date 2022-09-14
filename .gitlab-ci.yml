@@ -11,6 +11,7 @@ stages:
     - test6
     - test7
     - test8
+    - test9
 
 before_script:
     - apt-get update
@@ -25,7 +26,7 @@ before_script:
     - pip install -r requirements.txt
 
 Api Test:
-  stage: test5
+  stage: test9
   tags:
     - python
   script:
@@ -177,3 +178,16 @@ Cabital Connect Test (woo):
     paths:
       - Reports
     expire_in: 1 week
+
+Cabital Connect Test (latibac):
+  stage: test8
+  tags:
+    - python
+  script:
+    - python run.py connect woo
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
+
+
