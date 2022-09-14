@@ -34,8 +34,7 @@ class TestTransferApi:
                         sign = ApiFunction.make_signature(unix_time=str(unix_time), method='POST',
                                                           url='/api/v1/accounts/{}/transfers'.format(account_vid),
                                                           connect_type=partner, nonce=nonce, body=json.dumps(data))
-                        connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner][
-                            'Partner_ID']
+                        connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
                         connect_headers['ACCESS-SIGN'] = sign
                         connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                         connect_headers['ACCESS-NONCE'] = nonce
