@@ -84,7 +84,8 @@
       "account_vid_list": {
         "richard": {
           "account_vid": "728ded80-1e19-4146-b8ff-a1a893590e33",
-          "user_ref_id": "996465012836982998"
+          "user_ref_id": "996465012836982998",
+          "email": "1111"
         }
       }
     }
