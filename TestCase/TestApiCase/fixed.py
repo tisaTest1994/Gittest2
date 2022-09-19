@@ -16,6 +16,7 @@ class TestFixedApi:
         with allure.step("获取定期产品列表"):
             r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
             with allure.step("状态码和返回值"):
+                logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
@@ -684,6 +685,7 @@ class TestFixedApi:
                                 url='{}/earn/fix/products/{}/transactions'.format(env_url, product_info['product_id']),
                                 data=json.dumps(data), headers=headers)
             with allure.step("状态码和返回值"):
+                logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
@@ -715,6 +717,7 @@ class TestFixedApi:
                                 url='{}/earn/fix/products/{}/transactions'.format(env_url, product_info['product_id']),
                                 data=json.dumps(data), headers=headers)
             with allure.step("状态码和返回值"):
+                logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
@@ -809,6 +812,7 @@ class TestFixedApi:
             r = session.request('POST', url='{}/earn/fix/transactions/{}/renew'.format(env_url, product_list['tx_id']),
                                 data=json.dumps(data), headers=headers)
             with allure.step("状态码和返回值"):
+                logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
