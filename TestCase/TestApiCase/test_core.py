@@ -15,6 +15,7 @@ class TestCoreApi:
         with allure.step("查询钱包所有币种详细金额以及报价,以美元价格返回"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -28,6 +29,7 @@ class TestCoreApi:
         with allure.step("查询钱包所有币种金额"):
             r = session.request('GET', url='{}/core/account/wallets'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -44,6 +46,7 @@ class TestCoreApi:
         with allure.step("查询钱包某个币种"):
             r = session.request('GET', url='{}/core/account/wallets/{}'.format(env_url, id), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -77,6 +80,7 @@ class TestCoreApi:
             }
             r = session.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -93,6 +97,7 @@ class TestCoreApi:
             }
             r = session.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -109,6 +114,7 @@ class TestCoreApi:
             }
             r = session.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -125,6 +131,7 @@ class TestCoreApi:
             }
             r = session.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -141,6 +148,7 @@ class TestCoreApi:
             }
             r = session.request('GET', url='{}/core/account/wallets'.format(env_url), params=params, headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -155,6 +163,7 @@ class TestCoreApi:
         with allure.step("查询钱包所有币种详细金额以及报价,以欧元价格返回"):
             r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         headers['X-Currency'] = 'USD'
@@ -169,6 +178,7 @@ class TestCoreApi:
         with allure.step("查询客户状态"):
             r = session.request('GET', url='{}/core/beginnerguide'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -182,6 +192,7 @@ class TestCoreApi:
         with allure.step("获得客户地区,服务器时间"):
             r = session.request('GET', url='{}/core/geo'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -195,6 +206,7 @@ class TestCoreApi:
         with allure.step("获取metadata"):
             r = session.request('GET', url='{}/core/metadata'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):

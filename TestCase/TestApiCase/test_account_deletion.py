@@ -26,6 +26,7 @@ class TestAccountDeletionApi:
                                                                                      'password'], )
             r = session.request('GET', url='{}/account/writeoff/status'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -44,6 +45,7 @@ class TestAccountDeletionApi:
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account)
             r = session.request('GET', url='{}/account/writeoff/status'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -55,6 +57,7 @@ class TestAccountDeletionApi:
             r = session.request('POST', url='{}/account/writeoff/applicant/submit'.format(env_url),
                                 headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -74,6 +77,7 @@ class TestAccountDeletionApi:
             r = session.request('POST', url='{}/account/writeoff/applicant/submit'.format(env_url),
                                 headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -96,6 +100,7 @@ class TestAccountDeletionApi:
             r = session.request('POST', url='{}/account/writeoff/applicant/submit'.format(env_url),
                                 headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -119,6 +124,7 @@ class TestAccountDeletionApi:
             r = session.request('PUT', url='{}/operator/operator/users/update/{}'.format(operateUrl, user_id),
                                 data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -133,6 +139,7 @@ class TestAccountDeletionApi:
             r = session.request('POST', url='{}/operator/operator/writeoff/{}/callback'.format(operateUrl, user_id),
                                 data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -154,6 +161,7 @@ class TestAccountDeletionApi:
             r = session.request('POST', url='{}/account/writeoff/applicant/submit'.format(env_url),
                                 headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -172,6 +180,7 @@ class TestAccountDeletionApi:
             r = session.request('POST', url='{}/operator/operator/writeoff/{}/callback'.format(operateUrl, user_id),
                                 data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -190,6 +199,7 @@ class TestAccountDeletionApi:
             r = session.request('POST', url='{}/account/writeoff/applicant/submit'.format(env_url),
                                 headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -207,7 +217,8 @@ class TestAccountDeletionApi:
             r = session.request('POST', url='{}/operator/operator/writeoff/{}/callback'.format(operateUrl, user_id),
                                 data=json.dumps(data), headers=headers)
             with allure.step("状态码和返回值"):
-                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+            logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)

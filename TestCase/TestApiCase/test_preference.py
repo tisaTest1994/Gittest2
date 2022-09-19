@@ -16,6 +16,7 @@ class TestPreferenceApi:
         with allure.step("获取用户偏好信息"):
             r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -38,6 +39,7 @@ class TestPreferenceApi:
             }
             r = session.request('PUT', url='{}/preference/account/setting'.format(env_url), data=json.dumps(data1), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -62,6 +64,7 @@ class TestPreferenceApi:
             }
             r = session.request('PUT', url='{}/preference/account/setting'.format(env_url), data=json.dumps(data1), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -91,6 +94,7 @@ class TestPreferenceApi:
             }
             r = session.request('PUT', url='{}/preference/push/token'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -107,6 +111,7 @@ class TestPreferenceApi:
             }
             r = session.request('PUT', url='{}/preference/account/setting'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -116,6 +121,7 @@ class TestPreferenceApi:
         with allure.step("获取用户偏好信息"):
             r = session.request('GET', url='{}/preference/account/setting'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -132,6 +138,7 @@ class TestPreferenceApi:
             }
             r = session.request('PUT', url='{}/preference/account/setting'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -150,6 +157,7 @@ class TestPreferenceApi:
             }
             r = session.request('PUT', url='{}/preference/account/setting'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):

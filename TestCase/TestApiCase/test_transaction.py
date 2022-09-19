@@ -24,6 +24,7 @@ class TestTransactionApi:
         with allure.step("查询特定条件的交易"):
             r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -46,6 +47,7 @@ class TestTransactionApi:
         with allure.step("查询特定条件的交易"):
             r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -83,6 +85,7 @@ class TestTransactionApi:
         with allure.step("查询特定条件的交易"):
             r = session.request('POST', url='{}/txn/query/web'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -103,6 +106,7 @@ class TestTransactionApi:
         with allure.step("web查询很后面页面交易数据为空"):
             r = session.request('POST', url='{}/txn/query/web'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -124,6 +128,7 @@ class TestTransactionApi:
             }
             r = session.request('GET', url='{}/txn/{}'.format(env_url, transaction_id), params=params, headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -146,6 +151,7 @@ class TestTransactionApi:
         with allure.step("查询特定条件的交易"):
             r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -168,6 +174,7 @@ class TestTransactionApi:
         with allure.step("查询特定条件的交易"):
             r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):

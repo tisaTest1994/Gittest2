@@ -21,6 +21,7 @@ class TestAssetApi:
         with allure.step("查询每个币种当前资产市值"):
             r = session.request('GET', url='{}/assetstatapi/assetstat'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -36,6 +37,7 @@ class TestAssetApi:
         with allure.step("获取账户资金状态"):
             r = session.request('GET', url='{}/assetstatapi/assetstat'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -49,6 +51,7 @@ class TestAssetApi:
         with allure.step("获取账户资金状态"):
             r = session.request('GET', url='{}/assetstatapi/asset_pl_detail'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):

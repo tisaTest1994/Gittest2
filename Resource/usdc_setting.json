@@ -1,0 +1,289 @@
+{
+  "external.qa@cabital.com": {
+    "type": "customer",
+    "bank_info": {
+    "account_number": "12340010",
+    "routing_number": "121000248",
+    "iban": "",
+    "bank_name": "Hello",
+    "bank_address": {
+      "country_code": "USA",
+      "state": "",
+      "city": "",
+      "street_address": "",
+      "post_code": "",
+      "street_line1": "",
+      "street_line2": ""
+    },
+    "account_name": "yuke zhang",
+    "billing_address": {
+      "country_code": "USA",
+      "state": "MA",
+      "city": "Boston",
+      "street_address": "",
+      "post_code": "01234",
+      "street_line1": "100 Money Street",
+      "street_line2": ""
+    }
+},
+    "bank_info_type": "US",
+    "FB_white_list": "True"
+  },
+  "b01@cabital.com": {
+    "type": "company",
+    "bank_info_list": [
+      {
+        "bank_info": {
+    "account_number": "",
+    "routing_number": "",
+    "iban": "DE31100400480532013000",
+    "bank_name": "",
+    "bank_address": {
+      "country_code": "DE",
+      "state": "",
+      "city": "Berlin",
+      "street_address": "",
+      "post_code": "",
+      "street_line1": "",
+      "street_line2": ""
+    },
+    "account_name": "yuke zhang",
+    "billing_address": {
+      "country_code": "USA",
+      "state": "MA",
+      "city": "Boston",
+      "street_address": "",
+      "post_code": "01234",
+      "street_line1": "100 Money Street",
+      "street_line2": ""
+    }
+},
+        "bank_info_type": "NO US & IBAN"
+      },
+      {
+        "bank_info": {
+    "account_number": "12340010",
+    "routing_number": "121000248",
+    "iban": "",
+    "bank_name": "Hello",
+    "bank_address": {
+      "country_code": "USA",
+      "state": "",
+      "city": "",
+      "street_address": "",
+      "post_code": "",
+      "street_line1": "",
+      "street_line2": ""
+    },
+    "account_name": "yuke zhang",
+    "billing_address": {
+      "country_code": "USA",
+      "state": "MA",
+      "city": "Boston",
+      "street_address": "",
+      "post_code": "01234",
+      "street_line1": "100 Money Street",
+      "street_line2": ""
+    }
+},
+        "bank_info_type": "US"
+      }
+    ],
+    "FB_white_list": "True"
+  },
+  "b02@cabital.com": {
+    "type": "company",
+    "bank_info_list": [
+      {
+        "bank_info": {
+    "account_number": "",
+    "routing_number": "",
+    "iban": "DE31100400480532013000",
+    "bank_name": "",
+    "bank_address": {
+      "country_code": "DE",
+      "state": "",
+      "city": "Berlin",
+      "street_address": "",
+      "post_code": "",
+      "street_line1": "",
+      "street_line2": ""
+    },
+    "account_name": "yuke zhang",
+    "billing_address": {
+      "country_code": "USA",
+      "state": "MA",
+      "city": "Boston",
+      "street_address": "",
+      "post_code": "01234",
+      "street_line1": "100 Money Street",
+      "street_line2": ""
+    }
+},
+        "bank_info_type": "NO US & IBAN"
+      },
+      {
+        "bank_info": {
+    "account_number": "12340010",
+    "routing_number": "121000248",
+    "iban": "",
+    "bank_name": "Hello",
+    "bank_address": {
+      "country_code": "USA",
+      "state": "",
+      "city": "",
+      "street_address": "",
+      "post_code": "",
+      "street_line1": "",
+      "street_line2": ""
+    },
+    "account_name": "yuke zhang",
+    "billing_address": {
+      "country_code": "USA",
+      "state": "MA",
+      "city": "Boston",
+      "street_address": "",
+      "post_code": "01234",
+      "street_line1": "100 Money Street",
+      "street_line2": ""
+    }
+},
+        "bank_info_type": "US"
+      },
+      {
+        "bank_info": {
+    "account_number": "032100880012303",
+    "routing_number": "ROYCCAT2",
+    "iban": "",
+    "bank_name": "RBC Royal Bank of Canada",
+    "bank_address": {
+      "country_code": "CA",
+      "state": "",
+      "city": "Ottawa",
+      "street_address": "",
+      "post_code": "",
+      "street_line1": "",
+      "street_line2": ""
+    },
+    "account_name": "yuke zhang",
+    "billing_address": {
+      "country_code": "USA",
+      "state": "MA",
+      "city": "Boston",
+      "street_address": "",
+      "post_code": "01234",
+      "street_line1": "100 Money Street",
+      "street_line2": ""
+    }
+},
+        "bank_info_type": "NO US & NO IBAN"
+
+      }
+    ],
+    "FB_white_list": "True"
+  },
+  "b03@cabital.com": {
+    "type": "company",
+    "bank_info_list": [
+     
+    ],
+    "FB_white_list": "False"
+  },
+  "b04@cabital.com": {
+    "type": "company",
+    "bank_info_list": [
+      {
+        "bank_info": {
+    "account_number": "12340010",
+    "routing_number": "121000248",
+    "iban": "",
+    "bank_name": "Hello",
+    "bank_address": {
+      "country_code": "USA",
+      "state": "",
+      "city": "",
+      "street_address": "",
+      "post_code": "",
+      "street_line1": "",
+      "street_line2": ""
+    },
+    "account_name": "yuke zhang",
+    "billing_address": {
+      "country_code": "USA",
+      "state": "MA",
+      "city": "Boston",
+      "street_address": "",
+      "post_code": "01234",
+      "street_line1": "100 Money Street",
+      "street_line2": ""
+    }
+},
+        "bank_info_type": "US"
+      },
+      {
+        "bank_info": {
+    "account_number": "032100880012303",
+    "routing_number": "ROYCCAT2",
+    "iban": "",
+    "bank_name": "RBC Royal Bank of Canada",
+    "bank_address": {
+      "country_code": "CA",
+      "state": "",
+      "city": "Ottawa",
+      "street_address": "",
+      "post_code": "",
+      "street_line1": "",
+      "street_line2": ""
+    },
+    "account_name": "yuke zhang",
+    "billing_address": {
+      "country_code": "USA",
+      "state": "MA",
+      "city": "Boston",
+      "street_address": "",
+      "post_code": "01234",
+      "street_line1": "100 Money Street",
+      "street_line2": ""
+    }
+},
+        "bank_info_type": "NO US & NO IBAN"
+
+      }
+    ],
+    "FB_white_list": "True"
+  },
+  "b05@cabital.com": {
+    "type": "company",
+    "bank_info_list": [
+      {
+        "bank_info": {
+    "account_number": "032100880012303",
+    "routing_number": "ROYCCAT2",
+    "iban": "",
+    "bank_name": "RBC Royal Bank of Canada",
+    "bank_address": {
+      "country_code": "CA",
+      "state": "",
+      "city": "Ottawa",
+      "street_address": "",
+      "post_code": "",
+      "street_line1": "",
+      "street_line2": ""
+    },
+    "account_name": "yuke zhang",
+    "billing_address": {
+      "country_code": "USA",
+      "state": "MA",
+      "city": "Boston",
+      "street_address": "",
+      "post_code": "01234",
+      "street_line1": "100 Money Street",
+      "street_line2": ""
+    }
+},
+        "bank_info_type": "NO US & NO IBAN"
+      }
+    ],
+    "FB_white_list": "True"
+  }
+}

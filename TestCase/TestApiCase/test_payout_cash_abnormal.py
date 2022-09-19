@@ -1360,6 +1360,7 @@ class TestPayoutCashAbnormalApi:
             }
             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=data, headers=headers)
         with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
