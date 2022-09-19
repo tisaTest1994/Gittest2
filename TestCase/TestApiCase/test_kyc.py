@@ -20,7 +20,7 @@ class TestKycApi:
         with allure.step("通过kyc的用户，获取kyc上传token失败"):
             r = session.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
         with allure.step("状态码和返回值"):
-            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -49,7 +49,7 @@ class TestKycApi:
             r = session.request('POST', url='{}/kyc/case/start'.format(env_url), data=json.dumps(data), headers=headers)
         ApiFunction.get_account_token()
         with allure.step("状态码和返回值"):
-            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -108,7 +108,7 @@ class TestKycApi:
             r = session.request('PUT', url='{}/kyc/user/info/additional/update'.format(env_url), data=json.dumps(data),
                                 headers=headers)
         with allure.step("状态码和返回值"):
-            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -158,7 +158,7 @@ class TestKycApi:
         with allure.step("获取用户必填的KYC数据，获取全部信息"):
             r = session.request('GET', url='{}/kyc/user/info/required'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
-            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
@@ -172,7 +172,7 @@ class TestKycApi:
         with allure.step("获取用户必填的KYC数据，获取全部信息"):
             r = session.request('GET', url='{}/kyc/user/info/additional'.format(env_url), headers=headers)
         with allure.step("状态码和返回值"):
-            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):

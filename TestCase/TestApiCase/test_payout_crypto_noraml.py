@@ -173,7 +173,7 @@ class TestPayoutCryptoNormalApi:
     def test_payout_crypto_normal_006(self):
         with allure.step("BTC确认Crypto提现交易"):
             data = {
-                "amount": "13",
+                "amount": "131111111",
                 "code": "BTC",
                 "address": "tb1q38mwu50xludgz4r52n2v0q6jwlysjgz4zkk3kl",
             }
@@ -193,7 +193,7 @@ class TestPayoutCryptoNormalApi:
     def test_payout_crypto_normal_007(self):
         with allure.step("ETH确认Crypto提现交易"):
             data = {
-                "amount": "170",
+                "amount": "1700000000",
                 "code": "ETH",
                 "address": "0xA7185FBEE96B605709D9659894066dF21cc87f05",
                 "method": "ERC20"
@@ -214,7 +214,7 @@ class TestPayoutCryptoNormalApi:
     def test_payout_crypto_normal_008(self):
         with allure.step("USDT确认Crypto提现交易"):
             data = {
-                "amount": "250000",
+                "amount": "25000000000",
                 "code": "USDT",
                 "address": "0xA7185FBEE96B605709D9659894066dF21cc87f05",
                 "method": "ERC20"

@@ -1,289 +1,504 @@
 {
-  "external.qa@cabital.com": {
-    "type": "customer",
-    "bank_info": {
-    "account_number": "12340010",
-    "routing_number": "121000248",
-    "iban": "",
-    "bank_name": "Hello",
-    "bank_address": {
-      "country_code": "USA",
-      "state": "",
-      "city": "",
-      "street_address": "",
-      "post_code": "",
-      "street_line1": "",
-      "street_line2": ""
-    },
-    "account_name": "yuke zhang",
-    "billing_address": {
-      "country_code": "USA",
-      "state": "MA",
-      "city": "Boston",
-      "street_address": "",
-      "post_code": "01234",
-      "street_line1": "100 Money Street",
-      "street_line2": ""
+  "individualInfo": [
+    {
+      "FB_white_list": "True",
+      "email": "external.qa@cabital.com",
+      "accountId": "700dca34-1e6f-408b-903d-e37d0fcfd615",
+      "kycName": "Richard External QA",
+      "whitelistName": [
+        "a",
+        "leileitest我是谁ðsd",
+        "NGUYEN VAN A",
+        "Richard External QA",
+        "我是谁我是最厉害的李大胆"
+      ],
+      "circleCards": [
+        {
+          "绑卡信息": {
+            "account_number": "12340010",
+            "routing_number": "121000248",
+            "iban": "",
+            "bank_name": "Hello",
+            "bank_address": {
+              "country_code": "USA",
+              "state": "",
+              "city": "",
+              "street_address": "",
+              "post_code": "",
+              "street_line1": "",
+              "street_line2": ""
+            },
+            "account_name": "Richard External QA",
+            "billing_address": {
+              "country_code": "USA",
+              "state": "MA",
+              "city": "Boston",
+              "street_address": "",
+              "post_code": "01234",
+              "street_line1": "100 Money Street",
+              "street_line2": ""
+            }
+          },
+          "circle账户信息": {
+            "status": "complete",
+            "beneficiary": {
+              "name": "CIRCLE INTERNET FINANCIAL INC",
+              "address1": "1 MAIN STREET",
+              "address2": "SUITE 1"
+            },
+            "description": "WELLS FARGO BANK, NA ****0010",
+            "fingerprint": "a9a71b77-d83d-4fbc-997f-41a33550c594",
+            "tracking_ref": "CIR25EANVT",
+            "beneficiary_bank": {
+              "city": "NEW YORK",
+              "name": "CRYPTO BANK",
+              "address": "1 MONEY STREET",
+              "country": "US",
+              "currency": "USD",
+              "swift_code": "CRYPTO99",
+              "postal_code": "1001",
+              "account_number": "123119341897",
+              "routing_number": "999999999"
+            },
+            "virtual_account_id": "dfaeabff-3d48-4e5b-9d25-950c18782998"
+          }
+        }
+      ],
+      "crypto": [
+        "BTC",
+        "ETH",
+        "USDT_ERC20",
+        "USDC_ERC20"
+      ]
     }
-},
-    "bank_info_type": "US",
-    "FB_white_list": "True"
-  },
-  "b01@cabital.com": {
-    "type": "company",
-    "bank_info_list": [
-      {
-        "bank_info": {
-    "account_number": "",
-    "routing_number": "",
-    "iban": "DE31100400480532013000",
-    "bank_name": "",
-    "bank_address": {
-      "country_code": "DE",
-      "state": "",
-      "city": "Berlin",
-      "street_address": "",
-      "post_code": "",
-      "street_line1": "",
-      "street_line2": ""
+  ],
+  "business": [
+    {
+      "FB_white_list": "True",
+      "email": "b01@cabital.com",
+      "accountId": "a27f5914-9416-48be-bf56-bc9eeac18a64",
+      "companyName": "company name test1",
+      "whitelistName": [
+        "yuke zhang"
+      ],
+      "circleCards": [
+        {
+          "绑卡信息": {
+            "iban": "DE31100400480532013000",
+            "bank_name": "",
+            "account_name": "yuke zhang",
+            "bank_address": {
+              "city": "Berlin",
+              "country_code": "DE"
+            },
+            "account_number": "",
+            "routing_number": "",
+            "billing_address": {
+              "city": "Boston",
+              "state": "MA",
+              "post_code": "01234",
+              "country_code": "US",
+              "street_line1": "100 Money Street"
+            }
+          },
+          "circle账户信息": {
+            "status": "complete",
+            "beneficiary": {
+              "name": "CIRCLE INTERNET FINANCIAL INC",
+              "address1": "1 MAIN STREET",
+              "address2": "SUITE 1"
+            },
+            "description": "Commerzbank GF-B48 ****3000",
+            "fingerprint": "bcd8d325-6229-4594-a89b-0790143e0489",
+            "tracking_ref": "CIR2JN4JRH",
+            "beneficiary_bank": {
+              "city": "NEW YORK",
+              "name": "CRYPTO BANK",
+              "address": "1 MONEY STREET",
+              "country": "US",
+              "currency": "USD",
+              "swift_code": "CRYPTO99",
+              "postal_code": "1001",
+              "account_number": "123373874035",
+              "routing_number": "999999999"
+            },
+            "virtual_account_id": "2e74f234-de57-4e5c-a7b7-a13af6bd6a0a"
+          }
+        },
+        {
+          "绑卡信息": {
+            "iban": "",
+            "bank_name": "Hello",
+            "account_name": "company name test1",
+            "bank_address": {
+              "post_code": "0000",
+              "country_code": "US",
+              "street_line1": "line 1"
+            },
+            "account_number": "12340010",
+            "routing_number": "121000248",
+            "billing_address": {
+              "city": "Boston",
+              "state": "MA",
+              "post_code": "01234",
+              "country_code": "US",
+              "street_line1": "100 Money Street"
+            }
+          },
+          "circle账户信息": {
+            "status": "complete",
+            "beneficiary": {
+              "name": "CIRCLE INTERNET FINANCIAL INC",
+              "address1": "1 MAIN STREET",
+              "address2": "SUITE 1"
+            },
+            "description": "WELLS FARGO BANK, NA ****0010",
+            "fingerprint": "a9a71b77-d83d-4fbc-997f-41a33550c594",
+            "tracking_ref": "CIR3KTEN3N",
+            "beneficiary_bank": {
+              "city": "NEW YORK",
+              "name": "CRYPTO BANK",
+              "address": "1 MONEY STREET",
+              "country": "US",
+              "currency": "USD",
+              "swift_code": "CRYPTO99",
+              "postal_code": "1001",
+              "account_number": "123552182744",
+              "routing_number": "999999999"
+            },
+            "virtual_account_id": "cb424970-7185-41cf-8370-2759c50b79e8"
+          }
+        }
+      ],
+      "crypto": [
+        "BTC",
+        "ETH",
+        "USDT_ERC20",
+        "USDC_ERC20"
+      ]
     },
-    "account_name": "yuke zhang",
-    "billing_address": {
-      "country_code": "USA",
-      "state": "MA",
-      "city": "Boston",
-      "street_address": "",
-      "post_code": "01234",
-      "street_line1": "100 Money Street",
-      "street_line2": ""
-    }
-},
-        "bank_info_type": "NO US & IBAN"
-      },
-      {
-        "bank_info": {
-    "account_number": "12340010",
-    "routing_number": "121000248",
-    "iban": "",
-    "bank_name": "Hello",
-    "bank_address": {
-      "country_code": "USA",
-      "state": "",
-      "city": "",
-      "street_address": "",
-      "post_code": "",
-      "street_line1": "",
-      "street_line2": ""
+    {
+      "FB_white_list": "True",
+      "email": "b02@cabital.com",
+      "accountId": "cabd50b9-37f1-4889-b10d-8112e7d4e377",
+      "companyName": "company name test2",
+      "whitelistName": [
+        "yuke zhang"
+      ],
+      "circleCards": [
+        {
+          "绑卡信息": {
+            "iban": "DE31100400480532013000",
+            "bank_name": "",
+            "account_name": "yuke zhang",
+            "bank_address": {
+              "city": "Berlin",
+              "country_code": "DE",
+              "street_line1": "line 1"
+            },
+            "account_number": "",
+            "routing_number": "",
+            "billing_address": {
+              "city": "Boston",
+              "state": "MA",
+              "post_code": "01234",
+              "country_code": "US",
+              "street_line1": "100 Money Street"
+            }
+          },
+          "circle账户信息": {
+            "status": "complete",
+            "beneficiary": {
+              "name": "CIRCLE INTERNET FINANCIAL INC",
+              "address1": "1 MAIN STREET",
+              "address2": "SUITE 1"
+            },
+            "description": "Commerzbank GF-B48 ****3000",
+            "fingerprint": "bcd8d325-6229-4594-a89b-0790143e0489",
+            "tracking_ref": "CIR32QVABS",
+            "beneficiary_bank": {
+              "city": "NEW YORK",
+              "name": "CRYPTO BANK",
+              "address": "1 MONEY STREET",
+              "country": "US",
+              "currency": "USD",
+              "swift_code": "CRYPTO99",
+              "postal_code": "1001",
+              "account_number": "123803753518",
+              "routing_number": "999999999"
+            },
+            "virtual_account_id": "a9dad1dc-8485-4981-9d34-626442e48242"
+          }
+        },
+        {
+          "绑卡信息": {
+            "iban": "",
+            "bank_name": "Hello",
+            "account_name": "company name test2",
+            "bank_address": {
+              "country_code": "US"
+            },
+            "account_number": "12340010",
+            "routing_number": "121000248",
+            "billing_address": {
+              "city": "Boston",
+              "state": "MA",
+              "post_code": "01234",
+              "country_code": "US",
+              "street_line1": "100 Money Street"
+            }
+          },
+          "circle账户信息": {
+            "status": "complete",
+            "beneficiary": {
+              "name": "CIRCLE INTERNET FINANCIAL INC",
+              "address1": "1 MAIN STREET",
+              "address2": "SUITE 1"
+            },
+            "description": "WELLS FARGO BANK, NA ****0010",
+            "fingerprint": "a9a71b77-d83d-4fbc-997f-41a33550c594",
+            "tracking_ref": "CIR2AM9GLW",
+            "beneficiary_bank": {
+              "city": "NEW YORK",
+              "name": "CRYPTO BANK",
+              "address": "1 MONEY STREET",
+              "country": "US",
+              "currency": "USD",
+              "swift_code": "CRYPTO99",
+              "postal_code": "1001",
+              "account_number": "123547117247",
+              "routing_number": "999999999"
+            },
+            "virtual_account_id": "bb34e937-9ca3-415e-b931-61eb9ac161da"
+          }
+        },
+        {
+          "绑卡信息": {
+            "iban": "",
+            "bank_name": "RBC Royal Bank of Canada",
+            "account_name": "yuke zhang",
+            "bank_address": {
+              "city": "Ottawa",
+              "country_code": "CA"
+            },
+            "account_number": "032100880012303",
+            "routing_number": "ROYCCAT2",
+            "billing_address": {
+              "city": "Boston",
+              "state": "MA",
+              "post_code": "01234",
+              "country_code": "US",
+              "street_line1": "100 Money Street"
+            }
+          },
+          "circle账户信息": {
+            "status": "complete",
+            "beneficiary": {
+              "name": "CIRCLE INTERNET FINANCIAL INC",
+              "address1": "1 MAIN STREET",
+              "address2": "SUITE 1"
+            },
+            "description": "RBC Royal Bank of Canada ****2303",
+            "fingerprint": "87f96ed3-dd80-4e98-9b56-4ff671a29c17",
+            "tracking_ref": "CIR2J9XUE3",
+            "beneficiary_bank": {
+              "city": "NEW YORK",
+              "name": "CRYPTO BANK",
+              "address": "1 MONEY STREET",
+              "country": "US",
+              "currency": "USD",
+              "swift_code": "CRYPTO99",
+              "postal_code": "1001",
+              "account_number": "234948856669",
+              "routing_number": "999999999"
+            },
+            "virtual_account_id": "af02961f-fcce-4ac9-b54b-9e7eaefb664b"
+          }
+        }
+      ],
+      "crypto": [
+        "BTC",
+        "ETH",
+        "USDT_ERC20",
+        "USDC_ERC20"
+      ]
     },
-    "account_name": "yuke zhang",
-    "billing_address": {
-      "country_code": "USA",
-      "state": "MA",
-      "city": "Boston",
-      "street_address": "",
-      "post_code": "01234",
-      "street_line1": "100 Money Street",
-      "street_line2": ""
-    }
-},
-        "bank_info_type": "US"
-      }
-    ],
-    "FB_white_list": "True"
-  },
-  "b02@cabital.com": {
-    "type": "company",
-    "bank_info_list": [
-      {
-        "bank_info": {
-    "account_number": "",
-    "routing_number": "",
-    "iban": "DE31100400480532013000",
-    "bank_name": "",
-    "bank_address": {
-      "country_code": "DE",
-      "state": "",
-      "city": "Berlin",
-      "street_address": "",
-      "post_code": "",
-      "street_line1": "",
-      "street_line2": ""
+    {
+      "FB_white_list": "False",
+      "email": "b03@cabital.com",
+      "accountId": "a6099df3-3a56-4462-a2a0-9caeec5b61e8",
+      "companyName": "company name test3",
+      "whitelistName": [
+        "yuke zhang"
+      ],
+      "crypto": [
+        "BTC",
+        "ETH",
+        "USDT_ERC20",
+        "USDC_ERC20"
+      ]
     },
-    "account_name": "yuke zhang",
-    "billing_address": {
-      "country_code": "USA",
-      "state": "MA",
-      "city": "Boston",
-      "street_address": "",
-      "post_code": "01234",
-      "street_line1": "100 Money Street",
-      "street_line2": ""
-    }
-},
-        "bank_info_type": "NO US & IBAN"
-      },
-      {
-        "bank_info": {
-    "account_number": "12340010",
-    "routing_number": "121000248",
-    "iban": "",
-    "bank_name": "Hello",
-    "bank_address": {
-      "country_code": "USA",
-      "state": "",
-      "city": "",
-      "street_address": "",
-      "post_code": "",
-      "street_line1": "",
-      "street_line2": ""
+    {
+      "FB_white_list": "True",
+      "email": "b04@cabital.com",
+      "accountId": "abab2abc-f4fe-47b2-8872-b99e8edbcb74",
+      "companyName": "company name test4",
+      "whitelistName": [
+        "yuke zhang"
+      ],
+      "circleCards": [
+        {
+          "绑卡信息": {
+            "iban": "",
+            "bank_name": "Hello",
+            "account_name": "yuke zhang",
+            "bank_address": {
+              "country_code": "US"
+            },
+            "account_number": "12340010",
+            "routing_number": "121000248",
+            "billing_address": {
+              "city": "Boston",
+              "state": "MA",
+              "post_code": "01234",
+              "country_code": "US",
+              "street_line1": "100 Money Street"
+            }
+          },
+          "circle账户信息": {
+            "status": "complete",
+            "beneficiary": {
+              "name": "CIRCLE INTERNET FINANCIAL INC",
+              "address1": "1 MAIN STREET",
+              "address2": "SUITE 1"
+            },
+            "description": "WELLS FARGO BANK, NA ****0010",
+            "fingerprint": "a9a71b77-d83d-4fbc-997f-41a33550c594",
+            "tracking_ref": "CIR2AN5DLQ",
+            "beneficiary_bank": {
+              "city": "NEW YORK",
+              "name": "CRYPTO BANK",
+              "address": "1 MONEY STREET",
+              "country": "US",
+              "currency": "USD",
+              "swift_code": "CRYPTO99",
+              "postal_code": "1001",
+              "account_number": "234605724753",
+              "routing_number": "999999999"
+            },
+            "virtual_account_id": "e62dfdde-0cbd-40e5-accd-8575045c5e0b"
+          }
+        },
+        {
+          "绑卡信息": {
+            "iban": "",
+            "bank_name": "RBC Royal Bank of Canada",
+            "account_name": "yuke zhang",
+            "bank_address": {
+              "city": "Ottawa",
+              "country_code": "CA"
+            },
+            "account_number": "032100880012303",
+            "routing_number": "ROYCCAT2",
+            "billing_address": {
+              "city": "Boston",
+              "state": "MA",
+              "post_code": "01234",
+              "country_code": "US",
+              "street_line1": "100 Money Street"
+            }
+          },
+          "circle账户信息": {
+            "status": "complete",
+            "beneficiary": {
+              "name": "CIRCLE INTERNET FINANCIAL INC",
+              "address1": "1 MAIN STREET",
+              "address2": "SUITE 1"
+            },
+            "description": "RBC Royal Bank of Canada ****2303",
+            "fingerprint": "87f96ed3-dd80-4e98-9b56-4ff671a29c17",
+            "tracking_ref": "CIR3S7XSWP",
+            "beneficiary_bank": {
+              "city": "NEW YORK",
+              "name": "CRYPTO BANK",
+              "address": "1 MONEY STREET",
+              "country": "US",
+              "currency": "USD",
+              "swift_code": "CRYPTO99",
+              "postal_code": "1001",
+              "account_number": "123359875120",
+              "routing_number": "999999999"
+            },
+            "virtual_account_id": "cc784d4f-8394-44f6-8ef7-413beed47ae9"
+          }
+        }
+      ],
+      "crypto": [
+        "BTC",
+        "ETH",
+        "USDT_ERC20",
+        "USDC_ERC20"
+      ]
     },
-    "account_name": "yuke zhang",
-    "billing_address": {
-      "country_code": "USA",
-      "state": "MA",
-      "city": "Boston",
-      "street_address": "",
-      "post_code": "01234",
-      "street_line1": "100 Money Street",
-      "street_line2": ""
+    {
+      "FB_white_list": "True",
+      "email": "b05@cabital.com",
+      "accountId": "3472ed3c-61a3-408c-9c8e-ad1eeb0ec9f1",
+      "companyName": "company name test5",
+      "whitelistName": [
+        "yuke zhang"
+      ],
+      "circleCards": [
+        {
+          "绑卡信息": {
+            "iban": "",
+            "bank_name": "RBC Royal Bank of Canada",
+            "account_name": "yuke zhang",
+            "bank_address": {
+              "city": "Ottawa",
+              "country_code": "CA"
+            },
+            "account_number": "032100880012303",
+            "routing_number": "ROYCCAT2",
+            "billing_address": {
+              "city": "Boston",
+              "state": "MA",
+              "post_code": "01234",
+              "country_code": "US",
+              "street_line1": "100 Money Street"
+            }
+          },
+          "circle账户信息": {
+            "status": "complete",
+            "beneficiary": {
+              "name": "CIRCLE INTERNET FINANCIAL INC",
+              "address1": "1 MAIN STREET",
+              "address2": "SUITE 1"
+            },
+            "description": "RBC Royal Bank of Canada ****2303",
+            "fingerprint": "87f96ed3-dd80-4e98-9b56-4ff671a29c17",
+            "tracking_ref": "CIR2KCG3ZC",
+            "beneficiary_bank": {
+              "city": "NEW YORK",
+              "name": "CRYPTO BANK",
+              "address": "1 MONEY STREET",
+              "country": "US",
+              "currency": "USD",
+              "swift_code": "CRYPTO99",
+              "postal_code": "1001",
+              "account_number": "234085919255",
+              "routing_number": "999999999"
+            },
+            "virtual_account_id": "5dd6d76d-da1d-4f8e-96a1-c4f74dce7e7d"
+          }
+        }
+      ],
+      "crypto": [
+        "BTC",
+        "ETH",
+        "USDT_ERC20",
+        "USDC_ERC20"
+      ]
     }
-},
-        "bank_info_type": "US"
-      },
-      {
-        "bank_info": {
-    "account_number": "032100880012303",
-    "routing_number": "ROYCCAT2",
-    "iban": "",
-    "bank_name": "RBC Royal Bank of Canada",
-    "bank_address": {
-      "country_code": "CA",
-      "state": "",
-      "city": "Ottawa",
-      "street_address": "",
-      "post_code": "",
-      "street_line1": "",
-      "street_line2": ""
-    },
-    "account_name": "yuke zhang",
-    "billing_address": {
-      "country_code": "USA",
-      "state": "MA",
-      "city": "Boston",
-      "street_address": "",
-      "post_code": "01234",
-      "street_line1": "100 Money Street",
-      "street_line2": ""
-    }
-},
-        "bank_info_type": "NO US & NO IBAN"
-
-      }
-    ],
-    "FB_white_list": "True"
-  },
-  "b03@cabital.com": {
-    "type": "company",
-    "bank_info_list": [
-     
-    ],
-    "FB_white_list": "False"
-  },
-  "b04@cabital.com": {
-    "type": "company",
-    "bank_info_list": [
-      {
-        "bank_info": {
-    "account_number": "12340010",
-    "routing_number": "121000248",
-    "iban": "",
-    "bank_name": "Hello",
-    "bank_address": {
-      "country_code": "USA",
-      "state": "",
-      "city": "",
-      "street_address": "",
-      "post_code": "",
-      "street_line1": "",
-      "street_line2": ""
-    },
-    "account_name": "yuke zhang",
-    "billing_address": {
-      "country_code": "USA",
-      "state": "MA",
-      "city": "Boston",
-      "street_address": "",
-      "post_code": "01234",
-      "street_line1": "100 Money Street",
-      "street_line2": ""
-    }
-},
-        "bank_info_type": "US"
-      },
-      {
-        "bank_info": {
-    "account_number": "032100880012303",
-    "routing_number": "ROYCCAT2",
-    "iban": "",
-    "bank_name": "RBC Royal Bank of Canada",
-    "bank_address": {
-      "country_code": "CA",
-      "state": "",
-      "city": "Ottawa",
-      "street_address": "",
-      "post_code": "",
-      "street_line1": "",
-      "street_line2": ""
-    },
-    "account_name": "yuke zhang",
-    "billing_address": {
-      "country_code": "USA",
-      "state": "MA",
-      "city": "Boston",
-      "street_address": "",
-      "post_code": "01234",
-      "street_line1": "100 Money Street",
-      "street_line2": ""
-    }
-},
-        "bank_info_type": "NO US & NO IBAN"
-
-      }
-    ],
-    "FB_white_list": "True"
-  },
-  "b05@cabital.com": {
-    "type": "company",
-    "bank_info_list": [
-      {
-        "bank_info": {
-    "account_number": "032100880012303",
-    "routing_number": "ROYCCAT2",
-    "iban": "",
-    "bank_name": "RBC Royal Bank of Canada",
-    "bank_address": {
-      "country_code": "CA",
-      "state": "",
-      "city": "Ottawa",
-      "street_address": "",
-      "post_code": "",
-      "street_line1": "",
-      "street_line2": ""
-    },
-    "account_name": "yuke zhang",
-    "billing_address": {
-      "country_code": "USA",
-      "state": "MA",
-      "city": "Boston",
-      "street_address": "",
-      "post_code": "01234",
-      "street_line1": "100 Money Street",
-      "street_line2": ""
-    }
-},
-        "bank_info_type": "NO US & NO IBAN"
-      }
-    ],
-    "FB_white_list": "True"
-  }
+  ]
 }
