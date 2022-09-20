@@ -55,7 +55,7 @@ class TestUSDCApi:
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
-                assert r.status_code == 201, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
 
     @allure.title('test_circel_003')
     @allure.description('USD 商户 payin')
@@ -116,7 +116,7 @@ class TestUSDCApi:
                 "account_id": "700dca34-1e6f-408b-903d-e37d0fcfd615",
                 "legal_entity": 1,
                 "code": "USDC",
-                "amount": "40",
+                "amount": "40.231231",
                 "chain": "ETH",
                 "address": "0x465d39f446f3EE9867B318A5bB98EF7dA796DFbA"
             }
