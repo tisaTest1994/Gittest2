@@ -974,12 +974,11 @@ class ApiFunction:
                         total_spend_amount = Decimal(amount)
                         service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
                         spend_amount = (total_spend_amount * Decimal(1 - 0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
-                        buy_amount = (spend_amount / Decimal(quote))
+                        buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
                     else:
                         total_spend_amount = Decimal(amount)
                         service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.000000'), ROUND_FLOOR)
                         spend_amount = (total_spend_amount * Decimal(1 - 0.0375))
-
                         buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
             else:
                 with allure.step("判断地区"):

@@ -20,7 +20,7 @@ class TestCabitalPayApi:
             data = {
                 "reference_id": generate_string(30),
                 "purchase_currency": "USD",
-                "purchase_amount": "100.23",
+                "purchase_amount": "200",
                 "payment_currency": "USDT",
                 "payment_amount": "",
                 "network": "ETH",
