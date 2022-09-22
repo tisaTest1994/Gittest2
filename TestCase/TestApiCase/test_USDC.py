@@ -64,12 +64,12 @@ class TestUSDCApi:
             'Authorization'] = "Bearer QVBJX0tFWTozMzY4OGI0ZTdjYTgzYjlmODU2ODIzNjlhZTU2OGEzZTplMWNjMWQyMGQxNThiMTUwMDU5NzI0N2ZjMmYxZTA4OQ=="
         with allure.step("payin"):
             data = {
-                'trackingRef': 'CIR3KTEN3N',
+                'trackingRef': 'CIR2AM9GLW',
                 'beneficiaryBank': {
-                    'accountNumber': '123552182744'
+                    'accountNumber': '123547117247'
                 },
                 'amount': {
-                    'amount': '200.00',
+                    'amount': '230.00',
                     'currency': 'USD'
                 }
             }
