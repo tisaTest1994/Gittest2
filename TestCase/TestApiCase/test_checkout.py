@@ -914,6 +914,7 @@ class TestCheckoutApi:
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+16@cabital.com')
         with allure.step("币种兑选择"):
             pairs = ApiFunction.get_buy_crypto_currency(type='all')
+            pairs.remove('USDT-IDR')
         for z in pairs:
             for x in get_json()['checkOutAreaList2']:
                 with allure.step("创建数字货币购买交易信息，ccy 是buy"):

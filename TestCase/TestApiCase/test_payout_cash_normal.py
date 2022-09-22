@@ -213,6 +213,7 @@ class TestPayoutCashNormalApi:
                 headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
                                     headers=headers)
+                logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
@@ -221,6 +222,7 @@ class TestPayoutCashNormalApi:
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                      headers=headers)
                 with allure.step("状态码和返回值"):
+                    logger.info('trace id是{}'.format(str(r2.headers['Traceparent'])))
                     logger.info('状态码是{}'.format(str(r2.status_code)))
                     logger.info('返回值是{}'.format(str(r2.text)))
                 with allure.step("校验状态码"):
@@ -296,8 +298,8 @@ class TestPayoutCashNormalApi:
             }
             with allure.step("确认EUR法币提现交易"):
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url),
-                                    data=json.dumps(data),
-                                    headers=headers)
+                                    data=json.dumps(data), headers=headers)
+                logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
@@ -310,6 +312,7 @@ class TestPayoutCashNormalApi:
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                      headers=headers)
                 with allure.step("状态码和返回值"):
+                    logger.info('trace id是{}'.format(str(r2.headers['Traceparent'])))
                     logger.info('状态码是{}'.format(str(r2.status_code)))
                     logger.info('返回值是{}'.format(str(r2.text)))
                 with allure.step("校验状态码"):
@@ -327,6 +330,7 @@ class TestPayoutCashNormalApi:
                 'code': 'GBP'
             }
             r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), params=params, headers=headers)
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
             account_name = r.json()['name_list']
         with allure.step("法币GBP提现"):
             data = {
@@ -339,8 +343,8 @@ class TestPayoutCashNormalApi:
             }
             with allure.step("确认GBP法币提现交易"):
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url),
-                                    data=json.dumps(data),
-                                    headers=headers)
+                                    data=json.dumps(data), headers=headers)
+                logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
                 with allure.step("校验状态码"):
                     assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
@@ -353,6 +357,7 @@ class TestPayoutCashNormalApi:
                 r2 = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), data=json.dumps(data),
                                      headers=headers)
                 with allure.step("状态码和返回值"):
+                    logger.info('trace id是{}'.format(str(r2.headers['Traceparent'])))
                     logger.info('状态码是{}'.format(str(r2.status_code)))
                     logger.info('返回值是{}'.format(str(r2.text)))
                 with allure.step("校验状态码"):
