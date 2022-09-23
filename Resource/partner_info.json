@@ -7,7 +7,8 @@
       "account_vid_list": {
         "richard": {
           "account_vid": "96f29441-feb4-495a-a531-96c833e8261a",
-          "user_ref_id": "38f26ee0d72f9031644a41874edbeda8"
+          "user_ref_id": "38f26ee0d72f9031644a41874edbeda8",
+          "email":"test@cabital.com"
         }
       }
     },
@@ -18,7 +19,8 @@
       "account_vid_list": {
         "richard": {
           "account_vid": "b715b005-b358-47ea-ab93-e4c7516efa52",
-          "user_ref_id": "996465012836982998"
+          "user_ref_id": "996465012836982998",
+          "email":"23123"
         }
       }
     },
@@ -29,7 +31,8 @@
       "account_vid_list": {
         "richard": {
           "account_vid": "9dea7f42-be58-4595-a7ba-fab7e6e58762",
-          "user_ref_id": "10000826"
+          "user_ref_id": "10000826",
+          "email": "314627197@qq.com"
         }
       }
     },
@@ -40,7 +43,8 @@
       "account_vid_list": {
         "richard": {
           "account_vid": "19abdc64-6ab4-4069-8601-e99ab3c607a1",
-          "user_ref_id": "10227"
+          "user_ref_id": "10227",
+           "email": "neoding001@outlook.com"
         }
       }
     },
@@ -51,7 +55,8 @@
       "account_vid_list": {
         "richard": {
           "account_vid": "3580bf87-a24c-49b9-a161-fe249b811803",
-          "user_ref_id": "996465012836982998"
+          "user_ref_id": "996465012836982998",
+           "email":"23123412"
         }
       }
     },
@@ -62,7 +67,8 @@
       "account_vid_list": {
         "richard": {
           "account_vid": "0d628d06-3668-4b06-8fc8-8148126b8271",
-          "user_ref_id": "y9L5fFWeSibFxPqD6tusLrH8PU4qJK"
+          "user_ref_id": "y9L5fFWeSibFxPqD6tusLrH8PU4qJK",
+           "email": "qa4@cabital.com"
         }
       }
     },
@@ -73,7 +79,8 @@
       "account_vid_list": {
         "richard": {
           "account_vid": "964bb53f-1e00-4632-8bb7-954a6ad2f4e0",
-          "user_ref_id": "MC561"
+          "user_ref_id": "MC561",
+          "email":"23123412"
         }
       }
     },
