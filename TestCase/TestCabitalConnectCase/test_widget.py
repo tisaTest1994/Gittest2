@@ -138,6 +138,3 @@ class TestWidgetApi:
                 logger.info('返回值是{}'.format(str(r.url)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-            with allure.step("校验url返回值"):
-                print(r.text)
-                #assert expect_url in r.url, "获取跳转地址,期望url是{}，返回值是{}".format(expect_url, r.url)
