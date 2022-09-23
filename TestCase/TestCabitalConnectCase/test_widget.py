@@ -115,3 +115,29 @@ class TestWidgetApi:
                                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                             with allure.step("校验返回值"):
                                 assert r.json() == {}, "确认划转交易错误，返回值是{}".format(r.text)
+
+    @allure.title('test_widget_004')
+    @allure.description('link onboarding')
+    def test_widget_004(self, partner):
+        with allure.step("获得用户信息"):
+            params = {
+                'partner_key': get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID'],
+                'user_ext_ref': get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['user_ref_id'],
+                'email': get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['email'],
+                'redirect_url': 'https://www.baidu.com',
+                'feature': 'onboarding'
+            }
+            r1 = session.request('GET', url='{}/partner/link'.format(connect_url), params=params, headers=headers)
+            with allure.step("验签"):
+                sign = ApiFunction.get_link_sign(url=r1.url, partner=partner)
+                connect_headers['ACCESS-SECRET'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Secret_Key']
+                params['signature'] = sign
+            r = session.request('GET', url='{}/partner/link'.format(connect_url), params=params, headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.url)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验url返回值"):
+                print(r.text)
+                #assert expect_url in r.url, "获取跳转地址,期望url是{}，返回值是{}".format(expect_url, r.url)

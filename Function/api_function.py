@@ -426,8 +426,8 @@ class ApiFunction:
 
     # 验签 sha256
     @staticmethod
-    def infinni_games_access_sign(url):
-        key = get_json()['infinni_games']['secretKey']
+    def get_link_sign(url, partner):
+        key = get_json(file='partner_info.json')[get_json()['env']][partner]['Secret_Key']
         key = key.encode('utf-8')
         message = url.encode('utf-8')
         sign = base64.b64encode(hmac.new(key, message, digestmod=sha256).digest())
@@ -998,4 +998,92 @@ class ApiFunction:
                             total_spend_amount = Decimal(get_precision(service_charge, precision, True)) + spend_amount
             return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'total_spend_amount': get_precision(total_spend_amount, precision), 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(buy_amount, 6)}
 
-
+    # 获取buy crypto指定币种的手续费，买入卖出数量。
+    @staticmethod
+    def get_buy_crypto_transfer_list(amount, t_fee, pairs='USDT-EUR', ccy='spend', country='TH'):
+        with allure.step("获取汇率"):
+            r = session.request('GET', url='{}/acquiring/buy/quotes/{}'.format(env_url, pairs), headers=headers)
+            quote = r.json()['quote']['amount']
+            quote_id = r.json()['quote']['id']
+            t_fee = Decimal(t_fee)
+        with allure.step("打开数字货币购买画面"):
+            r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
+            for i in r.json()['payment_currencies']:
+                if i['code'] == str(pairs.split('-')[1]):
+                    precision = i['precision']
+        with allure.step("确认major_code"):
+            if ccy == 'spend':
+                major_code = pairs.split('-')[1]
+            else:
+                major_code = pairs.split('-')[0]
+        with allure.step("判断方向"):
+            if ccy == 'spend':
+                with allure.step("判断地区"):
+                    if country in get_json()['EAList']:
+                        total_spend_amount = Decimal(amount)
+                        service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        spend_amount = (total_spend_amount * Decimal(1 - 0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR) - t_fee
+                    else:
+                        total_spend_amount = Decimal(amount)
+                        service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        spend_amount = (total_spend_amount * Decimal(1 - 0.0375))
+                        buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR) - t_fee
+            else:
+                if 'CLP' in pairs or 'IDR' in pairs or 'VND' in pairs or 'KRW' in pairs or 'JPY' in pairs:
+                    with allure.step("判断地区"):
+                        if country in get_json()['EAList']:
+                            buy_amount = Decimal(amount)
+                            buy_amount2 = Decimal(amount) + t_fee
+                            spend_amount = Decimal(buy_amount2 * Decimal(quote)).quantize(Decimal('0'),
+                                                                                          ROUND_CEILING)
+                            total_spend_amount = (spend_amount / Decimal(1 - 0.0185)).quantize(Decimal('0'),
+                                                                                               ROUND_CEILING)
+                            service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0'),
+                                                                                             ROUND_CEILING)
+                            if total_spend_amount != Decimal(
+                                    get_precision(service_charge, precision, True)) + spend_amount:
+                                total_spend_amount = Decimal(
+                                    get_precision(service_charge, precision, True)) + spend_amount
+                        else:
+                            buy_amount = Decimal(amount)
+                            buy_amount2 = Decimal(amount) + t_fee
+                            spend_amount = Decimal(buy_amount2 * Decimal(quote)).quantize(Decimal('0'),
+                                                                                          ROUND_CEILING)
+                            total_spend_amount = (spend_amount / Decimal(1 - 0.0375)).quantize(Decimal('0.'),
+                                                                                               ROUND_CEILING)
+                            service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0'),
+                                                                                             ROUND_CEILING)
+                            if total_spend_amount != Decimal(
+                                    get_precision(service_charge, precision, True)) + spend_amount:
+                                total_spend_amount = Decimal(
+                                    get_precision(service_charge, precision, True)) + spend_amount
+                else:
+                    with allure.step("判断地区"):
+                        if country in get_json()['EAList']:
+                            buy_amount = Decimal(amount)
+                            buy_amount2 = Decimal(amount) + t_fee
+                            spend_amount = Decimal(buy_amount2 * Decimal(quote)).quantize(Decimal('0.00'),
+                                                                                          ROUND_CEILING)
+                            total_spend_amount = (spend_amount / Decimal(1 - 0.0185)).quantize(Decimal('0.00'),
+                                                                                               ROUND_CEILING)
+                            service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.00'),
+                                                                                             ROUND_CEILING)
+                            if total_spend_amount != Decimal(
+                                    get_precision(service_charge, precision, True)) + spend_amount:
+                                total_spend_amount = Decimal(
+                                    get_precision(service_charge, precision, True)) + spend_amount
+                        else:
+                            buy_amount = Decimal(amount)
+                            buy_amount2 = Decimal(amount) + t_fee
+                            spend_amount = Decimal(buy_amount2 * Decimal(quote)).quantize(Decimal('0.00'),
+                                                                                          ROUND_CEILING)
+                            total_spend_amount = (spend_amount / Decimal(1 - 0.0375)).quantize(Decimal('0.00'),
+                                                                                               ROUND_CEILING)
+                            service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.00'),
+                                                                                             ROUND_CEILING)
+                            if total_spend_amount != Decimal(
+                                    get_precision(service_charge, precision, True)) + spend_amount:
+                                total_spend_amount = Decimal(
+                                    get_precision(service_charge, precision, True)) + spend_amount
+            return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'total_spend_amount': get_precision(total_spend_amount, precision), 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(buy_amount, 6)}
