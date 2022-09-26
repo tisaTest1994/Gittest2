@@ -762,166 +762,6 @@ class ApiFunction:
             cycle = cycle + 1
         assert False, '换汇失败，接口返回{}'.format(r.text)
 
-    # 根据config 获得支持币种，支持bybit，infinni games
-    @staticmethod
-    def get_connect_support(url, headers, key=''):
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            if key == 'infinni games':
-                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', key='infinni games', nonce=nonce)
-            else:
-                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', nonce=nonce)
-            headers['ACCESS-SIGN'] = sign
-            headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            headers['ACCESS-NONCE'] = nonce
-        with allure.step("获取合作方的配置"):
-            r = session.request('GET', url='{}/config'.format(url), headers=headers)
-            support_list = []
-            for i in r.json()['currencies']:
-                support_list.append(i['symbol'])
-        return support_list
-
-    # 根据config 获得支持cash币种，支持bybit，infinni games
-    @staticmethod
-    def get_connect_support_cash(url, headers, key=''):
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            if key == 'infinni games':
-                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', key='infinni games', nonce=nonce)
-            else:
-                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', nonce=nonce)
-            headers['ACCESS-SIGN'] = sign
-            headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            headers['ACCESS-NONCE'] = nonce
-        with allure.step("获取合作方的配置"):
-            r = session.request('GET', url='{}/config'.format(url), headers=headers)
-            support_list = []
-            for i in r.json()['currencies']:
-                if i['type'] == 1:
-                    support_list.append(i['symbol'])
-        return support_list
-
-    # 根据config 获得cfx list，支持bybit，infinni games
-    @staticmethod
-    def get_connect_cfx_list(url, headers, key=''):
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            if key == 'infinni games':
-                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', key='infinni games', nonce=nonce)
-            else:
-                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', nonce=nonce)
-            headers['ACCESS-SIGN'] = sign
-            headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            headers['ACCESS-NONCE'] = nonce
-        with allure.step("获取合作方的配置"):
-            r = session.request('GET', url='{}/config'.format(url), headers=headers)
-            cfx_list = []
-            for i in r.json()['pairs']:
-                cfx_list.append(i['pair'])
-        return cfx_list
-
-    # 根据需求或得config参数
-    @staticmethod
-    def get_config_info(project='bybit', type='', symbol=''):
-        headers = {}
-        with allure.step("验签"):
-            unix_time = int(time.time())
-            nonce = generate_string(30)
-            if project == 'infinni games':
-                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', key='infinni games', nonce=nonce)
-                url = get_json()['infinni_games']['url']
-                headers['ACCESS-KEY'] = get_json()['infinni_games']['partner_id']
-            elif project == 'bybit':
-                sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET', url='/api/v1/config', nonce=nonce)
-                url = get_json()['connect'][get_json()['env']]['url']
-                headers = get_json()['connect'][get_json()['env']]['bybit']['Headers']
-            headers['ACCESS-SIGN'] = sign
-            headers['ACCESS-TIMESTAMP'] = str(unix_time)
-            headers['ACCESS-NONCE'] = nonce
-        with allure.step("获取合作方的配置"):
-            r = session.request('GET', url='{}/config'.format(url), headers=headers)
-            if type == 'pairs':
-                cfx_list = []
-                for i in r.json()['pairs']:
-                    cfx_list.append(i['pair'])
-                return cfx_list
-            elif type == 'cash':
-                cash_list = []
-                for i in r.json()['currencies']:
-                    if i['type'] == 1:
-                        cash_list.append(i['symbol'])
-                return cash_list
-            elif type == 'crypto':
-                crypto_list = []
-                for i in r.json()['currencies']:
-                    if i['type'] == 2:
-                        crypto_list.append(i['symbol'])
-                return crypto_list
-            elif type == 'credit_limit':
-                credit_list = []
-                credit_limit = []
-                for i in r.json()['currencies']:
-                    if i['config']['credit']['allow']:
-                        credit_dict = i['config']['credit']
-                        del(credit_dict['allow'])
-                        credit_dict['symbol'] = i['symbol']
-                        credit_list.append(credit_dict)
-                for j in credit_list:
-                    if j['symbol'] == symbol:
-                        credit_limit.append([j['min'], j['max']])
-                return credit_limit
-
-            elif type == 'debit_limit':
-                debit_list = []
-                debit_limit = []
-                for i in r.json()['currencies']:
-                    if i['config']['debit']['allow']:
-                        debit_dict = i['config']['debit']
-                        del(debit_dict['allow'])
-                        debit_dict['symbol'] = i['symbol']
-                        debit_list.append(debit_dict)
-                for j in debit_list:
-                    if j['symbol'] == symbol:
-                        debit_limit.append([j['min'], j['max']])
-                return debit_limit
-
-            elif type == 'debit_fee':
-                debit_fee = []
-                debit_fee_value = []
-                for i in r.json()['currencies']:
-                    if i['fees']['debit_fee']['is_single']:
-                        debit_dict = i['fees']['debit_fee']
-                        del (debit_dict['is_single'])
-                        debit_dict['symbol'] = i['symbol']
-                        debit_fee.append(debit_dict)
-                for j in debit_fee:
-                    if j['symbol'] == symbol:
-                        debit_fee_value.append([j['value'], j['original_value']])
-                return debit_fee_value
-
-            elif type == 'cfx_limit':
-                cfx_list = []
-                cfx_limit = []
-                for i in r.json()['currencies']:
-                    if i['config']['conversion']['allow']:
-                        cfx_dict = i['config']['conversion']
-                        del(cfx_dict['allow'])
-                        cfx_dict['symbol'] = i['symbol']
-                        cfx_list.append(cfx_dict)
-                for j in cfx_list:
-                    if j['symbol'] == symbol:
-                        cfx_limit.append([j['min'], j['max']])
-                return cfx_limit
-
-            elif type == 'all':
-                all_list = []
-                for i in r.json()['currencies']:
-                    all_list.append(i['symbol'])
-                return all_list
-
     # 获取buy crypto所有支持的币种
     @staticmethod
     def get_buy_crypto_currency(type='all'):
@@ -1087,3 +927,23 @@ class ApiFunction:
                                 total_spend_amount = Decimal(
                                     get_precision(service_charge, precision, True)) + spend_amount
             return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'total_spend_amount': get_precision(total_spend_amount, precision), 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(buy_amount, 6)}
+
+    # 获取用户可用单币种balance
+    @staticmethod
+    def connect_get_balance(partner, account_vid, currency):
+        with allure.step("验签"):
+            unix_time = int(time.time())
+            nonce = generate_string(30)
+            sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET',
+                                              url='/api/v1/accounts/{}/balances/{}'.format(account_vid, currency),
+                                              connect_type=partner, nonce=nonce)
+            connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner][
+                'Partner_ID']
+            connect_headers['ACCESS-SIGN'] = sign
+            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
+            connect_headers['ACCESS-NONCE'] = nonce
+        with allure.step("账户可用余额列表"):
+            r = session.request('GET', url='{}/accounts/{}/balances/{}'.format(connect_url, account_vid, currency),
+                                headers=connect_headers)
+        return r.json()['balance']
+

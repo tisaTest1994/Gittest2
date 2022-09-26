@@ -17,12 +17,14 @@ class TestTransferApi:
         with allure.step("获得不同币种"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['config']['debit']['allow']:
+                    with allure.step("未操作前的balance"):
+                        old_balance = ApiFunction.connect_get_balance(partner, account_vid, i['symbol'])['balances']
                     with allure.step("获得data"):
                         with allure.step("获得otp"):
                             mfaVerificationCode = get_mfa_code('richard')
                         external_id = generate_string(25)
                         data = {
-                            'amount': str(giveAmount(i['symbol'])),
+                            'amount': giveAmount(i['symbol']),
                             'symbol': i['symbol'],
                             'otp': str(mfaVerificationCode),
                             'direction': 'DEBIT',
@@ -76,6 +78,10 @@ class TestTransferApi:
                                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                             with allure.step("校验返回值"):
                                 assert r.json()['external_id'] == external_id, "查询转账记录错误，返回值是{}".format(r.text)
+                    with allure.step("操作后的balance"):
+                        new_balance = ApiFunction.connect_get_balance(partner, account_vid, i['symbol'])['balances']
+                    with allure.step("计算用户balance变化"):
+                        assert Decimal(old_balance) - Decimal(data['amount']) == Decimal(new_balance), "用户balance变化错误，操作前的balance是{},操作金额是{},操作后的金额是{}".format(old_balance, str(giveAmount(i['symbol'])), new_balance)
 
     @allure.title('test_transfer_002')
     @allure.description('partner发起请求，把资金从cabital转移到partner账户并且关联C+T交易')
