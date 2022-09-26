@@ -673,6 +673,8 @@ class TestPayoutCashAbnormalApi:
                     logger.info('状态码是{}'.format(str(r2.status_code)))
                     logger.info('返回值是{}'.format(str(r2.text)))
                 with allure.step("校验状态码"):
+                    if r.status_code == 504 and r.json()['message'] == 'context deadline exceeded':
+                        pytest.skip(msg='后端接口不稳定导致504')
                     assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
                     assert r2.json()['code'] == '103015',\
@@ -1070,6 +1072,8 @@ class TestPayoutCashAbnormalApi:
                     logger.info('状态码是{}'.format(str(r2.status_code)))
                     logger.info('返回值是{}'.format(str(r2.text)))
                 with allure.step("校验状态码"):
+                    if r.status_code == 504 and r.json()['message'] == 'context deadline exceeded':
+                        pytest.skip(msg='后端接口不稳定导致504')
                     assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
                     assert r2.json()['code'] == '103015', \
