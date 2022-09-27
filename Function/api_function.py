@@ -858,17 +858,66 @@ class ApiFunction:
                 major_code = pairs.split('-')[0]
         with allure.step("判断方向"):
             if ccy == 'spend':
-                with allure.step("判断地区"):
-                    if country in get_json()['EAList']:
-                        total_spend_amount = Decimal(amount)
-                        service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.000000'), ROUND_CEILING)
-                        spend_amount = (total_spend_amount * Decimal(1 - 0.0185)).quantize(Decimal('0.000000'), ROUND_CEILING)
-                        buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR) - t_fee
-                    else:
-                        total_spend_amount = Decimal(amount)
-                        service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.000000'), ROUND_CEILING)
-                        spend_amount = (total_spend_amount * Decimal(1 - 0.0375)).quantize(Decimal('0.000000'), ROUND_CEILING)
-                        buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR) - t_fee
+                if 'CLP' in pairs or 'IDR' in pairs or 'VND' in pairs or 'KRW' in pairs or 'JPY' in pairs:
+                    with allure.step("判断地区"):
+                        if country in get_json()['EAList']:
+                            total_spend_amount = Decimal(amount)
+                            processing_fee = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0'),
+                                                                                             ROUND_CEILING)
+                            spend_amount = total_spend_amount - processing_fee
+                            buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'),
+                                                                                  ROUND_FLOOR) - t_fee
+                            service_charge = (
+                                        total_spend_amount - (buy_amount * Decimal(quote)).quantize(Decimal('0'),
+                                                                                                    ROUND_CEILING) - (
+                                                Decimal(t_fee) * Decimal(quote).quantize(Decimal('0'),
+                                                                                         ROUND_CEILING))).quantize(
+                                Decimal('0'), ROUND_FLOOR)
+                            transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0'), ROUND_CEILING)
+                        else:
+                            total_spend_amount = Decimal(amount)
+                            processing_fee = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0'),
+                                                                                             ROUND_CEILING)
+                            spend_amount = total_spend_amount - processing_fee
+                            buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'),
+                                                                                  ROUND_FLOOR) - t_fee
+                            service_charge = (
+                                        total_spend_amount - (buy_amount * Decimal(quote)).quantize(Decimal('0'),
+                                                                                                    ROUND_CEILING) - (
+                                                    Decimal(t_fee) * Decimal(quote).quantize(Decimal('0'),
+                                                                                             ROUND_CEILING))).quantize(
+                                Decimal('0'), ROUND_FLOOR)
+                            transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0'), ROUND_CEILING)
+                else:
+                    with allure.step("判断地区"):
+                        if country in get_json()['EAList']:
+                            total_spend_amount = Decimal(amount)
+                            processing_fee = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.00'),
+                                                                                             ROUND_CEILING)
+                            spend_amount = total_spend_amount - processing_fee
+                            buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'),
+                                                                                  ROUND_FLOOR) - t_fee
+                            service_charge = (
+                                        total_spend_amount - (buy_amount * Decimal(quote)).quantize(Decimal('0.00'),
+                                                                                                    ROUND_CEILING) - (
+                                                Decimal(t_fee) * Decimal(quote).quantize(Decimal('0.00'),
+                                                                                         ROUND_CEILING))).quantize(
+                                Decimal('0.00'), ROUND_FLOOR)
+                            transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0.00'), ROUND_CEILING)
+                        else:
+                            total_spend_amount = Decimal(amount)
+                            processing_fee = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.00'),
+                                                                                             ROUND_CEILING)
+                            spend_amount = total_spend_amount - processing_fee
+                            buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'),
+                                                                                  ROUND_FLOOR) - t_fee
+                            service_charge = (
+                                        total_spend_amount - (buy_amount * Decimal(quote)).quantize(Decimal('0.00'),
+                                                                                                    ROUND_CEILING) - (
+                                                    Decimal(t_fee) * Decimal(quote).quantize(Decimal('0.00'),
+                                                                                             ROUND_CEILING))).quantize(
+                                Decimal('0.00'), ROUND_FLOOR)
+                            transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0.00'), ROUND_CEILING)
             else:
                 if 'CLP' in pairs or 'IDR' in pairs or 'VND' in pairs or 'KRW' in pairs or 'JPY' in pairs:
                     with allure.step("判断地区"):
@@ -885,6 +934,7 @@ class ApiFunction:
                                     get_precision(service_charge, precision, True)) + spend_amount:
                                 total_spend_amount = Decimal(
                                     get_precision(service_charge, precision, True)) + spend_amount
+                            transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0'), ROUND_CEILING)
                         else:
                             buy_amount = Decimal(amount)
                             buy_amount2 = Decimal(amount) + t_fee
@@ -898,6 +948,7 @@ class ApiFunction:
                                     get_precision(service_charge, precision, True)) + spend_amount:
                                 total_spend_amount = Decimal(
                                     get_precision(service_charge, precision, True)) + spend_amount
+                            transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0'), ROUND_CEILING)
                 else:
                     with allure.step("判断地区"):
                         if country in get_json()['EAList']:
@@ -913,6 +964,7 @@ class ApiFunction:
                                     get_precision(service_charge, precision, True)) + spend_amount:
                                 total_spend_amount = Decimal(
                                     get_precision(service_charge, precision, True)) + spend_amount
+                            transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0.00'), ROUND_CEILING)
                         else:
                             buy_amount = Decimal(amount)
                             buy_amount2 = Decimal(amount) + t_fee
@@ -926,7 +978,8 @@ class ApiFunction:
                                     get_precision(service_charge, precision, True)) + spend_amount:
                                 total_spend_amount = Decimal(
                                     get_precision(service_charge, precision, True)) + spend_amount
-            return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'total_spend_amount': get_precision(total_spend_amount, precision), 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(buy_amount, 6)}
+                            transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0.00'), ROUND_CEILING)
+            return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'total_spend_amount': get_precision(total_spend_amount, precision), 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision, True), 'buy_amount': get_precision(buy_amount, 6), 'transfer_fee': str(transfer_fee)}
 
     # 获取用户可用单币种balance
     @staticmethod

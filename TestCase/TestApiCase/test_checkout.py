@@ -909,7 +909,7 @@ class TestCheckoutApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
 
     @allure.title('test_check_out_021')
-    @allure.description('单T EE用户')
+    @allure.description('单B EE用户')
     def test_check_out_021(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+16@cabital.com')
         with allure.step("币种兑选择"):
