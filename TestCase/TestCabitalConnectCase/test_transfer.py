@@ -418,7 +418,7 @@ class TestTransferApi:
                             amount = 315000
                         elif 'CZK' in z:
                             amount = 3000
-                        elif 'JYP' in z:
+                        elif 'JPY' in z:
                             amount = 55000
                         else:
                             amount = 550
