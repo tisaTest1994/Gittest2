@@ -413,7 +413,7 @@ class TestTransferApi:
                         elif 'LKR' in z:
                             amount = 4000
                         elif 'KRW' in z:
-                            amount = 15000
+                            amount = 150000
                         elif 'VND' in z:
                             amount = 315000
                         elif 'CZK' in z:
