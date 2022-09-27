@@ -71,7 +71,7 @@ class TestCashierApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
@@ -155,7 +155,7 @@ class TestCashierApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -227,7 +227,7 @@ class TestCashierApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -319,7 +319,7 @@ class TestCashierApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -391,7 +391,7 @@ class TestCashierApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -486,7 +486,7 @@ class TestCashierApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign
@@ -560,7 +560,7 @@ class TestCashierApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments', key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
             self.headers['ACCESS-SIGN'] = sign

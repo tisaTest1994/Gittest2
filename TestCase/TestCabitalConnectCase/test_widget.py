@@ -58,6 +58,7 @@ class TestWidgetApi:
         with allure.step("划转"):
             account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard'][
                 'account_vid']
+
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['config']['transfer_debit']['allow'] is True:
                     with allure.step("获得transfer前金额"):
@@ -104,7 +105,7 @@ class TestWidgetApi:
                             }
                             with allure.step("验签"):
                                 unix_time = int(time.time())
-                                nonce = generate_string(30)
+                                nonce = generate_string(20) + str(time.time()).split('.')[0]
                                 sign = ApiFunction.make_signature(unix_time=str(unix_time), method='PUT', url='/api/v1/accounts/{}/transfers/{}'.format(account_vid, transfer_id), connect_type=partner, nonce=nonce, body=json.dumps(data))
                                 connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
                                 connect_headers['ACCESS-SIGN'] = sign

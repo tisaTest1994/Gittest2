@@ -127,16 +127,16 @@ class TestRebalanceApi:
                             "value_date": "2021-12-30",
                             "order_type_enum": 1,
                             "counterparty_txn_id": generate_string(16),
-                            "money_house_id": "MoneyHouseTypeBinanceDGTLT",
-                            "currency": "ETH",
-                            "principal": "2.2",
+                            "money_house_id": "20",
+                            "currency": "USDC",
+                            "principal": "300",
                             "fee_detail": {
                                 "amount": "0",
                                 "cost_type": 0
                             },
                             "operator": "system",
                             "txn_hash": txn_hash,
-                            "money_house_account_id": "3a3b81da-f04e-11eb-9e63-ba224deb3be4",
+                            "money_house_account_id": "38711f9b-22c5-11ed-8573-0a3898443cb8",
                             "order_id": ""
                         },
                         {
@@ -144,8 +144,8 @@ class TestRebalanceApi:
                             "order_type_enum": 2,
                             "counterparty_txn_id": generate_string(16),
                             "money_house_id": "MoneyHouseTypeFireBlocksDGTLT",
-                            "currency": "ETH",
-                            "principal": "2.2",
+                            "currency": "USDC",
+                            "principal": "300",
                             "fee_detail": {
                                 "cost_type": 2,
                                 "amount": "0.0003",

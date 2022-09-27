@@ -55,7 +55,7 @@ class TestCabitalPayApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -87,7 +87,7 @@ class TestCabitalPayApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -118,7 +118,7 @@ class TestCabitalPayApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -178,7 +178,7 @@ class TestCabitalPayApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -238,7 +238,7 @@ class TestCabitalPayApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -306,7 +306,7 @@ class TestCabitalPayApi:
                         }
                     with allure.step("验签"):
                         unix_time = int(time.time())
-                        nonce = generate_string(30)
+                        nonce = generate_string(20) + str(time.time()).split('.')[0]
                         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                             key='cabital pay', nonce=nonce, body=json.dumps(data))
                         self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -377,7 +377,7 @@ class TestCabitalPayApi:
                         }
                     with allure.step("验签"):
                         unix_time = int(time.time())
-                        nonce = generate_string(30)
+                        nonce = generate_string(20) + str(time.time()).split('.')[0]
                         sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                             key='cabital pay', nonce=nonce, body=json.dumps(data))
                         self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -439,7 +439,7 @@ class TestCabitalPayApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -499,7 +499,7 @@ class TestCabitalPayApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -559,7 +559,7 @@ class TestCabitalPayApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -619,7 +619,7 @@ class TestCabitalPayApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -645,7 +645,7 @@ class TestCabitalPayApi:
         payment_id = generate_string(20)
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
                                                 nonce=nonce)
@@ -703,7 +703,7 @@ class TestCabitalPayApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST', url='/api/v1/payments',
                                                 key='cabital pay', nonce=nonce, body=json.dumps(data))
             self.headers['ACCESS-KEY'] = get_json()['cabital_pay'][get_json()['env']]['secretKey']
@@ -723,7 +723,7 @@ class TestCabitalPayApi:
         payment_id = r.json()['payment_id']
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
                                                 nonce=nonce)
@@ -747,7 +747,7 @@ class TestCabitalPayApi:
         payment_id = '3d3676eb-a3f9-4bf8-8958-c222f692f716'
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
                                                 nonce=nonce)
@@ -770,7 +770,7 @@ class TestCabitalPayApi:
             payment_id = "cdf28bdc-093a-4eae-a2eb-7ca071b08bd8"
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
                                                 nonce=nonce)
@@ -795,7 +795,7 @@ class TestCabitalPayApi:
             payment_id = "7684b8bf-f9a9-4ea2-b3d6-3933fdd37294"
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
                                                 nonce=nonce)
@@ -821,7 +821,7 @@ class TestCabitalPayApi:
             payment_id = "0b11f4a3-0576-4c47-a91b-4af059fdcc14"
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
                                                 nonce=nonce)
@@ -847,7 +847,7 @@ class TestCabitalPayApi:
             payment_id = "4ff2d3ab-a3ee-43c1-9654-c010955b9e7c"
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='GET',
                                                 url='/api/v1/payments/{}'.format(payment_id), key='cabital pay',
                                                 nonce=nonce)

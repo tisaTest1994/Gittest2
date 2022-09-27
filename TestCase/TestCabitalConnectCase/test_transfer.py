@@ -32,7 +32,7 @@ class TestTransferApi:
                         }
                     with allure.step("验签"):
                         unix_time = int(time.time())
-                        nonce = generate_string(30)
+                        nonce = generate_string(20) + str(time.time()).split('.')[0]
                         sign = ApiFunction.make_signature(unix_time=str(unix_time), method='POST',
                                                           url='/api/v1/accounts/{}/transfers'.format(account_vid),
                                                           connect_type=partner, nonce=nonce, body=json.dumps(data))
@@ -61,7 +61,7 @@ class TestTransferApi:
                             sleep(2)
                             with allure.step("验签"):
                                 unix_time = int(time.time())
-                                nonce = generate_string(30)
+                                nonce = generate_string(20) + str(time.time()).split('.')[0]
                                 sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET',
                                                                   url='/api/v1/recon/transfers/{}'.format(external_id),
                                                                   connect_type=partner, nonce=nonce)
@@ -115,7 +115,7 @@ class TestTransferApi:
                                 }
                             with allure.step("验签"):
                                 unix_time = int(time.time())
-                                nonce = generate_string(30)
+                                nonce = generate_string(20) + str(time.time()).split('.')[0]
                                 sign = ApiFunction.make_signature(unix_time=str(unix_time), method='POST',
                                                                   url='/api/v1/accounts/{}/transfers'.format(
                                                                       account_vid),
@@ -145,7 +145,7 @@ class TestTransferApi:
                                     sleep(2)
                                     with allure.step("验签"):
                                         unix_time = int(time.time())
-                                        nonce = generate_string(30)
+                                        nonce = generate_string(20) + str(time.time()).split('.')[0]
                                         sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET',
                                                                           url='/api/v1/recon/transfers/{}'.format(
                                                                               external_id),
@@ -175,6 +175,8 @@ class TestTransferApi:
         with allure.step("获得不同币种"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['config']['credit']['allow']:
+                    with allure.step("未操作前的balance"):
+                        old_balance = ApiFunction.connect_get_balance(partner, account_vid, i['symbol'])['balances']
                     with allure.step("获得data"):
                         with allure.step("获得otp"):
                             mfaVerificationCode = get_mfa_code('richard')
@@ -188,7 +190,7 @@ class TestTransferApi:
                         }
                     with allure.step("验签"):
                         unix_time = int(time.time())
-                        nonce = generate_string(30)
+                        nonce = generate_string(20) + str(time.time()).split('.')[0]
                         sign = ApiFunction.make_signature(unix_time=str(unix_time), method='POST',
                                                           url='/api/v1/accounts/{}/transfers'.format(account_vid),
                                                           connect_type=partner, nonce=nonce, body=json.dumps(data))
@@ -217,7 +219,7 @@ class TestTransferApi:
                             sleep(2)
                             with allure.step("验签"):
                                 unix_time = int(time.time())
-                                nonce = generate_string(30)
+                                nonce = generate_string(20) + str(time.time()).split('.')[0]
                                 sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET',
                                                                   url='/api/v1/recon/transfers/{}'.format(external_id),
                                                                   connect_type=partner, nonce=nonce)
@@ -234,3 +236,15 @@ class TestTransferApi:
                                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                             with allure.step("校验返回值"):
                                 assert r.json()['external_id'] == external_id, "查询转账记录错误，返回值是{}".format(r.text)
+                            with allure.step("操作后的balance"):
+                                new_balance = ApiFunction.connect_get_balance(partner, account_vid, i['symbol'])[
+                                    'balances']
+                            with allure.step("获取手续费"):
+                                credit_fee = i['fees']['credit_fee']['value']
+                            with allure.step("计算用户balance变化"):
+                                assert Decimal(old_balance) + Decimal(data['amount']) - Decimal(credit_fee) == Decimal(
+                                    new_balance), "用户balance变化错误，操作前的balance是{},操作金额是{},操作后的金额是{}".format(old_balance,
+                                                                                                          str(giveAmount(
+                                                                                                              i[
+                                                                                                                  'symbol'])),
+                                                                                                          new_balance)

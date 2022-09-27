@@ -747,7 +747,7 @@ class ApiFunction:
             else:
                 with allure.step("验签"):
                     unix_time = int(time.time())
-                    nonce = generate_string(30)
+                    nonce = generate_string(20) + str(time.time()).split('.')[0]
                     sign = ApiFunction.make_signature(unix_time=str(unix_time), method='POST',
                                                       url='/api/v1/accounts/{}/conversions'.format(account_id),
                                                       connect_type=partner, nonce=nonce, body=json.dumps(data))
@@ -861,13 +861,13 @@ class ApiFunction:
                 with allure.step("判断地区"):
                     if country in get_json()['EAList']:
                         total_spend_amount = Decimal(amount)
-                        service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
-                        spend_amount = (total_spend_amount * Decimal(1 - 0.0185)).quantize(Decimal('0.000000'), ROUND_FLOOR)
+                        service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.000000'), ROUND_CEILING)
+                        spend_amount = (total_spend_amount * Decimal(1 - 0.0185)).quantize(Decimal('0.000000'), ROUND_CEILING)
                         buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR) - t_fee
                     else:
                         total_spend_amount = Decimal(amount)
-                        service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.000000'), ROUND_FLOOR)
-                        spend_amount = (total_spend_amount * Decimal(1 - 0.0375))
+                        service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.000000'), ROUND_CEILING)
+                        spend_amount = (total_spend_amount * Decimal(1 - 0.0375)).quantize(Decimal('0.000000'), ROUND_CEILING)
                         buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR) - t_fee
             else:
                 if 'CLP' in pairs or 'IDR' in pairs or 'VND' in pairs or 'KRW' in pairs or 'JPY' in pairs:
@@ -933,7 +933,7 @@ class ApiFunction:
     def connect_get_balance(partner, account_vid, currency):
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET',
                                               url='/api/v1/accounts/{}/balances/{}'.format(account_vid, currency),
                                               connect_type=partner, nonce=nonce)

@@ -20,7 +20,7 @@ class TestAccountApi:
             user_ext_ref = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['user_ref_id']
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET', url='/api/v1/partner/links/{}'.format(user_ext_ref), connect_type=partner, nonce=nonce)
             connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner][
                 'Partner_ID']
@@ -41,7 +41,7 @@ class TestAccountApi:
             account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET', url='/api/v1/accounts/{}/detail'.format(account_vid), connect_type=partner, nonce=nonce)
             connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
             connect_headers['ACCESS-SIGN'] = sign

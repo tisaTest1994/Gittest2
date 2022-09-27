@@ -38,7 +38,7 @@ class TestKycAcceptanceApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
                                                 url='/api/v1/accounts/{}/kycinfo/submit'.format(account_id),
                                                 key='93a99e69-889a-47f4-9811-7bb98e25de62', nonce=nonce)
@@ -84,7 +84,7 @@ class TestKycAcceptanceApi:
             }
         with allure.step("验签"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_access_sign(unix_time=str(unix_time), method='POST',
                                                 url='/api/v1/accounts/{}/kycinfo/submit'.format(account_id),
                                                 key='0d5e13da-d695-11ec-ae7e-0a3898443cb8', nonce=nonce)

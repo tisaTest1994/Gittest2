@@ -10,7 +10,7 @@ class TestConfigApi:
     def test_config_001(self, partner):
         with allure.step("签名"):
             unix_time = int(time.time())
-            nonce = generate_string(30)
+            nonce = generate_string(20) + str(time.time()).split('.')[0]
             sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET', url='/api/v1/config', connect_type=partner, nonce=nonce)
             connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
             connect_headers['ACCESS-SIGN'] = sign

@@ -1,3 +1,5 @@
+import uuid
+
 from Function.api_function import *
 from Function.operate_sql import *
 
@@ -112,7 +114,8 @@ class TestUSDCApi:
             'Authorization'] = "Bearer QVBJX0tFWTozMzY4OGI0ZTdjYTgzYjlmODU2ODIzNjlhZTU2OGEzZTplMWNjMWQyMGQxNThiMTUwMDU5NzI0N2ZjMmYxZTA4OQ=="
         with allure.step("check"):
             circle_id = '8d9b4217-3a2e-40f7-a6a8-94b65fb8fd4d'
-            r = session.request('GET', url='https://api-sandbox.circle.com/v1/payments/{}'.format(circle_id), headers=headers)
+            r = session.request('GET', url='https://api-sandbox.circle.com/v1/payments/{}'.format(circle_id),
+                                headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -126,7 +129,8 @@ class TestUSDCApi:
             'Authorization'] = "Bearer QVBJX0tFWTozMzY4OGI0ZTdjYTgzYjlmODU2ODIzNjlhZTU2OGEzZTplMWNjMWQyMGQxNThiMTUwMDU5NzI0N2ZjMmYxZTA4OQ=="
         with allure.step("check"):
             circle_id = '87bc6a99-c8da-46ba-a0cc-bad89e75903b'
-            r = session.request('GET', url='https://api-sandbox.circle.com/v1/payouts/{}'.format(circle_id), headers=headers)
+            r = session.request('GET', url='https://api-sandbox.circle.com/v1/payouts/{}'.format(circle_id),
+                                headers=headers)
             with allure.step("状态码和返回值"):
                 logger.info('状态码是{}'.format(str(r.status_code)))
                 logger.info('返回值是{}'.format(str(r.text)))
@@ -180,4 +184,30 @@ class TestUSDCApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
 
-
+    @allure.title('test_rebalance_001')
+    @allure.description('Circle -> FireBlocks USDC 双边场景')
+    def test_rebalance_001(self):
+        headers[
+            'Authorization'] = "Bearer QVBJX0tFWTozMzY4OGI0ZTdjYTgzYjlmODU2ODIzNjlhZTU2OGEzZTplMWNjMWQyMGQxNThiMTUwMDU5NzI0N2ZjMmYxZTA4OQ=="
+        data = {
+            "idempotencyKey": str(uuid.uuid4()),
+            "source": {
+                "type": "wallet",
+                "id": "1001292707"
+            },
+            "amount": {
+                "amount": "20",
+                "currency": "USD"
+            },
+            "destination": {
+                "type": "blockchain",
+                "address": "0xaE346B37A0A7ffd5F224Cc2fC2c4C0E1bC541D67",
+                "chain": "ETH"
+            }
+        }
+        r = session.request('POST', url='https://api-sandbox.circle.com/v1/transfers', data=json.dumps(data), headers=headers)
+        with allure.step("状态码和返回值"):
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 201 , "http 状态码不对，目前状态码是{}".format(r.status_code)

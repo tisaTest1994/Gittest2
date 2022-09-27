@@ -19,7 +19,7 @@ class TestDepositApi:
                 if i['symbol'] == 'EUR' and i['deposit_methods'][0] == 'SEPA':
                     with allure.step("验签"):
                         unix_time = int(time.time())
-                        nonce = generate_string(30)
+                        nonce = generate_string(20) + str(time.time()).split('.')[0]
                         sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET', url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(account_vid, 'EUR', 'SEPA'), connect_type=partner, nonce=nonce)
                         connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner][
                             'Partner_ID']
@@ -58,7 +58,7 @@ class TestDepositApi:
                 if i['symbol'] == 'GBP' and i['deposit_methods'][0] == 'FPS':
                     with allure.step("验签"):
                         unix_time = int(time.time())
-                        nonce = generate_string(30)
+                        nonce = generate_string(20) + str(time.time()).split('.')[0]
                         sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET', url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(account_vid, 'GBP', 'FPS'), connect_type=partner, nonce=nonce)
                         connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
                         connect_headers['ACCESS-SIGN'] = sign
@@ -99,7 +99,7 @@ class TestDepositApi:
                 if i['symbol'] == 'CHF' and i['deposit_methods'][0] == 'SIC':
                     with allure.step("验签"):
                         unix_time = int(time.time())
-                        nonce = generate_string(30)
+                        nonce = generate_string(20) + str(time.time()).split('.')[0]
                         sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET', url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(account_vid, 'CHF', 'SIC'), connect_type=partner, nonce=nonce)
                         connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
                         connect_headers['ACCESS-SIGN'] = sign
@@ -135,7 +135,7 @@ class TestDepositApi:
                 if i['symbol'] == 'GBP' and i['deposit_methods'][0] == 'FPS':
                     with allure.step("验签"):
                         unix_time = int(time.time())
-                        nonce = generate_string(30)
+                        nonce = generate_string(20) + str(time.time()).split('.')[0]
                         sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET', url='/api/v1/accounts/{}/balances/{}/deposit/{}'.format(account_vid, 'GBP', 'FPS'), connect_type=partner, nonce=nonce)
                         connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner][
                             'Partner_ID']
