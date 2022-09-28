@@ -17,9 +17,15 @@ class TestAccountingPayOutOrderApi:
             transaction_id = ApiFunction.get_payout_transaction_id(amount='0.02', address='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C', code_type='ETH')
         with allure.step("等待交易成功"):
             sql = "select * from transaction where transaction_id = '{}';".format(transaction_id)
-            result = sqlFunction().connect_mysql('payouttxn', sql=sql)
-            print(result)
-            logger.info(result)
+            payout_txn = sqlFunction().connect_mysql('payouttxn', sql=sql)
+            print(payout_txn)
+            logger.info(payout_txn)
+            # status = json.loads(payout_txn['status'])
+            # if status == 'PAYOUT_TXN_STATUS_SUCCEEDED':
+            #     pass
+            # else:
+            #
+
         # with allure.step("确认 PAYOUT_TXN_STATUS_CREATED 冻账"):
         #     sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_CREATED';".format(transaction_id)
         #     movement_id_create = sqlFunction().connect_mysql('wallet', sql=sql)
