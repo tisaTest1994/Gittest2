@@ -12,6 +12,7 @@ stages:
     - test7
     - test8
     - test9
+    - test10
 
 before_script:
     - apt-get update
@@ -26,7 +27,7 @@ before_script:
     - pip install -r requirements.txt
 
 Api Test:
-  stage: test9
+  stage: test3
   tags:
     - python
   script:
@@ -47,28 +48,6 @@ Cabital Pay Test:
       - Reports
     expire_in: 1 week
 
-# Cabinet Test:
-#   stage: test3
-#   tags:
-#     - python
-#   script:
-#     - python run.py cabinet en_US
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-#
-# Bybit Test:
-#   stage: test4
-#   tags:
-#     - python
-#   script:
-#     - python run.py bybit en_US
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-
 Accounting Test:
   stage: test1
   tags:
@@ -80,41 +59,8 @@ Accounting Test:
       - Reports
     expire_in: 1 week
 
-# Infinni Games Test:
-#   stage: test6
-#   tags:
-#     - python
-#   script:
-#     - python run.py infinni en_US
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-#
-# Kyc Test:
-#   stage: test7
-#   tags:
-#     - python
-#   script:
-#     - python run.py kyc test
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-#
-# Kyc Test（sanbox）:
-#   stage: test7
-#   tags:
-#     - python
-#   script:
-#     - python run.py kyc sanbox
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
-
 Cabital Connect Test (bybit):
-  stage: test8
+  stage: test4
   tags:
     - python
   script:
@@ -125,7 +71,7 @@ Cabital Connect Test (bybit):
     expire_in: 1 week
 
 Cabital Connect Test (gate):
-  stage: test8
+  stage: test5
   tags:
     - python
   script:
@@ -136,7 +82,7 @@ Cabital Connect Test (gate):
     expire_in: 1 week
 
 Cabital Connect Test (ace):
-  stage: test8
+  stage: test6
   tags:
     - python
   script:
@@ -147,7 +93,7 @@ Cabital Connect Test (ace):
     expire_in: 1 week
 
 Cabital Connect Test (matrixport):
-  stage: test8
+  stage: test7
   tags:
     - python
   script:
@@ -169,7 +115,7 @@ Cabital Connect Test (infinni):
     expire_in: 1 week
 
 Cabital Connect Test (woo):
-  stage: test8
+  stage: test9
   tags:
     - python
   script:
@@ -180,7 +126,7 @@ Cabital Connect Test (woo):
     expire_in: 1 week
 
 Cabital Connect Test (latibac):
-  stage: test8
+  stage: test10
   tags:
     - python
   script:
@@ -191,3 +137,35 @@ Cabital Connect Test (latibac):
     expire_in: 1 week
 
 
+# Cabinet Test:
+#   stage: test3
+#   tags:
+#     - python
+#   script:
+#     - python run.py cabinet en_US
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+
+# Kyc Test:
+#   stage: test7
+#   tags:
+#     - python
+#   script:
+#     - python run.py kyc test
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
+#
+# Kyc Test（sanbox）:
+#   stage: test7
+#   tags:
+#     - python
+#   script:
+#     - python run.py kyc sanbox
+#   artifacts:
+#     paths:
+#       - Reports
+#     expire_in: 1 week
