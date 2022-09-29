@@ -598,7 +598,7 @@ class TestWidgetApi:
                         elif 'THB' in z:
                             amount = 2000
                         elif 'IDR' in z:
-                            amount = 200000
+                            amount = 80000000
                         elif 'EGP' in z:
                             amount = 2000
                         else:
