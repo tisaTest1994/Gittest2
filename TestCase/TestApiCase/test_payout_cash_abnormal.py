@@ -312,6 +312,8 @@ class TestPayoutCashAbnormalApi:
                     logger.info('状态码是{}'.format(str(r2.status_code)))
                     logger.info('返回值是{}'.format(str(r2.text)))
                 with allure.step("校验状态码"):
+                    if r.status_code == 504 and r.json()['message'] == 'context deadline exceeded':
+                        pytest.skip(msg='后端接口不稳定导致504')
                     assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
                     if i == amount_list[0]:
@@ -385,6 +387,7 @@ class TestPayoutCashAbnormalApi:
                     else:
                         assert r2.json()['code'] == '103002', "创建BRL-Ted法币提现交易-(提现金额大于最大金额)返回值错误，当前返回值是{}".format(
                             r2.text)
+            sleep(20)
 
     @allure.title('test_payout_cash_abnormal_008')
     @allure.description('确认&创建BRL提现提现交易，BRL-PIX—CPF(输入错误CPF)')
