@@ -143,12 +143,8 @@ class TestWidgetApi:
     @allure.title('test_widget_005')
     @allure.description('B+T')
     def test_widget_005(self, partner):
-        with allure.step("获取用户的account_vid"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard'][
-                'account_vid']
         with allure.step("币种兑选择"):
             pairs = ApiFunction.get_buy_crypto_currency(type='all')
-            pairs.remove('USDT-IDR')
         with allure.step("T 支持币种"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['config']['transfer_debit']['allow']:
@@ -157,6 +153,7 @@ class TestWidgetApi:
                     for z in pairs:
                         for x in get_json()['checkOutAreaList2']:
                             with allure.step("创建数字货币购买交易信息，ccy 是buy"):
+                                sleep(1)
                                 with allure.step("get token"):
                                     data = {
                                         "type": "card",
@@ -179,8 +176,7 @@ class TestWidgetApi:
                                         "Content-Type": "application/json"
                                     }
                                     r = session.request('POST', url='https://api.sandbox.checkout.com/tokens',
-                                                        data=json.dumps(data),
-                                                        headers=headers2)
+                                                        data=json.dumps(data), headers=headers2)
                                     with allure.step("校验状态码"):
                                         assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(
                                             r.status_code)
@@ -262,6 +258,7 @@ class TestWidgetApi:
                                     r = session.request('POST', url='{}/acquiring/buy'.format(env_url),
                                                         data=json.dumps(data),
                                                         headers=headers)
+                                    logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
                                     logger.info('状态码是{}'.format(str(r.status_code)))
                                     logger.info('返回值是{}'.format(str(r.text)))
                                     if 'Invalid Quote' not in r.text:
@@ -272,38 +269,6 @@ class TestWidgetApi:
                                     assert r.json()['status'] == 1, "币种兑{},地区{},ccy是buy,checkout支付错误，当前返回值是{}".format(z,
                                                                                                                       x,
                                                                                                                       r.text)
-                                transfer_id = r.json()['txn_id']
-                                with allure.step("确认划转"):
-                                    if r.json()['status'] == 1:
-                                        external_id = generate_string(25)
-                                        data = {
-                                            "status": "SUCCESS",
-                                            "code": "good",
-                                            "message": "ok",
-                                            "handle_time": int(time.time()),
-                                            "external_id": external_id
-                                        }
-                                        with allure.step("验签"):
-                                            unix_time = int(time.time())
-                                            nonce = generate_string(20) + str(time.time()).split('.')[0]
-                                            sign = ApiFunction.make_signature(unix_time=str(unix_time), method='PUT',
-                                                                              url='/api/v1/accounts/{}/transfers/{}'.format(
-                                                                                  account_vid, transfer_id),
-                                                                              connect_type=partner, nonce=nonce,
-                                                                              body=json.dumps(data))
-                                            connect_headers['ACCESS-KEY'] = \
-                                            get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
-                                            connect_headers['ACCESS-SIGN'] = sign
-                                            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                                            connect_headers['ACCESS-NONCE'] = nonce
-                                        r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(connect_url,
-                                                                                                            account_vid,
-                                                                                                            transfer_id),
-                                                            data=json.dumps(data), headers=connect_headers)
-                                        with allure.step("校验状态码"):
-                                            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                                        with allure.step("校验返回值"):
-                                            assert r.json() == {}, "确认划转交易错误，返回值是{}".format(r.text)
                             with allure.step("创建数字货币购买交易信息，ccy 是spend"):
                                 with allure.step("get token"):
                                     data = {
@@ -359,6 +324,8 @@ class TestWidgetApi:
                                         amount = 2000
                                     elif 'THB' in z:
                                         amount = 2000
+                                    elif 'IDR' in z:
+                                        amount = 200000
                                     else:
                                         amount = 550
                                 while 1 < 2:
@@ -451,35 +418,267 @@ class TestWidgetApi:
                                 with allure.step("校验返回值"):
                                     assert r.json()['status'] == 1, "币种兑{},地区{},ccy是spend,checkout支付错误，当前返回值是{}".format(
                                         z, x, r.text)
-                                transfer_id = r.json()['txn_id']
-                                with allure.step("确认划转"):
-                                    if r.json()['status'] == 1:
-                                        external_id = generate_string(25)
-                                        data = {
-                                            "status": "SUCCESS",
-                                            "code": "good",
-                                            "message": "ok",
-                                            "handle_time": int(time.time()),
-                                            "external_id": external_id
-                                        }
-                                        with allure.step("验签"):
-                                            unix_time = int(time.time())
-                                            nonce = generate_string(20) + str(time.time()).split('.')[0]
-                                            sign = ApiFunction.make_signature(unix_time=str(unix_time), method='PUT',
-                                                                              url='/api/v1/accounts/{}/transfers/{}'.format(
-                                                                                  account_vid, transfer_id),
-                                                                              connect_type=partner, nonce=nonce,
-                                                                              body=json.dumps(data))
-                                            connect_headers['ACCESS-KEY'] = \
-                                            get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
-                                            connect_headers['ACCESS-SIGN'] = sign
-                                            connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
-                                            connect_headers['ACCESS-NONCE'] = nonce
-                                        r = session.request('PUT', url='{}/accounts/{}/transfers/{}'.format(connect_url,
-                                                                                                            account_vid,
-                                                                                                            transfer_id),
-                                                            data=json.dumps(data), headers=connect_headers)
-                                        with allure.step("校验状态码"):
-                                            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                                        with allure.step("校验返回值"):
-                                            assert r.json() == {}, "确认划转交易错误，返回值是{}".format(r.text)
+
+    @allure.title('test_widget_006')
+    @allure.description('B+W')
+    def test_widget_006(self, partner):
+        with allure.step("币种兑选择"):
+            pairs = ApiFunction.get_buy_crypto_currency(type='all')
+        for z in pairs:
+            for x in get_json()['checkOutAreaList2']:
+                with allure.step("创建数字货币购买交易信息，ccy 是buy"):
+                    sleep(1)
+                    with allure.step("get token"):
+                        data = {
+                            "type": "card",
+                            "number": "4242424242424242",
+                            "expiry_month": 6,
+                            "expiry_year": 2025,
+                            "name": "Bruce Wayne",
+                            "cvv": "100",
+                            "billing_address": {
+                                "address_line1": "Checkout.com",
+                                "address_line2": "90 Tottenham Court Road",
+                                "city": "London",
+                                "state": "London",
+                                "zip": "W1T 4TJ",
+                                "country": x
+                            }
+                        }
+                        headers2 = {
+                            "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
+                            "Content-Type": "application/json"
+                        }
+                        r = session.request('POST', url='https://api.sandbox.checkout.com/tokens',
+                                            data=json.dumps(data), headers=headers2)
+                        with allure.step("校验状态码"):
+                            assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(
+                                r.status_code)
+                            token = r.json()['token']
+                            dic = json.loads(r.text)
+                            if "issuer" in dic.keys():
+                                issuer = dic["issuer"]
+                            else:
+                                issuer = ''
+                    while 1 < 2:
+                        crypto_list = ApiFunction.get_buy_crypto_transfer_list(150, '12', pairs=z,
+                                                                               ccy='buy', country=x)
+                        data = {
+                            "buy": {
+                                "code": (str(crypto_list['pairs']).split('-'))[0],
+                                "amount": crypto_list['buy_amount']
+                            },
+                            "spend": {
+                                "code": (str(crypto_list['pairs']).split('-'))[1],
+                                "amount": crypto_list['spend_amount']
+                            },
+                            "quote": {
+                                "id": crypto_list['quote_id'],
+                                "amount": crypto_list['quote']
+                            },
+                            "major_code": crypto_list['major_code'],
+                            "fee": {
+                                "code": (str(crypto_list['pairs']).split('-'))[1],
+                                "amount": crypto_list['service_charge']
+                            },
+                            "total_amount": crypto_list['total_spend_amount'],
+                            "card": {
+                                "type": 1,
+                                "token": token,
+                                "expiry_month": '6',
+                                "expiry_year": str(r.json()['expiry_year']),
+                                "scheme": str(r.json()['scheme']),
+                                "last": str(r.json()['last4']),
+                                "bin": str(r.json()['bin']),
+                                "card_type": str(r.json()['card_type']),
+                                "issuer": issuer,
+                                "issuer_country": x
+                            },
+                            "bind_card": True,
+                            "card_holder_name": "Ting DP319",
+                            "billing_address": {
+                                "country_code": "CN",
+                                "state": "",
+                                "city": "shanghai",
+                                "post_code": "210000",
+                                "street_line_1": "Shanghai",
+                                "street_line_2": "Shab"
+                            },
+                            "nonce": generate_string(30),
+                            "check_amount": True,
+                            "destination": {
+                                "destination_type": 3,
+                                "withdraw_txn": {
+                                    "address": "0xA7185FBEE96B605709D9659894066dF21cc87f05",
+                                    "method": "ERC20",
+                                    "receive": {
+                                        "code": "USDT",
+                                        "amount": crypto_list['buy_amount']
+                                    },
+                                    "fee": {
+                                        "code": "USDT",
+                                        "amount": "12"
+                                    },
+                                    "tx_hash": "1234"
+                                },
+                                "fee": {
+                                    "code": (str(crypto_list['pairs']).split('-'))[1],
+                                    "amount": crypto_list['transfer_fee']
+                                }
+                            }
+                        }
+                        logger.info('checkout传入参数是{}'.format(data))
+                        r = session.request('POST', url='{}/acquiring/buy'.format(env_url),
+                                            data=json.dumps(data),
+                                            headers=headers)
+                        logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+                        logger.info('状态码是{}'.format(str(r.status_code)))
+                        logger.info('返回值是{}'.format(str(r.text)))
+                        if 'Invalid Quote' not in r.text:
+                            break
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    with allure.step("校验返回值"):
+                        assert r.json()['status'] == 1, "币种兑{},地区{},ccy是buy,checkout支付错误，当前返回值是{}".format(z,
+                                                                                                          x,
+                                                                                                          r.text)
+                with allure.step("创建数字货币购买交易信息，ccy 是spend"):
+                    with allure.step("get token"):
+                        data = {
+                            "type": "card",
+                            "number": "4242424242424242",
+                            "expiry_month": 6,
+                            "expiry_year": 2025,
+                            "name": "Bruce Wayne",
+                            "cvv": "100",
+                            "billing_address": {
+                                "address_line1": "Checkout.com",
+                                "address_line2": "90 Tottenham Court Road",
+                                "city": "London",
+                                "state": "London",
+                                "zip": "W1T 4TJ",
+                                "country": x
+                            }
+                        }
+                        headers2 = {
+                            "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
+                            "Content-Type": "application/json"
+                        }
+                        r = session.request('POST', url='https://api.sandbox.checkout.com/tokens',
+                                            data=json.dumps(data),
+                                            headers=headers2)
+                        with allure.step("校验状态码"):
+                            assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(
+                                r.status_code)
+                            token = r.json()['token']
+                            dic = json.loads(r.text)
+                            if "issuer" in dic.keys():
+                                issuer = dic["issuer"]
+                            else:
+                                issuer = ''
+                    with allure.step("解决最大/最小值"):
+                        if 'CLF' in z:
+                            amount = 1000
+                        elif 'CLP' in z:
+                            amount = 90000
+                        elif 'COP' in z:
+                            amount = 490000
+                        elif 'LKR' in z:
+                            amount = 40000
+                        elif 'KRW' in z:
+                            amount = 1500000
+                        elif 'VND' in z:
+                            amount = 715000
+                        elif 'CZK' in z:
+                            amount = 3000
+                        elif 'JPY' in z:
+                            amount = 55000
+                        elif 'TWD' in z:
+                            amount = 2000
+                        elif 'THB' in z:
+                            amount = 2000
+                        elif 'IDR' in z:
+                            amount = 200000
+                        else:
+                            amount = 550
+                    while 1 < 2:
+                        crypto_list = ApiFunction.get_buy_crypto_transfer_list(amount, '12', pairs=z,
+                                                                               ccy='spend', country=x)
+                        data = {
+                            "buy": {
+                                "code": (str(crypto_list['pairs']).split('-'))[0],
+                                "amount": crypto_list['buy_amount']
+                            },
+                            "spend": {
+                                "code": (str(crypto_list['pairs']).split('-'))[1],
+                                "amount": crypto_list['spend_amount']
+                            },
+                            "quote": {
+                                "id": crypto_list['quote_id'],
+                                "amount": crypto_list['quote']
+                            },
+                            "major_code": crypto_list['major_code'],
+                            "fee": {
+                                "code": (str(crypto_list['pairs']).split('-'))[1],
+                                "amount": crypto_list['service_charge']
+                            },
+                            "total_amount": crypto_list['total_spend_amount'],
+                            "card": {
+                                "type": 1,
+                                "token": token,
+                                "expiry_month": '6',
+                                "expiry_year": str(r.json()['expiry_year']),
+                                "scheme": str(r.json()['scheme']),
+                                "last": str(r.json()['last4']),
+                                "bin": str(r.json()['bin']),
+                                "card_type": str(r.json()['card_type']),
+                                "issuer": issuer,
+                                "issuer_country": x
+                            },
+                            "bind_card": True,
+                            "card_holder_name": "Ting DP319",
+                            "billing_address": {
+                                "country_code": "CN",
+                                "state": "",
+                                "city": "shanghai",
+                                "post_code": "210000",
+                                "street_line_1": "Shanghai",
+                                "street_line_2": "Shab"
+                            },
+                            "nonce": generate_string(30),
+                            "check_amount": True,
+                            "destination": {
+                                "destination_type": 3,
+                                "withdraw_txn": {
+                                    "address": "0xA7185FBEE96B605709D9659894066dF21cc87f05",
+                                    "method": "ERC20",
+                                    "receive": {
+                                        "code": "USDT",
+                                        "amount": crypto_list['buy_amount']
+                                    },
+                                    "fee": {
+                                        "code": "USDT",
+                                        "amount": "12"
+                                    },
+                                    "tx_hash": "1234"
+                                },
+                                "fee": {
+                                    "code": (str(crypto_list['pairs']).split('-'))[1],
+                                    "amount": crypto_list['transfer_fee']
+                                }
+                            }
+                        }
+                        logger.info('checkout传入参数是{}'.format(data))
+                        r = session.request('POST', url='{}/acquiring/buy'.format(env_url),
+                                            data=json.dumps(data), headers=headers)
+                        logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+                        logger.info('状态码是{}'.format(str(r.status_code)))
+                        logger.info('返回值是{}'.format(str(r.text)))
+                        sleep(2)
+                        if 'Invalid Quote' not in r.text:
+                            break
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    with allure.step("校验返回值"):
+                        assert r.json()['status'] == 1, "币种兑{},地区{},ccy是spend,checkout支付错误，当前返回值是{}".format(
+                            z, x, r.text)
