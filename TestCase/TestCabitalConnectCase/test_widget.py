@@ -599,6 +599,8 @@ class TestWidgetApi:
                             amount = 2000
                         elif 'IDR' in z:
                             amount = 200000
+                        elif 'EGP' in z:
+                            amount = 2000
                         else:
                             amount = 550
                     while 1 < 2:
