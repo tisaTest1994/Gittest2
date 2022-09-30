@@ -30,29 +30,58 @@ class TestAccountingPayOutOrderApi:
                 else:
                     sleep(60)
         with allure.step("查transaction的动账"):
-            sql = "select * from wallet.internal_balance where transaction_id = '{}';".format(transaction_id)
-            internal_balance = sqlFunction().connect_mysql('wallet', sql=sql)
-            line1 = internal_balance[0]
-            line2 = internal_balance[1]
-            line3 = internal_balance[2]
-        print(line1)
-        print(line2)
-        print(line3)
-        # with allure.step("确认 PAYOUT_TXN_STATUS_EXECUTING 内部户转出"):
-        #     sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_EXECUTING' and offset = 1;".format(transaction_id)
-        #     movement_id = sqlFunction().connect_mysql('wallet', sql=sql)
-        #     sql = "select * from internal_balance where movement_id = '{}';".format(movement_id[0]['movement_id'])
-        #     movement_id_internal_balance = sqlFunction().connect_mysql('wallet', sql=sql)
-        #     assert movement_id_internal_balance != (), 'PAYOUT_TXN_STATUS_EXECUTING 内部户转出失败'
-        # with allure.step("确认 PAYOUT_TXN_STATUS_EXECUTING 外部户收到"):
-        #     sql = "select * from client_balance where movement_id = '{}';".format(movement_id[0]['movement_id'])
-        #     movement_id_client_balance = sqlFunction().connect_mysql('wallet', sql=sql)
-        #     assert movement_id_client_balance != (), 'PAYOUT_TXN_STATUS_EXECUTING 外部户收到失败'
-        # with allure.step("确认 PAYOUT_TXN_STATUS_EXECUTING 手续费"):
-        #     sql = "select movement_id from movement where transaction_id = '{}' and memo = 'PAYOUT_TXN_STATUS_EXECUTING' and offset = 2;".format(transaction_id)
-        #     movement_id = sqlFunction().connect_mysql('wallet', sql=sql)
-        #     sql = "select * from internal_balance where movement_id = '{}';".format(movement_id[0]['movement_id'])
-        #     movement_id_service_charge = sqlFunction().connect_mysql('wallet', sql=sql)
-        #     assert movement_id_service_charge != (), '确认 PAYOUT_TXN_STATUS_EXECUTING 手续费失败'
-        #     assert len(movement_id_service_charge) == 2, '手续费一借一贷错误'
-        #
+            with allure.step("step1：查internal balance表"):
+                sql = "select * from wallet.movement where transaction_id = '{}';".format(transaction_id)
+                internal_balance = sqlFunction().connect_mysql('wallet', sql=sql)
+                # internal_balance = [{'id': 2982881, 'trace_id': 'bb59c17f-707a-46a2-b398-eaef7a7d25cc', 'movement_id': '2e912069-89f1-4a47-a5e3-69f27fe2a340', 'account_id': 'LT000001.0003.0001.0000.DGT_________', 'move_index': 1, 'wallet_id': '77ad0e81-d40b-11eb-8e66-0a3898443cb8', 'date': 'datetime.datetime(2022, 9, 29, 3, 39, 9)', 'transaction_id': '5950ae52-1c23-4a62-b70d-278275488b47', 'requested_by': 'payouttxn', 'transaction_sub_type': 'Payment', 'detail': '{"type": 1, "amount": {"amount": "0.02"}, "wallet": null, "balance": 1, "route_wallet": {"code": {"role": 2, "chain": "", "symbol": "ETH"}, "step": 0, "account_id": "LT000001.0003.0001.0000.DGT_________", "moneyhouse": "", "amount_type": 1, "legal_entity": 1, "requested_by": "payouttxn", "status_transitions": {"to": "Executing", "from": "Ready"}, "transaction_sub_type": "Payment"}, "transaction_sub_type": ""}', 'status': 0, 'movement_type': 1, 'code': 'ETH', 'amount': '0.02', 'created_at': 'datetime.datetime(2022, 9, 29, 3, 39, 10, 145286)', 'updated_at': 'datetime.datetime(2022, 9, 29, 3, 39, 10, 145286)', 'legal_entity': 'LEGAL_ENTITY_LITHUANIA_DGT', 'moneyhouse': ''},
+                #             {'id': 2982882, 'trace_id': '839d0c4c-09a3-4371-8c47-e53f38d9c138', 'movement_id': 'e5347702-76b2-49da-a849-19cb8f43738c', 'account_id': 'LT000001.0003.0001.0000.DGT_________', 'move_index': 2, 'wallet_id': '77ad0e81-d40b-11eb-8e66-0a3898443cb8', 'date': 'datetime.datetime(2022, 9, 29, 3, 39, 10)', 'transaction_id': '5950ae52-1c23-4a62-b70d-278275488b47', 'requested_by': 'payouttxn', 'transaction_sub_type': 'Payment', 'detail': '{"type": 2, "amount": {"amount": "0.004"}, "wallet": null, "balance": 1, "route_wallet": {"code": {"role": 2, "chain": "", "symbol": "ETH"}, "step": 0, "account_id": "LT000001.0003.0001.0000.DGT_________", "moneyhouse": "", "amount_type": 2, "legal_entity": 1, "requested_by": "payouttxn", "status_transitions": {"to": "Executing", "from": "Ready"}, "transaction_sub_type": "Payment"}, "transaction_sub_type": ""}', 'status': 0, 'movement_type': 2, 'code': 'ETH', 'amount': '0.004', 'created_at': 'datetime.datetime(2022, 9, 29, 3, 39, 10, 391358)', 'updated_at': 'datetime.datetime(2022, 9, 29, 3, 39, 10, 391358)', 'legal_entity': 'LEGAL_ENTITY_LITHUANIA_DGT', 'moneyhouse': ''},
+                #             {'id': 2982883, 'trace_id': 'f44a7f67-f28f-4e3c-88b9-34d539ad73b3', 'movement_id': 'e5347702-76b2-49da-a849-19cb8f43738c', 'account_id': 'LT000001.0003.0001.0000.DGT_________', 'move_index': 2, 'wallet_id': '77b057d5-d40b-11eb-8e66-0a3898443cb8', 'date': 'datetime.datetime(2022, 9, 29, 3, 39, 10)', 'transaction_id': '5950ae52-1c23-4a62-b70d-278275488b47', 'requested_by': 'payouttxn', 'transaction_sub_type': 'Payment', 'detail': '{"type": 1, "amount": {"amount": "0.004"}, "wallet": null, "balance": 1, "route_wallet": {"code": {"role": 2, "chain": "", "symbol": "ETH"}, "step": 0, "account_id": "LT000001.0003.0001.0000.DGT_________", "moneyhouse": "", "amount_type": 2, "legal_entity": 1, "requested_by": "payouttxn", "status_transitions": {"to": "Executing", "from": "Ready"}, "transaction_sub_type": "Payment"}, "transaction_sub_type": ""}', 'status': 0, 'movement_type': 1, 'code': 'ETH', 'amount': '0.004', 'created_at': 'datetime.datetime(2022, 9, 29, 3, 39, 10, 395921)', 'updated_at': 'datetime.datetime(2022, 9, 29, 3, 39, 10, 395921)', 'legal_entity': 'LEGAL_ENTITY_LITHUANIA_DGT', 'moneyhouse': ''}]
+                assert len(internal_balance) == 3, 'payout transaction movement缺少了'
+                with allure.step("step2：检查3笔动账"):
+                    for i in range(0, len(internal_balance)):
+                        with allure.step("检查交易阶段：Ready-Executing，本金的动账"):
+                            if json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
+                                    and internal_balance[i]['requested_by'] =='payouttxn' \
+                                    and internal_balance[i]['transaction_sub_type'] == 'Payment' \
+                                    and internal_balance[i]['amount'] == amount \
+                                    and internal_balance[i]['movement_type'] == 1\
+                                    and internal_balance[i]['code']:
+                                logger.info('本金的动账正确')
+                                wallet_id = internal_balance[i]['wallet']
+                                with allure.step("检查wallet name"):
+                                    sql = "select * from wallet.wallet where wallet_id= = '{}';".format(
+                                        wallet_id)
+                                    wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                                    assert wallet_name['wallet_name'] == 'LT-Payment Transition-ETH'
+                            elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
+                                    and internal_balance[i]['requested_by'] =='payouttxn' \
+                                    and internal_balance[i]['transaction_sub_type'] == 'Payment' \
+                                    and internal_balance[i]['amount'] == fee_amount \
+                                    and internal_balance[i]['movement_type'] == 1 \
+                                    and internal_balance[i]['code'] == ccy:
+                                logger.info('贷方向fee的动账正确')
+                                wallet_id = internal_balance[i]['wallet']
+                                with allure.step("检查wallet name"):
+                                    sql = "select * from wallet.wallet where wallet_id= = '{}';".format(
+                                        wallet_id)
+                                    wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                                    assert wallet_name['wallet_name'] == 'LT-Payment Transition-ETH'
+                            elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
+                                    and internal_balance[i]['requested_by'] =='payouttxn' \
+                                    and internal_balance[i]['transaction_sub_type'] == 'Payment' \
+                                    and internal_balance[i]['amount'] == fee_amount \
+                                    and internal_balance[i]['movement_type'] == 2\
+                                    and internal_balance[i]['code']:
+                                logger.info('借方向fee的动账正确')
+                                wallet_id = internal_balance[i]['wallet']
+                                with allure.step("检查wallet name"):
+                                    sql = "select * from wallet.wallet where wallet_id= = '{}';".format(
+                                        wallet_id)
+                                    wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                                    assert wallet_name['wallet_name'] == 'LT-Revenue Fee-ETH'
+                            else:
+                                assert False, "transaction动账错误，错误的动账为：{}".format(internal_balance[i])
+        with allure.step("查客户账"):
+            sql = "select * from wallet.client_balancewhere transaction_id = '{}';".format(transaction_id)
+            client_balance = sqlFunction().connect_mysql('wallet', sql=sql)
+            assert client_balance['code'] == ccy and client_balance['amount']== amount and client_balance['requested_by'] == 'payouttxn' and client_balance['transaction_sub_type'] == 'Payment', '客户账记账错误'
