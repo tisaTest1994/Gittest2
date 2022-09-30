@@ -85,7 +85,7 @@ if __name__ == '__main__':
     elif sys.argv[1] == "web":
         pytest.main(['./TestCase/TestWebCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "accounting":
-        pytest.main(['./TestCase/TestAccountingCase/test_payout_accouting.py::TestPayOutAccountingApi::test_payout_accounting_001', '-v', '--alluredir', './Reports', '--clean-alluredir'])
+        pytest.main(['./TestCase/TestAccountingCase/test_payout_accounting.py::TestPayOutAccountingApi::test_payout_accounting_001', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "infinni":
         pytest.main(['./TestCase/TestInfinniGamesCase', '-v', '--alluredir', './Reports', '--clean-alluredir'])
     elif sys.argv[1] == "widget":

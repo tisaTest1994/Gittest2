@@ -10,9 +10,9 @@ class TestPayOutAccountingApi:
     def setup_method(self):
         pass
 
-    @allure.title('test_payout_accouting_001')
-    @allure.description('ETH Payout Accouting校验')
-    def test_payout_accouting_001(self):
+    @allure.title('test_payout_accounting_001')
+    @allure.description('ETH Payout Accounting校验')
+    def test_payout_accounting_001(self):
         with allure.step("生成一笔ETH payout订单"):
             transaction_id = ApiFunction.get_payout_transaction_id(amount='0.02', address='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C', code_type='ETH')
         with allure.step("等待交易成功"):
