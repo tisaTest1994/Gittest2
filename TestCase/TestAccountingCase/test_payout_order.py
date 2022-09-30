@@ -3,16 +3,16 @@ from Function.operate_excel import *
 from Function.operate_sql import *
 
 
-@allure.feature("accounting PayOutOrder 相关 testcases")
-class TestAccountingPayOutOrderApi:
+@allure.feature("PayOut accounting相关 testcases")
+class TestPayOutAccountingApi:
 
     # 初始化class
     def setup_method(self):
         pass
 
-    @allure.title('test_payout_order_001')
-    @allure.description('ETH Payout Order校验')
-    def test_payout_order_001(self):
+    @allure.title('test_payout_accouting_001')
+    @allure.description('ETH Payout Accouting校验')
+    def test_payout_accouting_001(self):
         with allure.step("生成一笔ETH payout订单"):
             transaction_id = ApiFunction.get_payout_transaction_id(amount='0.02', address='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C', code_type='ETH')
         with allure.step("等待交易成功"):
@@ -51,7 +51,7 @@ class TestAccountingPayOutOrderApi:
                                     sql = "select * from wallet where wallet_id = '{}';".format(
                                         wallet_id)
                                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                    assert wallet_name[0]['wallet_name'] == 'LT-Revenue Fee-USD'
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-USD'
                         elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
                                 and internal_balance[i]['requested_by'] =='payouttxn' \
                                 and internal_balance[i]['transaction_sub_type'] == 'Payment' \
@@ -65,7 +65,7 @@ class TestAccountingPayOutOrderApi:
                                     sql = "select * from wallet where wallet_id = '{}';".format(
                                         wallet_id)
                                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-ETH'
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Revenue Fee-USD'
                         elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
                                 and internal_balance[i]['requested_by'] =='payouttxn' \
                                 and internal_balance[i]['transaction_sub_type'] == 'Payment' \
@@ -88,6 +88,11 @@ class TestAccountingPayOutOrderApi:
             assert client_balance['code'] == ccy and client_balance['amount'] == amount \
                    and client_balance['requested_by'] == 'payouttxn' \
                    and client_balance['transaction_sub_type'] == 'Payment', '客户账记账错误'
+            with allure.step("检查wallet name"):
+                sql = "select * from wallet where wallet_id = '{}';".format(
+                    wallet_id)
+                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                assert wallet_name[0]['wallet_name'] == ''
         with allure.step("查order的动账"):
             sql = "select * from order where transaction_id = '{}';".format(transaction_id)
             order = sqlFunction().connect_mysql('payoutorder', sql=sql)
