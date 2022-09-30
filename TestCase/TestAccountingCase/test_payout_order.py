@@ -47,7 +47,7 @@ class TestAccountingPayOutOrderApi:
                                     and internal_balance[i]['movement_type'] == 1\
                                     and internal_balance[i]['code']:
                                 logger.info('本金的动账正确')
-                                wallet_id = internal_balance[i]['wallet']
+                                wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
                                     sql = "select * from wallet.wallet where wallet_id= = '{}';".format(
                                         wallet_id)
@@ -60,7 +60,7 @@ class TestAccountingPayOutOrderApi:
                                     and internal_balance[i]['movement_type'] == 1 \
                                     and internal_balance[i]['code'] == ccy:
                                 logger.info('贷方向fee的动账正确')
-                                wallet_id = internal_balance[i]['wallet']
+                                wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
                                     sql = "select * from wallet.wallet where wallet_id= = '{}';".format(
                                         wallet_id)
@@ -73,7 +73,7 @@ class TestAccountingPayOutOrderApi:
                                     and internal_balance[i]['movement_type'] == 2\
                                     and internal_balance[i]['code']:
                                 logger.info('借方向fee的动账正确')
-                                wallet_id = internal_balance[i]['wallet']
+                                wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
                                     sql = "select * from wallet.wallet where wallet_id= = '{}';".format(
                                         wallet_id)
@@ -84,4 +84,7 @@ class TestAccountingPayOutOrderApi:
         with allure.step("查客户账"):
             sql = "select * from wallet.client_balancewhere transaction_id = '{}';".format(transaction_id)
             client_balance = sqlFunction().connect_mysql('wallet', sql=sql)
-            assert client_balance['code'] == ccy and client_balance['amount']== amount and client_balance['requested_by'] == 'payouttxn' and client_balance['transaction_sub_type'] == 'Payment', '客户账记账错误'
+            assert client_balance['code'] == ccy and client_balance['amount'] == amount \
+                   and client_balance['requested_by'] == 'payouttxn' \
+                   and client_balance['transaction_sub_type'] == 'Payment', '客户账记账错误'
+            
