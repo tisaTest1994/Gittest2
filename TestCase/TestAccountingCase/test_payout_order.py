@@ -38,26 +38,27 @@ class TestAccountingPayOutOrderApi:
                 assert len(internal_balance) == 3, 'payout transaction 动账少记了'
                 with allure.step("step2：检查3笔动账"):
                     for i in range(0, len(internal_balance)):
-                        with allure.step("检查交易阶段：Ready-Executing，本金的动账"):
-                            if json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
-                                    and internal_balance[i]['requested_by'] =='payouttxn' \
-                                    and internal_balance[i]['transaction_sub_type'] == 'Payment' \
-                                    and internal_balance[i]['amount'] == amount \
-                                    and internal_balance[i]['movement_type'] == 1\
-                                    and internal_balance[i]['code']:
-                                logger.info('本金的动账正确')
+                        if json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
+                                and internal_balance[i]['requested_by'] =='payouttxn' \
+                                and internal_balance[i]['transaction_sub_type'] == 'Payment' \
+                                and internal_balance[i]['amount'] == amount \
+                                and internal_balance[i]['movement_type'] == 1\
+                                and internal_balance[i]['code']:
+                            with allure.step("检查交易阶段：Ready-Executing，本金的动账"):
+                                logger.info('检查交易阶段：Ready-Executing，本金的动账')
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
                                     sql = "select * from wallet where wallet_id = '{}';".format(
                                         wallet_id)
                                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-ETH'
-                            elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
-                                    and internal_balance[i]['requested_by'] =='payouttxn' \
-                                    and internal_balance[i]['transaction_sub_type'] == 'Payment' \
-                                    and internal_balance[i]['amount'] == fee_amount \
-                                    and internal_balance[i]['movement_type'] == 1 \
-                                    and internal_balance[i]['code'] == ccy:
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Revenue Fee-USD'
+                        elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
+                                and internal_balance[i]['requested_by'] =='payouttxn' \
+                                and internal_balance[i]['transaction_sub_type'] == 'Payment' \
+                                and internal_balance[i]['amount'] == fee_amount \
+                                and internal_balance[i]['movement_type'] == 1 \
+                                and internal_balance[i]['code'] == ccy:
+                            with allure.step("检查交易阶段：Ready-Executing，贷方向fee的动账"):
                                 logger.info('贷方向fee的动账正确')
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
@@ -65,21 +66,22 @@ class TestAccountingPayOutOrderApi:
                                         wallet_id)
                                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
                                     assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-ETH'
-                            elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
-                                    and internal_balance[i]['requested_by'] =='payouttxn' \
-                                    and internal_balance[i]['transaction_sub_type'] == 'Payment' \
-                                    and internal_balance[i]['amount'] == fee_amount \
-                                    and internal_balance[i]['movement_type'] == 2\
-                                    and internal_balance[i]['code'] == ccy:
+                        elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
+                                and internal_balance[i]['requested_by'] =='payouttxn' \
+                                and internal_balance[i]['transaction_sub_type'] == 'Payment' \
+                                and internal_balance[i]['amount'] == fee_amount \
+                                and internal_balance[i]['movement_type'] == 2\
+                                and internal_balance[i]['code'] == ccy:
+                            with allure.step("检查交易阶段：Ready-Executing，借方向fee的动账"):
                                 logger.info('借方向fee的动账正确')
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
                                     sql = "select * from wallet where wallet_id = '{}';".format(
                                         wallet_id)
                                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                    assert wallet_name[0]['wallet_name'] == 'LT-Revenue Fee-ETH'
-                            else:
-                                assert False, "transaction动账错误，错误的动账为：{}".format(internal_balance[i])
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-USD'
+                        else:
+                            assert False, "transaction动账错误，错误的动账为：{}".format(internal_balance[i])
         with allure.step("查客户账"):
             sql = "select * from client_balance where transaction_id = '{}';".format(transaction_id)
             client_balance = sqlFunction().connect_mysql('wallet', sql=sql)
@@ -103,7 +105,8 @@ class TestAccountingPayOutOrderApi:
                             and internal_balance[i]['amount'] == amount - fee_amount \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
-                            logger.info('贷方向Created-Executing阶段的order动账正确')
+                        with allure.step("检查交易阶段：Created-Executing阶段，贷方向的order动账"):
+                            logger.info('交易阶段：Created-Executing阶段，贷方向的order动账正确')
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
                                 sql = "select * from wallet where wallet_id = '{}';".format(
@@ -117,7 +120,8 @@ class TestAccountingPayOutOrderApi:
                             and internal_balance[i]['amount'] == amount - fee_amount \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
-                            logger.info('借方向Created-Executing阶段的order动账正确')
+                        with allure.step("检查交易阶段：Created-Executing阶段，借方向的order动账"):
+                            logger.info('交易阶段：Created-Executing阶段，借方向的order动账正确')
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
                                 sql = "select * from wallet where wallet_id = '{}';".format(
@@ -131,7 +135,8 @@ class TestAccountingPayOutOrderApi:
                             and internal_balance[i]['amount'] == amount - fee_amount \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
-                            logger.info('贷方向Executing-Succeeded阶段的order动账正确')
+                        with allure.step("检查交易阶段：Executing-Succeeded阶段，贷方向的order动账"):
+                            logger.info('交易阶段：Executing-Succeeded阶段，贷方向的order动账正确')
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
                                 sql = "select * from wallet where wallet_id = '{}';".format(
@@ -145,7 +150,8 @@ class TestAccountingPayOutOrderApi:
                             and internal_balance[i]['amount'] == amount - fee_amount \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
-                            logger.info('借方向Executing-Succeeded阶段的order动账正确')
+                        with allure.step("检查交易阶段：Executing-Succeeded阶段，借方向的order动账"):
+                            logger.info('交易阶段：Executing-Succeeded阶段，借方向的order动账正确')
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
                                 sql = "select * from wallet where wallet_id = '{}';".format(
