@@ -51,7 +51,7 @@ class TestPayOutAccountingApi:
                                     sql = "select * from wallet where wallet_id = '{}';".format(
                                         wallet_id)
                                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-USD'
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-ETH'
                         elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
                                 and internal_balance[i]['requested_by'] =='payouttxn' \
                                 and internal_balance[i]['transaction_sub_type'] == 'Payment' \
@@ -65,7 +65,7 @@ class TestPayOutAccountingApi:
                                     sql = "select * from wallet where wallet_id = '{}';".format(
                                         wallet_id)
                                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                    assert wallet_name[0]['wallet_name'] == 'LT-Revenue Fee-USD'
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Revenue Fee-ETH'
                         elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
                                 and internal_balance[i]['requested_by'] =='payouttxn' \
                                 and internal_balance[i]['transaction_sub_type'] == 'Payment' \
@@ -79,7 +79,7 @@ class TestPayOutAccountingApi:
                                     sql = "select * from wallet where wallet_id = '{}';".format(
                                         wallet_id)
                                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-USD'
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-ETH'
                         else:
                             assert False, "transaction动账错误，错误的动账为：{}".format(internal_balance[i])
         with allure.step("查客户账"):
