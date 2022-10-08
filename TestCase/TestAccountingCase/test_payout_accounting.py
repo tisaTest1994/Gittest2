@@ -23,7 +23,7 @@ class TestPayOutAccountingApi:
             amount = payout_txn['amount']
             fee = json.loads(payout_txn['fee'])
             fee_amount = fee['ccy']['amount']['amount']
-            for i in range(0, 10):
+            for i in range(0, 20):
                 if status == 'PAYOUT_TXN_STATUS_SUCCEEDED':
                     break
                 else:
