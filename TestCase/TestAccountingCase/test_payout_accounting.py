@@ -89,17 +89,17 @@ class TestPayOutAccountingApi:
             with allure.step("step1：查internal balance表"):
                 sql = "select * from client_balance where transaction_id = '{}';".format(transaction_id)
                 client_balance = sqlFunction().connect_mysql('wallet', sql=sql)
-                print(client_balance)
-            #     assert client_balance['code'] == ccy and client_balance['amount'] == amount \
-            #            and client_balance['requested_by'] == 'payouttxn' \
-            #            and client_balance['transaction_sub_type'] == 'Payment', '客户账记账错误'
-            # with allure.step("检查wallet name"):
-            #     sql = "select * from wallet where wallet_id = '{}';".format(
-            #         wallet_id)
-            #     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-            #     assert wallet_name[0]['wallet_name'] == ''
+                wallet_id = client_balance[0]['wallet_id']
+                assert client_balance[0]['code'] == ccy and client_balance[0]['amount'] == amount \
+                       and client_balance[0]['requested_by'] == 'payouttxn' \
+                       and client_balance[0]['transaction_sub_type'] == 'Payment', '客户账记账错误'
+            with allure.step("检查wallet name"):
+                sql = "select * from wallet where wallet_id = '{}';".format(
+                    wallet_id)
+                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                assert wallet_name[0]['wallet_name'] == ''
         with allure.step("查order的动账"):
-            sql = "select * from order where transaction_id = '{}';".format(transaction_id)
+            sql = "select * from payoutorder.order where transaction_id = '{}';".format(transaction_id)
             order = sqlFunction().connect_mysql('payoutorder', sql=sql)
             assert order['status'] == 'PAYOUT_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and order['amount'] == amount - fee_amount, 'order错误'
             order_id = order['order_id']
