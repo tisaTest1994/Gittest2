@@ -100,7 +100,8 @@ class TestPayOutAccountingApi:
                 assert wallet_name[0]['wallet_name'] == ''
         with allure.step("查order的动账"):
             sql = "select * from payoutorder.order where transaction_id = '{}';".format(transaction_id)
-            order = sqlFunction().connect_mysql('payoutorder', sql=sql)
+            order_original = sqlFunction().connect_mysql('payoutorder', sql=sql)
+            order = order_original[0]
             assert order['status'] == 'PAYOUT_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and order['amount'] == amount - fee_amount, 'order错误'
             order_id = order['order_id']
             sql = "select * from wallet.internal_balance where transaction_id= = '{}';".format(order_id)
