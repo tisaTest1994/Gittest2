@@ -681,7 +681,8 @@ class ApiFunction:
             for y in balance_list2:
                 cfx_list.append('{}-{}'.format(i, y))
         for z in cfx_list:
-            cfx_list.remove('{}-{}'.format(z.split('-')[1], z.split('-')[0]))
+            if '{}-{}'.format(z.split('-')[1], z.split('-')[0]) in cfx_list:
+                cfx_list.remove('{}-{}'.format(z.split('-')[1], z.split('-')[0]))
         return cfx_list
 
     # 换汇

@@ -94,8 +94,7 @@ class TestConvertApi:
                                      url='{}/core/quotes/{}'.format(env_url, "{}-{}".format(cryptos[1], cryptos[0])),
                                      headers=headers)
                 logger.info('客户买入{},卖出{},我们给出的汇率是{}'.format(cryptos[1], cryptos[0], r2.json()['quote']))
-                assert float(str(1 / float(r2.json()['quote']))[:len(str(r1.json()['quote']))]) <= float(
-                    r1.json()['quote']), "{}汇率对出现了问题".format(i)
+                assert Decimal(str(1 / float(r2.json()['quote']))) <= Decimal(r1.json()['quote']), "{}汇率对出现了问题".format(i)
 
     @allure.title('test_convert_005')
     @allure.description('超时换汇交易')
