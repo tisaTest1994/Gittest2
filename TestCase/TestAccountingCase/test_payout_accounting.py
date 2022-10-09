@@ -140,7 +140,7 @@ class TestPayOutAccountingApi:
                                 wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
                                 assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-ETH'
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
-                        "to": "Succeeded", "from": "Excuting"} \
+                        "to": "Succeeded", "from": "Executing"} \
                             and internal_balance[i]['requested_by'] == 'payoutorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Payment' \
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
@@ -155,7 +155,7 @@ class TestPayOutAccountingApi:
                                 wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
                                 assert wallet_name[0]['wallet_name'] == 'LT-Cash MP-FireBlocks-ETH_ETH'
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
-                        "to": "Succeeded", "from": "Excuting"} \
+                        "to": "Succeeded", "from": "Executing"} \
                             and internal_balance[i]['requested_by'] == 'payoutorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Payment' \
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
