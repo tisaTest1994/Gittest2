@@ -102,7 +102,8 @@ class TestPayOutAccountingApi:
             sql = "select * from payoutorder.order where transaction_id = '{}';".format(transaction_id)
             order_original = sqlFunction().connect_mysql('payoutorder', sql=sql)
             order = order_original[0]
-            assert order['status'] == 'PAYOUT_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and order['amount'] == amount - fee_amount, 'order错误'
+            print(order)
+            assert order['status'] == 'PAYOUT_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and Decimal(order['amount']) == Decimal(amount) - Decimal(fee_amount), 'order错误'
             order_id = order['order_id']
             sql = "select * from wallet.internal_balance where transaction_id= = '{}';".format(order_id)
             internal_balance = sqlFunction().connect_mysql('wallet', sql=sql)
@@ -113,7 +114,7 @@ class TestPayOutAccountingApi:
                         "to": "Executing", "from": "Ready"} \
                             and internal_balance[i]['requested_by'] == 'payoutorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Payment' \
-                            and internal_balance[i]['amount'] == amount - fee_amount \
+                            and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
                         with allure.step("检查交易阶段：Created-Executing阶段，贷方向的order动账"):
@@ -128,7 +129,7 @@ class TestPayOutAccountingApi:
                         "to": "Executing", "from": "Ready"} \
                             and internal_balance[i]['requested_by'] == 'payoutorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Payment' \
-                            and internal_balance[i]['amount'] == amount - fee_amount \
+                            and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
                         with allure.step("检查交易阶段：Created-Executing阶段，借方向的order动账"):
@@ -143,7 +144,7 @@ class TestPayOutAccountingApi:
                         "to": "Succeeded", "from": "Excuting"} \
                             and internal_balance[i]['requested_by'] == 'payoutorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Payment' \
-                            and internal_balance[i]['amount'] == amount - fee_amount \
+                            and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
                         with allure.step("检查交易阶段：Executing-Succeeded阶段，贷方向的order动账"):
@@ -158,7 +159,7 @@ class TestPayOutAccountingApi:
                         "to": "Succeeded", "from": "Excuting"} \
                             and internal_balance[i]['requested_by'] == 'payoutorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Payment' \
-                            and internal_balance[i]['amount'] == amount - fee_amount \
+                            and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
                         with allure.step("检查交易阶段：Executing-Succeeded阶段，借方向的order动账"):
