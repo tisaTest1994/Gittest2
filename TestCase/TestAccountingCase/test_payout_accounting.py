@@ -105,7 +105,7 @@ class TestPayOutAccountingApi:
             print(order)
             assert order['status'] == 'PAYOUT_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and Decimal(order['amount']) == Decimal(amount) - Decimal(fee_amount), 'order错误'
             order_id = order['order_id']
-            sql = "select * from wallet.internal_balance where transaction_id= = '{}';".format(order_id)
+            sql = "select * from wallet.internal_balance where transaction_id = '{}';".format(order_id)
             internal_balance = sqlFunction().connect_mysql('wallet', sql=sql)
             assert len(internal_balance) == 4, 'payout order 动账少记了'
             with allure.step("step2：检查order4笔动账"):
