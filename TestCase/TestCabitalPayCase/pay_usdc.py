@@ -17,6 +17,9 @@ python3 pay_usdct.py address amount
 address TRC20 must start with T
 address ERC20 must start with 0x
 amount must between 0.0 and 500.000
+ETH 
+0xaE346B37A0A7ffd5F224Cc2fC2c4C0E1bC541D67
+TRrKNZUjxjA14YyCFrN6EiySFBFdbwPquc
 ----------------------------------------------------------
 Output is the transfer id
 it will pending until get the transaction hash

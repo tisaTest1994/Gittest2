@@ -27,10 +27,13 @@ class TestPayOutAccountingApi:
                 if status == 'PAYOUT_TXN_STATUS_SUCCEEDED':
                     break
                 else:
-                    sql = "select * from transaction where transaction_id = '{}';".format(transaction_id)
-                    payout_txn = (sqlFunction().connect_mysql('payouttxn', sql=sql))[0]
-                    status = payout_txn['status']
-                    sleep(60)
+                    if i == 19:
+                        assert False, '已等待20分钟，ETH提现仍未到账，请手工检查交易是否正常'
+                    else:
+                        sql = "select * from transaction where transaction_id = '{}';".format(transaction_id)
+                        payout_txn = (sqlFunction().connect_mysql('payouttxn', sql=sql))[0]
+                        status = payout_txn['status']
+                        sleep(60)
         with allure.step("查transaction的动账"):
             with allure.step("step1：查internal balance表"):
                 sql = "select * from internal_balance where transaction_id = '{}';".format(transaction_id)
@@ -51,7 +54,7 @@ class TestPayOutAccountingApi:
                                     sql = "select * from wallet where wallet_id = '{}';".format(
                                         wallet_id)
                                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-USD'
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-ETH'
                         elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
                                 and internal_balance[i]['requested_by'] =='payouttxn' \
                                 and internal_balance[i]['transaction_sub_type'] == 'Payment' \
@@ -65,7 +68,7 @@ class TestPayOutAccountingApi:
                                     sql = "select * from wallet where wallet_id = '{}';".format(
                                         wallet_id)
                                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                    assert wallet_name[0]['wallet_name'] == 'LT-Revenue Fee-USD'
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Revenue Fee-ETH'
                         elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {"to":"Executing","from":"Ready" } \
                                 and internal_balance[i]['requested_by'] =='payouttxn' \
                                 and internal_balance[i]['transaction_sub_type'] == 'Payment' \
@@ -79,23 +82,26 @@ class TestPayOutAccountingApi:
                                     sql = "select * from wallet where wallet_id = '{}';".format(
                                         wallet_id)
                                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-USD'
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-ETH'
                         else:
                             assert False, "transaction动账错误，错误的动账为：{}".format(internal_balance[i])
         with allure.step("查客户账"):
-            sql = "select * from client_balance where transaction_id = '{}';".format(transaction_id)
-            client_balance = sqlFunction().connect_mysql('wallet', sql=sql)
-            assert client_balance['code'] == ccy and client_balance['amount'] == amount \
-                   and client_balance['requested_by'] == 'payouttxn' \
-                   and client_balance['transaction_sub_type'] == 'Payment', '客户账记账错误'
+            with allure.step("step1：查internal balance表"):
+                sql = "select * from client_balance where transaction_id = '{}';".format(transaction_id)
+                client_balance = sqlFunction().connect_mysql('wallet', sql=sql)
+                wallet_id = client_balance[0]['wallet_id']
+                assert client_balance[0]['code'] == ccy and client_balance[0]['amount'] == amount \
+                       and client_balance[0]['requested_by'] == 'payouttxn' \
+                       and client_balance[0]['transaction_sub_type'] == 'Payment', '客户账记账错误'
             with allure.step("检查wallet name"):
                 sql = "select * from wallet where wallet_id = '{}';".format(
                     wallet_id)
                 wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
                 assert wallet_name[0]['wallet_name'] == ''
         with allure.step("查order的动账"):
-            sql = "select * from order where transaction_id = '{}';".format(transaction_id)
-            order = sqlFunction().connect_mysql('payoutorder', sql=sql)
+            sql = "select * from payoutorder.order where transaction_id = '{}';".format(transaction_id)
+            order_original = sqlFunction().connect_mysql('payoutorder', sql=sql)
+            order = order_original[0]
             assert order['status'] == 'PAYOUT_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and order['amount'] == amount - fee_amount, 'order错误'
             order_id = order['order_id']
             sql = "select * from wallet.internal_balance where transaction_id= = '{}';".format(order_id)
