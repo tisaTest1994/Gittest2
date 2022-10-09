@@ -16,11 +16,14 @@ class TestPayOutAccountingApi:
         for currency in ['ETH', 'USDT', 'BTC']:
             if currency == 'ETH':
                 amount = '0.02'
+                address = '0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C'
             elif currency == 'USDT':
                 amount = '40'
+                address ='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C'
             else:
                 amount = '0.01'
+                address = 'tb1qqfs5u6lhqgcl2d40p203756ls6x2jqn89amnv3'
             with allure.step("生成一笔ETH payout订单"):
-                transaction_id = ApiFunction.get_payout_transaction_id(amount=amount, address='0xf48e06660E4d3D7Cf89B6977463379bcCD5c0d1C', code_type=currency)
+                transaction_id = ApiFunction.get_payout_transaction_id(amount=amount, address=address, code_type=currency)
                 ApiFunction.crypto_payout_accouting(transaction_id)
 
