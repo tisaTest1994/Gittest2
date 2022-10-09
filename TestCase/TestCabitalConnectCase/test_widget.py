@@ -325,7 +325,9 @@ class TestWidgetApi:
                                     elif 'THB' in z:
                                         amount = 2000
                                     elif 'IDR' in z:
-                                        amount = 200000
+                                        amount = 2000000
+                                    elif 'MXN' in z:
+                                        amount = 20000
                                     else:
                                         amount = 550
                                 while 1 < 2:
@@ -601,6 +603,8 @@ class TestWidgetApi:
                             amount = 80000000
                         elif 'EGP' in z:
                             amount = 2000
+                        elif 'MXN' in z:
+                            amount = 20000
                         else:
                             amount = 550
                     while 1 < 2:
