@@ -102,7 +102,6 @@ class TestPayOutAccountingApi:
             sql = "select * from payoutorder.order where transaction_id = '{}';".format(transaction_id)
             order_original = sqlFunction().connect_mysql('payoutorder', sql=sql)
             order = order_original[0]
-            print(order)
             assert order['status'] == 'PAYOUT_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and Decimal(order['amount']) == Decimal(amount) - Decimal(fee_amount), 'order错误'
             order_id = order['order_id']
             sql = "select * from wallet.internal_balance where transaction_id = '{}';".format(order_id)
@@ -111,7 +110,7 @@ class TestPayOutAccountingApi:
             with allure.step("step2：检查order4笔动账"):
                 for i in range(0, len(internal_balance)):
                     if json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
-                        "to": "Executing", "from": "Ready"} \
+                        "to": "Executing", "from": "Created"} \
                             and internal_balance[i]['requested_by'] == 'payoutorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Payment' \
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
@@ -126,7 +125,7 @@ class TestPayOutAccountingApi:
                                 wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
                                 assert wallet_name[0]['wallet_name'] == 'LT-Payment Clearing-FireBlocks-ETH'
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
-                        "to": "Executing", "from": "Ready"} \
+                        "to": "Executing", "from": "Created"} \
                             and internal_balance[i]['requested_by'] == 'payoutorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Payment' \
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
