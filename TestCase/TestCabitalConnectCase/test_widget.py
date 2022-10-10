@@ -635,6 +635,8 @@ class TestWidgetApi:
                             amount = 2000
                         elif 'MXN' in z:
                             amount = 20000
+                        elif 'ZAR' in z:
+                            amount = 2000
                         else:
                             amount = 550
                     while 1 < 2:
