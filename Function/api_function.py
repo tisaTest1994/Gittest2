@@ -127,12 +127,6 @@ class ApiFunction:
         assert r.json()['transaction_id'] is not None, "payout币种是{}，金额是{}错误，返回值是{}".format(data['code'], data['amount'], r.text)
         return r.json()['transaction_id']
 
-    # 获取下次清算金额
-    @staticmethod
-    def get_interest(productId):
-        r1 = session.request('GET', url=' {}/earn/products/{}/next_yield'.format(env_url, productId), headers=headers)
-        return r1.json()['next_yield']
-
     # 获取当前换汇报价
     @staticmethod
     def get_quote(pair):
@@ -163,18 +157,6 @@ class ApiFunction:
                         balance_type_frozen_amount = y[amount_type]
         return balance_type_frozen_amount
 
-    # 获取钱包指定币种全部数量
-    @staticmethod
-    def get_all_crypto_number():
-        r = session.request('GET', url='{}/core/account'.format(env_url), headers=headers)
-        crypto_list = get_json()['crypto_list']
-        number_dict = {}
-        for i in r.json()['wallets']:
-            for y in crypto_list:
-                if i['code'] == y:
-                    number_dict[y] = i['amount']
-        return number_dict
-
     # 获取当前某个币的当前资产价值，用USD结算
     @staticmethod
     def get_crypto_abs_amount(type='BTC'):
@@ -182,75 +164,6 @@ class ApiFunction:
         for i in r.json()['wallets']:
             if i['code'] == type:
                 return i['abs_amount']
-
-    # 获得今日损益
-    @staticmethod
-    def get_today_increase():
-        crypto_list = get_json()['crypto_list']
-        # 当前全部货币数量
-        number_dict = ApiFunction.get_all_crypto_number()
-        # 今天utc0点时间
-        yesterday_time = datetime.now(tz=pytz.timezone('UTC')).strftime("%Y%m%d")
-        today_increase = {}
-        for i in crypto_list:
-            # 目前货币数量
-            number = number_dict[i]
-            data = {
-                "pagination_request": {
-                    "cursor": "0",
-                    "page_size": 99999
-                },
-                "user_txn_sub_types": [1, 2, 4, 6, 7],
-                "statuses": [2],
-                "codes": [i],
-                "created_from": int(get_zero_utc_time())
-            }
-            r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers)
-            for y in r.json()['transactions']:
-                if y['user_txn_sub_type'] == 1:
-                    number = float(number) - float(json.loads(y['details'])['currency']['amount'])
-                elif y['user_txn_sub_type'] == 2 and json.loads(y['details'])['buy_currency']['code'] == i:
-                    number = float(number) - float(json.loads(y['details'])['buy_currency']['amount'])
-                elif y['user_txn_sub_type'] == 2 and json.loads(y['details'])['sell_currency']['code'] == i:
-                    number = float(number) + float(json.loads(y['details'])['buy_currency']['amount'])
-                elif y['user_txn_sub_type'] == 4:
-                    number = float(number) - float(json.loads(y['details'])['currency']['amount'])
-                elif y['user_txn_sub_type'] == 6:
-                    number = float(number) + float(json.loads(y['details'])['currency']['amount'])
-                elif y['user_txn_sub_type'] == 7:
-                    number = float(number) - float(json.loads(y['details'])['currency']['amount'])
-            # 获取昨天UTC23:59的汇率价格
-            quote = sqlFunction.get_crypto_quote(type=i, day_time=yesterday_time)
-            yesterday_amount = (Decimal(number) * Decimal(quote)).quantize(Decimal('0.00'), ROUND_FLOOR)
-            # 获得当前价格
-            now_amount = ApiFunction.get_crypto_abs_amount(type=i)
-            today_increase[i] = (Decimal(yesterday_amount) - Decimal(now_amount)).quantize(Decimal('0.00'), ROUND_FLOOR)
-        return str(today_increase)
-
-    # 获得总持仓成本
-    @staticmethod
-    def get_cost(type='ETH'):
-        # 获得交易记录
-        data = {
-            "pagination_request": {
-                "cursor": "0",
-                "page_size": 9999999
-            },
-            "user_txn_sub_types": [1, 2, 6],
-            "statuses": [2],
-            "codes": [type]
-        }
-        r = session.request('POST', url='{}/txn/query'.format(env_url), data=json.dumps(data), headers=headers,
-                            timeout=10)
-        for y in r.json()['transactions']:
-            cost = 0
-            if y['user_txn_sub_type'] == 1:
-                order_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(y['updated_at']))
-            if y['user_txn_sub_type'] == 2:
-                order_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(y['updated_at']))
-            if y['user_txn_sub_type'] == 6:
-                order_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(y['updated_at']))
-                amount = json.loads(y['details'])['currency']['amount']
 
     # 查询交易状态
     @staticmethod
@@ -260,60 +173,6 @@ class ApiFunction:
         }
         r = session.request('GET', url='{}/txn/{}'.format(env_url, transaction_id), params=params, headers=headers)
         return r.json()['transaction']['status']
-
-    # 获取一天cfx数据
-    @staticmethod
-    def get_one_day_cfx_info(day_time=(datetime.now(tz=pytz.timezone('UTC')) + timedelta(days=-1)).strftime("%Y-%m-%d")):
-        cfx_book = get_json()['cfx_book']
-        time_list = get_zero_time(day_time=day_time)
-        cfx_info = []
-        for i in time_list:
-            info = sqlFunction().get_cfx_detail(end_time=i)
-            if info is not None and '()' not in str(info):
-                cfx_info.append(info)
-        cfx_list = []
-        for y in cfx_info:
-            for z in y:
-                cfx_dict = {}
-                if z['trading_direction'] == 1:
-                    cfx_dict['buy_us'] = str(cfx_book[str(z['book_id'])]).split('-')[1]
-                    cfx_dict['sell_us'] = str(cfx_book[str(z['book_id'])]).split('-')[0]
-                    cfx_dict['buy_us_amount'] = z['pnl_amount']
-                    cfx_dict['sell_us_amount'] = z['trading_amount']
-                    cfx_dict['profit'] = z['gnl']
-                    cfx_dict['order_time'] = z['aggregation_no']
-                    profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
-                    if '.' in str(profit):
-                        if str(cfx_book[str(z['book_id'])]).split('-')[1] == 'BTC' or \
-                                str(cfx_book[str(z['book_id'])]).split('-')[1] == 'ETH':
-                            profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:8])
-                        elif str(cfx_book[str(z['book_id'])]).split('-')[1] == 'USDT':
-                            profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
-                        else:
-                            profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])
-                    profit = Decimal(profit) - Decimal(z['pnl_amount'])
-                    assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
-                elif z['trading_direction'] == 2:
-                    cfx_dict['buy_us'] = str(cfx_book[str(z['book_id'])]).split('-')[0]
-                    cfx_dict['sell_us'] = str(cfx_book[str(z['book_id'])]).split('-')[1]
-                    cfx_dict['buy_us_amount'] = z['trading_amount']
-                    cfx_dict['sell_us_amount'] = z['pnl_amount']
-                    cfx_dict['profit'] = z['gnl']
-                    cfx_dict['order_time'] = z['aggregation_no']
-                    profit = Decimal(z['trading_amount']) * Decimal(z['cost'])
-                    if '.' in str(profit):
-                        if str(cfx_book[str(z['book_id'])]).split('-')[1] == 'BTC' or \
-                                str(cfx_book[str(z['book_id'])]).split('-')[1] == 'ETH':
-                            profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:8])
-                        elif str(cfx_book[str(z['book_id'])]).split('-')[1] == 'USDT':
-                            profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:6])
-                        else:
-                            profit = '{}.{}'.format(str(profit).split('.')[0], str(profit).split('.')[1][:2])
-                    profit = Decimal(z['pnl_amount']) - Decimal(profit)
-                    assert Decimal(profit) == Decimal(z['gnl']), '预计损益是{}，数据库返回是{}'.format(profit, z['gnl'])
-                cfx_dict['cost'] = z['cost']
-                cfx_list.append(cfx_dict)
-        return cfx_list
 
     # webhook解码
     @staticmethod
@@ -342,7 +201,6 @@ class ApiFunction:
         # 根据SHA256算法处理签名之前内容data
         sha_data = SHA256.new(str(data).encode("utf-8"))
         # 验证签名
-        print(data)
         signer = Signature_PKC.new(public_key)
         return signer.verify(sha_data, sign_data)
 
@@ -497,59 +355,7 @@ class ApiFunction:
         assert False, '未找到相对应webhookwebhook的信息path:{}，caseSystemId:{}, action:{}, suggestion:{}, decision:{}'.format(
             path, caseSystemId, action, suggestion, decision)
 
-    # 活期申购
-    @staticmethod
-    def subscribe():
-        r = session.request('GET', url='{}/earn/products'.format(env_url), headers=headers)
-        product_list = random.choice(r.json())
-        code = product_list['code']
-        product_id = product_list['product_id']
-        if code == 'USDT':
-            amount = '20'
-        else:
-            amount = "0.01327"
-        data = {
-            "tx_type": 1,
-            "amount": amount,
-            "code": code
-        }
-        r = session.request('POST', url='{}/earn/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'tx_id' in r.text, "赎回错误，返回值是{}".format(r.text)
-        return {'product_id': product_id, 'code': code, 'tx_id': r.json()['tx_id']}
-
-    # 定期申购
-    @staticmethod
-    def subscribe_fix(auto_renew=False):
-        r = session.request('GET', url='{}/earn/fix/products'.format(env_url), headers=headers)
-        product_list = random.choice(random.choice(r.json())['products'])
-        logger.info('项目信息是{}'.format(product_list))
-        code = product_list['code']
-        product_id = product_list['product_id']
-        if code == 'USDT':
-            amount = '1000'
-            interest_amount = str(((Decimal(amount) * (Decimal(product_list['apy']) / 100) / Decimal(365)).quantize(Decimal('0.000000'), ROUND_FLOOR)) * Decimal(product_list['tenor']))
-        else:
-            amount = "1"
-            interest_amount = str(((Decimal(amount) * (Decimal(product_list['apy']) / 100) / Decimal(365)).quantize(Decimal('0.00000000'), ROUND_FLOOR)) * Decimal(product_list['tenor']))
-        data = {
-            "subscribe_amount": {
-                "code": code,
-                "amount": amount
-            },
-            "maturity_interest": {
-                "code": code,
-                "amount": interest_amount
-            },
-            "auto_renew": auto_renew
-        }
-        logger.info('申购信息是{}'.format(data))
-        r = session.request('POST', url='{}/earn/fix/products/{}/transactions'.format(env_url, product_id), data=json.dumps(data), headers=headers)
-        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-        assert 'tx_id' in r.text, "赎回错误，返回值是{}".format(r.text)
-        return {'product_id': product_id, 'code': code, 'tx_id': r.json()['tx_id']}
-
-    # 收取验证码先发再收
+    # 收取验证码（先发再收）
     @staticmethod
     def get_verification_code(type, account):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=account)
@@ -604,48 +410,6 @@ class ApiFunction:
         logger.info('返回值是{}'.format(str(r.text)))
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json() == {}, "校验验证码失败，返回值是{}".format(r.text)
-
-    # 换汇
-    @staticmethod
-    def cfx_hedging_pairs(pair):
-        with allure.step("获取直盘或者拆盘汇率对"):
-            sql = "select books from split_setting where pair = '{}';".format(pair)
-            books = sqlFunction().connect_mysql('hedging', sql=sql, type=1)
-            pair_list = {}
-            books = json.loads(books['books'])
-            for i in books['books']:
-                pair_list[i['id']] = i['pair']
-            if len(pair_list.keys()) == 1:
-                logger.info('获得直盘币种对{}'.format(pair_list))
-                return pair_list
-            else:
-                logger.info('获得拆盘币种对{}'.format(pair_list))
-                return pair_list
-
-    # 指定换汇币种对和major_ccy币种，随机生成换汇金额。
-    @staticmethod
-    def cfx_random_number(cfx_dict):
-        with allure.step("major_ccy 是buy值"):
-            if cfx_dict['buy'] == cfx_dict['major_ccy']:
-                if cfx_dict['buy'] == 'BTC' or cfx_dict['buy'] == 'ETH':
-                    buy_amount = random.uniform(0.02, 0.199)
-                else:
-                    buy_amount = random.uniform(25, 1000.11)
-                buy_amount = crypto_len(number=buy_amount, type=cfx_dict['buy'])
-                quote = ApiFunction.get_quote('{}-{}'.format(cfx_dict['buy'], cfx_dict['sell']))
-                sell_amount = str(float(buy_amount) * float(quote['quote']))
-                sell_amount = crypto_len(number=sell_amount, type=cfx_dict['sell'])
-        with allure.step("major_ccy 是sell值"):
-            if cfx_dict['sell'] == cfx_dict['major_ccy']:
-                if cfx_dict['sell'] == 'BTC' or cfx_dict['sell'] == 'ETH':
-                    sell_amount = random.uniform(0.02, 0.199)
-                else:
-                    sell_amount = random.uniform(25, 1000.11)
-                sell_amount = crypto_len(number=sell_amount, type=cfx_dict['sell'])
-                quote = ApiFunction.get_quote('{}-{}'.format(cfx_dict['buy'], cfx_dict['sell']))
-                buy_amount = str(float(sell_amount) / float(quote['quote']))
-                buy_amount = crypto_len(number=buy_amount, type=cfx_dict['buy'])
-        return {"buy": cfx_dict['buy'], "sell": cfx_dict['sell'], "buy_amount": buy_amount, "sell_amount": sell_amount, "quote": quote, "major_ccy": cfx_dict['major_ccy']}
 
     # 获得全部币种的list
     @staticmethod
