@@ -993,7 +993,7 @@ class ApiFunction:
                                 headers=connect_headers)
         return r.json()['balance']
 
-     # crypto-payout accounting(ETH/USDT/BTC)
+    # crypto-payout accounting(ETH/USDT/BTC)
     @staticmethod
     def crypto_payout_accouting(transaction_id):
         with allure.step("等待交易成功"):
@@ -1162,7 +1162,7 @@ class ApiFunction:
                     else:
                         assert False, "order动账错误，错误的动账为：{}".format(internal_balance[i])
 
-     # crypto-payin accounting(ETH/USDT/BTC)
+    # crypto-payin accounting(ETH/USDT/BTC)
     @staticmethod
     def crypto_payin_accouting(transaction_id):
         with allure.step("查询payin transaction"):
