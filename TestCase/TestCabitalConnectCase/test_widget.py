@@ -620,7 +620,7 @@ class TestWidgetApi:
                         elif 'KRW' in z:
                             amount = 1500000
                         elif 'VND' in z:
-                            amount = 715000
+                            amount = 915000
                         elif 'CZK' in z:
                             amount = 3000
                         elif 'JPY' in z:
