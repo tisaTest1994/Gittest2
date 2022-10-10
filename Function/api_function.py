@@ -765,8 +765,11 @@ class ApiFunction:
 
     # 获取buy crypto所有支持的币种
     @staticmethod
-    def get_buy_crypto_currency(type='all'):
-        r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
+    def get_buy_crypto_currency(partner, type='all'):
+        params = {
+            'partner_id': get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
+        }
+        r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers, params=params)
         payment_currencies = r.json()['payment_currencies']
         buy_crypto_currency = []
         buy_crypto_currency_random = []

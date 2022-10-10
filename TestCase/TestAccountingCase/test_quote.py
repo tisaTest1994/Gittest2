@@ -101,7 +101,7 @@ class TestQuoteApi:
         with allure.step("获取当前UTC时间"):
             day_time = (datetime.now(tz=pytz.timezone('UTC'))).strftime("%Y%m%d")
         with allure.step("获取全部换汇币种对"):
-            cfx_list = ApiFunction.get_buy_crypto_currency(type='all')
+            cfx_list = ApiFunction.get_buy_crypto_currency(partner=partner, type='all')
             for i in cfx_list:
                 sql = "select bid, ask, original_bid, original_ask, extra from quote_{} where pair = '{}' and purpose = 'BuyTxn' limit 1;".format(day_time, i)
                 logger.info('sql命令是{}'.format(sql))
