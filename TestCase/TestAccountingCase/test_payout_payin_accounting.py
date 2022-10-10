@@ -28,14 +28,14 @@ class TestPayOutPayInAccountingApi:
                 amount = random.uniform(0.001, 0.002)
                 fee = '0.0006'
                 address = 'tb1qqfs5u6lhqgcl2d40p203756ls6x2jqn89amnv3'
-            with allure.step("生成一笔{} payout订单").format(currency):
+            with allure.step("生成一笔payout订单"):
                 transaction_id = ApiFunction.get_payout_transaction_id(amount=amount, address=address, code_type=currency)
-            with allure.step("{} payout账务测试").format(currency):
+            with allure.step("payout账务测试"):
                 ApiFunction.crypto_payout_accouting(transaction_id)
-            with allure.step("通过{} payout查询对应一笔payin").format(currency):
+            with allure.step("通过payout查询对应一笔payin"):
                 sql = "select * from payintxn.transaction where account_id = '{}' and ccy='{}' and amount= '{}' order by id desc limit 1;".format(account_id, currency, Decimal(amount)-Decimal(fee))
                 payin_txn = (sqlFunction().connect_mysql('payintxn', sql=sql))[0]
                 transaction_id = payin_txn[transaction_id]
-            with allure.step("{} payin账务测试").format(currency):
+            with allure.step("payin账务测试"):
                 ApiFunction.crypto_payin_accouting(transaction_id)
 
