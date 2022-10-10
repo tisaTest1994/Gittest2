@@ -3,14 +3,14 @@ from Function.operate_excel import *
 from Function.operate_sql import *
 
 
-@allure.feature("PayOut accounting相关 testcases")
-class TestPayOutAccountingApi:
+@allure.feature("PayOut & PayIn accounting相关 testcases")
+class TestPayOutPayInAccountingApi:
 
     # 初始化class
     def setup_method(self):
         pass
 
-    @allure.title('test_payout_accounting_001')
+    @allure.title('test_payout_payin_accounting_001')
     @allure.description('Payout&Payin Crypto Accounting校验')
     def test_payout_payin_accounting_001(self):
         account_id = 'b013327e-ae65-4197-acf6-806f03873f51'
