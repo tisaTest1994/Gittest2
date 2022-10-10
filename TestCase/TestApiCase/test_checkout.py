@@ -459,7 +459,7 @@ class TestCheckoutApi:
     @allure.description('创建数字货币购买交易USD-USDT-payment with token，金额小于最小值或大于最大值')
     def test_check_out_015(self):
         with allure.step('从接口获得所有buy crypto的spend币种'):
-            for i in ApiFunction.get_buy_crypto_currency(type='all'):
+            for i in ApiFunction.get_buy_crypto_currency(partner=partner, type='all'):
                 with allure.step('获取法币最小和最大提现金额'):
                     amount_list_limit = ApiFunction.get_buy_crypto_limit(currency=i.split('-')[1])
                     amount_list = []
@@ -913,7 +913,7 @@ class TestCheckoutApi:
     def test_check_out_021(self):
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+16@cabital.com')
         with allure.step("币种兑选择"):
-            pairs = ApiFunction.get_buy_crypto_currency(type='all')
+            pairs = ApiFunction.get_buy_crypto_currency(partner=partner, type='all')
         for z in pairs:
             for x in get_json()['checkOutAreaList2']:
                 with allure.step("创建数字货币购买交易信息，ccy 是buy"):

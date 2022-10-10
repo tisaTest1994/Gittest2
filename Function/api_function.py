@@ -765,8 +765,11 @@ class ApiFunction:
 
     # 获取buy crypto所有支持的币种
     @staticmethod
-    def get_buy_crypto_currency(type='all'):
-        r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
+    def get_buy_crypto_currency(partner, type='all'):
+        params = {
+            'partner_id': get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
+        }
+        r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers, params=params)
         payment_currencies = r.json()['payment_currencies']
         buy_crypto_currency = []
         buy_crypto_currency_random = []
@@ -990,7 +993,7 @@ class ApiFunction:
                                 headers=connect_headers)
         return r.json()['balance']
 
-     # crypto-payout accounting(ETH/USDT/BTC)
+    # crypto-payout accounting(ETH/USDT/BTC)
     @staticmethod
     def crypto_payout_accouting(transaction_id):
         with allure.step("等待交易成功"):
@@ -1165,7 +1168,7 @@ class ApiFunction:
                     else:
                         assert False, "order动账错误，错误的动账为：{}".format(internal_balance[i])
 
-     # crypto-payin accounting(ETH/USDT/BTC)
+    # crypto-payin accounting(ETH/USDT/BTC)
     @staticmethod
     def crypto_payin_accouting(transaction_id):
         with allure.step("查询payin transaction"):

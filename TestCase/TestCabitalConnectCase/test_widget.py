@@ -166,7 +166,7 @@ class TestWidgetApi:
     @allure.description('B+T')
     def test_widget_005(self, partner):
         with allure.step("币种兑选择"):
-            pairs = ApiFunction.get_buy_crypto_currency(type='all')
+            pairs = ApiFunction.get_buy_crypto_currency(partner=partner, type='all')
         with allure.step("T 支持币种"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['config']['transfer_debit']['allow']:
@@ -345,7 +345,7 @@ class TestWidgetApi:
                                     elif 'KRW' in z:
                                         amount = 1500000
                                     elif 'VND' in z:
-                                        amount = 715000
+                                        amount = 915000
                                     elif 'CZK' in z:
                                         amount = 3000
                                     elif 'JPY' in z:
@@ -455,7 +455,7 @@ class TestWidgetApi:
     @allure.description('B+W')
     def test_widget_006(self, partner):
         with allure.step("币种兑选择"):
-            pairs = ApiFunction.get_buy_crypto_currency(type='all')
+            pairs = ApiFunction.get_buy_crypto_currency(partner=partner, type='all')
         for z in pairs:
             for x in get_json()['checkOutAreaList2']:
                 with allure.step("创建数字货币购买交易信息，ccy 是buy"):
@@ -620,7 +620,7 @@ class TestWidgetApi:
                         elif 'KRW' in z:
                             amount = 1500000
                         elif 'VND' in z:
-                            amount = 715000
+                            amount = 915000
                         elif 'CZK' in z:
                             amount = 3000
                         elif 'JPY' in z:
