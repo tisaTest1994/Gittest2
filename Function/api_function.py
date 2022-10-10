@@ -1032,7 +1032,8 @@ class ApiFunction:
                                 and internal_balance[i]['amount'] == amount \
                                 and internal_balance[i]['movement_type'] == 1 \
                                 and internal_balance[i]['code']:
-                            with allure.step("检查交易阶段：Ready-Executing，本金的动账"):
+                            logger.info('币种{}在交易阶段：Ready-Executing,transaction本金动账正确').format(ccy)
+                            with allure.step("检查wallet name"):
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
                                     sql = "select * from wallet where wallet_id = '{}';".format(
@@ -1047,7 +1048,8 @@ class ApiFunction:
                                 and internal_balance[i]['amount'] == fee_amount \
                                 and internal_balance[i]['movement_type'] == 1 \
                                 and internal_balance[i]['code'] == ccy:
-                            with allure.step("检查交易阶段：Ready-Executing，贷方向fee的动账"):
+                            logger.info('币种{}在交易阶段：Ready-Executing,贷方向(movement_typ=1)transaction fee的动账正确').format(ccy)
+                            with allure.step("检查wallet name"):
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
                                     sql = "select * from wallet where wallet_id = '{}';".format(
@@ -1062,7 +1064,8 @@ class ApiFunction:
                                 and internal_balance[i]['amount'] == fee_amount \
                                 and internal_balance[i]['movement_type'] == 2 \
                                 and internal_balance[i]['code'] == ccy:
-                            with allure.step("检查交易阶段：Ready-Executing，借方向fee的动账"):
+                            logger.info('币种{}在交易阶段：Ready-Executing,借方向(movement_typ=2)transaction fee的动账正确').format(ccy)
+                            with allure.step("检查wallet name"):
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
                                     sql = "select * from wallet where wallet_id = '{}';".format(
@@ -1093,7 +1096,6 @@ class ApiFunction:
                 order['amount']) == Decimal(amount) - Decimal(fee_amount), 'order错误'
             order_id = order['order_id']
             chain = order['chain']
-            print(chain)
             sql = "select * from wallet.internal_balance where transaction_id = '{}';".format(order_id)
             internal_balance = sqlFunction().connect_mysql('wallet', sql=sql)
             assert len(internal_balance) == 4, 'payout order 动账少记了'
@@ -1106,7 +1108,8 @@ class ApiFunction:
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
-                        with allure.step("检查交易阶段：Created-Executing阶段，贷方向的order动账"):
+                        logger.info('币种{}在交易阶段：Created-Executing,贷方向(movement_type=1)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
                                 sql = "select * from wallet where wallet_id = '{}';".format(
@@ -1121,7 +1124,8 @@ class ApiFunction:
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
-                        with allure.step("检查交易阶段：Created-Executing阶段，借方向的order动账"):
+                        logger.info('币种{}在交易阶段：Created-Executing,借方向(movement_type=2)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
                                 sql = "select * from wallet where wallet_id = '{}';".format(
@@ -1136,14 +1140,15 @@ class ApiFunction:
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
-                        with allure.step("检查交易阶段：Executing-Succeeded阶段，贷方向的order动账"):
+                        logger.info('币种{}在交易阶段：Executing-Succeeded,贷方向(movement_type=1)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
                                 sql = "select * from wallet where wallet_id = '{}';".format(
                                     wallet_id)
                                 wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
                                 assert wallet_name[0]['wallet_name'] == 'LT-Cash MP-FireBlocks-{}_{}'.format(ccy, chain),\
-                                    "期望返回结果是:'LT-Cash MP-FireBlocks-{}_{}'，实际结果是:{}".format(ccy, wallet_name[0]['wallet_name'])
+                                    "期望返回结果是:'LT-Cash MP-FireBlocks-{}_{}'，实际结果是:{}".format(ccy, chain, wallet_name[0]['wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
                         "to": "Succeeded", "from": "Executing"} \
                             and internal_balance[i]['requested_by'] == 'payoutorder' \
@@ -1151,7 +1156,8 @@ class ApiFunction:
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
-                        with allure.step("检查交易阶段：Executing-Succeeded阶段，借方向的order动账"):
+                        logger.info('币种{}在交易阶段：Executing-Succeeded,借方向(movement_type=2)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
                                 sql = "select * from wallet where wallet_id = '{}';".format(
@@ -1191,7 +1197,8 @@ class ApiFunction:
                                 and internal_balance[i]['amount'] == amount \
                                 and internal_balance[i]['movement_type'] == 2 \
                                 and internal_balance[i]['code']:
-                            with allure.step("检查交易阶段：Pending-Succeed，本金的动账"):
+                            logger.info('币种{}在交易阶段：Pending-Succeed,transaction本金的动账正确').format(ccy)
+                            with allure.step("检查wallet name"):
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
                                     sql = "select * from wallet where wallet_id = '{}';".format(
@@ -1205,7 +1212,8 @@ class ApiFunction:
                                 and internal_balance[i]['amount'] == fee_amount \
                                 and internal_balance[i]['movement_type'] == 1 \
                                 and internal_balance[i]['code'] == ccy:
-                            with allure.step("检查交易阶段：New，贷方向fee的动账"):
+                            logger.info('币种{}在交易阶段：New,贷方向(movement_type=1)的transaction fee动账正确').format(ccy)
+                            with allure.step("检查wallet name"):
                                 logger.info('贷方向fee的动账正确')
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
@@ -1220,8 +1228,8 @@ class ApiFunction:
                                 and internal_balance[i]['amount'] == fee_amount \
                                 and internal_balance[i]['movement_type'] == 2 \
                                 and internal_balance[i]['code'] == ccy:
-                            with allure.step("检查交易阶段：New，借方向fee的动账"):
-                                logger.info('借方向fee的动账正确')
+                            logger.info('币种{}在交易阶段：New,借方向(movement_type=2)的transaction fee动账正确').format(ccy)
+                            with allure.step("检查wallet name"):
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
                                     sql = "select * from wallet where wallet_id = '{}';".format(
@@ -1247,76 +1255,150 @@ class ApiFunction:
             sql = "select * from payinorder.order where order_id = '{}';".format(order_id)
             order_original = sqlFunction().connect_mysql('payinorder', sql=sql)
             order = order_original[0]
+            print(ccy+'payin order 为:' + order)
             assert order['status'] == 'PAYIN_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and Decimal(
                 order['amount']) == Decimal(amount) - Decimal(fee_amount), 'order错误'
             chain = order['chain']
             sql = "select * from wallet.internal_balance where transaction_id = '{}';".format(order_id)
             internal_balance = sqlFunction().connect_mysql('wallet', sql=sql)
+            print(ccy + 'payin order internal_balance :' + internal_balance )
             assert len(internal_balance) == 6, 'payin order 动账少记了'
-            # with allure.step("检查order6笔动账"):
-            #     for i in range(0, len(internal_balance)):
-            #         if json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
-            #             "to": "Created", "from": ""} \
-            #                 and internal_balance[i]['requested_by'] == 'payinorder' \
-            #                 and internal_balance[i]['transaction_sub_type'] == 'Unknown' \
-            #                 and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
-            #                 and internal_balance[i]['movement_type'] == 1 \
-            #                 and internal_balance[i]['code'] == ccy:
-            #             with allure.step("检查交易阶段：Created阶段，贷方向的order动账"):
-            #                 wallet_id = internal_balance[i]['wallet_id']
-            #                 with allure.step("检查wallet name"):
-            #                     sql = "select * from wallet where wallet_id = '{}';".format(
-            #                         wallet_id)
-            #                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-            #                     assert wallet_name[0]['wallet_name'] == 'LT-Payment Clearing-FireBlocks-{}'.format(ccy),\
-            #                         "期望返回结果是:'LT-Payment Clearing-FireBlocks-{}'，实际结果是:{}".format(ccy, chain, wallet_name[0]['wallet_name'])
-            #         elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
-            #             "to": "Executing", "from": "Created"} \
-            #                 and internal_balance[i]['requested_by'] == 'payoutorder' \
-            #                 and internal_balance[i]['transaction_sub_type'] == 'Payment' \
-            #                 and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
-            #                 and internal_balance[i]['movement_type'] == 2 \
-            #                 and internal_balance[i]['code'] == ccy:
-            #             with allure.step("检查交易阶段：Created-Executing阶段，借方向的order动账"):
-            #                 logger.info('交易阶段：Created-Executing阶段，借方向的order动账正确')
-            #                 wallet_id = internal_balance[i]['wallet_id']
-            #                 with allure.step("检查wallet name"):
-            #                     sql = "select * from wallet where wallet_id = '{}';".format(
-            #                         wallet_id)
-            #                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-            #                     assert wallet_name[0]['wallet_name'] == 'LT-Payment Transition-{}'.format(ccy),\
-            #                         "期望返回结果是:'LT-Payment Transition-{}'，实际结果是:{}".format(ccy, chain, wallet_name[0]['wallet_name'])
-            #         elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
-            #             "to": "Succeeded", "from": "Executing"} \
-            #                 and internal_balance[i]['requested_by'] == 'payoutorder' \
-            #                 and internal_balance[i]['transaction_sub_type'] == 'Payment' \
-            #                 and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
-            #                 and internal_balance[i]['movement_type'] == 1 \
-            #                 and internal_balance[i]['code'] == ccy:
-            #             with allure.step("检查交易阶段：Executing-Succeeded阶段，贷方向的order动账"):
-            #                 wallet_id = internal_balance[i]['wallet_id']
-            #                 with allure.step("检查wallet name"):
-            #                     sql = "select * from wallet where wallet_id = '{}';".format(
-            #                         wallet_id)
-            #                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-            #                     assert wallet_name[0]['wallet_name'] == 'LT-Cash MP-FireBlocks-{}_{}'.format(ccy, chain),\
-            #                         "期望返回结果是:'LT-Cash MP-FireBlocks-{}_{}'，实际结果是:{}".format(ccy, chain, wallet_name[0]['wallet_name'])
-            #         elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
-            #             "to": "Succeeded", "from": "Executing"} \
-            #                 and internal_balance[i]['requested_by'] == 'payoutorder' \
-            #                 and internal_balance[i]['transaction_sub_type'] == 'Payment' \
-            #                 and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
-            #                 and internal_balance[i]['movement_type'] == 2 \
-            #                 and internal_balance[i]['code'] == ccy:
-            #             with allure.step("检查交易阶段：Executing-Succeeded阶段，借方向的order动账"):
-            #                 logger.info('交易阶段：Executing-Succeeded阶段，借方向的order动账正确')
-            #                 wallet_id = internal_balance[i]['wallet_id']
-            #                 with allure.step("检查wallet name"):
-            #                     sql = "select * from wallet where wallet_id = '{}';".format(
-            #                         wallet_id)
-            #                     wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-            #                     assert wallet_name[0]['wallet_name'] == 'LT-Payment Clearing-FireBlocks-{}'.format(ccy),\
-            #                         "期望返回结果是:'LT-Payment Clearing-FireBlocks-{}'，实际结果是:{}".format(ccy, chain, wallet_name[0]['wallet_name'])
-            #         else:
-            #             assert False, "order动账错误，错误的动账为：{}".format(internal_balance[i])
+            with allure.step("检查order6笔动账"):
+                for i in range(0, len(internal_balance)):
+                    if json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
+                        "to": "Created", "from": ""} \
+                            and internal_balance[i]['requested_by'] == 'payinorder' \
+                            and internal_balance[i]['transaction_sub_type'] == 'Unknown' \
+                            and Decimal(internal_balance[i]['amount']) == amount \
+                            and internal_balance[i]['movement_type'] == 1 \
+                            and internal_balance[i]['code'] == ccy:
+                        logger.info('币种{}在交易阶段：Created阶段,step=0,贷方向(movement_type=1)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
+                            wallet_id = internal_balance[i]['wallet_id']
+                            with allure.step("检查wallet name"):
+                                sql = "select * from wallet where wallet_id = '{}';".format(
+                                    wallet_id)
+                                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                                assert wallet_name[0]['wallet_name'] == 'LT-Pending PayIn -FireBlocks-{}'.format(ccy),\
+                                    "期望返回结果是:''LT-Pending PayIn -FireBlocks-{}''，实际结果是:{}".format(ccy, chain, wallet_name[0]['wallet_name'])
+                    elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
+                        "to": "Created", "from": ""} \
+                            and internal_balance[i]['requested_by'] == 'payinorder' \
+                            and internal_balance[i]['transaction_sub_type'] == 'Unknown' \
+                            and internal_balance[i]['amount'] == amount \
+                            and internal_balance[i]['movement_type'] == 2 \
+                            and internal_balance[i]['code'] == ccy:
+                        logger.info('币种{}在交易阶段：Created阶段,step=0,借方向(movement_type=2)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
+                            wallet_id = internal_balance[i]['wallet_id']
+                            with allure.step("检查wallet name"):
+                                sql = "select * from wallet where wallet_id = '{}';".format(
+                                    wallet_id)
+                                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                                assert wallet_name[0]['wallet_name'] == 'LT-Collection Clearing-FireBlocks-{}'.format(ccy),\
+                                    "期望返回结果是:'LT-Collection Clearing-FireBlocks-{}'，实际结果是:{}".format(ccy, chain, wallet_name[0]['wallet_name'])
+                    elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
+                        "to": "Succeeded", "from": "Created"} \
+                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 0)\
+                            and internal_balance[i]['requested_by'] == 'payinorder' \
+                            and internal_balance[i]['transaction_sub_type'] == 'Collection' \
+                            and internal_balance[i]['amount'] == amount \
+                            and internal_balance[i]['movement_type'] == 1 \
+                            and internal_balance[i]['code'] == ccy:
+                        logger.info('币种{}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=1)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
+                            wallet_id = internal_balance[i]['wallet_id']
+                            with allure.step("检查wallet name"):
+                                sql = "select * from wallet where wallet_id = '{}';".format(
+                                    wallet_id)
+                                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                                assert wallet_name[0]['wallet_name'] == 'LT-Collection Clearing-FireBlocks-{}'.format(ccy),\
+                                    "期望返回结果是:'LT-Collection Clearing-FireBlocks-{}'，实际结果是:{}".format(ccy, wallet_name[0]['wallet_name'])
+                    elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
+                        "to": "Success", "from": "Created"} \
+                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 0) \
+                            and internal_balance[i]['requested_by'] == 'payin' \
+                            and internal_balance[i]['transaction_sub_type'] == 'Collection' \
+                            and internal_balance[i]['amount'] == amount \
+                            and internal_balance[i]['movement_type'] == 2 \
+                            and internal_balance[i]['code'] == ccy:
+                        logger.info('币种{}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=2)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
+                            wallet_id = internal_balance[i]['wallet_id']
+                            with allure.step("检查wallet name"):
+                                sql = "select * from wallet where wallet_id = '{}';".format(
+                                    wallet_id)
+                                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                                assert wallet_name[0]['wallet_name'] == 'LT-Cash CA-FireBlocks-{}_{}'.format(ccy, chain),\
+                                    "期望返回结果是:'LT-Cash CA-FireBlocks-{}_{}'，实际结果是:{}".format(ccy, chain, wallet_name[0]['wallet_name'])
+                    elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
+                        "to": "Succeeded", "from": "Created"} \
+                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 0)\
+                            and internal_balance[i]['requested_by'] == 'payinorder' \
+                            and internal_balance[i]['transaction_sub_type'] == 'Collection' \
+                            and internal_balance[i]['amount'] == amount \
+                            and internal_balance[i]['movement_type'] == 1 \
+                            and internal_balance[i]['code'] == ccy:
+                        logger.info('币种{}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=1)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
+                            wallet_id = internal_balance[i]['wallet_id']
+                            with allure.step("检查wallet name"):
+                                sql = "select * from wallet where wallet_id = '{}';".format(
+                                    wallet_id)
+                                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                                assert wallet_name[0]['wallet_name'] == 'LT-Collection Clearing-FireBlocks-{}'.format(ccy),\
+                                    "期望返回结果是:'LT-Collection Clearing-FireBlocks-{}'，实际结果是:{}".format(ccy, wallet_name[0]['wallet_name'])
+                    elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
+                        "to": "Success", "from": "Created"} \
+                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 0) \
+                            and internal_balance[i]['requested_by'] == 'payin' \
+                            and internal_balance[i]['transaction_sub_type'] == 'Collection' \
+                            and internal_balance[i]['amount'] == amount \
+                            and internal_balance[i]['movement_type'] == 2 \
+                            and internal_balance[i]['code'] == ccy:
+                        logger.info('币种{}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=2)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
+                            wallet_id = internal_balance[i]['wallet_id']
+                            with allure.step("检查wallet name"):
+                                sql = "select * from wallet where wallet_id = '{}';".format(
+                                    wallet_id)
+                                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                                assert wallet_name[0]['wallet_name'] == 'LT-Cash CA-FireBlocks-{}_{}'.format(ccy, chain),\
+                                    "期望返回结果是:'LT-Cash CA-FireBlocks-{}_{}'，实际结果是:{}".format(ccy, chain, wallet_name[0]['wallet_name'])
+                    elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
+                        "to": "Succeeded", "from": "Created"} \
+                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 1)\
+                            and internal_balance[i]['requested_by'] == 'payinorder' \
+                            and internal_balance[i]['transaction_sub_type'] == 'Collection' \
+                            and internal_balance[i]['amount'] == amount \
+                            and internal_balance[i]['movement_type'] == 1 \
+                            and internal_balance[i]['code'] == ccy:
+                        logger.info('币种{}在交易阶段：Created-Success阶段,step=1,贷方向(movement_type=1)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
+                            wallet_id = internal_balance[i]['wallet_id']
+                            with allure.step("检查wallet name"):
+                                sql = "select * from wallet where wallet_id = '{}';".format(
+                                    wallet_id)
+                                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                                assert wallet_name[0]['wallet_name'] == 'LT-Collection Transition-{}'.format(ccy),\
+                                    "期望返回结果是:'LT-Collection Transition-{}'，实际结果是:{}".format(ccy, wallet_name[0]['wallet_name'])
+                    elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
+                        "to": "Success", "from": "Created"} \
+                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 1) \
+                            and internal_balance[i]['requested_by'] == 'payin' \
+                            and internal_balance[i]['transaction_sub_type'] == 'Collection' \
+                            and internal_balance[i]['amount'] == amount \
+                            and internal_balance[i]['movement_type'] == 2 \
+                            and internal_balance[i]['code'] == ccy:
+                        logger.info('币种{}在交易阶段：Created-Success阶段,step=1,贷方向(movement_type=2)的order动账正确').format(ccy)
+                        with allure.step("检查wallet name"):
+                            wallet_id = internal_balance[i]['wallet_id']
+                            with allure.step("检查wallet name"):
+                                sql = "select * from wallet where wallet_id = '{}';".format(
+                                    wallet_id)
+                                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
+                                assert wallet_name[0]['wallet_name'] == 'LT-Pending PayIn -FireBlocks-{}'.format(ccy),\
+                                    "期望返回结果是:'LT-Pending PayIn -FireBlocks-{}'，实际结果是:{}".format(ccy, wallet_name[0]['wallet_name'])
+                    else:
+                        assert False, "order动账错误，错误的动账为：{}".format(internal_balance[i])
 
