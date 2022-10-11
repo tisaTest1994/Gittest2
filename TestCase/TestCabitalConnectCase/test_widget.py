@@ -27,7 +27,7 @@ class TestWidgetApi:
             assert r.json() == {"limits": {"BRL": {"min": "50", "max": "1000000"}, "BTC": {"min": "0.0002", "max": "5"},
                                            "CHF": {"min": "10", "max": "200000"}, "ETH": {"min": "0.002", "max": "100"},
                                            "EUR": {"min": "10", "max": "200000"}, "GBP": {"min": "10", "max": "200000"},
-                                           "USDT": {"min": "10", "max": "200000"},
+                                           "USDT": {"min": "10", "max": "200000"}, "USD": {"min": "10", "max": "200000"},
                                            "VND": {"min": "250000",
                                                    "max": "5000000000"}}}, '不传入partner_id, 取得全部conversion limit错误，返回值是{}'.format(
                 r.text)
@@ -620,7 +620,7 @@ class TestWidgetApi:
                         elif 'KRW' in z:
                             amount = 1500000
                         elif 'VND' in z:
-                            amount = 915000
+                            amount = 1515000
                         elif 'CZK' in z:
                             amount = 3000
                         elif 'JPY' in z:
