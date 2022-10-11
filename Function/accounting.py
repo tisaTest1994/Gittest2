@@ -230,7 +230,6 @@ class AccountingFunction:
                                 and internal_balance[i]['code'] == ccy:
                             logger.info('payin {}在交易阶段：New,贷方向(movement_type=1)的transaction fee动账正确', ccy)
                             with allure.step("检查wallet name"):
-                                logger.info('贷方向fee的动账正确')
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
                                     sql = "select * from wallet where wallet_id = '{}';".format(
@@ -316,7 +315,7 @@ class AccountingFunction:
                                                                                                          'wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
                         "to": "Succeeded", "from": "Created"} \
-                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 0) \
+                            and json.loads(internal_balance[i]['detail'])['route_wallet']['step'] == 0 \
                             and internal_balance[i]['requested_by'] == 'payinorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Collection' \
                             and internal_balance[i]['amount'] == amount \
@@ -334,7 +333,7 @@ class AccountingFunction:
                                         'wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
                         "to": "Success", "from": "Created"} \
-                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 0) \
+                            and json.loads(internal_balance[i]['detail'])['route_wallet']['step'] == 0 \
                             and internal_balance[i]['requested_by'] == 'payin' \
                             and internal_balance[i]['transaction_sub_type'] == 'Collection' \
                             and internal_balance[i]['amount'] == amount \
@@ -352,7 +351,7 @@ class AccountingFunction:
                                                                                             wallet_name[0]['wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
                         "to": "Succeeded", "from": "Created"} \
-                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 0) \
+                            and json.loads(internal_balance[i]['detail'])['route_wallet']['step'] == 0 \
                             and internal_balance[i]['requested_by'] == 'payinorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Collection' \
                             and internal_balance[i]['amount'] == amount \
@@ -370,7 +369,7 @@ class AccountingFunction:
                                         'wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
                         "to": "Success", "from": "Created"} \
-                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 0) \
+                            and json.loads(internal_balance[i]['detail'])['route_wallet']['step'] == 0 \
                             and internal_balance[i]['requested_by'] == 'payin' \
                             and internal_balance[i]['transaction_sub_type'] == 'Collection' \
                             and internal_balance[i]['amount'] == amount \
@@ -388,7 +387,7 @@ class AccountingFunction:
                                                                                             wallet_name[0]['wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
                         "to": "Succeeded", "from": "Created"} \
-                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 1) \
+                            and json.loads(internal_balance[i]['detail'])['route_wallet']['step'] == 1 \
                             and internal_balance[i]['requested_by'] == 'payinorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Collection' \
                             and internal_balance[i]['amount'] == amount \
@@ -406,7 +405,7 @@ class AccountingFunction:
                                                                                             wallet_name[0]['wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
                         "to": "Success", "from": "Created"} \
-                            and json.loads(internal_balance[i]['detail']['route_wallet']['step'] == 1) \
+                            and json.loads(internal_balance[i]['detail'])['route_wallet']['step'] == 1 \
                             and internal_balance[i]['requested_by'] == 'payin' \
                             and internal_balance[i]['transaction_sub_type'] == 'Collection' \
                             and internal_balance[i]['amount'] == amount \
