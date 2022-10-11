@@ -67,18 +67,20 @@ class TestConvertApi:
                 assert r.json()['restrictions']['BRL'] == {"min": "50", "max": "1000000"}, "BRL换汇限制错误，接口返回值是{}".format(
                     r.json()['restrictions']['BRL'])
                 assert r.json()['restrictions']['BTC'] == {"min": "0.0002", "max": "5"}, "BTC换汇限制错误，接口返回值是{}".format(
-                    r.json()['restrictions']['BRL'])
+                    r.json()['restrictions']['BTC'])
                 assert r.json()['restrictions']['CHF'] == {"min": "10", "max": "200000"}, "CHF换汇限制错误，接口返回值是{}".format(
-                    r.json()['restrictions']['BRL'])
+                    r.json()['restrictions']['CHF'])
                 assert r.json()['restrictions']['ETH'] == {"min": "0.002", "max": "100"}, "ETH换汇限制错误，接口返回值是{}".format(
-                    r.json()['restrictions']['BRL'])
+                    r.json()['restrictions']['ETH'])
                 assert r.json()['restrictions']['EUR'] == {"min": "10", "max": "200000"}, "EUR换汇限制错误，接口返回值是{}".format(
-                    r.json()['restrictions']['BRL'])
+                    r.json()['restrictions']['EUR'])
                 assert r.json()['restrictions']['USDT'] == {"min": "10", "max": "200000"}, "USDT换汇限制错误，接口返回值是{}".format(
-                    r.json()['restrictions']['BRL'])
+                    r.json()['restrictions']['USDT'])
                 assert r.json()['restrictions']['VND'] == {"min": "250000",
                                                            "max": "5000000000"}, "VND换汇限制错误，接口返回值是{}".format(
-                    r.json()['restrictions']['BRL'])
+                    r.json()['restrictions']['VND'])
+                assert r.json()['restrictions']['USD'] == {"min": "10", "max": "200000"}, "USDT换汇限制错误，接口返回值是{}".format(
+                    r.json()['restrictions']['USD'])
 
     @allure.title('test_convert_004')
     @allure.description('换汇存在汇率差（手续费）')
