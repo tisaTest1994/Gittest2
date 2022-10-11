@@ -190,7 +190,7 @@ class AccountingFunction:
         with allure.step("查询payin transaction"):
             sql = "select * from transaction where transaction_id = '{}';".format(transaction_id)
             payin_txn = (sqlFunction().connect_mysql('payintxn', sql=sql))[0]
-            transaction_id = payin_txn[transaction_id]
+            transaction_id = payin_txn['transaction_id']
             order_id = payin_txn['order_id']
             ccy = payin_txn['ccy']
             amount = payin_txn['amount']
