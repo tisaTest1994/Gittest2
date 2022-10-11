@@ -38,7 +38,7 @@ class TestPayOutPayInAccountingApi:
             with allure.step("通过payout查询对应一笔payin"):
                 sql = "select * from payintxn.transaction where account_id = '{}' and ccy='{}' and amount= '{}' order by id desc limit 1;".format(account_id, currency, Decimal(amount)-Decimal(fee))
                 payin_txn = (sqlFunction().connect_mysql('payintxn', sql=sql))[0]
-                transaction_id = payin_txn[transaction_id]
+                transaction_id = payin_txn['transaction_id']
             with allure.step("payin账务测试"):
                 AccountingFunction.crypto_payin_accouting(transaction_id)
 

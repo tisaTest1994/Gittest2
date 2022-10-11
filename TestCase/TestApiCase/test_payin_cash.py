@@ -9,9 +9,9 @@ class TestPayInCashApi:
     def setup_method(self):
         ApiFunction.add_headers()
 
-    @allure.title('testpay_in_cash_001')
+    @allure.title('test_pay_in_cash_001')
     @allure.description('获得法币充值币种')
-    def testpay_in_cash_001(self):
+    def test_pay_in_cash_001(self):
         with allure.step("充值币种"):
             r = session.request('GET', url='{}/pay/deposit/ccy/{}'.format(env_url, 'fiat'), headers=headers)
             with allure.step("校验状态码"):
@@ -20,9 +20,9 @@ class TestPayInCashApi:
                 for i in get_json()['cash_list']:
                     assert i in str(r.json()['fiat']), "获得法币充值币种错误，返回值是{}".format(r.text)
 
-    @allure.title('testpay_in_cash_002')
+    @allure.title('test_pay_in_cash_002')
     @allure.description('获得全部货币充值币种')
-    def testpay_in_cash_002(self):
+    def test_pay_in_cash_002(self):
         with allure.step("充值币种"):
             r = session.request('GET', url='{}/pay/deposit/ccy/{}'.format(env_url, ''), headers=headers)
             with allure.step("校验状态码"):
@@ -33,29 +33,9 @@ class TestPayInCashApi:
                 for i in get_json()['cash_list']:
                     assert i in str(r.json()['fiat']), "获得法币充值币种错误，返回值是{}".format(r.text)
 
-    @allure.title('testpay_in_cash_003')
-    @allure.description('显示充值法币账户的充值信息')
-    def testpay_in_cash_003(self):
-        with allure.step("充值币种"):
-            for i in get_json()['cash_list']:
-                if i != 'VND':
-                    params = {
-                        'code': i
-                    }
-                    r = session.request('GET', url='{}/pay/deposit/fiat'.format(env_url), params=params,
-                                        headers=headers)
-                    with allure.step("校验状态码"):
-                        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                    if i == 'BRL':
-                        with allure.step("校验返回值"):
-                            assert '3RZ SERVICOS DIGITAIS' in r.text, "显示充值法币账户的充值信息错误，返回值是{}".format(r.text)
-                    else:
-                        with allure.step("校验返回值"):
-                            assert 'Cabital Fintech (LT) UAB' in r.text, "显示充值法币账户的充值信息错误，返回值是{}".format(r.text)
-
-    @allure.title('testpay_in_cash_004')
+    @allure.title('test_pay_in_cash_004')
     @allure.description('GBP法币充值账户信息')
-    def testpay_in_cash_004(self):
+    def test_pay_in_cash_004(self):
         with allure.step("GBP法币充值账户"):
             r = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'GBP', 'Faster Payments'),
                                 headers=headers)
@@ -65,9 +45,9 @@ class TestPayInCashApi:
                 assert r.json()['bank_accounts'][0][
                            'account_name'] == 'Cabital Fintech (LT) UAB', "GBP法币充值账户信息错误，返回值是{}".format(r.text)
 
-    @allure.title('testpay_in_cash_005')
+    @allure.title('test_pay_in_cash_005')
     @allure.description('EUR法币充值账户信息')
-    def testpay_in_cash_005(self):
+    def test_pay_in_cash_005(self):
         with allure.step("EUR法币充值账户信息"):
             r = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'EUR', 'SEPA'), headers=headers)
             with allure.step("校验状态码"):
@@ -76,9 +56,9 @@ class TestPayInCashApi:
                 assert r.json()['bank_accounts'][0][
                            'account_name'] == 'Cabital Fintech (LT) UAB', "EUR法币充值账户信息错误，返回值是{}".format(r.text)
 
-    @allure.title('testpay_in_cash_006')
+    @allure.title('test_pay_in_cash_006')
     @allure.description('CHF法币充值账户信息')
-    def testpay_in_cash_006(self):
+    def test_pay_in_cash_006(self):
         with allure.step("CHF法币充值账户信息"):
             r = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'CHF', 'SIC'), headers=headers)
             with allure.step("校验状态码"):
@@ -87,9 +67,9 @@ class TestPayInCashApi:
                 assert r.json()['bank_accounts'][0][
                            'account_name'] == 'Cabital Fintech (LT) UAB', "CHF法币充值账户信息错误，返回值是{}".format(r.text)
 
-    @allure.title('testpay_in_cash_007')
+    @allure.title('test_pay_in_cash_007')
     @allure.description('BRL法币充值账户信息')
-    def testpay_in_cash_007(self):
+    def test_pay_in_cash_007(self):
         with allure.step("BRL法币充值账户信息"):
             r = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'BRL', 'PIX'), headers=headers)
             with allure.step("校验状态码"):
@@ -99,9 +79,9 @@ class TestPayInCashApi:
                 assert r.json()['bank_accounts'][0][
                            'account_name'] == '3RZ SERVICOS DIGITAIS LTDA', "BRL法币充值账户信息错误，返回值是{}".format(r.text)
 
-    @allure.title('testpay_in_cash_008')
+    @allure.title('test_pay_in_cash_008')
     @allure.description('Plaid 转出币种限制')
-    def testpay_in_cash_008(self):
+    def test_pay_in_cash_008(self):
         with allure.step("Plaid 转出币种限制"):
             balance_list = get_json()['cash_list']
             for i in balance_list:
@@ -116,9 +96,9 @@ class TestPayInCashApi:
                     assert r.json()['min'] == '1', "Plaid 转出币种限制最小值错误，返回值是{}".format(r.text)
                     assert r.json()['max'] == '5', "Plaid 转出币种限制最大值错误，返回值是{}".format(r.text)
 
-    @allure.title('testpay_in_cash_009')
+    @allure.title('test_pay_in_cash_009')
     @allure.description('BRL 创造pay in bank account数据')
-    def testpay_in_cash_009(self):
+    def test_pay_in_cash_009(self):
         with allure.step("切换账号"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
@@ -160,9 +140,9 @@ class TestPayInCashApi:
                                                    get_json()['sandbox']['BRL']['password']))
             print(r.text)
 
-    @allure.title('testpay_in_cash_010')
+    @allure.title('test_pay_in_cash_010')
     @allure.description('BRL 创造pay in PixKey数据')
-    def testpay_in_cash_010(self):
+    def test_pay_in_cash_010(self):
         with allure.step("切换账号"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
