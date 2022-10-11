@@ -271,7 +271,6 @@ class AccountingFunction:
             sql = "select * from payinorder.order where order_id = '{}';".format(order_id)
             order_original = sqlFunction().connect_mysql('payinorder', sql=sql)
             order = order_original[0]
-            print(ccy + 'payin order 为:' + order)
             assert order['status'] == 'PAYIN_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and Decimal(
                 order['amount']) == Decimal(amount) - Decimal(fee_amount), 'order错误'
             chain = order['chain']
