@@ -277,7 +277,6 @@ class AccountingFunction:
             chain = order['chain']
             sql = "select * from wallet.internal_balance where transaction_id = '{}';".format(order_id)
             internal_balance = sqlFunction().connect_mysql('wallet', sql=sql)
-            print(ccy + 'payin order internal_balance :' + internal_balance)
             assert len(internal_balance) == 6, 'payin order 动账少记了'
             with allure.step("检查order6笔动账"):
                 for i in range(0, len(internal_balance)):
