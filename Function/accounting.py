@@ -314,7 +314,7 @@ class AccountingFunction:
                                                                                                      wallet_name[0][
                                                                                                          'wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
-                        "to": "Succeeded", "from": "Created"} \
+                        "to": "Success", "from": "Created"} \
                             and json.loads(internal_balance[i]['detail'])['route_wallet']['step'] == 0 \
                             and internal_balance[i]['requested_by'] == 'payinorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Collection' \
@@ -350,43 +350,7 @@ class AccountingFunction:
                                     "期望返回结果是:'LT-Cash CA-FireBlocks-{}_{}'，实际结果是:{}".format(ccy, chain,
                                                                                             wallet_name[0]['wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
-                        "to": "Succeeded", "from": "Created"} \
-                            and json.loads(internal_balance[i]['detail'])['route_wallet']['step'] == 0 \
-                            and internal_balance[i]['requested_by'] == 'payinorder' \
-                            and internal_balance[i]['transaction_sub_type'] == 'Collection' \
-                            and internal_balance[i]['amount'] == amount \
-                            and internal_balance[i]['movement_type'] == 1 \
-                            and internal_balance[i]['code'] == ccy:
-                        logger.info('payin {}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=1)的order动账正确', ccy)
-                        with allure.step("检查wallet name"):
-                            wallet_id = internal_balance[i]['wallet_id']
-                            with allure.step("检查wallet name"):
-                                sql = "select * from wallet where wallet_id = '{}';".format(
-                                    wallet_id)
-                                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                assert wallet_name[0]['wallet_name'] == 'LT-Collection Clearing-FireBlocks-{}'.format(ccy), \
-                                    "期望返回结果是:'LT-Collection Clearing-FireBlocks-{}'，实际结果是:{}".format(ccy, wallet_name[0][
-                                        'wallet_name'])
-                    elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
                         "to": "Success", "from": "Created"} \
-                            and json.loads(internal_balance[i]['detail'])['route_wallet']['step'] == 0 \
-                            and internal_balance[i]['requested_by'] == 'payin' \
-                            and internal_balance[i]['transaction_sub_type'] == 'Collection' \
-                            and internal_balance[i]['amount'] == amount \
-                            and internal_balance[i]['movement_type'] == 2 \
-                            and internal_balance[i]['code'] == ccy:
-                        logger.info('payin {}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=2)的order动账正确', ccy)
-                        with allure.step("检查wallet name"):
-                            wallet_id = internal_balance[i]['wallet_id']
-                            with allure.step("检查wallet name"):
-                                sql = "select * from wallet where wallet_id = '{}';".format(
-                                    wallet_id)
-                                wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                assert wallet_name[0]['wallet_name'] == 'LT-Cash CA-FireBlocks-{}_{}'.format(ccy, chain), \
-                                    "期望返回结果是:'LT-Cash CA-FireBlocks-{}_{}'，实际结果是:{}".format(ccy, chain,
-                                                                                            wallet_name[0]['wallet_name'])
-                    elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
-                        "to": "Succeeded", "from": "Created"} \
                             and json.loads(internal_balance[i]['detail'])['route_wallet']['step'] == 1 \
                             and internal_balance[i]['requested_by'] == 'payinorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Collection' \
