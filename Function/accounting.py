@@ -42,7 +42,7 @@ class AccountingFunction:
                                 and internal_balance[i]['amount'] == amount \
                                 and internal_balance[i]['movement_type'] == 1 \
                                 and internal_balance[i]['code']:
-                            logger.info('币种{}在交易阶段：Ready-Executing,transaction本金动账正确', ccy)
+                            logger.info('payout {}在交易阶段：Ready-Executing,transaction本金动账正确', ccy)
                             with allure.step("检查wallet name"):
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
@@ -59,7 +59,7 @@ class AccountingFunction:
                                 and internal_balance[i]['amount'] == fee_amount \
                                 and internal_balance[i]['movement_type'] == 1 \
                                 and internal_balance[i]['code'] == ccy:
-                            logger.info('币种{}在交易阶段：Ready-Executing,贷方向(movement_typ=1)transaction fee的动账正确', ccy)
+                            logger.info('payout {}在交易阶段：Ready-Executing,贷方向(movement_typ=1)transaction fee的动账正确', ccy)
                             with allure.step("检查wallet name"):
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
@@ -75,7 +75,7 @@ class AccountingFunction:
                                 and internal_balance[i]['amount'] == fee_amount \
                                 and internal_balance[i]['movement_type'] == 2 \
                                 and internal_balance[i]['code'] == ccy:
-                            logger.info('币种{}在交易阶段：Ready-Executing,借方向(movement_typ=2)transaction fee的动账正确', ccy)
+                            logger.info('payout {}在交易阶段：Ready-Executing,借方向(movement_typ=2)transaction fee的动账正确', ccy)
                             with allure.step("检查wallet name"):
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
@@ -120,7 +120,7 @@ class AccountingFunction:
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Created-Executing,贷方向(movement_type=1)的order动账正确', ccy)
+                        logger.info('payout {}在交易阶段：Created-Executing,贷方向(movement_type=1)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
@@ -137,7 +137,7 @@ class AccountingFunction:
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Created-Executing,借方向(movement_type=2)的order动账正确', ccy)
+                        logger.info('payout {}在交易阶段：Created-Executing,借方向(movement_type=2)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
@@ -153,7 +153,7 @@ class AccountingFunction:
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Executing-Succeeded,贷方向(movement_type=1)的order动账正确', ccy)
+                        logger.info('payout {}在交易阶段：Executing-Succeeded,贷方向(movement_type=1)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
@@ -170,7 +170,7 @@ class AccountingFunction:
                             and Decimal(internal_balance[i]['amount']) == Decimal(amount) - Decimal(fee_amount) \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Executing-Succeeded,借方向(movement_type=2)的order动账正确', ccy)
+                        logger.info('payout {}在交易阶段：Executing-Succeeded,借方向(movement_type=2)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
@@ -213,7 +213,7 @@ class AccountingFunction:
                                 and internal_balance[i]['amount'] == amount \
                                 and internal_balance[i]['movement_type'] == 2 \
                                 and internal_balance[i]['code']:
-                            logger.info('币种{}在交易阶段：Pending-Succeed,transaction本金的动账正确', ccy)
+                            logger.info('payin {}在交易阶段：Pending-Succeed,transaction本金的动账正确', ccy)
                             with allure.step("检查wallet name"):
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
@@ -228,7 +228,7 @@ class AccountingFunction:
                                 and internal_balance[i]['amount'] == fee_amount \
                                 and internal_balance[i]['movement_type'] == 1 \
                                 and internal_balance[i]['code'] == ccy:
-                            logger.info('币种{}在交易阶段：New,贷方向(movement_type=1)的transaction fee动账正确', ccy)
+                            logger.info('payin {}在交易阶段：New,贷方向(movement_type=1)的transaction fee动账正确', ccy)
                             with allure.step("检查wallet name"):
                                 logger.info('贷方向fee的动账正确')
                                 wallet_id = internal_balance[i]['wallet_id']
@@ -244,7 +244,7 @@ class AccountingFunction:
                                 and internal_balance[i]['amount'] == fee_amount \
                                 and internal_balance[i]['movement_type'] == 2 \
                                 and internal_balance[i]['code'] == ccy:
-                            logger.info('币种{}在交易阶段：New,借方向(movement_type=2)的transaction fee动账正确', ccy)
+                            logger.info('payin {}在交易阶段：New,借方向(movement_type=2)的transaction fee动账正确', ccy)
                             with allure.step("检查wallet name"):
                                 wallet_id = internal_balance[i]['wallet_id']
                                 with allure.step("检查wallet name"):
@@ -271,8 +271,7 @@ class AccountingFunction:
             sql = "select * from payinorder.order where order_id = '{}';".format(order_id)
             order_original = sqlFunction().connect_mysql('payinorder', sql=sql)
             order = order_original[0]
-            assert order['status'] == 'PAYIN_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and Decimal(
-                order['amount']) == Decimal(amount) - Decimal(fee_amount), 'order错误'
+            assert order['status'] == 'PAYIN_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and order['amount'] == amount, 'order错误'
             chain = order['chain']
             sql = "select * from wallet.internal_balance where transaction_id = '{}';".format(order_id)
             internal_balance = sqlFunction().connect_mysql('wallet', sql=sql)
@@ -286,7 +285,7 @@ class AccountingFunction:
                             and Decimal(internal_balance[i]['amount']) == amount \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Created阶段,step=0,贷方向(movement_type=1)的order动账正确', ccy)
+                        logger.info('payin {}在交易阶段：Created阶段,step=0,贷方向(movement_type=1)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
@@ -304,7 +303,7 @@ class AccountingFunction:
                             and internal_balance[i]['amount'] == amount \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Created阶段,step=0,借方向(movement_type=2)的order动账正确', ccy)
+                        logger.info('payin {}在交易阶段：Created阶段,step=0,借方向(movement_type=2)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
@@ -323,7 +322,7 @@ class AccountingFunction:
                             and internal_balance[i]['amount'] == amount \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=1)的order动账正确', ccy)
+                        logger.info('payin {}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=1)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
@@ -341,7 +340,7 @@ class AccountingFunction:
                             and internal_balance[i]['amount'] == amount \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=2)的order动账正确', ccy)
+                        logger.info('payin {}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=2)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
@@ -359,7 +358,7 @@ class AccountingFunction:
                             and internal_balance[i]['amount'] == amount \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=1)的order动账正确', ccy)
+                        logger.info('payin {}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=1)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
@@ -377,7 +376,7 @@ class AccountingFunction:
                             and internal_balance[i]['amount'] == amount \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=2)的order动账正确', ccy)
+                        logger.info('payin {}在交易阶段：Created-Success阶段,step=0,贷方向(movement_type=2)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
@@ -395,7 +394,7 @@ class AccountingFunction:
                             and internal_balance[i]['amount'] == amount \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Created-Success阶段,step=1,贷方向(movement_type=1)的order动账正确', ccy)
+                        logger.info('payin {}在交易阶段：Created-Success阶段,step=1,贷方向(movement_type=1)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
@@ -413,7 +412,7 @@ class AccountingFunction:
                             and internal_balance[i]['amount'] == amount \
                             and internal_balance[i]['movement_type'] == 2 \
                             and internal_balance[i]['code'] == ccy:
-                        logger.info('币种{}在交易阶段：Created-Success阶段,step=1,贷方向(movement_type=2)的order动账正确', ccy)
+                        logger.info('payin {}在交易阶段：Created-Success阶段,step=1,贷方向(movement_type=2)的order动账正确', ccy)
                         with allure.step("检查wallet name"):
                             wallet_id = internal_balance[i]['wallet_id']
                             with allure.step("检查wallet name"):
