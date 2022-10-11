@@ -1,5 +1,5 @@
 from Function.api_function import *
-from Function.operate_excel import *
+from Function.accounting import *
 from Function.operate_sql import *
 
 
@@ -34,11 +34,11 @@ class TestPayOutPayInAccountingApi:
             with allure.step("生成一笔payout订单"):
                 transaction_id = ApiFunction.get_payout_transaction_id(amount=amount, address=address, code_type=currency)
             with allure.step("payout账务测试"):
-                ApiFunction.crypto_payout_accouting(transaction_id)
+                AccountingFunction.crypto_payout_accouting(transaction_id)
             with allure.step("通过payout查询对应一笔payin"):
                 sql = "select * from payintxn.transaction where account_id = '{}' and ccy='{}' and amount= '{}' order by id desc limit 1;".format(account_id, currency, Decimal(amount)-Decimal(fee))
                 payin_txn = (sqlFunction().connect_mysql('payintxn', sql=sql))[0]
                 transaction_id = payin_txn[transaction_id]
             with allure.step("payin账务测试"):
-                ApiFunction.crypto_payin_accouting(transaction_id)
+                AccountingFunction.crypto_payin_accouting(transaction_id)
 
