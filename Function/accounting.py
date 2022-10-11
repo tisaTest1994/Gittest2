@@ -282,7 +282,7 @@ class AccountingFunction:
                         "to": "Created", "from": ""} \
                             and internal_balance[i]['requested_by'] == 'payinorder' \
                             and internal_balance[i]['transaction_sub_type'] == 'Unknown' \
-                            and Decimal(internal_balance[i]['amount']) == amount \
+                            and internal_balance[i]['amount'] == amount \
                             and internal_balance[i]['movement_type'] == 1 \
                             and internal_balance[i]['code'] == ccy:
                         logger.info('payin {}在交易阶段：Created阶段,step=0,贷方向(movement_type=1)的order动账正确', ccy)
