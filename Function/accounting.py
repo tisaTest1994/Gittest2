@@ -271,7 +271,7 @@ class AccountingFunction:
             sql = "select * from payinorder.order where order_id = '{}';".format(order_id)
             order_original = sqlFunction().connect_mysql('payinorder', sql=sql)
             order = order_original[0]
-            assert order['status'] == 'PAYIN_ORDER_STATUS_SUCCEEDED' and order['ccy'] == ccy and order['amount'] == amount, 'order错误'
+            assert order['status'] == 'PAYIN_ORDER_STATUS_SUCCEED' and order['ccy'] == ccy and order['amount'] == amount, 'order错误'
             chain = order['chain']
             sql = "select * from wallet.internal_balance where transaction_id = '{}';".format(order_id)
             internal_balance = sqlFunction().connect_mysql('wallet', sql=sql)
