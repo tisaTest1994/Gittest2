@@ -31,14 +31,29 @@ class TestPayOutPayInAccountingApi:
                 amount = format(amount, '.8f')
                 fee = '0.0006'
                 address = 'tb1qqfs5u6lhqgcl2d40p203756ls6x2jqn89amnv3'
-            with allure.step("生成一笔{currency} payout订单"):
+            with allure.step("生成一笔{} payout订单并判断交易是否成功".format(currency)):
                 transaction_id = ApiFunction.get_payout_transaction_id(amount=amount, address=address, code_type=currency)
-            with allure.step("{currency} payout账务测试"):
+                for i in range(0, 60):
+                    if status == 'PAYOUT_TXN_STATUS_SUCCEEDED':
+                        break
+                    #交易被kyt拒绝，btc测试环境的KYT结果是mock的，有1/9会failed
+                    elif status == "PAYOUT_TXN_STATUS_CANCELLED":
+                        transaction_id = ApiFunction.get_payout_transaction_id(amount=amount, address=address,
+                                                                               code_type=currency)
+                    else:
+                        if i == 59:
+                            assert False, '已等待60分钟，{}提现仍未到账，请手工检查交易是否正常'.format(currency)
+                        else:
+                            sql = "select * from transaction where transaction_id = '{}';".format(transaction_id)
+                            payout_txn = (sqlFunction().connect_mysql('payouttxn', sql=sql))[0]
+                            status = payout_txn['status']
+                            sleep(60)
+            with allure.step("{} payout账务测试".format(currency)):
                 AccountingFunction.crypto_payout_accouting(transaction_id)
-            with allure.step("通过payout查询对应一笔{currency} payin"):
+            with allure.step("通过payout查询对应一笔{} payin".format(currency)):
                 sql = "select * from payintxn.transaction where account_id = '{}' and ccy='{}' and amount= '{}' order by id desc limit 1;".format(account_id, currency, Decimal(amount)-Decimal(fee))
                 payin_txn = (sqlFunction().connect_mysql('payintxn', sql=sql))[0]
                 transaction_id = payin_txn['transaction_id']
-            with allure.step("{currency} payin账务测试"):
+            with allure.step("{} payin账务测试".format(currency)):
                 AccountingFunction.crypto_payin_accouting(transaction_id)
 

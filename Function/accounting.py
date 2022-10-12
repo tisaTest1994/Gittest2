@@ -17,17 +17,6 @@ class AccountingFunction:
                 fee_amount = '0'
             else:
                 fee_amount = fee['ccy']['amount']['amount']
-            for i in range(0, 60):
-                if status == 'PAYOUT_TXN_STATUS_SUCCEEDED':
-                    break
-                else:
-                    if i == 59:
-                        assert False, '已等待60分钟，{}提现仍未到账，请手工检查交易是否正常'.format(ccy)
-                    else:
-                        sql = "select * from transaction where transaction_id = '{}';".format(transaction_id)
-                        payout_txn = (sqlFunction().connect_mysql('payouttxn', sql=sql))[0]
-                        status = payout_txn['status']
-                        sleep(60)
         with allure.step("查transaction的动账"):
             with allure.step("查internal balance表"):
                 sql = "select * from internal_balance where transaction_id = '{}';".format(transaction_id)
