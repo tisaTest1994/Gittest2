@@ -2,10 +2,11 @@
 Reports/
 src/
 *.pyc
-Resource/latest_2fa.json
 Screenshot/App/*.png
 Screenshot/Web/*.png
 multiple_languages_*.json
 TestCase/TestWebCase/temp.jpg
 TestCase/TestAndroidCase/temp.jpg
 TestCase/TestApiCase/payme.html
+TestCase/TestCabitalConnectCase/conftest.py
+Resource/latest_2fa.json
