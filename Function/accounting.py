@@ -292,7 +292,7 @@ class AccountingFunction:
                                     wallet_id)
                                 wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
                                 assert wallet_name[0]['wallet_name'] == 'LT-Pending PayIn -FireBlocks-{}'.format(ccy), \
-                                    "期望返回结果是:''LT-Pending PayIn -FireBlocks-{}''，实际结果是:{}".format(ccy, wallet_name[0]['wallet_name'])
+                                    "期望返回结果是:'LT-Pending PayIn -FireBlocks-{}'，实际结果是:{}".format(ccy, wallet_name[0]['wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
                         "to": "Created", "from": ""} \
                             and internal_balance[i]['requested_by'] == 'payinorder' \
