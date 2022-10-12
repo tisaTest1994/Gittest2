@@ -174,3 +174,27 @@ class TestPayInCashApi:
                                 data=data, auth=(get_json()['sandbox']['BRL']['username'],
                                                    get_json()['sandbox']['BRL']['password']))
             print(r.text)
+
+    # @allure.title('test_pay_in_cash_011')
+    # @allure.description('GBP法币充值账户信息')
+    # def test_pay_in_cash_011(self):
+    #     with allure.step("GBP法币充值账户"):
+    #         r = session.request('GET', url='{}/pay/deposit/{}'.format(env_url, 'USD'),
+    #                             headers=headers)
+    #         with allure.step("校验状态码"):
+    #             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+    #         with allure.step("校验返回值"):
+    #             assert r.json()['bank_accounts'][0][
+    #                        'account_name'] == 'Cabital Fintech (LT) UAB', "GBP法币充值账户信息错误，返回值是{}".format(r.text)
+    #
+    # @allure.title('test_pay_in_cash_011')
+    # @allure.description('GBP法币充值账户信息')
+    # def test_pay_in_cash_004(self):
+    #     with allure.step("GBP法币充值账户"):
+    #         r = session.request('GET', url='{}/pay/deposit/fiat/{}/{}'.format(env_url, 'USD', 'SWIFT'),
+    #                             headers=headers)
+    #         with allure.step("校验状态码"):
+    #             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+    #         with allure.step("校验返回值"):
+    #             assert r.json()['bank_accounts'][0][
+    #                        'account_name'] == 'Cabital Fintech (LT) UAB', "GBP法币充值账户信息错误，返回值是{}".format(r.text)
