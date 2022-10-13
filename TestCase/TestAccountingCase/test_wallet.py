@@ -70,12 +70,26 @@ class TestAccountingWalletApi:
                                         wallet_subType = str(line_info[7]).split('(')[0].split(":'")[1]
                                     else:
                                         wallet_subType = str(line_info[7]).split("'")[1]
-                                sql = "select * from wallet where code = {} and account_code = {} and status = {} and allow_overdraft = {} and balance_direction = {} and wallet_type = '{}';".format(
-                                    str(line_info[4]).split(':')[1], int(float(str(line_info[8]).split(':')[1])),
-                                    status, allow_overdraft, balance_direction, wallet_subType)
-                                info = sqlFunction().connect_mysql('wallet', sql=sql)
-                                if not list(info):
-                                    error_list.append({y: sql})
+                                with allure.step("Currency 币种解析"):
+                                    if ',' in str(line_info[4]).split(':')[1]:
+                                        currency_list = str(line_info[4]).split(':')[1].strip("'").split(',')
+                                        for z in currency_list:
+                                            sql = "select * from wallet where code = '{}' and account_code = {} and status = {} and allow_overdraft = {} and balance_direction = {} and wallet_type = '{}';".format(
+                                                z,
+                                                int(float(str(line_info[8]).split(':')[1])),
+                                                status, allow_overdraft, balance_direction, wallet_subType)
+                                            print(sql)
+                                            info = sqlFunction().connect_mysql('wallet', sql=sql)
+                                            if not list(info):
+                                                error_list.append({y: sql})
+                                    else:
+                                        sql = "select * from wallet where code = {} and account_code = {} and status = {} and allow_overdraft = {} and balance_direction = {} and wallet_type = '{}';".format(
+                                            str(line_info[4]).split(':')[1],
+                                            int(float(str(line_info[8]).split(':')[1])),
+                                            status, allow_overdraft, balance_direction, wallet_subType)
+                                        info = sqlFunction().connect_mysql('wallet', sql=sql)
+                                        if not list(info):
+                                            error_list.append({y: sql})
         logger.info(error_list)
         assert error_list == [], 'error list 是{}'.format(error_list)
 

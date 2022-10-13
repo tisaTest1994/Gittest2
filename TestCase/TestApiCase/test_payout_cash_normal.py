@@ -538,7 +538,6 @@ class TestPayoutCashNormalApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         a = 1
-        print(r.json()['account_names'])
         with allure.step("确保1在前，0在后"):
             # 循环确保无效name后不会有有效的name
             for i in r.json()['account_names']:
@@ -604,15 +603,21 @@ class TestPayoutCashNormalApi:
     @allure.title('test_payout_cash_normal_017')
     @allure.description('创建USD法币提现交易')
     def test_payout_cash_normal_017(self):
-        
+        with allure.step("切换用户"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+        code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+        mfaVerificationCode = get_mfa_code()
+        headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+        headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
         data = {
             "code": "USD",
             "amount": "200",
             "payment_method": "SWIFT",
-            "account_name": "kimi w",
-            "bank_account_id": "b2e00af4-e1c2-4c46-8171-c9bf30e7b588"
+            "account_name": "Richard External QA",
+            "bank_account_id": "dfaeabff-3d48-4e5b-9d25-950c18782998"
         }
-        with allure.step("确认USD法币提现交易"):
+        with allure.step("创建USD法币提现交易"):
             r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), headers=headers, data=json.dumps(data))
         with allure.step("状态码和返回值"):
             logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
@@ -621,4 +626,4 @@ class TestPayoutCashNormalApi:
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
-            assert r.json() == {}, "确认USD法币提现交易错误，返回值是{}".format(r.text)
+            assert r.json()['status'] == 1, "创建USD法币提现交易错误，返回值是{}".format(r.text)
