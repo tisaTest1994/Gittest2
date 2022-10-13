@@ -72,7 +72,7 @@ class TestAccountingWalletApi:
                                         wallet_subType = str(line_info[7]).split("'")[1]
                                 with allure.step("Currency 币种解析"):
                                     if ',' in str(line_info[4]).split(':')[1]:
-                                        currency_list = str(line_info[4]).split(':')[1].split(',')
+                                        currency_list = str(line_info[4]).split(':')[1].strip("'").split(',')
                                         for z in currency_list:
                                             sql = "select * from wallet where code = {} and account_code = {} and status = {} and allow_overdraft = {} and balance_direction = {} and wallet_type = '{}';".format(
                                                 z,
