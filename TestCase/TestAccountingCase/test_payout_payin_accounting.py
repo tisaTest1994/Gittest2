@@ -43,6 +43,9 @@ class TestPayOutPayInAccountingApi:
                     elif status == "PAYOUT_TXN_STATUS_CANCELLED":
                         transaction_id = ApiFunction.get_payout_transaction_id(amount=amount, address=address,
                                                                                code_type=currency)
+                        sql = "select * from transaction where transaction_id = '{}';".format(transaction_id)
+                        payout_txn = (sqlFunction().connect_mysql('payouttxn', sql=sql))[0]
+                        status = payout_txn['status']
                     else:
                         if i == 59:
                             assert False, '已等待60分钟，{}提现仍未到账，请手工检查交易是否正常'.format(currency)
