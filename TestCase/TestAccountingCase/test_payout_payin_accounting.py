@@ -33,6 +33,9 @@ class TestPayOutPayInAccountingApi:
                 address = 'tb1qqfs5u6lhqgcl2d40p203756ls6x2jqn89amnv3'
             with allure.step("生成一笔{} payout订单并判断交易是否成功".format(currency)):
                 transaction_id = ApiFunction.get_payout_transaction_id(amount=amount, address=address, code_type=currency)
+                sql = "select * from transaction where transaction_id = '{}';".format(transaction_id)
+                payout_txn = (sqlFunction().connect_mysql('payouttxn', sql=sql))[0]
+                status = payout_txn['status']
                 for i in range(0, 60):
                     if status == 'PAYOUT_TXN_STATUS_SUCCEEDED':
                         break
