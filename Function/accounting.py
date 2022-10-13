@@ -3,13 +3,27 @@ from Function.operate_sql import *
 
 
 class AccountingFunction:
+    # sql转格式
+    @staticmethod
+    def sql_result(table, sql):
+        with allure.step("判断返回数据类型"):
+            sql_result = ["1"]
+            # sql_result = {"transaction_id":"9d6ec87f-1c7b-401c-95d1-fbad87a1c916","txn_id":"9d6ec87f-1c7b-401c-95d1-fbad87a1c916","status":1,"code":"ETH","amount":"0.29405177","fee":{"code":"ETH","amount":"0.004"},"receivable_amount":"0.29005177","return_amount":None,"failed_reason":""}
+            if isinstance(sql_result, dict):
+                return sql_result
+            elif isinstance(sql_result, list):
+                if len(sql_result) == 1:
+                    return sql_result[0]
+                else:
+                    return sql_result
+
+
     # crypto-payout accounting(ETH/USDT/BTC)
     @staticmethod
     def crypto_payout_accouting(transaction_id):
         with allure.step("等待交易成功"):
             sql = "select * from transaction where transaction_id = '{}';".format(transaction_id)
             payout_txn = (sqlFunction().connect_mysql('payouttxn', sql=sql))[0]
-            status = payout_txn['status']
             ccy = payout_txn['ccy']
             amount = payout_txn['amount']
             fee = json.loads(payout_txn['fee'])
@@ -149,9 +163,13 @@ class AccountingFunction:
                                 sql = "select * from wallet where wallet_id = '{}';".format(
                                     wallet_id)
                                 wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                assert wallet_name[0]['wallet_name'] == 'LT-Cash MP-FireBlocks-{}_{}'.format(ccy, chain), \
-                                    "期望返回结果是:LT-Cash MP-FireBlocks-{}_{}，实际结果是:{}".format(ccy, chain,
-                                                                                            wallet_name[0]['wallet_name'])
+                                if ccy == 'BTC':
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Cash MP-FireBlocks-{}'.format(ccy), \
+                                        "期望返回结果是:LT-Cash MP-FireBlocks-{}，实际结果是:{}".format(ccy, wallet_name[0]['wallet_name'])
+                                else:
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Cash MP-FireBlocks-{}_{}'.format(ccy, chain), \
+                                        "期望返回结果是:LT-Cash MP-FireBlocks-{}_{}，实际结果是:{}".format(ccy, chain,
+                                                                                                wallet_name[0]['wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
                         "to": "Succeeded", "from": "Executing"} \
                             and internal_balance[i]['requested_by'] == 'payoutorder' \
@@ -280,7 +298,6 @@ class AccountingFunction:
                                 sql = "select * from wallet where wallet_id = '{}';".format(
                                     wallet_id)
                                 wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                print(wallet_name)
                                 assert str(wallet_name[0]['wallet_name']) == 'LT-Pending PayIn-FireBlocks-{}'.format(ccy) or str(wallet_name[0]['wallet_name']) == 'LT-Pending PayIn -FireBlocks-{}'.format(ccy), \
                                     "期望返回结果是:LT-Pending PayIn-FireBlocks-{}，实际结果是:{}".format(ccy, wallet_name[0]['wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
@@ -332,9 +349,16 @@ class AccountingFunction:
                                 sql = "select * from wallet where wallet_id = '{}';".format(
                                     wallet_id)
                                 wallet_name = sqlFunction().connect_mysql('wallet', sql=sql)
-                                assert wallet_name[0]['wallet_name'] == 'LT-Cash CA-FireBlocks-{}_{}'.format(ccy, chain), \
-                                    "期望返回结果是:LT-Cash CA-FireBlocks-{}_{}，实际结果是:{}".format(ccy, chain,
-                                                                                            wallet_name[0]['wallet_name'])
+                                if ccy == 'BTC':
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Cash CA-FireBlocks-{}'.format(ccy), \
+                                        "期望返回结果是:LT-Cash CA-FireBlocks-{}，实际结果是:{}".format(ccy, wallet_name[0][
+                                            'wallet_name'])
+                                else:
+                                    assert wallet_name[0]['wallet_name'] == 'LT-Cash CA-FireBlocks-{}_{}'.format(ccy,
+                                                                                                                 chain), \
+                                        "期望返回结果是:LT-Cash CA-FireBlocks-{}_{}，实际结果是:{}".format(ccy, chain,
+                                                                                              wallet_name[0][
+                                                                                                  'wallet_name'])
                     elif json.loads(internal_balance[i]['detail'])['route_wallet']['status_transitions'] == {
                         "to": "Success", "from": "Created"} \
                             and json.loads(internal_balance[i]['detail'])['route_wallet']['step'] == 1 \
