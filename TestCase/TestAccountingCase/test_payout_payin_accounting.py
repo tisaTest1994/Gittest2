@@ -14,7 +14,7 @@ class TestPayOutPayInAccountingApi:
     @allure.description('Payout&Payin Crypto Accounting校验')
     def test_payout_payin_accounting_001(self):
         account_id = 'b013327e-ae65-4197-acf6-806f03873f51'
-        for currency in ['ETH', 'USDT']:
+        for currency in ['ETH', 'USDT', 'BTC']:
             # 提现的地址用的account_id = 'b013327e-ae65-4197-acf6-806f03873f51'这个账号的地址（为了方便查payin）
             if currency == 'ETH':
                 amount = random.uniform(0.02, 0.39999999)

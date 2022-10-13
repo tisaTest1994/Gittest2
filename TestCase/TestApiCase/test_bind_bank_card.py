@@ -180,4 +180,3 @@ class TestBindBankCardApi:
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-
