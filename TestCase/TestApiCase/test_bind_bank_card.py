@@ -164,4 +164,20 @@ class TestBindBankCardApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             assert r.json()['countries'] is not None, "获取某个银行国家列表失败，返回值是{}".format(r.text)
 
+    @allure.title('test_bind_bank_card_007')
+    @allure.description('解绑USD银行卡')
+    @pytest.mark.skip(reason='手动操作')
+    def test_bind_bank_card_007(self):
+        data = {
+            'id': ''
+        }
+        with allure.step("获取某个银行国家列表"):
+            r = session.request('DELETE', url='{}/pay/bank-account'.format(env_url), headers=headers, params=params)
+        with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            assert r.json()['countries'] is not None, "获取某个银行国家列表失败，返回值是{}".format(r.text)
 
