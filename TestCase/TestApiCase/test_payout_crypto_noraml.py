@@ -229,3 +229,41 @@ class TestPayoutCryptoNormalApi:
                 assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
                 assert r.json()['code'] == '103031', "USDT确认Crypto提现交易超过每日限额错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_crypto_normal_009')
+    @allure.description('确认&创建USDC虚拟货币提现交易')
+    def test_payout_crypto_normal_009(self):
+        with allure.step("切换账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
+            data = {
+                "amount": '100.02',
+                "code": 'USDC',
+                "address": '0x465d39f446f3EE9867B318A5bB98EF7dA796DFbA',
+                "chain": "ETH"
+            }
+        with allure.step("确认BTC虚拟货币提现交易"):
+            r = session.request('POST', url='{}/pay/withdraw/crypto/validate'.format(env_url),
+                                data=json.dumps(data),
+                                headers=headers)
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("状态码和返回值"):
+                logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验返回值"):
+                assert r.json() == {}, "确认BTC虚拟货币提现交易错误，返回值是{}".format(r.text)
+        with allure.step("创建ETH虚拟货币提现交易"):
+            code = ApiFunction.get_verification_code(type='MFA_EMAIL', account=get_json()['email']['payout_email'])
+            mfaVerificationCode = get_mfa_code()
+            headers['X-Mfa-Otp'] = str(mfaVerificationCode)
+            headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
+            r2 = session.request('POST', url='{}/pay/withdraw/transactions'.format(env_url), data=json.dumps(data),
+                                 headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('状态码是{}'.format(str(r2.status_code)))
+                logger.info('返回值是{}'.format(str(r2.text)))
+            with allure.step("校验状态码"):
+                assert r2.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            return r2.json()['transaction_id']
