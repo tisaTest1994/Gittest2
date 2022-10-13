@@ -217,7 +217,8 @@
     "EUR",
     "CHF",
     "BRL",
-    "VND"
+    "VND",
+    "USD"
   ],
   "cfx_service_charge": {
     "BRL": 0.01,
@@ -318,7 +319,8 @@
   "crypto_list": [
     "BTC",
     "ETH",
-    "USDT"
+    "USDT",
+    "USD"
   ],
   "email": {
     "accountId": "96f29441-feb4-495a-a531-96c833e8261a",

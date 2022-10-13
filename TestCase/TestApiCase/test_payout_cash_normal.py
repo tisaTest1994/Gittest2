@@ -29,6 +29,10 @@ class TestPayoutCashNormalApi:
                         }
                     r = session.request('POST', url='{}/pay/withdraw/fiat/verification'.format(env_url),
                                         data=json.dumps(data), headers=headers)
+                    with allure.step("状态码和返回值"):
+                        logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+                        logger.info('状态码是{}'.format(str(r.status_code)))
+                        logger.info('返回值是{}'.format(str(r.text)))
                     if i == 'GBP':
                         assert r.json()['fee']['amount'] == '2.5', '获取提现费率和提现限制错误, 币种是{}'.format(i)
                         assert r.json()['fee']['code'] == i, '获取提现费率和提现限制错误, 币种是{}'.format(i)
@@ -51,6 +55,11 @@ class TestPayoutCashNormalApi:
                             r.json()['fee']['amount']), '获取提现费率和提现限制错误, 币种是{}'.format(i)
                     elif i == 'VND':
                         assert r.json()['fee']['amount'] == '6000', '获取提现费率和提现限制错误, 币种是{}'.format(i)
+                        assert r.json()['fee']['code'] == i, '获取提现费率和提现限制错误, 币种是{}'.format(i)
+                        assert float(r.json()['receivable_amount']) == float(data['amount']) - float(
+                            r.json()['fee']['amount']), '获取提现费率和提现限制错误, 币种是{}'.format(i)
+                    elif i == 'USD':
+                        assert r.json()['fee']['amount'] == '40', '获取提现费率和提现限制错误, 币种是{}'.format(i)
                         assert r.json()['fee']['code'] == i, '获取提现费率和提现限制错误, 币种是{}'.format(i)
                         assert float(r.json()['receivable_amount']) == float(data['amount']) - float(
                             r.json()['fee']['amount']), '获取提现费率和提现限制错误, 币种是{}'.format(i)
@@ -84,22 +93,35 @@ class TestPayoutCashNormalApi:
                         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
                         if i == 'GBP':
-                            assert r.json()['supported_payment_methods'] == 'Faster Payments', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(i, r.json())
-                            assert r.json()['payment_methods'][r.json()['supported_payment_methods']] == {'min': '20', 'max': '40000', 'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                            assert r.json()[
+                                       'supported_payment_methods'] == 'Faster Payments', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                                i, r.json())
+                            assert r.json()['payment_methods'][r.json()['supported_payment_methods']] == {'min': '20',
+                                                                                                          'max': '40000',
+                                                                                                          'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
                         elif i == 'EUR':
-                            assert r.json()['supported_payment_methods'] == 'SEPA', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(i, r.json())
-                            assert r.json()['payment_methods'][r.json()['supported_payment_methods']] == {'max': '50000', 'min': '25', 'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                            assert r.json()['supported_payment_methods'] == 'SEPA', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                                i, r.json())
+                            assert r.json()['payment_methods'][r.json()['supported_payment_methods']] == {
+                                'max': '50000', 'min': '25', 'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
                         elif i == 'CHF':
-                            assert r.json()['supported_payment_methods'] == 'SIC or SWIFT', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(i, r.json())
-                            assert r.json()['payment_methods']['SIC'] == {'max': '50000', 'min': '25', 'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                            assert r.json()[
+                                       'supported_payment_methods'] == 'SIC or SWIFT', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                                i, r.json())
+                            assert r.json()['payment_methods']['SIC'] == {'max': '50000', 'min': '25',
+                                                                          'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
                         elif i == 'BRL':
-                            assert r.json()['supported_payment_methods'] == 'PIX or Bank Transfer', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(i, r.json())
-                            assert r.json()['payment_methods']['Bank Transfer'] == {'min': '130', 'max': '300000', 'order': 1}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                            assert r.json()[
+                                       'supported_payment_methods'] == 'PIX or Bank Transfer', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
-                            assert r.json()['payment_methods']['PIX'] == {'min': '130', 'max': '300000', 'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                            assert r.json()['payment_methods']['Bank Transfer'] == {'min': '130', 'max': '300000',
+                                                                                    'order': 1}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                                i, r.json())
+                            assert r.json()['payment_methods']['PIX'] == {'min': '130', 'max': '300000',
+                                                                          'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
                         elif i == 'VND':
                             assert r.json()[
@@ -109,7 +131,8 @@ class TestPayoutCashNormalApi:
                             assert r.json()['payment_methods']['Bank Transfer'] == {'min': '600000', 'max': '300000000',
                                                                                     'order': 0}, '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
-                            assert r.json()['fee_rule']['percentage_charge_rule']['percentage'] == '2', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
+                            assert r.json()['fee_rule']['percentage_charge_rule'][
+                                       'percentage'] == '2', '开启法币提现画面错误，币种是{},接口返回值是{}'.format(
                                 i, r.json())
 
     @allure.title('test_payout_cash_normal_004')
@@ -528,11 +551,74 @@ class TestPayoutCashNormalApi:
     @allure.title('test_payout_cash_normal_015')
     @allure.description('获取用户提现白名单')
     def test_payout_cash_normal_015(self):
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-            account=get_json()['email']['payout_email'])
+        # headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+        #     account=get_json()['email']['payout_email'])
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice1012001@cabital.com', password='Zcdsw123')
         with allure.step("获取用户提现白名单"):
             r = session.request('GET', url='{}/pay/user-whitelist'.format(env_url), headers=headers)
+            print(r.json())
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['name_list'] is not None, "获取用户提现白名单错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_normal_016')
+    @allure.description('开启USD提现画面')
+    def test_payout_cash_normal_016(self):
+        params = {
+            'code': 'USD',
+            'payment_method': 'SWIFT'
+        }
+        with allure.step("开启USD提现画面"):
+            r = session.request('GET', url='{}/pay/withdraw/fiat'.format(env_url), headers=headers, params=params)
+        with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['bound_bank_account_max_cnt'] == 3, "开启USD提现画面错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_normal_017')
+    @allure.description('确认USD法币提现交易')
+    def test_payout_cash_normal_017(self):
+        data = {
+            "code": "USD",
+            "amount": "200",
+            "payment_method": "SWIFT",
+            "account_name": "kimi w",
+            "bank_account_id": "b2e00af4-e1c2-4c46-8171-c9bf30e7b588"
+        }
+        with allure.step("确认USD法币提现交易"):
+            r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), headers=headers, data=json.dumps(data))
+        with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "确认USD法币提现交易错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_cash_normal_017')
+    @allure.description('创建USD法币提现交易')
+    def test_payout_cash_normal_017(self):
+        
+        data = {
+            "code": "USD",
+            "amount": "200",
+            "payment_method": "SWIFT",
+            "account_name": "kimi w",
+            "bank_account_id": "b2e00af4-e1c2-4c46-8171-c9bf30e7b588"
+        }
+        with allure.step("确认USD法币提现交易"):
+            r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), headers=headers, data=json.dumps(data))
+        with allure.step("状态码和返回值"):
+            logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+            logger.info('状态码是{}'.format(str(r.status_code)))
+            logger.info('返回值是{}'.format(str(r.text)))
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json() == {}, "确认USD法币提现交易错误，返回值是{}".format(r.text)

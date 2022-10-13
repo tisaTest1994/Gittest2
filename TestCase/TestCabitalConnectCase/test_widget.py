@@ -176,39 +176,39 @@ class TestWidgetApi:
                         for x in get_json()['checkOutAreaList2']:
                             with allure.step("创建数字货币购买交易信息，ccy 是buy"):
                                 sleep(1)
-                                with allure.step("get token"):
-                                    data = {
-                                        "type": "card",
-                                        "number": "4242424242424242",
-                                        "expiry_month": 6,
-                                        "expiry_year": 2025,
-                                        "name": "Bruce Wayne",
-                                        "cvv": "100",
-                                        "billing_address": {
-                                            "address_line1": "Checkout.com",
-                                            "address_line2": "90 Tottenham Court Road",
-                                            "city": "London",
-                                            "state": "London",
-                                            "zip": "W1T 4TJ",
-                                            "country": x
-                                        }
-                                    }
-                                    headers2 = {
-                                        "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
-                                        "Content-Type": "application/json"
-                                    }
-                                    r = session.request('POST', url='https://api.sandbox.checkout.com/tokens',
-                                                        data=json.dumps(data), headers=headers2)
-                                    with allure.step("校验状态码"):
-                                        assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(
-                                            r.status_code)
-                                        token = r.json()['token']
-                                        dic = json.loads(r.text)
-                                        if "issuer" in dic.keys():
-                                            issuer = dic["issuer"]
-                                        else:
-                                            issuer = ''
                                 while 1 < 2:
+                                    with allure.step("get token"):
+                                        data = {
+                                            "type": "card",
+                                            "number": "4242424242424242",
+                                            "expiry_month": 6,
+                                            "expiry_year": 2025,
+                                            "name": "Bruce Wayne",
+                                            "cvv": "100",
+                                            "billing_address": {
+                                                "address_line1": "Checkout.com",
+                                                "address_line2": "90 Tottenham Court Road",
+                                                "city": "London",
+                                                "state": "London",
+                                                "zip": "W1T 4TJ",
+                                                "country": x
+                                            }
+                                        }
+                                        headers2 = {
+                                            "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
+                                            "Content-Type": "application/json"
+                                        }
+                                        r = session.request('POST', url='https://api.sandbox.checkout.com/tokens',
+                                                            data=json.dumps(data), headers=headers2)
+                                        with allure.step("校验状态码"):
+                                            assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(
+                                                r.status_code)
+                                            token = r.json()['token']
+                                            dic = json.loads(r.text)
+                                            if "issuer" in dic.keys():
+                                                issuer = dic["issuer"]
+                                            else:
+                                                issuer = ''
                                     crypto_list = ApiFunction.get_buy_crypto_transfer_list(150, t_fee, pairs=z,
                                                                                            ccy='buy', country=x)
                                     data = {
@@ -300,39 +300,6 @@ class TestWidgetApi:
                                                                                                                       x,
                                                                                                                       r.text)
                             with allure.step("创建数字货币购买交易信息，ccy 是spend"):
-                                with allure.step("get token"):
-                                    data = {
-                                        "type": "card",
-                                        "number": "4242424242424242",
-                                        "expiry_month": 6,
-                                        "expiry_year": 2025,
-                                        "name": "Bruce Wayne",
-                                        "cvv": "100",
-                                        "billing_address": {
-                                            "address_line1": "Checkout.com",
-                                            "address_line2": "90 Tottenham Court Road",
-                                            "city": "London",
-                                            "state": "London",
-                                            "zip": "W1T 4TJ",
-                                            "country": x
-                                        }
-                                    }
-                                    headers2 = {
-                                        "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
-                                        "Content-Type": "application/json"
-                                    }
-                                    r = session.request('POST', url='https://api.sandbox.checkout.com/tokens',
-                                                        data=json.dumps(data),
-                                                        headers=headers2)
-                                    with allure.step("校验状态码"):
-                                        assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(
-                                            r.status_code)
-                                        token = r.json()['token']
-                                        dic = json.loads(r.text)
-                                        if "issuer" in dic.keys():
-                                            issuer = dic["issuer"]
-                                        else:
-                                            issuer = ''
                                 with allure.step("解决最大/最小值"):
                                     if 'CLF' in z:
                                         amount = 1000
@@ -361,6 +328,39 @@ class TestWidgetApi:
                                     else:
                                         amount = 550
                                 while 1 < 2:
+                                    with allure.step("get token"):
+                                        data = {
+                                            "type": "card",
+                                            "number": "4242424242424242",
+                                            "expiry_month": 6,
+                                            "expiry_year": 2025,
+                                            "name": "Bruce Wayne",
+                                            "cvv": "100",
+                                            "billing_address": {
+                                                "address_line1": "Checkout.com",
+                                                "address_line2": "90 Tottenham Court Road",
+                                                "city": "London",
+                                                "state": "London",
+                                                "zip": "W1T 4TJ",
+                                                "country": x
+                                            }
+                                        }
+                                        headers2 = {
+                                            "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
+                                            "Content-Type": "application/json"
+                                        }
+                                        r = session.request('POST', url='https://api.sandbox.checkout.com/tokens',
+                                                            data=json.dumps(data),
+                                                            headers=headers2)
+                                        with allure.step("校验状态码"):
+                                            assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(
+                                                r.status_code)
+                                            token = r.json()['token']
+                                            dic = json.loads(r.text)
+                                            if "issuer" in dic.keys():
+                                                issuer = dic["issuer"]
+                                            else:
+                                                issuer = ''
                                     crypto_list = ApiFunction.get_buy_crypto_transfer_list(amount, t_fee, pairs=z,
                                                                                            ccy='spend', country=x)
                                     data = {
@@ -460,39 +460,39 @@ class TestWidgetApi:
             for x in get_json()['checkOutAreaList2']:
                 with allure.step("创建数字货币购买交易信息，ccy 是buy"):
                     sleep(1)
-                    with allure.step("get token"):
-                        data = {
-                            "type": "card",
-                            "number": "4242424242424242",
-                            "expiry_month": 6,
-                            "expiry_year": 2025,
-                            "name": "Bruce Wayne",
-                            "cvv": "100",
-                            "billing_address": {
-                                "address_line1": "Checkout.com",
-                                "address_line2": "90 Tottenham Court Road",
-                                "city": "London",
-                                "state": "London",
-                                "zip": "W1T 4TJ",
-                                "country": x
-                            }
-                        }
-                        headers2 = {
-                            "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
-                            "Content-Type": "application/json"
-                        }
-                        r = session.request('POST', url='https://api.sandbox.checkout.com/tokens',
-                                            data=json.dumps(data), headers=headers2)
-                        with allure.step("校验状态码"):
-                            assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(
-                                r.status_code)
-                            token = r.json()['token']
-                            dic = json.loads(r.text)
-                            if "issuer" in dic.keys():
-                                issuer = dic["issuer"]
-                            else:
-                                issuer = ''
                     while 1 < 2:
+                        with allure.step("get token"):
+                            data = {
+                                "type": "card",
+                                "number": "4242424242424242",
+                                "expiry_month": 6,
+                                "expiry_year": 2025,
+                                "name": "Bruce Wayne",
+                                "cvv": "100",
+                                "billing_address": {
+                                    "address_line1": "Checkout.com",
+                                    "address_line2": "90 Tottenham Court Road",
+                                    "city": "London",
+                                    "state": "London",
+                                    "zip": "W1T 4TJ",
+                                    "country": x
+                                }
+                            }
+                            headers2 = {
+                                "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
+                                "Content-Type": "application/json"
+                            }
+                            r = session.request('POST', url='https://api.sandbox.checkout.com/tokens',
+                                                data=json.dumps(data), headers=headers2)
+                            with allure.step("校验状态码"):
+                                assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(
+                                    r.status_code)
+                                token = r.json()['token']
+                                dic = json.loads(r.text)
+                                if "issuer" in dic.keys():
+                                    issuer = dic["issuer"]
+                                else:
+                                    issuer = ''
                         crypto_list = ApiFunction.get_buy_crypto_transfer_list(150, '12', pairs=z,
                                                                                ccy='buy', country=x)
                         data = {
@@ -640,6 +640,39 @@ class TestWidgetApi:
                         else:
                             amount = 550
                     while 1 < 2:
+                        with allure.step("get token"):
+                            data = {
+                                "type": "card",
+                                "number": "4242424242424242",
+                                "expiry_month": 6,
+                                "expiry_year": 2025,
+                                "name": "Bruce Wayne",
+                                "cvv": "100",
+                                "billing_address": {
+                                    "address_line1": "Checkout.com",
+                                    "address_line2": "90 Tottenham Court Road",
+                                    "city": "London",
+                                    "state": "London",
+                                    "zip": "W1T 4TJ",
+                                    "country": x
+                                }
+                            }
+                            headers2 = {
+                                "Authorization": "Bearer pk_sbox_cqecp4mj36curomekpmzd42cjeg",
+                                "Content-Type": "application/json"
+                            }
+                            r = session.request('POST', url='https://api.sandbox.checkout.com/tokens',
+                                                data=json.dumps(data),
+                                                headers=headers2)
+                            with allure.step("校验状态码"):
+                                assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(
+                                    r.status_code)
+                                token = r.json()['token']
+                                dic = json.loads(r.text)
+                                if "issuer" in dic.keys():
+                                    issuer = dic["issuer"]
+                                else:
+                                    issuer = ''
                         crypto_list = ApiFunction.get_buy_crypto_transfer_list(amount, '12', pairs=z,
                                                                                ccy='spend', country=x)
                         data = {

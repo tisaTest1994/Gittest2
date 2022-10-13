@@ -366,6 +366,7 @@ class ApiFunction:
         r = session.request('POST', url='{}/account/verify-code/email'.format(env_url), data=json.dumps(data), headers=headers)
         assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         assert r.json() == {}, "收取验证码失败，返回值是{}".format(r.text)
+        sleep(3)
         code = ApiFunction.get_email_code(type)
         return code
 
