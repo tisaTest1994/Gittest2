@@ -75,7 +75,7 @@ class TestAccountingWalletApi:
                                         currency_list = str(line_info[4]).split(':')[1].strip("'").split(',')
                                         for z in currency_list:
                                             sql = "select * from wallet where code = {} and account_code = {} and status = {} and allow_overdraft = {} and balance_direction = {} and wallet_type = '{}';".format(
-                                                str(z),
+                                                '{}'.format(z),
                                                 int(float(str(line_info[8]).split(':')[1])),
                                                 status, allow_overdraft, balance_direction, wallet_subType)
                                             print(sql)
