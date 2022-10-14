@@ -56,6 +56,7 @@ class TestBalanceApi:
                     connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                     connect_headers['ACCESS-NONCE'] = nonce
                 with allure.step("账户可用余额列表"):
+                    print(i['symbol'])
                     r = session.request('GET', url='{}/accounts/{}/balances/{}'.format(connect_url, account_vid, i['symbol']), headers=connect_headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))

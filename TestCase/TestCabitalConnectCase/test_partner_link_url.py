@@ -49,6 +49,7 @@ class TestWidgetApi:
                ('transactionlist', 'https://widget.latibac.com/connect/link?feature=link'),
               ('onboarding', 'https://widget.latibac.com/onboarding?'),
               ]
+
     @allure.title('test_link_001')
     @allure.description('partner linked用户link时根据参数跳转对应地址')
     @pytest.mark.parametrize('feature, expect_url', linked, ids=linked_case_title)
