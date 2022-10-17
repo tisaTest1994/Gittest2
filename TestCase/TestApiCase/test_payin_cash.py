@@ -17,7 +17,9 @@ class TestPayInCashApi:
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
-                for i in get_json()['cash_list']:
+                cash_list_local = get_json()['cash_list']
+                cash_list_local.remove('USD')
+                for i in cash_list_local:
                     assert i in str(r.json()['fiat']), "获得法币充值币种错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_cash_002')
@@ -30,7 +32,9 @@ class TestPayInCashApi:
             with allure.step("校验返回值"):
                 for i in get_json()['crypto_list']:
                     assert i in str(r.json()['crypto']), "获得法币充值币种错误，返回值是{}".format(r.text)
-                for i in get_json()['cash_list']:
+                cash_list_local = get_json()['cash_list']
+                cash_list_local.remove('USD')
+                for i in cash_list_local:
                     assert i in str(r.json()['fiat']), "获得法币充值币种错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_cash_004')
@@ -85,7 +89,7 @@ class TestPayInCashApi:
         with allure.step("Plaid 转出币种限制"):
             balance_list = get_json()['cash_list']
             for i in balance_list:
-                if i != 'CHF' and i != 'BRL' and i != 'VND':
+                if i != 'CHF' and i != 'BRL' and i != 'VND' and i != 'USD':
                     r = session.request('GET', url='{}/pay/plaid/limit/{}'.format(env_url, i), headers=headers)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))

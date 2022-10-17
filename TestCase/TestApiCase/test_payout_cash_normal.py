@@ -76,7 +76,9 @@ class TestPayoutCashNormalApi:
                 for y in r.json()['fiat']:
                     if y['status'] == 1:
                         cash_list.append(y['name'])
-                assert (set(cash_list) == set(get_json()['cash_list'])), '获得法币提现币种错误，接口返回币种是{}'.format(cash_list)
+                cash_list_local = get_json()['cash_list']
+                cash_list_local.remove('USD')
+                assert (set(cash_list) == set(cash_list_local)), '获得法币提现币种错误，接口返回币种是{}'.format(cash_list)
 
     @allure.title('test_payout_cash_normal_003')
     @allure.description('开启法币提现画面')
@@ -612,7 +614,7 @@ class TestPayoutCashNormalApi:
         headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
         data = {
             "code": "USD",
-            "amount": "200",
+            "amount": "50",
             "payment_method": "SWIFT",
             "account_name": "Richard External QA",
             "bank_account_id": "dfaeabff-3d48-4e5b-9d25-950c18782998"
