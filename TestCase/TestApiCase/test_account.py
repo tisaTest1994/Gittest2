@@ -102,10 +102,6 @@ class TestAccountApi:
                 "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -121,10 +117,6 @@ class TestAccountApi:
                 "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -572,10 +564,6 @@ class TestAccountApi:
                 'version': r.json()['privacyPolicyVersion']
             }
             r = session.request('GET', url='{}/account/privacy'.format(env_url), params=params, headers=headers)
-            with allure.step("状态码和返回值"):
-    
-                logger.info('状态码是{}'.format(str(r.status_code)))
-                logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
@@ -591,10 +579,6 @@ class TestAccountApi:
                 'version': r.json()['termOfServiceVersion']
             }
             r = session.request('GET', url='{}/account/tos'.format(env_url), params=params, headers=headers)
-            with allure.step("状态码和返回值"):
-    
-                logger.info('状态码是{}'.format(str(r.status_code)))
-                logger.info('返回值是{}'.format(str(r.text)))
             with allure.step("校验状态码"):
                 assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
             with allure.step("校验返回值"):
@@ -635,10 +619,6 @@ class TestAccountApi:
                 "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -657,10 +637,6 @@ class TestAccountApi:
                 "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signIn'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -672,10 +648,6 @@ class TestAccountApi:
                 'refreshToken': refreshToken
             }
             r = session.request('POST', url='{}/account/user/logout'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -686,10 +658,6 @@ class TestAccountApi:
             }
             r = session.request('POST', url='{}/account/user/refreshToken'.format(env_url), data=json.dumps(data),
                                 headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 401, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -712,10 +680,6 @@ class TestAccountApi:
                 }
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -746,10 +710,6 @@ class TestAccountApi:
                 }
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -780,10 +740,6 @@ class TestAccountApi:
                 }
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -803,10 +759,6 @@ class TestAccountApi:
                 "password": get_json()['email']['password']
             }
             r = session.request('POST', url='{}/account/user/signUp'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -818,10 +770,6 @@ class TestAccountApi:
     def test_account_043(self):
         with allure.step("获取已经设置密码用户的必填系统级数据"):
             r = session.request('GET', url='{}/account/info/system/required'.format(env_url), headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -835,10 +783,6 @@ class TestAccountApi:
                 "password": "Zcdsw123"
             }
             r = session.request('POST', url='{}/account/info/system/required'.format(env_url), data=json.dumps(data), headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 400, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -853,10 +797,6 @@ class TestAccountApi:
                 'type': 'referral_code'
             }
             r = session.request('GET', url='{}/recruit/code_verification/{}'.format(env_url, code), params=params, headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -871,10 +811,6 @@ class TestAccountApi:
                 'type': 'referral_code'
             }
             r = session.request('GET', url='{}/recruit/code_verification/{}'.format(env_url, code), params=params, headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
@@ -889,10 +825,6 @@ class TestAccountApi:
                 'type': 'promo_code'
             }
             r = session.request('GET', url='{}/recruit/code_verification/{}'.format(env_url, code), params=params, headers=headers)
-        with allure.step("状态码和返回值"):
-
-            logger.info('状态码是{}'.format(str(r.status_code)))
-            logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
