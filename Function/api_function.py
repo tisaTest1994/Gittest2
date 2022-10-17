@@ -535,17 +535,20 @@ class ApiFunction:
             'partner_id': get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
         }
         r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers, params=params)
-        payment_currencies = r.json()['payment_currencies']
-        buy_crypto_currency = []
-        buy_crypto_currency_random = []
-        for i in range(0, len(payment_currencies)):
-            buy_crypto_currency.append('USDT-{}'.format(payment_currencies[i]['code']))
-        if type == 'random':
-            j = random.randint(0, len(buy_crypto_currency))
-            buy_crypto_currency_random.append(buy_crypto_currency[j])
-            return buy_crypto_currency_random
+        if r.json()['code'] == '101034':
+            return []
         else:
-            return buy_crypto_currency
+            payment_currencies = r.json()['payment_currencies']
+            buy_crypto_currency = []
+            buy_crypto_currency_random = []
+            for i in range(0, len(payment_currencies)):
+                buy_crypto_currency.append('USDT-{}'.format(payment_currencies[i]['code']))
+            if type == 'random':
+                j = random.randint(0, len(buy_crypto_currency))
+                buy_crypto_currency_random.append(buy_crypto_currency[j])
+                return buy_crypto_currency_random
+            else:
+                return buy_crypto_currency
 
     # 获取buy crypto指定币种的最大最小值
     @staticmethod
