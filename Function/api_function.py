@@ -535,7 +535,7 @@ class ApiFunction:
             'partner_id': get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
         }
         r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers, params=params)
-        if r.json()['code'] == '101034':
+        if '101034' in r.text:
             return []
         else:
             payment_currencies = r.json()['payment_currencies']
