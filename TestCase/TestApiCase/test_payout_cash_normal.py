@@ -584,12 +584,15 @@ class TestPayoutCashNormalApi:
     @allure.title('test_payout_cash_normal_017')
     @allure.description('确认USD法币提现交易')
     def test_payout_cash_normal_017(self):
+        with allure.step("切换用户"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+                account=get_json()['email']['payout_email'])
         data = {
             "code": "USD",
             "amount": "200",
             "payment_method": "SWIFT",
-            "account_name": "kimi w",
-            "bank_account_id": "b2e00af4-e1c2-4c46-8171-c9bf30e7b588"
+            "account_name": "Richard External QA",
+            "bank_account_id": "dfaeabff-3d48-4e5b-9d25-950c18782998"
         }
         with allure.step("确认USD法币提现交易"):
             r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), headers=headers, data=json.dumps(data))
@@ -617,7 +620,7 @@ class TestPayoutCashNormalApi:
             "amount": "50",
             "payment_method": "SWIFT",
             "account_name": "Richard External QA",
-            "bank_account_id": "dfaeabff-3d48-4e5b-9d25-950c18782998"
+            "bank_account_id": "1d39f080-6990-405f-9e8d-509780bad1e9"
         }
         with allure.step("创建USD法币提现交易"):
             r = session.request('POST', url='{}/pay/withdraw/fiat'.format(env_url), headers=headers, data=json.dumps(data))

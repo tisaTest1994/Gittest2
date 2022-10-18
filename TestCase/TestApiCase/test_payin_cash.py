@@ -177,7 +177,6 @@ class TestPayInCashApi:
                                 url='{}/Partner/Orders/{}'.format(get_json()['sandbox']['BRL']['url'], order_id),
                                 data=data, auth=(get_json()['sandbox']['BRL']['username'],
                                                  get_json()['sandbox']['BRL']['password']))
-            print(r.text)
 
     @allure.title('test_pay_in_cash_011')
     @allure.description('USD可充值的种类列表')
