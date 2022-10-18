@@ -30,23 +30,19 @@ class TestMarketApi:
     def test_market_002(self):
         with allure.step("获得行情信息"):
             for i in get_json()['crypto_list']:
-                params = {
-                    "code": i
-                }
-                r = session.request('GET', url='{}/marketstat/public/ticker'.format(env_url), params=params, headers=headers)
-                with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                with allure.step("校验返回值"):
-                    assert 'price_24h_pcnt' in r.text, "获得价格曲线错误，返回值是{}".format(r.text)
+                if i != 'USD':
+                    params = {
+                        "code": i
+                    }
+                    r = session.request('GET', url='{}/marketstat/public/ticker'.format(env_url), params=params,
+                                        headers=headers)
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    with allure.step("校验返回值"):
+                        assert 'price_24h_pcnt' in r.text, "获得价格曲线错误，返回值是{}".format(r.text)
 
-    # @allure.title('test_market_003 给测试环境注资')
-    # def test_market_003(self):
-    #     with allure.step("给测试环境注资"):
-    #         r = session.request('GET', url='https://faucet.ropsten.be/donate/WV98W3a7hYhBRIDPRGk8D/0xaE346B37A0A7ffd5F224Cc2fC2c4C0E1bC541D67')
-    #         print(r.json())
-
-    @allure.title('test_market_004 首页获得数字货币报价')
-    def test_market_004(self):
+    @allure.title('test_market_003 首页获得数字货币报价')
+    def test_market_003(self):
         with allure.step("首页获得数字货币报价"):
             params = {
                 'codes': 'BTC,ETH'
