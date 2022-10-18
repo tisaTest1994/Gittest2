@@ -165,9 +165,9 @@ class TestBindBankCardApi:
 
     @allure.title('test_bind_bank_card_007')
     @allure.description('解绑USD银行卡')
-    @pytest.mark.skip(reason='手动操作')
+    #@pytest.mark.skip(reason='手动操作')
     def test_bind_bank_card_007(self):
-        bank_id = 'bfcda6e0-f16d-4f07-9f69-f4b9025724ab'
+        bank_id = '5a54dccb-683b-4046-b245-46b240e9e28b'
         data = {
             'id': 'bank_id'
         }

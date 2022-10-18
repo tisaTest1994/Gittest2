@@ -170,6 +170,7 @@ class TestDepositApi:
     def test_deposit_005(self, partner):
         with allure.step("获取用户VID"):
             account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
+            #account_vid = '162ffc37-306b-4e60-a0f4-bf986a68141a'
         with allure.step("判断partner是否支持deposit"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['symbol'] == 'USD' and i['deposit_methods'][0] == 'SWIFT':
@@ -190,17 +191,12 @@ class TestDepositApi:
                         with allure.step("校验状态码"):
                             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                         with allure.step("校验返回值"):
-                            assert r.json()['meta'][
-                                       'account_name'] == 'Cabital Fintech (LT) UAB', "获取账户单币入账信息, account_name返回值是{}".format(
-                                r.text)
-                            assert r.json()['meta']['ref_code'] == '8VVSNP', "获取账户单币入账信息,ref_code返回值是{}".format(r.text)
-                            assert r.json()['meta']['account_number'] == '00003157', "获取账户单币入账信息, account_number返回值是{}".format(r.text)
-                            assert r.json()['meta']['sort_code'] == '040541', "获取账户单币入账信息, sort_code返回值是{}".format(
-                                r.text)
-                            assert r.json()['meta'][
-                                       'bank_name'] == 'BCB Payments Ltd', "获取账户单币入账信息, bank_name返回值是{}".format(r.text)
-                            assert r.json()['meta'][
-                                       'bank_address'] == '5 Merchant Square London', "获取账户单币入账信息, bank_address错误，返回值是{}".format(
-                                r.text)
-                            assert r.json()['meta'][
-                                       'bank_country'] == 'United Kingdom', "获取账户单币入账信息, bank_country返回值是{}".format(r.text)
+                            assert r.json()['symbol'] == 'USD', "获取账户单币入账信息, symbol返回值是{}".format(r.text)
+                            assert r.json()['method'] == 'SWIFT', "获取账户单币入账信息, method返回值是{}".format(r.text)
+                            assert r.json()['meta']['bound_bank_accounts'][0]['source_bank_account']['account_name'] == 'Wan yilei', "获取账户单币入账信息, account_name返回值是{}".format(r.text)
+                            assert r.json()['meta']['bound_bank_accounts'][0]['source_bank_account']['account_number'] == '1234223432344236', "获取账户单币入账信息, account_number返回值是{}".format(r.text)
+                            assert r.json()['meta']['bound_bank_accounts'][0]['source_bank_account']['aba_routing_number'] == '121000248', "获取账户单币入账信息, aba_routing_number返回值是{}".format(r.text)
+
+
+
+

@@ -13,7 +13,8 @@ class TestTransferApi:
     @allure.description('partner发起请求，把资金从cabital转移到partner账户')
     def test_transfer_001(self, partner):
         with allure.step("获取用户的account_vid"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard'][
+                'account_vid']
         with allure.step("获得不同币种"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['config']['debit']['allow']:
@@ -36,7 +37,8 @@ class TestTransferApi:
                         sign = ApiFunction.make_signature(unix_time=str(unix_time), method='POST',
                                                           url='/api/v1/accounts/{}/transfers'.format(account_vid),
                                                           connect_type=partner, nonce=nonce, body=json.dumps(data))
-                        connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
+                        connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner][
+                            'Partner_ID']
                         connect_headers['ACCESS-SIGN'] = sign
                         connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                         connect_headers['ACCESS-NONCE'] = nonce
@@ -65,12 +67,14 @@ class TestTransferApi:
                                 sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET',
                                                                   url='/api/v1/recon/transfers/{}'.format(external_id),
                                                                   connect_type=partner, nonce=nonce)
-                                connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
+                                connect_headers['ACCESS-KEY'] = \
+                                get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
                                 connect_headers['ACCESS-SIGN'] = sign
                                 connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                                 connect_headers['ACCESS-NONCE'] = nonce
                             with allure.step("查询转账记录"):
-                                r = session.request('GET', url='{}/recon/transfers/{}'.format(connect_url, external_id), headers=connect_headers)
+                                r = session.request('GET', url='{}/recon/transfers/{}'.format(connect_url, external_id),
+                                                    headers=connect_headers)
                             with allure.step("状态码和返回值"):
                                 logger.info('状态码是{}'.format(str(r.status_code)))
                                 logger.info('返回值是{}'.format(str(r.text)))
@@ -81,13 +85,18 @@ class TestTransferApi:
                     with allure.step("操作后的balance"):
                         new_balance = ApiFunction.connect_get_balance(partner, account_vid, i['symbol'])['balances']
                     with allure.step("计算用户balance变化"):
-                        assert Decimal(old_balance) - Decimal(data['amount']) == Decimal(new_balance), "用户balance变化错误，操作前的balance是{},操作金额是{},操作后的金额是{}".format(old_balance, str(giveAmount(i['symbol'])), new_balance)
+                        assert Decimal(old_balance) - Decimal(data['amount']) == Decimal(
+                            new_balance), "用户balance变化错误，操作前的balance是{},操作金额是{},操作后的金额是{}".format(old_balance,
+                                                                                                  str(giveAmount(
+                                                                                                      i['symbol'])),
+                                                                                                  new_balance)
 
     @allure.title('test_transfer_002')
     @allure.description('partner发起请求，把资金从cabital转移到partner账户并且关联C+T交易')
     def test_transfer_002(self, partner):
         with allure.step("获取用户的account_vid"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard'][
+                'account_vid']
         with allure.step("获取换汇支持币种对"):
             cfx_list = []
             for z in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['pairs']:
@@ -121,7 +130,8 @@ class TestTransferApi:
                                                                       account_vid),
                                                                   connect_type=partner, nonce=nonce,
                                                                   body=json.dumps(data))
-                                connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
+                                connect_headers['ACCESS-KEY'] = \
+                                get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
                                 connect_headers['ACCESS-SIGN'] = sign
                                 connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                                 connect_headers['ACCESS-NONCE'] = nonce
@@ -151,7 +161,7 @@ class TestTransferApi:
                                                                               external_id),
                                                                           connect_type=partner, nonce=nonce)
                                         connect_headers['ACCESS-KEY'] = \
-                                        get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
+                                            get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
                                         connect_headers['ACCESS-SIGN'] = sign
                                         connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                                         connect_headers['ACCESS-NONCE'] = nonce
@@ -171,7 +181,8 @@ class TestTransferApi:
     @allure.description('partner发起请求，把资金从partner转移到cabital账户')
     def test_transfer_003(self, partner):
         with allure.step("获取用户的account_vid"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard'][
+                'account_vid']
         with allure.step("获得不同币种"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['config']['credit']['allow']:
@@ -194,7 +205,8 @@ class TestTransferApi:
                         sign = ApiFunction.make_signature(unix_time=str(unix_time), method='POST',
                                                           url='/api/v1/accounts/{}/transfers'.format(account_vid),
                                                           connect_type=partner, nonce=nonce, body=json.dumps(data))
-                        connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
+                        connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner][
+                            'Partner_ID']
                         connect_headers['ACCESS-SIGN'] = sign
                         connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                         connect_headers['ACCESS-NONCE'] = nonce
@@ -223,12 +235,14 @@ class TestTransferApi:
                                 sign = ApiFunction.make_signature(unix_time=str(unix_time), method='GET',
                                                                   url='/api/v1/recon/transfers/{}'.format(external_id),
                                                                   connect_type=partner, nonce=nonce)
-                                connect_headers['ACCESS-KEY'] = get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
+                                connect_headers['ACCESS-KEY'] = \
+                                get_json(file='partner_info.json')[get_json()['env']][partner]['Partner_ID']
                                 connect_headers['ACCESS-SIGN'] = sign
                                 connect_headers['ACCESS-TIMESTAMP'] = str(unix_time)
                                 connect_headers['ACCESS-NONCE'] = nonce
                             with allure.step("查询转账记录"):
-                                r = session.request('GET', url='{}/recon/transfers/{}'.format(connect_url, external_id), headers=connect_headers)
+                                r = session.request('GET', url='{}/recon/transfers/{}'.format(connect_url, external_id),
+                                                    headers=connect_headers)
                             with allure.step("状态码和返回值"):
                                 logger.info('状态码是{}'.format(str(r.status_code)))
                                 logger.info('返回值是{}'.format(str(r.text)))
@@ -240,7 +254,10 @@ class TestTransferApi:
                                 new_balance = ApiFunction.connect_get_balance(partner, account_vid, i['symbol'])[
                                     'balances']
                             with allure.step("获取手续费"):
-                                credit_fee = i['fees']['credit_fee']['value']
+                                if i['fees']['credit_fee']['value'] == '':
+                                    credit_fee = '0'
+                                else:
+                                    credit_fee = i['fees']['credit_fee']['value']
                             with allure.step("计算用户balance变化"):
                                 assert Decimal(old_balance) + Decimal(data['amount']) - Decimal(credit_fee) == Decimal(
                                     new_balance), "用户balance变化错误，操作前的balance是{},操作金额是{},操作后的金额是{}".format(old_balance,
