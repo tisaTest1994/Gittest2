@@ -602,9 +602,9 @@ class TestPayoutCashNormalApi:
         with allure.step("校验返回值"):
             assert r.json() == {}, "确认USD法币提现交易错误，返回值是{}".format(r.text)
 
-    @allure.title('test_payout_cash_normal_017')
+    @allure.title('test_payout_cash_normal_018')
     @allure.description('创建USD法币提现交易')
-    def test_payout_cash_normal_017(self):
+    def test_payout_cash_normal_018(self):
         with allure.step("切换用户"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
