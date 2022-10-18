@@ -552,12 +552,10 @@ class TestPayoutCashNormalApi:
     @allure.title('test_payout_cash_normal_015')
     @allure.description('获取用户提现白名单')
     def test_payout_cash_normal_015(self):
-        # headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-        #     account=get_json()['email']['payout_email'])
-        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice1012001@cabital.com', password='Zcdsw123')
+        headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
+            account=get_json()['email']['payout_email'])
         with allure.step("获取用户提现白名单"):
             r = session.request('GET', url='{}/pay/user-whitelist'.format(env_url), headers=headers)
-            print(r.json())
         with allure.step("校验状态码"):
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
