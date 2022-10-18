@@ -14,14 +14,27 @@ class TestPayInCryptoApi:
     def test_pay_in_crypto_001(self):
         with allure.step("查询转入记录"):
             currency = get_json()['crypto_list']
-            data = {}
+            data = {
+                'code': '',
+                'chain': ''
+            }
             for i in currency:
                 data['code'] = i
-                r = session.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data, headers=headers)
-                with allure.step("校验状态码"):
-                    assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
-                with allure.step("校验返回值"):
-                    assert r.json()[0]['code'] == i, "查询数字货币转入地址错误，返回值是{}".format(r.text)
+                if i == 'USD':
+                    data['code'] = 'USDC'
+                    data['chain'] = 'ETH'
+                    r = session.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data,
+                                        headers=headers)
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    with allure.step("校验返回值"):
+                        assert r.json()[0]['code'] == 'USDC', "查询数字货币转入地址错误，返回值是{}".format(r.text)
+                else:
+                    r = session.request('GET', url='{}/pay/deposit/addresses'.format(env_url), params=data, headers=headers)
+                    with allure.step("校验状态码"):
+                        assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+                    with allure.step("校验返回值"):
+                        assert r.json()[0]['code'] == i, "查询数字货币转入地址错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_crypto_002')
     @allure.description('使用错误币种查询数字货币转入地址')
@@ -39,7 +52,7 @@ class TestPayInCryptoApi:
                         assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
                         assert r.json()['code'] == '103021', "使用错误币种查询数字货币转入地址错误，返回值是{}".format(r.text)
-                        assert r.json() == [], "使用错误币种查询数字货币转入地址错误，返回值是{}".format(r.text)
+                        assert r.json()['message'] == 'Invalid code', "使用错误币种查询数字货币转入地址错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_crypto_003')
     @allure.description('使用指定链ETH查询数字货币转入地址')
