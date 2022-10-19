@@ -709,6 +709,8 @@ class TestPayoutCashAbnormalApi:
                     logger.info('状态码是{}'.format(str(r.status_code)))
                     logger.info('返回值是{}'.format(str(r.text)))
                 with allure.step("校验返回值"):
+                    if r.status_code == 504 and r.json()['message'] == 'context deadline exceeded':
+                        pytest.skip(msg='后端接口不稳定导致504')
                     assert r.json()['code'] == '103022',\
                         "确认EUR法币提现交易-错误payment method返回值错误，接口返回值是{}".format(r.text)
             with allure.step("创建EUR法币提现交易-错误payment method"):
@@ -1035,6 +1037,8 @@ class TestPayoutCashAbnormalApi:
                     logger.info('状态码是{}'.format(str(r2.status_code)))
                     logger.info('返回值是{}'.format(str(r2.text)))
                 with allure.step("校验状态码"):
+                    if r2.status_code == 504 and r2.json()['message'] == 'context deadline exceeded':
+                        pytest.skip(msg='后端接口不稳定导致504')
                     assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
                     assert r2.json()['code'] == '103026', \
@@ -1069,6 +1073,8 @@ class TestPayoutCashAbnormalApi:
                                     data=json.dumps(data),
                                     headers=headers)
                 with allure.step("校验状态码"):
+                    if r.status_code == 504 and r.json()['message'] == 'context deadline exceeded':
+                        pytest.skip(msg='后端接口不稳定导致504')
                     assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("校验返回值"):
                     assert r.json()['code'] == '103015', "确认GBP法币提现交易-用户名字带有中文字符提现失败错误，返回值是{}".format(r.text)
@@ -1079,7 +1085,7 @@ class TestPayoutCashAbnormalApi:
                     logger.info('状态码是{}'.format(str(r2.status_code)))
                     logger.info('返回值是{}'.format(str(r2.text)))
                 with allure.step("校验状态码"):
-                    if r.status_code == 504 and r.json()['message'] == 'context deadline exceeded':
+                    if r2.status_code == 504 and r2.json()['message'] == 'context deadline exceeded':
                         pytest.skip(msg='后端接口不稳定导致504')
                     assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                 with allure.step("校验返回值"):
@@ -1119,6 +1125,8 @@ class TestPayoutCashAbnormalApi:
                 r = session.request('POST', url='{}/pay/withdraw/fiat/validate'.format(env_url), data=json.dumps(data),
                                     headers=headers)
                 with allure.step("校验状态码"):
+                    if r.status_code == 504 and r.json()['message'] == 'context deadline exceeded':
+                        pytest.skip(msg='后端接口不稳定导致504')
                     assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
                 with allure.step("状态码和返回值"):
                     logger.info('状态码是{}'.format(str(r.status_code)))
