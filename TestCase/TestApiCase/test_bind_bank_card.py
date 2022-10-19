@@ -134,7 +134,7 @@ class TestBindBankCardApi:
     @allure.title('test_bind_bank_card_005')
     @allure.description('获取USD某个银行卡具体信息')
     def test_bind_bank_card_005(self):
-        bank_id = 'bfcda6e0-f16d-4f07-9f69-f4b9025724ab'
+        bank_id = 'b949a136-d8ae-4f44-8acd-9e989eca2bd0'
         with allure.step("获取某个银行卡具体信息"):
             r = session.request('GET', url='{}/pay/bank-account/{}'.format(env_url, bank_id), headers=headers)
         with allure.step("状态码和返回值"):
