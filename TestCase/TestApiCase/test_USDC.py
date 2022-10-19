@@ -18,12 +18,12 @@ class TestUSDCApi:
             'Authorization'] = "Bearer QVBJX0tFWTozMzY4OGI0ZTdjYTgzYjlmODU2ODIzNjlhZTU2OGEzZTplMWNjMWQyMGQxNThiMTUwMDU5NzI0N2ZjMmYxZTA4OQ=="
         with allure.step("payin"):
             data = {
-                'trackingRef': 'CIR25EANVT',
+                'trackingRef': 'CRYPTO99',
                 'beneficiaryBank': {
-                    'accountNumber': '123119341897'
+                    'accountNumber': '123910895851'
                 },
                 'amount': {
-                    'amount': '23.00',
+                    'amount': '45.00',
                     'currency': 'USD'
                 }
             }
@@ -113,7 +113,7 @@ class TestUSDCApi:
         headers[
             'Authorization'] = "Bearer QVBJX0tFWTozMzY4OGI0ZTdjYTgzYjlmODU2ODIzNjlhZTU2OGEzZTplMWNjMWQyMGQxNThiMTUwMDU5NzI0N2ZjMmYxZTA4OQ=="
         with allure.step("check"):
-            circle_id = '8d9b4217-3a2e-40f7-a6a8-94b65fb8fd4d'
+            circle_id = '91942984-06b9-479a-a5ad-3387ded32f8e'
             r = session.request('GET', url='https://api-sandbox.circle.com/v1/payments/{}'.format(circle_id),
                                 headers=headers)
             with allure.step("状态码和返回值"):

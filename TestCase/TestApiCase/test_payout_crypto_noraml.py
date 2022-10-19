@@ -239,7 +239,7 @@ class TestPayoutCryptoNormalApi:
             data = {
                 "amount": '100.02',
                 "code": 'USDC',
-                "address": '0x465d39f446f3EE9867B318A5bB98EF7dA796DFbA',
+                "address": '0xF2a4ee82046d324263b3F3BC95b9E8a555908A94',
                 "chain": "ETH"
             }
         with allure.step("确认BTC虚拟货币提现交易"):

@@ -58,7 +58,7 @@ class TestSearchOrderApi:
     @allure.title('test_search_order_003')
     @allure.description('以轉帳交易 ID 取得單一轉帳交易詳細資訊')
     def test_search_order_003(self, partner):
-        transfer_id = "0b3729d3-cb6c-4e34-9d3c-8d7fc83b8f12"
+        transfer_id = "23dcdf66-c2ec-48ba-acba-d466880c2abd"
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(20) + str(time.time()).split('.')[0]
@@ -80,7 +80,7 @@ class TestSearchOrderApi:
     @allure.title('test_search_order_004')
     @allure.description('以合作方轉帳交易 ID 取得單一轉帳交易詳細資訊')
     def test_search_order_004(self, partner):
-        external_id = "WU9sq8T8ewJtZBGSDEJ7mtlWu"
+        external_id = "vy8yiyLKxXxx4TsvpWugSS8y4"
         with allure.step("验签"):
             unix_time = int(time.time())
             nonce = generate_string(20) + str(time.time()).split('.')[0]

@@ -59,10 +59,8 @@ class TestWidgetApi:
     @allure.title('test_widget_003')
     @allure.description('transfer debit 交易')
     def test_widget_003(self, partner):
-        with allure.step("划转"):
-            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard'][
-                'account_vid']
-
+        with allure.step("获取vid"):
+            account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['config']['transfer_debit']['allow'] is True:
                     with allure.step("获得transfer前金额"):
@@ -72,8 +70,7 @@ class TestWidgetApi:
                         "code": i['symbol'],
                         "direction": "DEBIT",
                         "account_vid":
-                            get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list'][
-                                'richard']['account_vid'],
+                            get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid'],
                         "user_ext_ref":
                             get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list'][
                                 'richard']['user_ref_id']
