@@ -147,7 +147,6 @@ class TestDepositApi:
                                             url='{}/accounts/{}/balances/{}/deposit/{}'.
                                             format(connect_url, account_vid, 'GBP', 'FPS'), headers=connect_headers)
                         with allure.step("校验状态码"):
-                            print(r.text)
                             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                         with allure.step("校验返回值"):
                             assert r.json()['meta'][
@@ -170,7 +169,6 @@ class TestDepositApi:
     def test_deposit_005(self, partner):
         with allure.step("获取用户VID"):
             account_vid = get_json(file='partner_info.json')[get_json()['env']][partner]['account_vid_list']['richard']['account_vid']
-            #account_vid = '162ffc37-306b-4e60-a0f4-bf986a68141a'
         with allure.step("判断partner是否支持deposit"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['symbol'] == 'USD' and i['deposit_methods'][0] == 'SWIFT':
@@ -187,7 +185,6 @@ class TestDepositApi:
                         r = session.request('GET',
                                             url='{}/accounts/{}/balances/{}/deposit/{}'.
                                             format(connect_url, account_vid, 'USD', 'SWIFT'), headers=connect_headers)
-                        print(r.text)
                         with allure.step("校验状态码"):
                             assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
                         with allure.step("校验返回值"):
