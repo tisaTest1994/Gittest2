@@ -17,7 +17,7 @@ class TestPayOutPayInAccountingApi:
         for currency in ['ETH', 'USDT']:
             # 提现的地址用的account_id = 'b013327e-ae65-4197-acf6-806f03873f51'这个账号的地址（为了方便查payin）
             if currency == 'ETH':
-                amount = random.uniform(0.02, 0.39999999)
+                amount = random.uniform(0.02, 0.03999999)
                 amount = format(amount, '.8f')
                 fee = '0.004'
                 address = '0xb34876a77826F1bb564872e0470c242e561e68be'
