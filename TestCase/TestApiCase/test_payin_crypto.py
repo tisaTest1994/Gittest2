@@ -52,7 +52,7 @@ class TestPayInCryptoApi:
                         assert r.status_code == 400, "http 状态码不对，目前状态码是{}".format(r.status_code)
                     with allure.step("校验返回值"):
                         assert r.json()['code'] == '103021', "使用错误币种查询数字货币转入地址错误，返回值是{}".format(r.text)
-                        assert r.json()['message'] == 'Invalid code', "使用错误币种查询数字货币转入地址错误，返回值是{}".format(r.text)
+                        assert r.json()['message'] == 'Invalid Code', "使用错误币种查询数字货币转入地址错误，返回值是{}".format(r.text)
 
     @allure.title('test_pay_in_crypto_003')
     @allure.description('使用指定链ETH查询数字货币转入地址')
