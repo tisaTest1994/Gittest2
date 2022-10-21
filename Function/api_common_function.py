@@ -113,7 +113,7 @@ def get_email():
     client.login(get_json()['email']['email'], get_json()['email']['security_code'])
     # 选择收件夹
     sleep_time = 0
-    while sleep_time < 120:
+    while sleep_time < 100:
         client.select('INBOX', readonly=False)
         type, data = client.search(None, 'ALL')
         num = str(len(str(data[0], 'utf-8').split(' ')))
@@ -126,11 +126,11 @@ def get_email():
             if '(UTC)' in title:
                 email_time = time.mktime(time.strptime(title.split(' - ')[1].split(' (UTC)')[0], "%Y-%m-%d %H:%M:%S"))
                 utc_now_time = time.mktime(time.strptime(datetime.now(tz=pytz.timezone('UTC')).strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S"))
-                if int(email_time) + int(30) >= int(utc_now_time):
+                if int(email_time) + int(90) >= int(utc_now_time):
                     email_list = {"title": title, "body": data[0][1].decode(encoding['encoding'])}
                     break
-        sleep_time = sleep_time + 10
-        time.sleep(10)
+        sleep_time = sleep_time + 20
+        time.sleep(20)
         client.close()
     assert data[0] is not None, 'email原始数据获取为空'
     # 删除邮件
