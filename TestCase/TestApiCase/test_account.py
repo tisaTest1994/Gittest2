@@ -555,34 +555,24 @@ class TestAccountApi:
             assert relation[0]['relation'] == 1, '数据库查询值是{}'.format(relation)
 
     @allure.title('test_account_030')
-    @allure.description('查询指定版本的隐私政策')
+    @allure.description('查询最新版本的隐私政策的版本号')
     def test_account_030(self):
         with allure.step("获取最新隐私版本号"):
             r = session.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
-        with allure.step("查询指定版本的隐私政策"):
-            params = {
-                'version': r.json()['privacyPolicyVersion']
-            }
-            r = session.request('GET', url='{}/account/privacy'.format(env_url), params=params, headers=headers)
-            with allure.step("校验状态码"):
-                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-            with allure.step("校验返回值"):
-                assert r.json()['version'] == 20220228, "查询指定版本的隐私政策失败，返回值是{}".format(r.text)
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['privacyPolicyVersion'] == 20220228, "查询指定版本的隐私政策失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_031')
-    @allure.description('查询指定版本的服务条款')
+    @allure.description('查询最新版本的服务条款的版本号')
     def test_account_031(self):
         with allure.step("获取最新隐私版本号"):
             r = session.request('GET', url='{}/account/privacy/latest'.format(env_url), headers=headers)
-        with allure.step("查询指定版本的服务条款"):
-            params = {
-                'version': r.json()['termOfServiceVersion']
-            }
-            r = session.request('GET', url='{}/account/tos'.format(env_url), params=params, headers=headers)
-            with allure.step("校验状态码"):
-                assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
-            with allure.step("校验返回值"):
-                assert r.json()['version'] == 20220825, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
+        with allure.step("校验状态码"):
+            assert r.status_code == 200, "http状态码不对，目前状态码是{}".format(r.status_code)
+        with allure.step("校验返回值"):
+            assert r.json()['termOfServiceVersion'] == 20221017, "查询指定版本的服务条款失败，返回值是{}".format(r.text)
 
     @allure.title('test_account_036')
     @allure.description('多次referal注册用户')
