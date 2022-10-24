@@ -62,7 +62,7 @@ class TestWidgetApi:
                 'feature': feature,
                 'redirect_url': '',
                 'device_type': 'app',
-                'pair':'',
+                'pair': '',
                 'major_ccy': '',
                 'major_amount': ''
             }
