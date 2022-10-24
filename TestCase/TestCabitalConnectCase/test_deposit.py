@@ -226,7 +226,7 @@ class TestDepositApi:
                                 r.text)
 
     @allure.title('test_deposit_007')
-    @allure.description('获取BRL deposit ,cpf状态为2pass，partner是latibac')
+    @allure.description('获取BRL deposit ,cpf状态为3pass，partner是latibac')
     def test_deposit_007(self, partner):
         with allure.step("获取用户VID"):
             account_vid = 'df368955-2b9c-4af0-b8ea-8226fead4c5d'
@@ -265,7 +265,7 @@ class TestDepositApi:
                                 r.text)
 
     @allure.title('test_deposit_008')
-    @allure.description('获取BRL deposit ,cpf状态为3failed，partner是latibac')
+    @allure.description('获取BRL deposit ,cpf状态为2failed，partner是latibac')
     def test_deposit_008(self, partner):
         with allure.step("获取用户VID"):
             account_vid = '044281ae-e06c-46e1-812f-74ad1ac68edc'
