@@ -456,14 +456,14 @@ class TestCheckoutApi:
         #     sleep(15)
 
     @allure.title('test_check_out_015')
-    @allure.description('创建数字货币购买交易USD-USDT-payment with token，金额小于最小值或大于最大值')
+    @allure.description('创建数字货币购买交易-payment with token，金额小于最小值或大于最大值')
     def test_check_out_015(self):
         with allure.step('从接口获得所有buy crypto的spend币种'):
             for i in ApiFunction.get_buy_crypto_currency(partner='woo', type='all'):
-                with allure.step('获取法币最小和最大提现金额'):
+                with allure.step('获取法币{}最小和最大提现金额'.format(i.split('-')[1])):
                     amount_list_limit = ApiFunction.get_buy_crypto_limit(currency=i.split('-')[1])
                     amount_list = []
-                with allure.step('根据币种精度计算法币小于最小和大于最大提现金额'):
+                with allure.step('根据币种精度计算法币{}小于最小和大于最大提现金额'.format(i.split('-')[1])):
                     r = session.request('GET', url='{}/acquiring/buy/prepare'.format(env_url), headers=headers)
                     for z in r.json()['payment_currencies']:
                         if z['code'] == i.split('-')[1]:
@@ -475,7 +475,7 @@ class TestCheckoutApi:
                             max_more = Decimal(str(amount_list_limit[1])) + Decimal(str(amount_change))
                     amount_list.append(str(min_less))
                     amount_list.append(str(max_more))
-                with allure.step("创建数字货币购买交易信息"):
+                with allure.step("创建数字货币购买交易币种对:{}".format(i)):
                     for amount in amount_list:
                         crypto_list = ApiFunction.get_buy_crypto_list(amount, pairs=i, ccy='spend', country='TH')
                         data = {
@@ -522,18 +522,17 @@ class TestCheckoutApi:
                             },
                             "nonce": generate_string(30)
                         }
-                        with allure.step("创建数字货币购买交易USD-USDT-payment with token，金额小于最小值或大于最大值"):
+                        with allure.step("创建数字货币购买交易{}-payment with token，金额小于最小值或大于最大值".format(i)):
                             r2 = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data),
                                                  headers=headers)
                         with allure.step("校验状态码"):
                             assert r2.status_code == 400, "http 状态码不对，目前状态码是{}".format(r2.status_code)
                         with allure.step("校验返回值"):
                             if amount == amount_list[0]:
-                                assert r2.json()['code'] == '101007', "确认GBP法币提现交易-提现金额为{}(提现金额小于最小金额)返回值错误，当前返回值是{}".format(
-                                    amount, r2.text)
+                                print('当前交易币种对为{}'.format(i))
+                                assert r2.json()['code'] == '101007', "创建数字货币购买交易{}-payment with token-(提现金额小于最小金额)返回值错误，当前返回值是{}".format(i, r2.text)
                             else:
-                                assert r2.json()['code'] == '101006', "确认GBP法币提现交易-(提现金额大于最大金额)返回值错误，当前返回值是{}".format(
-                                    r2.text)
+                                assert r2.json()['code'] == '101006', "创建数字货币购买交易{}-payment with token-(提现金额大于最大金额)返回值错误，当前返回值是{}".format(r2.text)
                         with allure.step("状态码和返回值"):
                             logger.info('状态码是{}'.format(str(r2.status_code)))
                             logger.info('返回值是{}'.format(str(r2.text)))

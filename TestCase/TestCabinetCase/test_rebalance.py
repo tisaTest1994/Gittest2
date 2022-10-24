@@ -4,7 +4,7 @@ from Function.api_function import *
 from Function.operate_sql import *
 
 
-# operate相关cases
+@allure.feature("rebalance相关 testcases")
 class TestRebalanceApi:
 
     # 初始化class
