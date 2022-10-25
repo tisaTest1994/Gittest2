@@ -630,3 +630,5 @@ class TestPayoutCashNormalApi:
             assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
         with allure.step("校验返回值"):
             assert r.json()['status'] == 1, "创建USD法币提现交易错误，返回值是{}".format(r.text)
+
+

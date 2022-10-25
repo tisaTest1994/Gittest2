@@ -637,7 +637,7 @@ class ApiFunction:
                     with allure.step("判断地区"):
                         if country in get_json()['EAList']:
                             total_spend_amount = Decimal(amount)
-                            processing_fee = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0'),
+                            processing_fee = (total_spend_amount * Decimal(0.019)).quantize(Decimal('0'),
                                                                                              ROUND_CEILING)
                             spend_amount = total_spend_amount - processing_fee
                             buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'),
@@ -652,7 +652,7 @@ class ApiFunction:
                             transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0'), ROUND_CEILING)
                         else:
                             total_spend_amount = Decimal(amount)
-                            processing_fee = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0'),
+                            processing_fee = (total_spend_amount * Decimal(0.038)).quantize(Decimal('0'),
                                                                                              ROUND_CEILING)
                             spend_amount = total_spend_amount - processing_fee
                             buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'),
@@ -669,7 +669,7 @@ class ApiFunction:
                     with allure.step("判断地区"):
                         if country in get_json()['EAList']:
                             total_spend_amount = Decimal(amount)
-                            processing_fee = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.00'),
+                            processing_fee = (total_spend_amount * Decimal(0.019)).quantize(Decimal('0.00'),
                                                                                              ROUND_CEILING)
                             spend_amount = total_spend_amount - processing_fee
                             buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'),
@@ -684,7 +684,7 @@ class ApiFunction:
                             transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0.00'), ROUND_CEILING)
                         else:
                             total_spend_amount = Decimal(amount)
-                            processing_fee = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.00'),
+                            processing_fee = (total_spend_amount * Decimal(0.038)).quantize(Decimal('0.00'),
                                                                                              ROUND_CEILING)
                             spend_amount = total_spend_amount - processing_fee
                             buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'),
@@ -705,9 +705,9 @@ class ApiFunction:
                             spend_amount = Decimal(buy_amount * Decimal(quote)).quantize(Decimal('0'),
                                                                                           ROUND_CEILING) + Decimal(t_fee * Decimal(quote)).quantize(Decimal('0'),
                                                                           ROUND_CEILING)
-                            total_spend_amount = (spend_amount / Decimal(1 - 0.0185)).quantize(Decimal('0'),
+                            total_spend_amount = (spend_amount / Decimal(1 - 0.019)).quantize(Decimal('0'),
                                                                                                ROUND_CEILING)
-                            service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0'),
+                            service_charge = (total_spend_amount * Decimal(0.019)).quantize(Decimal('0'),
                                                                                              ROUND_CEILING)
                             transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0'), ROUND_CEILING)
                         else:
@@ -715,9 +715,9 @@ class ApiFunction:
                             spend_amount = Decimal(buy_amount * Decimal(quote)).quantize(Decimal('0'),
                                                                                           ROUND_CEILING) + Decimal(t_fee * Decimal(quote)).quantize(Decimal('0'),
                                                                           ROUND_CEILING)
-                            total_spend_amount = (spend_amount / Decimal(1 - 0.0375)).quantize(Decimal('0.'),
+                            total_spend_amount = (spend_amount / Decimal(1 - 0.038)).quantize(Decimal('0.'),
                                                                                                ROUND_CEILING)
-                            service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0'),
+                            service_charge = (total_spend_amount * Decimal(0.038)).quantize(Decimal('0'),
                                                                                              ROUND_CEILING)
                             transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0'), ROUND_CEILING)
                 else:
@@ -727,9 +727,9 @@ class ApiFunction:
                             spend_amount = Decimal(buy_amount * Decimal(quote)).quantize(Decimal('0.00'),
                                                                                           ROUND_CEILING) + Decimal(t_fee * Decimal(quote)).quantize(Decimal('0.00'),
                                                                           ROUND_CEILING)
-                            total_spend_amount = (spend_amount / Decimal(1 - 0.0185)).quantize(Decimal('0.00'),
+                            total_spend_amount = (spend_amount / Decimal(1 - 0.019)).quantize(Decimal('0.00'),
                                                                                                ROUND_CEILING)
-                            service_charge = (total_spend_amount * Decimal(0.0185)).quantize(Decimal('0.00'),
+                            service_charge = (total_spend_amount * Decimal(0.019)).quantize(Decimal('0.00'),
                                                                                              ROUND_CEILING)
                             transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0.00'), ROUND_CEILING)
                         else:
@@ -737,9 +737,9 @@ class ApiFunction:
                             spend_amount = Decimal(buy_amount * Decimal(quote)).quantize(Decimal('0.00'),
                                                                                           ROUND_CEILING) + Decimal(t_fee * Decimal(quote)).quantize(Decimal('0.00'),
                                                                           ROUND_CEILING)
-                            total_spend_amount = (spend_amount / Decimal(1 - 0.0375)).quantize(Decimal('0.00'),
+                            total_spend_amount = (spend_amount / Decimal(1 - 0.038)).quantize(Decimal('0.00'),
                                                                                                ROUND_CEILING)
-                            service_charge = (total_spend_amount * Decimal(0.0375)).quantize(Decimal('0.00'),
+                            service_charge = (total_spend_amount * Decimal(0.038)).quantize(Decimal('0.00'),
                                                                                              ROUND_CEILING)
                             transfer_fee = (t_fee * Decimal(quote)).quantize(Decimal('0.00'), ROUND_CEILING)
             return {'major_code': major_code, 'pairs': pairs, 'quote_id': quote_id, 'quote': quote, 'total_spend_amount': get_precision(total_spend_amount, precision), 'spend_amount': get_precision(spend_amount, precision), 'service_charge': get_precision(service_charge, precision), 'buy_amount': get_precision(buy_amount, 6), 'transfer_fee': str(transfer_fee)}
