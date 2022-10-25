@@ -152,7 +152,7 @@ class TestCheckoutApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验返回值"):
-            assert r.json()['fee']['amount'] == "3.75", '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
+            assert r.json()['fee']['amount'] == "3.8", '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
 
     @allure.title('test_check_out_007')
     @allure.description('获取购买数字货币费用-with card(EEA)')
@@ -175,7 +175,7 @@ class TestCheckoutApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验返回值"):
-            assert r.json()['fee']['amount'] == "1.85", '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
+            assert r.json()['fee']['amount'] == "1.9", '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
 
     @allure.title('test_check_out_008')
     @allure.description('获取购买数字货币费用，使用不支持的scheme')
@@ -221,7 +221,7 @@ class TestCheckoutApi:
             logger.info('状态码是{}'.format(str(r.status_code)))
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验返回值"):
-            assert r.json()['fee']['amount'] == "1.85", '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
+            assert r.json()['fee']['amount'] == "1.9", '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee']['amount'])
 
     @allure.title('test_check_out_010')
     @allure.description('获取购买数字货币费用规则-with card')
@@ -244,8 +244,8 @@ class TestCheckoutApi:
             logger.info('返回值是{}'.format(str(r.text)))
         with allure.step("校验返回值"):
             assert r.json()['fee_rule']['type'] == 1, '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee_rule']['type'])
-            assert r.json()['fee_rule']['percentage_charge_rule']['percentage'] == '3.75', '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee_rule']['percentage_charge_rule']['percentage'])
-            assert r.json()['fee_rule']['formula'] == 'CEILING(x*0.0375,2)', '购买数字货币公式错误，接口返回值为{}'.format(r.json()['fee_rule']['percentage_charge_rule']['percentage'])
+            assert r.json()['fee_rule']['percentage_charge_rule']['percentage'] == '3.8', '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee_rule']['percentage_charge_rule']['percentage'])
+            assert r.json()['fee_rule']['formula'] == 'CEILING(x*0.038,2)', '购买数字货币公式错误，接口返回值为{}'.format(r.json()['fee_rule']['percentage_charge_rule']['percentage'])
 
     @allure.title('test_check_out_011')
     @allure.description('获取购买数字货币费用规则-no card')
@@ -913,7 +913,8 @@ class TestCheckoutApi:
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+16@cabital.com')
         with allure.step("币种兑选择"):
             pairs = ApiFunction.get_buy_crypto_currency(partner='woo', type='all')
-        for z in pairs:
+        # for z in pairs:
+        for z in ['USDT-BRL']:
             for x in get_json()['checkOutAreaList2']:
                 with allure.step("创建数字货币购买交易信息，ccy 是buy"):
                     while 1 < 2:
