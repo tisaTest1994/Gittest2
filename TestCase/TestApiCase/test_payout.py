@@ -142,3 +142,81 @@ class TestPayoutApi:
             with allure.step("校验返回值"):
                 assert 'fiat' in r.text, "获得全部提现币种错误，返回值是{}".format(r.text)
                 assert 'crypto' in r.text, "获得全部提现币种错误，返回值是{}".format(r.text)
+
+    @allure.title('test_payout_009')
+    @allure.description('获取所有币种提现方式')
+    def test_payout_009(self):
+        with allure.step("获取所有可以提现的币种"):
+            r = session.request('GET', url='{}/pay/withdraw/ccy/{}'.format(env_url, ''), headers=headers)
+        ccy = []
+        for y in (r.json()['fiat'] + r.json()['crypto']):
+            if y['status'] == 1:
+                ccy.append(y['name'])
+        ccy.remove('VND')
+        for i in ccy:
+            with allure.step("获取法币{}的提现方式".format(i)):
+                r = session.request('GET', url='{}/pay/withdraw/{}'.format(env_url, i), headers=headers)
+            with allure.step("状态码和返回值"):
+                logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
+                logger.info('状态码是{}'.format(str(r.status_code)))
+                logger.info('返回值是{}'.format(str(r.text)))
+            with allure.step("校验状态码"):
+                assert r.status_code == 200, "http 状态码不对，目前状态码是{}".format(r.status_code)
+            with allure.step("校验返回值"):
+                if i == 'BTC':
+                    assert r.json()['payment_methods'][0]['type'] == "Bitcoin" \
+                           and r.json()['payment_methods'][0]['method'] == "BTC" \
+                           and r.json()['payment_methods'][0]['key'] == "BTC" \
+                           and r.json()['payment_methods'][0]['status'] == 1,\
+                        "币种{}提现方式错误，接口返回结果为{}".format(i, r.json()['payment_methods'])
+                elif i == 'ETH':
+                    assert r.json()['payment_methods'][0]['type'] == "Ethereum(ERC-20)" \
+                           and r.json()['payment_methods'][0]['method'] == "ERC20" \
+                           and r.json()['payment_methods'][0]['key'] == "ETH" \
+                           and r.json()['payment_methods'][0]['status'] == 1, \
+                        "币种{}提现方式错误，接口返回结果为{}".format(i, r.json()['payment_methods'])
+                elif i == 'USDT':
+                    assert r.json()['payment_methods'][0]['type'] == "Ethereum(ERC-20)" \
+                           and r.json()['payment_methods'][0]['method'] == "ERC20" \
+                           and r.json()['payment_methods'][0]['key'] == "ETH" \
+                           and r.json()['payment_methods'][0]['status'] == 1, \
+                        "币种{}提现方式错误，接口返回结果为{}".format(i, r.json()['payment_methods'])
+                elif i == 'USD':
+                    assert r.json()['payment_methods'][0]['type'] == "Ethereum(ERC-20)" \
+                           and r.json()['payment_methods'][0]['method'] == "ERC20" \
+                           and r.json()['payment_methods'][0]['key'] == "ETH" \
+                           and r.json()['payment_methods'][0]['status'] == 1 \
+                           and r.json()['payment_methods'][0]['ccy'] == "USDC", \
+                        "币种{}提现方式错误，接口返回结果为{}".format(i, r.json()['payment_methods'])
+                elif i == 'USDT':
+                    assert r.json()['payment_methods'][0]['type'] == "Ethereum(ERC-20)" \
+                           and r.json()['payment_methods'][0]['method'] == "ERC20" \
+                           and r.json()['payment_methods'][0]['key'] == "ETH" \
+                           and r.json()['payment_methods'][0]['status'] == 1, \
+                        "币种{}提现方式错误，接口返回结果为{}".format(i, r.json()['payment_methods'])
+                elif i == 'EUR':
+                    assert r.json()['payment_methods'][0]['type'] == "SEPA" \
+                           and r.json()['payment_methods'][0]['method'] == "SEPA" \
+                           and r.json()['payment_methods'][0]['key'] == "SEPA" \
+                           and r.json()['payment_methods'][0]['status'] == 1, \
+                        "币种{}提现方式错误，接口返回结果为{}".format(i, r.json()['payment_methods'])
+                elif i == 'GBP':
+                    assert r.json()['payment_methods'][0]['type'] == "Faster Payments" \
+                           and r.json()['payment_methods'][0]['method'] == "Faster Payments" \
+                           and r.json()['payment_methods'][0]['key'] == "Faster Payments" \
+                           and r.json()['payment_methods'][0]['status'] == 1, \
+                        "币种{}提现方式错误，接口返回结果为{}".format(i, r.json()['payment_methods'])
+                elif i == 'CHF':
+                    assert r.json()['payment_methods'][0]['type'] == "SIC/SWIFT" \
+                           and r.json()['payment_methods'][0]['method'] == "SIC/SWIFT" \
+                           and r.json()['payment_methods'][0]['key'] == "SIC" \
+                           and r.json()['payment_methods'][0]['status'] == 1, \
+                        "币种{}提现方式错误，接口返回结果为{}".format(i, r.json()['payment_methods'])
+                elif i == 'BRL':
+                    assert r.json()['payment_methods'][0]['type'] == "PIX" \
+                           and r.json()['payment_methods'][0]['method'] == "PIX" \
+                           and r.json()['payment_methods'][0]['key'] == "PIX" \
+                           and r.json()['payment_methods'][0]['status'] == 1, \
+                        "币种{}提现方式错误，接口返回结果为{}".format(i, r.json()['payment_methods'])
+                else:
+                    assert False, "提现币种有新增需要维护脚本"
