@@ -939,8 +939,7 @@ class TestCheckoutApi:
                                 "Content-Type": "application/json"
                             }
                             r = session.request('POST', url='https://api.sandbox.checkout.com/tokens',
-                                                data=json.dumps(data),
-                                                headers=headers2)
+                                                data=json.dumps(data), headers=headers2)
                             with allure.step("校验状态码"):
                                 assert r.status_code == 201, "获取checkout token返回的http状态码不对，目前状态码是{}".format(
                                     r.status_code)

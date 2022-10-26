@@ -589,24 +589,24 @@ class ApiFunction:
                         if country in get_json()['EAList']:
                             total_spend_amount = Decimal(amount)
                             service_charge = (total_spend_amount * Decimal(0.019)).quantize(Decimal('0'), ROUND_CEILING)
-                            spend_amount = (total_spend_amount * Decimal(1 - 0.019)).quantize(Decimal('0'), ROUND_CEILING)
+                            spend_amount = total_spend_amount - service_charge
                             buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
                         else:
                             total_spend_amount = Decimal(amount)
                             service_charge = (total_spend_amount * Decimal(0.038)).quantize(Decimal('0'), ROUND_CEILING)
-                            spend_amount = (total_spend_amount * Decimal(1 - 0.038)).quantize(Decimal('0'), ROUND_CEILING)
+                            spend_amount = total_spend_amount - service_charge
                             buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
                 else:
                     with allure.step("判断地区"):
                         if country in get_json()['EAList']:
                             total_spend_amount = Decimal(amount)
                             service_charge = (total_spend_amount * Decimal(0.019)).quantize(Decimal('0.00'), ROUND_CEILING)
-                            spend_amount = (total_spend_amount * Decimal(1 - 0.019)).quantize(Decimal('0.00'), ROUND_CEILING)
+                            spend_amount = total_spend_amount - service_charge
                             buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
                         else:
                             total_spend_amount = Decimal(amount)
                             service_charge = (total_spend_amount * Decimal(0.038)).quantize(Decimal('0.00'), ROUND_CEILING)
-                            spend_amount = (total_spend_amount * Decimal(1 - 0.038)).quantize(Decimal('0.00'), ROUND_CEILING)
+                            spend_amount = total_spend_amount - service_charge
                             buy_amount = (spend_amount / Decimal(quote)).quantize(Decimal('0.000000'), ROUND_FLOOR)
             else:
                 if 'CLP' in pairs or 'VND' in pairs or 'KRW' in pairs or 'JPY' in pairs:

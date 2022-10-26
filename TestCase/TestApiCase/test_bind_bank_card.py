@@ -87,7 +87,7 @@ class TestBindBankCardApi:
                 "code": "USD",
                 "money_house_id": "MoneyHouseTypeCircleDGTLT",
                 "account_name": "Wan yilei",
-                "account_number": "6214850010214788",
+                "account_number": "621485001021478",
                 "swift_code": "CMBCHKHH",
                 "bank_name": "CHINA MERCHANTS BANK",
                 "bank_address": {
