@@ -913,8 +913,7 @@ class TestCheckoutApi:
         headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='yanting.huang+16@cabital.com')
         with allure.step("币种兑选择"):
             pairs = ApiFunction.get_buy_crypto_currency(partner='woo', type='all')
-        # for z in pairs:
-        for z in ['USDT-BRL']:
+        for z in pairs:
             for x in get_json()['checkOutAreaList2']:
                 with allure.step("创建数字货币购买交易信息，ccy 是buy"):
                     while 1 < 2:
@@ -999,6 +998,7 @@ class TestCheckoutApi:
                         logger.info('checkout传入参数是{}'.format(data))
                         r = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data),
                                             headers=headers)
+                        logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                         if 'Invalid Quote' not in r.text:
@@ -1102,6 +1102,7 @@ class TestCheckoutApi:
                         logger.info('checkout传入参数是{}'.format(data))
                         r = session.request('POST', url='{}/acquiring/buy'.format(env_url), data=json.dumps(data),
                                             headers=headers)
+                        logger.info('trace id是{}'.format(str(r.headers['Traceparent'])))
                         logger.info('状态码是{}'.format(str(r.status_code)))
                         logger.info('返回值是{}'.format(str(r.text)))
                         if 'Invalid Quote' not in r.text:

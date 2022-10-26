@@ -101,7 +101,8 @@ class TestTransferApi:
             cfx_list = []
             for z in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['pairs']:
                 cfx_list.append(z['pair'])
-        with allure.step("获得不同币种"):
+            cfx_list = ['USDC-BRL']
+        with allure.step("判断是否能做T"):
             for i in get_json(file='partner_info.json')[get_json()['env']][partner]['config_info']['currencies']:
                 if i['config']['debit']['allow']:
                     for y in cfx_list:
@@ -116,12 +117,14 @@ class TestTransferApi:
                                 external_id = generate_string(25)
                                 data = {
                                     'amount': transaction['data']['buy_amount'],
-                                    'symbol': i['symbol'],
+                                    'symbol': transaction['data']['major_ccy'],
                                     'otp': str(mfaVerificationCode),
                                     'direction': 'DEBIT',
                                     'external_id': external_id,
                                     'conversion_id': cfx_transaction_id
                                 }
+                                print(11111)
+                                print(data)
                             with allure.step("验签"):
                                 unix_time = int(time.time())
                                 nonce = generate_string(20) + str(time.time()).split('.')[0]
