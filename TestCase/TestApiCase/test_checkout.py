@@ -265,9 +265,9 @@ class TestCheckoutApi:
         with allure.step("校验返回值"):
             assert r.json()['fee_rule']['type'] == 1, '购买数字货币手续费错误，接口返回值为{}'.format(r.json()['fee_rule']['type'])
             assert r.json()['fee_rule']['percentage_charge_rule'][
-                       'percentage'] == '1.85', '购买数字货币手续费错误，接口返回值为{}'.format(
+                       'percentage'] == '1.9', '购买数字货币手续费错误，接口返回值为{}'.format(
                 r.json()['fee_rule']['percentage_charge_rule']['percentage'])
-            assert r.json()['fee_rule']['formula'] == 'CEILING(x*0.0185,2)', '购买数字货币公式错误，接口返回值为{}'.format(
+            assert r.json()['fee_rule']['formula'] == 'CEILING(x*0.019,2)', '购买数字货币公式错误，接口返回值为{}'.format(
                 r.json()['fee_rule']['percentage_charge_rule']['percentage'])
 
     @allure.title('test_check_out_012')

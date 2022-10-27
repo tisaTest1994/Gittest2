@@ -13,13 +13,13 @@ class TestBindBankCardApi:
     @allure.description('USD绑定银行卡-us bank account')
     @pytest.mark.skip(reason='手动操作')
     def test_bind_bank_card_001(self):
-        # with allure.step("切换账号"):
-        #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
+        with allure.step("切换账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice1012001@cabital.com')
         with allure.step("us bank account"):
             data = {
                 "code": "USD",
                 "money_house_id": "MoneyHouseTypeCircleDGTLT",
-                "account_name": "Wan yilei",
+                "account_name": "ALL12ICCE001 WW012ANGGG",
                 "account_number": "1234223432344236",
                 "aba_routing_number": "121000248",
                 "bank_address": {
@@ -114,8 +114,8 @@ class TestBindBankCardApi:
     @allure.title('test_bind_bank_card_004')
     @allure.description('获取USD已经绑定银行卡列表')
     def test_bind_bank_card_004(self):
-        # with allure.step("切换账号"):
-        #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
+        with allure.step("切换账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
         params = {
             'payment_method': 'SWIFT',
             'money_house_id': 'MoneyHouseTypeCircleDGTLT',
@@ -148,6 +148,8 @@ class TestBindBankCardApi:
     @allure.title('test_bind_bank_card_006')
     @allure.description('获取USD某个银行国家列表')
     def test_bind_bank_card_006(self):
+        with allure.step("切换账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice1012001@cabital.com')
         params = {
             'payment_method': 'SWIFT',
             'money_house_id': 'MoneyHouseTypeCircleDGTLT',
@@ -165,7 +167,7 @@ class TestBindBankCardApi:
 
     @allure.title('test_bind_bank_card_007')
     @allure.description('解绑USD银行卡')
-    #@pytest.mark.skip(reason='手动操作')
+    @pytest.mark.skip(reason='手动操作')
     def test_bind_bank_card_007(self):
         bank_id = '5a54dccb-683b-4046-b245-46b240e9e28b'
         data = {

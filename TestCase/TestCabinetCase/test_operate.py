@@ -817,7 +817,7 @@ class TestOperateApi:
             data = {
                     "account_id": '15232ec3-170d-4714-93ca-8f093d3b0da6',
                     "whitelisted_name": 'NGUYEN VAN A',
-                    "account_name": "yilei20",
+                    "account_name": "yilei201",
                     "order_id": "",
                     "bank_account_number": "",
                     "bank_name": ""

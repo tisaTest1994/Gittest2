@@ -454,7 +454,7 @@ class ApiFunction:
 
     # 换汇
     @staticmethod
-    def cfx_random(pair, major_ccy, buy_amount=random.uniform(10, 500.999999), url=env_url, headers=headers, account_id='', partner=''):
+    def cfx_random(pair, major_ccy, buy_amount=random.uniform(10, 100.999999), url=env_url, headers=headers, account_id='', partner=''):
         cycle = 0
         while cycle < 5:
             buy_type = pair.split('-')[0]
@@ -469,8 +469,10 @@ class ApiFunction:
                         buy_amount = random.randint(250000, 300000)
                     elif buy_type == 'BRL':
                         buy_amount = random.uniform(50, 100.00)
+                    elif buy_type == 'USDC':
+                        buy_amount = random.uniform(40, 100.999999)
                     else:
-                        buy_amount = random.uniform(20, 500.99)
+                        buy_amount = random.uniform(20, 100.99)
                     quote = ApiFunction.get_quote(pair)
                     buy_amount = crypto_len(number=str(buy_amount), type=buy_type)
                     if sell_type == 'VND':
@@ -490,8 +492,10 @@ class ApiFunction:
                         sell_amount = random.randint(250000, 300000)
                     elif sell_type == 'BRL':
                         sell_amount = random.uniform(50, 100.99)
+                    elif sell_type == 'USDC':
+                        sell_amount = random.uniform(40, 100.999999)
                     else:
-                        sell_amount = random.uniform(20, 500.99)
+                        sell_amount = random.uniform(20, 100.99)
                     quote = ApiFunction.get_quote(pair)
                     sell_amount = crypto_len(number=str(sell_amount), type=sell_type)
                     if buy_type == 'VND':

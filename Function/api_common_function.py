@@ -184,7 +184,7 @@ def crypto_len(number, type):
                 end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1][:8])
             else:
                 end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1])
-        elif type == 'USDT':
+        elif type == 'USDT' or type == 'USDC':
             if len(str(number).split('.')[1]) > 6:
                 end_number = '{}.{}'.format(str(number).split('.')[0], str(number).split('.')[1][:6])
             else:

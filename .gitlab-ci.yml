@@ -13,6 +13,7 @@ stages:
     - test8
     - test9
     - test10
+    - test11
 
 before_script:
     - apt-get update
@@ -48,16 +49,16 @@ Cabital Pay Test:
       - Reports
     expire_in: 1 week
 
-# Accounting Test:
-#   stage: test1
-#   tags:
-#     - python
-#   script:
-#     - python run.py accounting hello
-#   artifacts:
-#     paths:
-#       - Reports
-#     expire_in: 1 week
+Accounting Test:
+  stage: test1
+  tags:
+    - python
+  script:
+    - python run.py accounting hello
+  artifacts:
+    paths:
+      - Reports
+    expire_in: 1 week
 
 Cabital Connect Test (bybit):
   stage: test4
