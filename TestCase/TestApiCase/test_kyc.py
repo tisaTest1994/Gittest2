@@ -180,3 +180,5 @@ class TestKycApi:
         with allure.step("校验返回值"):
             assert r.json()['userId'] is not None and r.json()['additionalInfos'] is not None, "获取用户全部补充信息失败，返回值是{}".format(r.text)
 
+    def test_kyc_test(self):
+        pass
