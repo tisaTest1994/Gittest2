@@ -182,5 +182,8 @@ class TestKycApi:
 
     def test_kyc_test(self):
         pass
+
     def test_aaa(self):
+        pass
+    def test_aaa1(self):
         pass
