@@ -187,5 +187,4 @@ class TestKycApi:
         pass
     def test_aaa1(self):
         pass
-    def test_aaa2(self):
-        pass
+    
