@@ -615,7 +615,7 @@ class TestPayoutCashNormalApi:
         headers['X-Mfa-Email'] = '{}###{}'.format(get_json()['email']['payout_email'], code)
         data = {
             "code": "USD",
-            "amount": "50",
+            "amount": "500.1",
             "payment_method": "SWIFT",
             "account_name": "Richard External QA",
             "bank_account_id": "1d39f080-6990-405f-9e8d-509780bad1e9"

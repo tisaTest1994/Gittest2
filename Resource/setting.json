@@ -517,10 +517,5 @@
   },
   "websocket": {
     "url": "wss://api.latibac.com/api/v1/realtime/ws"
-  },
-  "secretKey": {
-    "external.qa": "MJGUUVSGJ5HWEUTFKJVHQS2DKNBFGZ3U",
-    "neoding": "KVHXGRSWNZWG4UTHKVLVK4CRNQYTGT2X",
-    "richard": "MNHXOSSCNRWHURSDORSXQ5CIJZZEUMLT"
   }
 }

@@ -237,9 +237,9 @@ class TestPayoutCryptoNormalApi:
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
                 account=get_json()['email']['payout_email'])
             data = {
-                "amount": '100.02',
+                "amount": '100.02234567',
                 "code": 'USDC',
-                "address": '0xF2a4ee82046d324263b3F3BC95b9E8a555908A94',
+                "address": '0xD2da0100d110f17E13fD6F503857821B3D0FA4e5',
                 "chain": "ETH"
             }
         with allure.step("确认BTC虚拟货币提现交易"):

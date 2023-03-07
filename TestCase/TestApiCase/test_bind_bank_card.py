@@ -14,13 +14,13 @@ class TestBindBankCardApi:
     @pytest.mark.skip(reason='手动操作')
     def test_bind_bank_card_001(self):
         with allure.step("切换账号"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice1012001@cabital.com')
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='external.qa@cabital.com')
         with allure.step("us bank account"):
             data = {
                 "code": "USD",
                 "money_house_id": "MoneyHouseTypeCircleDGTLT",
-                "account_name": "ALL12ICCE001 WW012ANGGG",
-                "account_number": "1234223432344236",
+                "account_name": "Richard External QA",
+                "account_number": "12340010",
                 "aba_routing_number": "121000248",
                 "bank_address": {
                     "country_code": "US"
@@ -47,13 +47,13 @@ class TestBindBankCardApi:
     @allure.description('USD绑定银行卡-not us bank account iban supported')
     @pytest.mark.skip(reason='手动操作')
     def test_bind_bank_card_002(self):
-        # with allure.step("切换账号"):
-        #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
+        with allure.step("切换账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
         with allure.step("not us bank account iban supported"):
             data = {
                 "code": "USD",
                 "money_house_id": "MoneyHouseTypeCircleDGTLT",
-                "account_name": "Wan yilei",
+                "account_name": "Richard External QA",
                 "iban": "DE31100400480532013000",
                 "bank_address": {
                     "city": "Berlin",
@@ -80,13 +80,13 @@ class TestBindBankCardApi:
     @allure.description('USD绑定银行卡-not us bank account iban not supported')
     @pytest.mark.skip(reason='手动操作')
     def test_bind_bank_card_003(self):
-        # with allure.step("切换账号"):
-        #     headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
+        with allure.step("切换账号"):
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
         with allure.step("not us bank account iban supported"):
             data = {
                 "code": "USD",
                 "money_house_id": "MoneyHouseTypeCircleDGTLT",
-                "account_name": "Wan yilei",
+                "account_name": "Richard External QA",
                 "account_number": "621485001021478",
                 "swift_code": "CMBCHKHH",
                 "bank_name": "CHINA MERCHANTS BANK",
@@ -115,7 +115,7 @@ class TestBindBankCardApi:
     @allure.description('获取USD已经绑定银行卡列表')
     def test_bind_bank_card_004(self):
         with allure.step("切换账号"):
-            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account=get_json()['email']['payout_email'])
+            headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(account='alice.wang@cabital.com')
         params = {
             'payment_method': 'SWIFT',
             'money_house_id': 'MoneyHouseTypeCircleDGTLT',

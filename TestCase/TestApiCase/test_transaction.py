@@ -118,13 +118,13 @@ class TestTransactionApi:
     @allure.description('根据id编号查询单笔交易')
     def test_transaction_006(self):
         with allure.step("获得交易transaction_id"):
-            transaction_id = ApiFunction.get_payout_transaction_id()
+            transaction_id = 'f94226e4-72c7-4ca4-9f33-b611c06c84e7'
             logger.info('transaction_id 是{}'.format(transaction_id))
         with allure.step("查询单笔交易"):
             headers['Authorization'] = "Bearer " + ApiFunction.get_account_token(
-                account=get_json()['email']['payout_email'])
+                account='richard.wan@cabital.com')
             params = {
-                "txn_sub_type": 6
+                "txn_sub_type": 1
             }
             r = session.request('GET', url='{}/txn/{}'.format(env_url, transaction_id), params=params, headers=headers)
         with allure.step("状态码和返回值"):

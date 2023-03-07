@@ -20,7 +20,7 @@ class TestUSDCApi:
             data = {
                 'trackingRef': 'CRYPTO99',
                 'beneficiaryBank': {
-                    'accountNumber': '123910895851'
+                    'accountNumber': '123358965369'
                 },
                 'amount': {
                     'amount': '45.00',

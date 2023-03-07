@@ -815,9 +815,9 @@ class TestOperateApi:
         with allure.step("给客户添加白名单"):
             name = generate_string(16)
             data = {
-                    "account_id": '15232ec3-170d-4714-93ca-8f093d3b0da6',
-                    "whitelisted_name": 'NGUYEN VAN A',
-                    "account_name": "yilei201",
+                    "account_id": '6c31264c-da87-47ff-91d2-d40af771b0b3',
+                    "whitelisted_name": 'NGUYEN AQ703',
+                    "account_name": "alice102703 703",
                     "order_id": "",
                     "bank_account_number": "",
                     "bank_name": ""
